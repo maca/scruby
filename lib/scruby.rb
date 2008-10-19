@@ -24,11 +24,11 @@ LIB_DIR = File.join( File.expand_path(File.dirname(__FILE__) ), 'scruby' )
 $:.unshift( File.dirname(__FILE__) ) unless
   $:.include?(File.dirname(__FILE__)) || $:.include?(File.expand_path(File.dirname(__FILE__)))
 
-require 'scruby/audio/ugen_operations' 
-require 'scruby/audio/ugen' 
-require 'scruby/audio/operation_ugens'
-require 'scruby/control_name'
-require 'scruby/synthdef'
+require 'scruby/audio/ugens/ugen_operations' 
+require 'scruby/audio/ugens/ugen' 
+require 'scruby/audio/ugens/operation_ugens'
+require 'scruby/audio/control_name'
+require 'scruby/audio/synthdef'
 require 'scruby/extensions'
 
 

@@ -1,18 +1,19 @@
 require File.join(File.expand_path(File.dirname(__FILE__)),"helper")
 
-require "#{LIB_DIR}/audio/ugen_operations"
+require "#{LIB_DIR}/audio/ugens/ugen_operations"
 require "#{LIB_DIR}/extensions"
-require "#{LIB_DIR}/synthdef" 
-require "#{LIB_DIR}/control_name" 
-require "#{LIB_DIR}/audio/ugen_operations" 
-require "#{LIB_DIR}/audio/ugen" 
+require "#{LIB_DIR}/audio/synthdef" 
+# require "#{LIB_DIR}/control_name" 
+
 
 
 include Scruby
 include Audio
 
-def ControlName.new( *args )
-  args.flatten
+class ControlName
+  def self.new( *args )
+    args.flatten
+  end
 end
 
 

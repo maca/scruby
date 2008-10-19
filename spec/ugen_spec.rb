@@ -2,11 +2,12 @@ require File.join(File.expand_path(File.dirname(__FILE__)),"helper")
 require 'yaml'
 
 require "#{LIB_DIR}/audio/ugen_operations" 
-require "#{LIB_DIR}/audio/ugen" 
+require "#{LIB_DIR}/audio/ugens/ugen" 
 require "#{LIB_DIR}/extensions"
 
 include Scruby
 include Audio
+include Ugens
 
 
 describe Ugen do

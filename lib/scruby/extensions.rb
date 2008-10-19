@@ -16,15 +16,15 @@ class Numeric
 end
 
 class Fixnum
-  include Scruby::Audio::UgenOperations
+  include Scruby::Audio::Ugens::UgenOperations
 end
 
 class Float
-  include Scruby::Audio::UgenOperations
+  include Scruby::Audio::Ugens::UgenOperations
 end
 
 class Array
-  include Scruby::Audio::UgenOperations
+  include Scruby::Audio::Ugens::UgenOperations
   
   #collect with index
   def collect_with_index

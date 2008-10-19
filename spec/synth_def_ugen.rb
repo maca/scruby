@@ -1,17 +1,18 @@
 require File.join( File.expand_path(File.dirname(__FILE__)),"helper")
 
 
-require "#{LIB_DIR}/audio/ugen_operations" 
-require "#{LIB_DIR}/audio/ugen" 
+require "#{LIB_DIR}/audio/ugens/ugen_operations" 
+require "#{LIB_DIR}/audio/ugens/ugen" 
 require "#{LIB_DIR}/extensions"
-require "#{LIB_DIR}/synthdef" 
+require "#{LIB_DIR}/audio/synthdef" 
 # require "#{LIB_DIR}/control_name" 
-require "#{LIB_DIR}/audio/ugen"
+require "#{LIB_DIR}/audio/ugens/ugen"
 
 Dir.glob( File.join(LIB_DIR, "*.rb") ).each{ |f| require f  } #require all files in lib/audio
 
 include Scruby
 include Audio
+include Ugens
 
 
 describe "building ugen graph" do
