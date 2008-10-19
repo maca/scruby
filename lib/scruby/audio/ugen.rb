@@ -1,14 +1,16 @@
 module Scruby
   module Audio
     class Ugen
-      attr_accessor :inputs, :rate
+      attr_accessor :inputs, :rate, :index
+      
       RATES = [ :scalar, :demand, :control, :audio ]
       @@synthdef = nil
-      
+
       include UgenOperations
       
       def initialize( rate, *inputs) 
         @rate, @inputs = rate, inputs
+        @index = add_to_synthdef
       end
       
       def synthdef
@@ -26,6 +28,10 @@ module Scruby
       def ugen?
         true
       end
+      
+      def muladd( mul, add )
+        MulAdd.new( self, mul, add )
+      end
 
       class << self
         def new( rate, *inputs ) #:nodoc:
@@ -33,7 +39,7 @@ module Scruby
           raise ArgumentError.new( "#{rate} not a defined rate") unless RATES.include?( rate.to_sym )
           
           inputs = *inputs #if args is an array peel off one array skin
-          inputs = inputs.to_array #may return a non_array object so we turn it into array, does nothing if allready array
+          inputs = inputs.to_array #may return a non_array object so we turn it into array, does nothing if already array
       		size = inputs.select{ |a| a.instance_of? Array }.map{ |a| a.size }.max || 1 #get the size of the largest array element if present
       		inputs.flatten! if size == 1 #if there is one or more arrays with just one element flatten the input array
           return instantiate( rate, *inputs ) unless size > 1 #return an Ugen if no array was passed as an input

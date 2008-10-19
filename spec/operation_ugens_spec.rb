@@ -129,15 +129,48 @@ describe UnaryOpUgen do
       arr = BinaryOpUgen.new(:+, @control, [100, 200.0] )
       arr.first.inputs.should == [@control, 100]
       arr.last.inputs.should == [@control, 200.0]
-      
       BinaryOpUgen.new(:+, 100, @control ).inputs.should == [100, @control]
     end
-  
+    
+    it "should accept array as input" do
+      arr = BinaryOpUgen.new(:+, [@audio, @scalar], @control  )
+      arr.first.inputs.should == [@audio, @control]
+      arr.last.inputs.should == [@scalar, @control]
+    end
   end
+  
+  describe MulAdd do
+    it do
+      MulAdd.new( @audio, 0.5, 0.5 ).should be_instance_of(MulAdd)
+    end
+
+    it do
+      MulAdd.new( @audio, 0.5, 0.5 ).rate.should == :audio
+    end
+    
+    it do
+      MulAdd.new( @audio, 0.5, 0.5 ).inputs.should == [@audio, 0.5, 0.5]
+    end
+    
+    it "should not be instance of MulAdd" do
+      unary_op = mock('neg')
+      mult     = mock('mult')
+      minus    = mock('minus')
+      plus     = mock('plus')
+      
+      @audio.should_receive( :neg ).and_return( unary_op )
+      @audio.should_receive( :* ).and_return( mult )
+      add = mock( '0.5', :- => minus, :zero? => false )
+      @audio.should_receive( :+ ).and_return( plus )
+      
+      MulAdd.new( @audio, 0, 0.5 ).should be_instance_of( Float )
+      MulAdd.new( @audio, 1, 0 ).should  == @audio
+      MulAdd.new( @audio, -1, 0 ).should == unary_op
+      MulAdd.new( @audio, 0.5, 0 ).should == mult
+      MulAdd.new( @audio, -1, add ).should == minus
+      MulAdd.new( @audio, 1, 0.5 ).should == plus
+    end
+  end
+  
 end
 
-
-
-describe MulAdd do
-  it "should be described"
-end

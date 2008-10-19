@@ -21,14 +21,7 @@ module Scruby
         BINARY.each_key do |op|
           method_name = OP_SYMBOLS[op] || op #get a 'safe' method name for the method to add
           eval "def ugen_#{method_name}( input )
-                  p self.class if self.class.included_modules.include?( Enumerable )
-                  if input.ugen?
-                    if self.class.included_modules.include?( Enumerable )
-                      
-                      []
-                    end
-                    return BinaryOpUgen.new(:#{op}, self, input)
-                  end 
+                  return BinaryOpUgen.new(:#{op}, self, input) if input.ugen?
                   return self.original_#{method_name}( input ) if self.respond_to?( :original_#{method_name} )
                   raise ArgumentError.new( %(Expected \#\{input\} to be an Ugen) )
                 end"          

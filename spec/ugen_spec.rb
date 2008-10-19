@@ -10,6 +10,10 @@ include Audio
 
 
 describe Ugen do
+  
+  before do
+    @sdef = mock( 'sdef', :children => [] )
+  end
 
   it "should set constants " do
     UgenOperations::UNARY.should_not be_nil
@@ -60,18 +64,17 @@ describe Ugen do
   
   describe 'ugen graph in synth def' do
     before do
-      @sdef = mock( 'sdef', :children => [] )
-      Ugen.synthdef = @sdef
+      Ugen.synthdef = nil
       @ugen  = Ugen.new( :audio, 1, 2 )
       @ugen2 = Ugen.new( :audio, 1, 2 )
     end
     
     it "should not have synthdef" do
-      Ugen.synthdef = nil
       Ugen.new( :audio, 1, 2 ).synthdef.should be_nil
     end
     
     it "should have synthdef" do
+      Ugen.synthdef = @sdef
       @ugen.synthdef.should == @sdef
     end
     
@@ -79,10 +82,19 @@ describe Ugen do
       @ugen.should respond_to(:add_to_synthdef)
     end
     
+    it "should add to synth def on instantiation" do
+      Ugen.synthdef = @sdef
+      ugen = Ugen.new( :audio, 1, 2)
+      ugen.synthdef.should == @sdef
+      @sdef.children.should == [ugen]
+    end
+    
     it "should add to synthdef and return synthdef.children size" do
-      @ugen.add_to_synthdef.should  eql( 0 )
-      @ugen2.add_to_synthdef.should eql( 1 )
-      @sdef.children.should eql( [@ugen, @ugen2] )
+      Ugen.synthdef = @sdef
+      ugen, ugen2 = Ugen.new(:audio, 1, 2), Ugen.new(:audio, 1, 2)
+      @sdef.children.should eql( [ugen, ugen2] )
+      ugen.index.should == 0
+      ugen2.index.should == 1
     end
     
     it "should not add to synthdef" do
@@ -135,6 +147,10 @@ describe Ugen do
       *@i_2 = 100, 220 
       *@i_3 = 100, 230 
       *@i_4 = 100, 240
+    end
+    
+    it "should not care if an array was passed" do
+      Ugen.new( :audio, [1, 2, 3] ).should be_instance_of(Ugen)
     end
     
     it "should return an array of Ugens if an array as one arg is passed on instantiation" do
@@ -195,6 +211,13 @@ describe Ugen do
         end
       end
       last.call(ugens).should == array
+    end
+  
+    it "should return muladd" do
+      MulAdd = mock( 'MulAdd', :new => nil )
+      @ugen = Ugen.new(:audio, 100, 100)
+      MulAdd.should_receive( :new ).with( @ugen, 1, 1)
+      @ugen.muladd(1, 1)
     end
   end
 end

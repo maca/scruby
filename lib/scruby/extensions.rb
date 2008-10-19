@@ -24,7 +24,7 @@ class Float
 end
 
 class Array
-  # include Scruby::Audio::UgenOperations
+  include Scruby::Audio::UgenOperations
   
   #collect with index
   def collect_with_index

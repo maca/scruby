@@ -1,7 +1,6 @@
 module Scruby
   module Audio
     module OperationUgens
-      
       class BasicOpUgen < Ugen #:nodoc:
         attr_accessor :operator
         
@@ -45,6 +44,18 @@ module Scruby
       end
       
       class MulAdd < Ugen
+        def self.new( input, mul, add )
+          no_mul = ( mul == 1.0 )
+          minus  = ( mul == -1.0 )
+          return add         if mul.zero?
+          return input       if no_mul && add.zero?
+          return input.neg   if minus && add.zero?
+          return input * mul if add.zero?
+          return add - input if minus
+          return input + add if no_mul
+          
+          super( input.rate, input, mul, add )
+        end
         
       end
     end

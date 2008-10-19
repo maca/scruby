@@ -101,9 +101,17 @@ describe UgenOperations, 'loading module' do
   end
   
   describe Array do
+    
+    before :all do
+      Ugen = mock( 'Ugen' )
+    end
+    
     before do
       Klass.send( :include, UgenOperations )
       @ugen = mock( 'ugen', :ugen? => true )
+      @ugen.stub!( :instance_of? ).with( Ugen ).and_return( true )
+      @ugen.stub!( :instance_of? ).with( Ugen ).and_return( true )
+      @ugen.should be_instance_of( Ugen )
     end
 
     it do
@@ -115,11 +123,23 @@ describe UgenOperations, 'loading module' do
       [] + @ugen
     end
     
-    it "should return an array of ugens" do
-      ([] + @ugen).should be_instance_of(Array) 
+    it "should sum arrays as expected" do
+      ([1,2] + [3]).should == [1,2,3]
     end
-    
+
+    it "should return" do
+      BinaryOpUgen.should_receive( :new ).with( :+, [1,2], @ugen )
+      ([1, 2] + @ugen)
+    end    
   end
   
 end
+
+
+# methods overriden by UgenOperations inclusion: 
+# Fixnum#+ Fixnum#gcd Fixnum#/ Fixnum#round Fixnum#lcm Fixnum#div Fixnum#- Fixnum#>= Fixnum#* Fixnum#<= 
+# Float#+ Float#/ Float#round Float#div Float#- Float#>= Float#* Float#<= 
+# Array#+ Array#- Array#*
+# changed max and min to maximum and minimum because the override Array#max and Array#min wich take no args
+
 

@@ -1,5 +1,6 @@
 require File.join(File.expand_path(File.dirname(__FILE__)),"helper")
 
+require "#{LIB_DIR}/audio/ugen_operations"
 require "#{LIB_DIR}/extensions"
 require "ruby2ruby"
 

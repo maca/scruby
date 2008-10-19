@@ -58,8 +58,8 @@ binary:
   !ruby/symbol mod:                5
   !ruby/symbol <=:                 10
   !ruby/symbol >=:                 11
-  !ruby/symbol min:                12
-  !ruby/symbol max:                13
+  !ruby/symbol minimum:            12
+  !ruby/symbol maximum:            13 #can't be called max because there is an array method calle maximum
   !ruby/symbol lcm:                17
   !ruby/symbol gcd:                18
   !ruby/symbol round:              19
