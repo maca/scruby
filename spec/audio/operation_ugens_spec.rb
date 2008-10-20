@@ -15,10 +15,10 @@ describe UnaryOpUgen do
   RATES = [ :scalar, :demand, :control, :audio ]
   
   before do
-    @scalar  = mock( 'ugen', :rate => :scalar ) 
-    @demand  = mock( 'ugen', :rate => :demand ) 
-    @control = mock( 'ugen', :rate => :control ) 
-    @audio   = mock( 'ugen', :rate => :audio ) 
+    @scalar  = mock( 'ugen', :rate => :scalar, :valid_ugen_input? => true ) 
+    @demand  = mock( 'ugen', :rate => :demand, :valid_ugen_input? => true ) 
+    @control = mock( 'ugen', :rate => :control, :valid_ugen_input? => true ) 
+    @audio   = mock( 'ugen', :rate => :audio, :valid_ugen_input? => true ) 
   end
   
   describe UnaryOpUgen do

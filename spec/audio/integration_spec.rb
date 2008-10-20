@@ -19,26 +19,15 @@ describe "building ugen graph" do
     @sdef  = SynthDef.new( :name ) do end
     @ugen  = Ugen.new( :audio, 100, 200 )
   end
-  
-  it do
-    @sdef.should respond_to(:build_ugen_graph)
-  end
-  
+
   it "should return nil #sytnth_def" do
-    @ugen.synthdef.should eql(nil)
-  end
-  
-  it "should set @sdef #synthdef=" do
-    function = lambda{}
-    Ugen.should_receive( :synthdef= ).with( @sdef )
-    Ugen.should_receive( :synthdef= ).with( nil )      
-    @sdef.build_ugen_graph( function )
+    @ugen.send( :synthdef ).should eql(nil)
   end
   
   it "should set synthdef to the synth def for ugens instantiated inside ugen graph" do
-    function = lambda { Ugen.new( :audio, 100, 200 ).synthdef.should eql( @sdef ) }
-    @sdef.build_ugen_graph function
-    Ugen.new( :audio, 100, 200 ).synthdef.should eql( nil )
+    function = lambda { Ugen.new( :audio, 100, 200 ).send( :synthdef ).should eql( @sdef ) }
+    @sdef.send :build_ugen_graph, function, []
+    Ugen.new( :audio, 100, 200 ).send( :synthdef ).should eql( nil )
   end
   
 

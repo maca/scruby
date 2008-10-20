@@ -6,7 +6,11 @@ module Scruby
         UNARY  = operation_indices['unary']
         BINARY = operation_indices['binary']      
         OP_SYMBOLS = { :+ => :plus, :- => :minus, :* => :mult, :/ => :div2, :<= => :less_than_or_eql, :>= => :more_than_or_eql }
-      
+        
+        def valid_ugen_input?
+          true
+        end
+        
         def self.included( klass )
           klass.send( :include, BinaryOperations )
           begin; klass.send( :include, UnaryOperators ) if klass.new.ugen?; rescue; end

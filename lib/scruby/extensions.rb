@@ -7,12 +7,23 @@ class Object
   def ugen?
     false
   end
+  
+  def valid_ugen_input?
+    false
+  end
 end
 
 class Numeric
   def rate
     :scalar
   end
+end
+
+class Numeric
+  private
+  def collect_constants #:nodoc:
+    self
+  end  
 end
 
 class Fixnum
@@ -46,6 +57,11 @@ class Array
 
   def to_array
     self
+  end
+  
+  private
+  def collect_constants #:nodoc:
+    self.collect{ |e| e.send( :collect_constants )  }
   end
 end
 

@@ -1,6 +1,6 @@
 require File.join(File.expand_path(File.dirname(__FILE__)),"helper")
 
-require "#{LIB_DIR}/audio/ugen_operations"
+require "#{LIB_DIR}/audio/ugens/ugen_operations"
 require "#{LIB_DIR}/extensions"
 require "ruby2ruby"
 
@@ -45,6 +45,7 @@ describe Array, "monkey patches" do
     end
     
     it "should sum with Ugen"
+    it "should collect constants"
     
   end
 end

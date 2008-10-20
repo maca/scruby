@@ -69,24 +69,24 @@ describe Ugen do
       @ugen  = Ugen.new( :audio, 1, 2 )
       @ugen2 = Ugen.new( :audio, 1, 2 )
     end
-    
+        
     it "should not have synthdef" do
-      Ugen.new( :audio, 1, 2 ).synthdef.should be_nil
+      Ugen.new( :audio, 1, 2 ).send( :synthdef ).should be_nil
     end
     
     it "should have synthdef" do
       Ugen.synthdef = @sdef
-      @ugen.synthdef.should == @sdef
+      @ugen.send( :synthdef ).should == @sdef
     end
     
     it do
-      @ugen.should respond_to(:add_to_synthdef)
+      @ugen.should_not respond_to(:add_to_synthdef) #private method
     end
     
     it "should add to synth def on instantiation" do
       Ugen.synthdef = @sdef
       ugen = Ugen.new( :audio, 1, 2)
-      ugen.synthdef.should == @sdef
+      ugen.send( :synthdef ).should == @sdef
       @sdef.children.should == [ugen]
     end
     
@@ -101,13 +101,26 @@ describe Ugen do
     it "should not add to synthdef" do
       Ugen.synthdef = nil
       @sdef.children.should_not_receive( :<< )
-      Ugen.new( :audio, 1, 2 ).add_to_synthdef.should eql( nil )
+      Ugen.new( :audio, 1, 2 ).send( :add_to_synthdef ).should eql( nil )
     end
+    
+    it "should collect constants" do
+      Ugen.new( :audio, 100, @ugen, 200 ).send( :collect_constants ).flatten.sort.should == [1, 2, 100, 200]
+    end
+    
+    it "should collect constants on arrayed inputs" do
+      Ugen.new( :audio, 100, [@ugen, [200, @ugen2, 100] ] ).send( :collect_constants ).flatten.uniq.sort.should == [1, 2, 100, 200]
+    end
+    
   end
   
   describe 'initialization' do
     before do
       @ugen = Ugen.new(:audio, 1, 2, 3)
+    end
+    
+    it "should not accept non valid inputs" do
+      lambda{ @ugen = Ugen.new(:audio, "hola") }.should raise_error( ArgumentError )
     end
     
     it "should require at least one argument" do
