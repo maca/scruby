@@ -42,6 +42,8 @@ module Scruby
       def collect_constants( children ) #:nodoc:
         children.send( :collect_constants ).flatten.uniq
       end
+      
+      #to ugen
     end
   end
 end

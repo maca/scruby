@@ -1,4 +1,4 @@
-require File.join(File.expand_path(File.dirname(__FILE__)),"helper")
+require File.join( File.expand_path(File.dirname(__FILE__)), '..',"helper")
 require 'yaml'
 
 require "#{LIB_DIR}/audio/ugens/ugen_operations" 
@@ -218,7 +218,7 @@ describe Ugen do
     end
     
     it "should match the structure of the inputs array(s)" do
-      array = [ 200, [210, [220, 230]] ]
+      array = [ 200, [210, [220, 230] ] ]
       ugens = Ugen.new( :audio, 100, array )
       last = lambda do |i| 
         if i.instance_of?(Ugen) 

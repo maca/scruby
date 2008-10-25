@@ -1,0 +1,1811 @@
+<?xml version='1.0' encoding='utf-8'?>
+<!DOCTYPE ugendefs SYSTEM "http://www.sciss.de/jcollider/ugendefs.dtd">
+<ugendefs>
+	<ugen class="PitchShift" rates="audio">
+		<arg name="input" def="0.0" />
+		<arg name="windowSize" def="0.2" />
+		<arg name="pitchRatio" def="1.0" />
+		<arg name="pitchDispersion" def="0.0" />
+		<arg name="timeDispersion" def="0.0" />
+	</ugen>
+	
+	<ugen class="PSinGrain" rates="audio">
+		<arg name="freq" def="440.0" />
+		<arg name="dur" def="0.2" />
+		<arg name="amp" def="1.0" />
+	</ugen>
+
+	<ugen class="BufChannels" rates="control scalar">
+		<arg name="bufnum" />
+	</ugen>
+	
+	<ugen class="BufDur" rates="control scalar">
+		<arg name="bufnum" />
+	</ugen>
+	
+	<ugen class="BufSamples" rates="control scalar">
+		<arg name="bufnum" />
+	</ugen>
+
+	<ugen class="BufFrames" rates="control scalar">
+		<arg name="bufnum" />
+	</ugen>
+	
+	<ugen class="BufRateScale" rates="control scalar">
+		<arg name="bufnum" />
+	</ugen>
+	
+	<ugen class="BufSampleRate" rates="control scalar">
+		<arg name="bufnum" />
+	</ugen>
+
+	<ugen class="NumRunningSynths" rates="scalar" />
+
+	<ugen class="NumBuffers" rates="scalar" />
+
+	<ugen class="NumControlBuses" rates="scalar" />
+
+	<ugen class="NumAudioBuses" rates="scalar" />
+
+	<ugen class="NumInputBuses" rates="scalar" />
+
+	<ugen class="NumOutputBuses" rates="scalar" />
+
+	<ugen class="SubsampleOffset" rates="scalar" />
+
+	<ugen class="ControlRate" rates="scalar" />
+
+	<ugen class="RadiansPerSample" rates="scalar" />
+
+	<ugen class="SampleDur" rates="scalar" />
+
+	<ugen class="SampleRate" rates="scalar" />
+ 	
+	<ugen class="TBall" rates="audio">
+		<arg name="input" def="0.0" />
+		<arg name="g" def="10" />
+		<arg name="damp" def="0" />
+		<arg name="friction" def="0.01" />
+	</ugen>
+	
+	<ugen class="Ball" rates="audio">
+		<arg name="input" def="0.0" />
+		<arg name="g" def="10" />
+		<arg name="damp" def="0" />
+		<arg name="friction" def="0.01" />
+	</ugen>
+	
+	<ugen class="Spring" rates="audio">
+		<arg name="input" def="0.0" />
+		<arg name="spring" def="0" />
+		<arg name="damp" def="0" />
+	</ugen>
+
+	<ugen class="DetectSilence" rates="audio control">
+		<arg name="input" def="0.0" />
+		<arg name="amp" def="0.0001" />
+		<arg name="time" def="0.1" />
+		<arg name="doneAction" def="0" />
+		<outputs type="fixed" val="0" />
+	</ugen>
+	
+	<ugen class="Formlet" rates="audio control">
+		<arg name="input" def="0.0" />
+		<arg name="freq" def="440.0" />
+		<arg name="attacktime" def="1.0" />
+		<arg name="decaytime" def="1.0" />
+	</ugen>
+
+	<ugen class="Ringz" rates="audio control">
+		<arg name="input" def="0.0" />
+		<arg name="freq" def="440.0" />
+		<arg name="decaytime" def="1.0" />
+	</ugen>
+
+	<ugen class="SOS" rates="audio">
+		<arg name="input" def="0.0" />
+		<arg name="a0" def="0.0" />
+		<arg name="a1" def="0.0" />
+		<arg name="a2" def="0.0" />
+		<arg name="b1" def="0.0" />
+		<arg name="b2" def="0.0" />
+	</ugen>
+
+	<ugen class="FOS" rates="audio">
+		<arg name="input" def="0.0" />
+		<arg name="a0" def="0.0" />
+		<arg name="a1" def="0.0" />
+		<arg name="b1" def="0.0" />
+	</ugen>
+
+	<ugen class="Slew" rates="audio control">
+		<arg name="input" def="0.0" />
+		<arg name="up" def="1.0" />
+		<arg name="dn" def="1.0" />
+	</ugen>
+
+	<ugen class="Median" rates="audio control">
+		<arg name="length" def="3" />
+		<arg name="input" def="0.0" />
+	</ugen>
+
+	<ugen class="LPZ2" rates="audio control">
+		<arg name="input" def="0.0" />
+	</ugen>
+
+	<ugen class="BRZ2" rates="audio control">
+		<arg name="input" def="0.0" />
+	</ugen>
+
+	<ugen class="BPZ2" rates="audio control">
+		<arg name="input" def="0.0" />
+	</ugen>
+
+	<ugen class="HPZ2" rates="audio control">
+		<arg name="input" def="0.0" />
+	</ugen>
+
+	<ugen class="Slope" rates="audio control">
+		<arg name="input" def="0.0" />
+	</ugen>
+
+	<ugen class="LPZ1" rates="audio control">
+		<arg name="input" def="0.0" />
+	</ugen>
+
+	<ugen class="HPZ1" rates="audio control">
+		<arg name="input" def="0.0" />
+	</ugen>
+
+	<ugen class="MidEQ" rates="audio control">
+		<arg name="input" def="0.0" />
+		<arg name="freq" def="440.0" />
+		<arg name="rq" def="1.0" />
+		<arg name="db" def="0.0" />
+	</ugen>
+
+	<ugen class="BPF" rates="audio control">
+		<arg name="input" def="0.0" />
+		<arg name="freq" def="440.0" />
+		<arg name="rq" def="1.0" />
+	</ugen>
+
+	<ugen class="BRF" rates="audio control">
+		<arg name="input" def="0.0" />
+		<arg name="freq" def="440.0" />
+		<arg name="rq" def="1.0" />
+	</ugen>
+
+	<ugen class="LPF" rates="audio control">
+		<arg name="input" def="0.0" />
+		<arg name="freq" def="440.0" />
+	</ugen>
+
+	<ugen class="HPF" rates="audio control">
+		<arg name="input" def="0.0" />
+		<arg name="freq" def="440.0" />
+	</ugen>
+
+	<ugen class="RLPF" rates="audio control">
+		<arg name="input" def="0.0" />
+		<arg name="freq" def="440.0" />
+		<arg name="rq" def="1.0" />
+	</ugen>
+
+	<ugen class="RHPF" rates="audio control">
+		<arg name="input" def="0.0" />
+		<arg name="freq" def="440.0" />
+		<arg name="rq" def="1.0" />
+	</ugen>
+
+	<ugen class="LeakDC" rates="audio control">
+		<arg name="input" def="0.0" />
+		<arg name="coef" def="0.995" />	<!-- control default 0.9 -->
+	</ugen>
+
+	<ugen class="Lag" rates="audio control">
+		<arg name="input" def="0.0" />
+		<arg name="lagTime" def="0.1" />
+	</ugen>
+
+	<ugen class="Ramp" rates="audio control">
+		<arg name="input" def="0.0" />
+		<arg name="lagTime" def="0.1" />
+	</ugen>
+
+	<ugen class="Lag3" rates="audio control">
+		<arg name="input" def="0.0" />
+		<arg name="lagTime" def="0.1" />
+	</ugen>
+
+	<ugen class="Lag2" rates="audio control">
+		<arg name="input" def="0.0" />
+		<arg name="lagTime" def="0.1" />
+	</ugen>
+
+	<ugen class="Decay2" rates="audio control">
+		<arg name="input" def="0.0" />
+		<arg name="attackTime" def="0.01" />
+		<arg name="decayTime" def="1.0" />
+	</ugen>
+
+	<ugen class="Decay" rates="audio control">
+		<arg name="input" def="0.0" />
+		<arg name="decayTime" def="1.0" />
+	</ugen>
+
+	<ugen class="Integrator" rates="audio control">
+		<arg name="input" def="0.0" />
+		<arg name="coef" def="1.0" />
+	</ugen>
+
+	<ugen class="TwoPole" rates="audio control">
+		<arg name="input" def="0.0" />
+		<arg name="freq" def="440.0" />
+		<arg name="radius" def="0.8" />
+	</ugen>
+
+	<ugen class="APF" rates="audio control">
+		<arg name="input" def="0.0" />
+		<arg name="freq" def="440.0" />
+		<arg name="radius" def="0.8" />
+	</ugen>
+
+	<ugen class="TwoZero" rates="audio control">
+		<arg name="input" def="0.0" />
+		<arg name="freq" def="440.0" />
+		<arg name="radius" def="0.8" />
+	</ugen>
+	
+	<ugen class="OnePole" rates="audio control">
+		<arg name="input" def="0.0" />
+		<arg name="coef" def="0.5" />
+	</ugen>
+
+	<ugen class="OneZero" rates="audio control">
+		<arg name="input" def="0.0" />
+		<arg name="coef" def="0.5" />
+	</ugen>
+
+	<ugen class="Resonz" rates="audio control">
+		<arg name="input" def="0.0" />
+		<arg name="freq" def="440.0" />
+		<arg name="bwr" def="1.0" />
+	</ugen>
+
+	<ugen class="Gendy3" rates="audio control">
+		<arg name="ampdist" def="1" />
+		<arg name="durdist" def="1" />
+		<arg name="adparam" def="1.0" />
+		<arg name="ddparam" def="1.0" />
+		<arg name="freq" def="440" />
+		<arg name="ampscale" def="0.5" />
+		<arg name="durscale" def="0.5" />
+		<arg name="initCPs" def="12" />
+		<arg name="knum" />	<!-- default = initCPs -->
+	</ugen>
+
+	<ugen class="Gendy2" rates="audio control">
+		<arg name="ampdist" def="1" />
+		<arg name="durdist" def="1" />
+		<arg name="adparam" def="1.0" />
+		<arg name="ddparam" def="1.0" />
+		<arg name="minfreq" def="440" />	<!-- control default = 20 -->
+		<arg name="maxfreq" def="660" />	<!-- control default = 1000 -->
+		<arg name="ampscale" def="0.5" />
+		<arg name="durscale" def="0.5" />
+		<arg name="initCPs" def="12" />
+		<arg name="knum" />	<!-- default = initCPs -->
+		<arg name="a" def="1.17" />
+		<arg name="c" def="0.31" />
+	</ugen>
+
+	<ugen class="Gendy1" rates="audio control">
+		<arg name="ampdist" def="1" />
+		<arg name="durdist" def="1" />
+		<arg name="adparam" def="1.0" />
+		<arg name="ddparam" def="1.0" />
+		<arg name="minfreq" def="440" />	<!-- control default = 20 -->
+		<arg name="maxfreq" def="660" />	<!-- control default = 1000 -->
+		<arg name="ampscale" def="0.5" />
+		<arg name="durscale" def="0.5" />
+		<arg name="initCPs" def="12" />
+		<arg name="knum" />	<!-- default = initCPs -->
+	</ugen>
+
+	<ugen class="Linen" rates="control">
+		<arg name="gate" def="1.0" />
+		<arg name="attackTime" def="0.01" />
+		<arg name="susLevel" def="1.0" />
+		<arg name="releaseTime" def="1.0" />
+		<arg name="doneAction" def="0" />
+	</ugen>
+
+	<ugen class="EnvGen" rates="audio control">
+		<arg name="gate" def="1.0" />
+		<arg name="levelScale" def="1.0" />
+		<arg name="levelBias" def="0.0" />
+		<arg name="timeScale" def="1.0" />
+		<arg name="doneAction" def="0" />
+		<arg name="envelope" type="array" />
+	</ugen>
+
+	<ugen class="Free" rates="control">
+		<arg name="trig" />
+		<arg name="id" />
+	</ugen>
+
+	<ugen class="Pause" rates="control">
+		<arg name="gate" />
+		<arg name="id" />
+	</ugen>
+
+	<ugen class="PauseSelfWhenDone" rates="control">
+		<arg name="src" />
+	</ugen>
+
+	<ugen class="FreeSelfWhenDone" rates="control">
+		<arg name="src" />
+	</ugen>
+
+	<ugen class="PauseSelf" rates="control">
+		<arg name="input" />
+	</ugen>
+
+	<ugen class="FreeSelf" rates="control">
+		<arg name="input" />
+	</ugen>
+
+	<ugen class="Done" rates="control">
+		<arg name="src" />
+	</ugen>
+	
+	<ugen class="Pulse" rates="audio">
+		<arg name="freq" def="440.0" />
+		<arg name="width" def="0.5" />
+	</ugen>
+
+	<ugen class="Saw" rates="audio">
+		<arg name="freq" def="440.0" />
+	</ugen>
+
+	<ugen class="Blip" rates="audio">
+		<arg name="freq" def="440.0" />
+		<arg name="numharm" def="200.0" />
+	</ugen>
+	
+	<!-- DynKlank : wrongly defined as a UGen subclass -->
+
+	<ugen class="Klank" rates="audio">
+		<arg name="input" />
+		<arg name="freqscale" def="1.0" />
+		<arg name="freqoffset" def="0.0" />
+		<arg name="decayscale" def="1.0" />
+		<arg name="specs" type="array" />
+	</ugen>
+
+	<ugen class="Klang" rates="audio">
+		<arg name="freqscale" def="1.0" />
+		<arg name="freqoffset" def="0.0" />
+		<arg name="specs" type="array" />
+	</ugen>
+
+	<ugen class="FSinOsc" rates="audio control">
+		<arg name="freq" def="440.0" />
+		<arg name="iphase" def="0.0" />
+	</ugen>
+
+	<ugen class="PV_BinScramble" rates="control">
+		<arg name="buffer" />
+		<arg name="wipe" def="0.0" />
+		<arg name="width" def="0.2" />
+		<arg name="trig" def="0.0" />
+	</ugen>
+
+	<ugen class="PV_MagFreeze" rates="control">
+		<arg name="buffer" />
+		<arg name="freeze" def="0.0" />
+	</ugen>
+
+	<ugen class="PV_Diffuser" rates="control">
+		<arg name="buffer" />
+		<arg name="trig" def="0.0" />
+	</ugen>
+
+	<ugen class="PV_RandWipe" rates="control">
+		<arg name="bufferA" />
+		<arg name="bufferB" />
+		<arg name="wipe" def="0.0" />
+		<arg name="trig" def="0.0" />
+	</ugen>
+
+	<ugen class="PV_RectComb2" rates="control">
+		<arg name="bufferA" />
+		<arg name="bufferB" />
+		<arg name="numTeeth" def="0.0" />
+		<arg name="phase" def="0.0" />
+		<arg name="width" def="0.5" />
+	</ugen>
+
+	<ugen class="PV_RectComb" rates="control">
+		<arg name="buffer" />
+		<arg name="numTeeth" def="0.0" />
+		<arg name="phase" def="0.0" />
+		<arg name="width" def="0.5" />
+	</ugen>
+
+	<ugen class="PV_RandComb" rates="control">
+		<arg name="buffer" />
+		<arg name="wipe" def="0.0" />
+		<arg name="trig" def="0.0" />
+	</ugen>
+
+	<ugen class="PV_MagMul" rates="control">
+		<arg name="bufferA" />
+		<arg name="bufferB" />
+	</ugen>
+
+	<ugen class="PV_Add" rates="control">
+		<arg name="bufferA" />
+		<arg name="bufferB" />
+	</ugen>
+	
+	<ugen class="PV_Mul" rates="control">
+		<arg name="bufferA" />
+		<arg name="bufferB" />
+	</ugen>
+	
+	<ugen class="PV_Min" rates="control">
+		<arg name="bufferA" />
+		<arg name="bufferB" />
+	</ugen>
+	
+	<ugen class="PV_Max" rates="control">
+		<arg name="bufferA" />
+		<arg name="bufferB" />
+	</ugen>
+	
+	<ugen class="PV_CopyPhase" rates="control">
+		<arg name="bufferA" />
+		<arg name="bufferB" />
+	</ugen>
+
+	<ugen class="PV_BinWipe" rates="control">
+		<arg name="bufferA" />
+		<arg name="bufferB" />
+		<arg name="wipe" def="0.0" />
+	</ugen>
+
+	<ugen class="PV_BrickWall" rates="control">
+		<arg name="buffer" />
+		<arg name="wipe" def="0.0" />
+	</ugen>
+
+	<ugen class="PV_PhaseShift" rates="control">
+		<arg name="buffer" />
+		<arg name="shift" />
+	</ugen>
+	
+	<ugen class="PV_MagSquared" rates="control">
+		<arg name="buffer" />
+	</ugen>
+
+	<ugen class="PV_PhaseShift270" rates="control">
+		<arg name="buffer" />
+	</ugen>
+
+	<ugen class="PV_PhaseShift90" rates="control">
+		<arg name="buffer" />
+	</ugen>
+
+	<ugen class="PV_MagNoise" rates="control">
+		<arg name="buffer" />
+	</ugen>
+	
+	<ugen class="PV_BinShift" rates="control">
+		<arg name="buffer" />
+		<arg name="stretch" def="1.0" />
+		<arg name="shift" def="0.0" />
+	</ugen>
+
+	<ugen class="PV_MagShift" rates="control">
+		<arg name="buffer" />
+		<arg name="stretch" def="1.0" />
+		<arg name="shift" def="0.0" />
+	</ugen>
+
+	<ugen class="PV_MagSmear" rates="control">
+		<arg name="buffer" />
+		<arg name="bins" def="0.0" />
+	</ugen>
+
+	<ugen class="PV_MagAbove" rates="control">
+		<arg name="buffer" />
+		<arg name="threshold" def="0.0" />
+	</ugen>
+ 
+	<ugen class="PV_LocalMax" rates="control">
+		<arg name="buffer" />
+		<arg name="threshold" def="0.0" />
+	</ugen>
+
+	<ugen class="PV_MagClip" rates="control">
+		<arg name="buffer" />
+		<arg name="threshold" def="0.0" />
+	</ugen>
+
+	<ugen class="PV_MagBelow" rates="control">
+		<arg name="buffer" />
+		<arg name="threshold" def="0.0" />
+	</ugen>
+
+	<ugen class="IFFT" rates="audio">
+		<arg name="buffer" />
+	</ugen>
+
+	<ugen class="FFT" rates="control">
+		<arg name="buffer" />
+		<arg name="input" def="0.0" />
+	</ugen>
+
+	<ugen class="RunningSum" rates="audio control">
+		<arg name="input" />
+		<arg name="numsamp" def="40" />
+	</ugen>
+
+	<ugen class="PV_HainsworthFoote" rates="audio">
+		<arg name="buffer" />
+		<arg name="proph" def="0.0" />
+		<arg name="propf" def="0.0" />
+		<arg name="threshold" def="1.0" />
+		<arg name="waittime" def="0.04" />
+	</ugen>
+
+	<ugen class="PV_JensenAndersen" rates="audio">
+		<arg name="buffer" />
+		<arg name="propsc" def="0.25" />
+		<arg name="prophfe" def="0.25" />
+		<arg name="prophfc" def="0.25" />
+		<arg name="propsf" def="0.25" />
+		<arg name="threshold" def="1.0" />
+		<arg name="waittime" def="0.04" />
+	</ugen>
+
+	<ugen class="Convolution2" rates="audio">
+		<arg name="input" />
+		<arg name="bufnum" />
+		<arg name="trigger" />
+		<arg name="framesize" def="512" />
+	</ugen>
+
+	<ugen class="Convolution" rates="audio">
+		<arg name="input" />
+		<arg name="kernel" />
+		<arg name="framesize" def="512" />
+	</ugen>
+
+	<ugen class="PV_ConformalMap" rates="control">
+		<arg name="buffer" />
+		<arg name="areal" def="0.0" />
+		<arg name="aimag" def="0.0" />
+	</ugen>
+
+	<ugen class="Normalizer" rates="audio">
+		<arg name="input" />
+		<arg name="level" def="1.0" />
+		<arg name="dur" def="0.01" />
+	</ugen>
+
+	<ugen class="Limiter" rates="audio">
+		<arg name="input" />
+		<arg name="level" def="1.0" />
+		<arg name="dur" def="0.01" />
+	</ugen>
+
+	<!-- CompanderD : wrongly defined as a UGen subclass -->
+
+	<ugen class="Compander" rates="audio">
+		<arg name="input" def="0.0" />
+		<arg name="control" def="0.0" />
+		<arg name="thresh" def="0.5" />
+		<arg name="slopeBelow" def="1.0" />
+		<arg name="slopeAbove" def="1.0" />
+		<arg name="clampTime" def="0.01" />
+		<arg name="relaxTime" def="0.1" />
+	</ugen>
+
+	<ugen class="Amplitude" rates="audio control">
+		<arg name="input" def="0.0" />
+		<arg name="attackTime" def="0.01" />
+		<arg name="releaseTime" def="0.01" />
+	</ugen>
+
+	<ugen class="BufCombN" rates="audio">
+		<arg name="buf" def="0" />
+		<arg name="input" def="0.0" />
+		<arg name="delaytime" def="0.2" />
+		<arg name="decaytime" def="1.0" />
+	</ugen>
+
+	<ugen class="BufAllpassC" rates="audio">
+		<arg name="buf" def="0" />
+		<arg name="input" def="0.0" />
+		<arg name="delaytime" def="0.2" />
+		<arg name="decaytime" def="1.0" />
+	</ugen>
+
+	<ugen class="BufAllpassL" rates="audio">
+		<arg name="buf" def="0" />
+		<arg name="input" def="0.0" />
+		<arg name="delaytime" def="0.2" />
+		<arg name="decaytime" def="1.0" />
+	</ugen>
+
+	<ugen class="BufAllpassN" rates="audio">
+		<arg name="buf" def="0" />
+		<arg name="input" def="0.0" />
+		<arg name="delaytime" def="0.2" />
+		<arg name="decaytime" def="1.0" />
+	</ugen>
+
+	<ugen class="BufCombC" rates="audio">
+		<arg name="buf" def="0" />
+		<arg name="input" def="0.0" />
+		<arg name="delaytime" def="0.2" />
+		<arg name="decaytime" def="1.0" />
+	</ugen>
+
+	<ugen class="BufCombL" rates="audio">
+		<arg name="buf" def="0" />
+		<arg name="input" def="0.0" />
+		<arg name="delaytime" def="0.2" />
+		<arg name="decaytime" def="1.0" />
+	</ugen>
+
+	<ugen class="BufDelayN" rates="audio control">
+		<arg name="buf" def="0" />
+		<arg name="input" def="0.0" />
+		<arg name="delaytime" def="0.2" />
+	</ugen>
+	
+	<ugen class="BufDelayC" rates="audio control">
+		<arg name="buf" def="0" />
+		<arg name="input" def="0.0" />
+		<arg name="delaytime" def="0.2" />
+	</ugen>
+
+	<ugen class="BufDelayL" rates="audio control">
+		<arg name="buf" def="0" />
+		<arg name="input" def="0.0" />
+		<arg name="delaytime" def="0.2" />
+	</ugen>
+
+	<ugen class="CombN" rates="audio control">
+		<arg name="input" def="0.0" />
+		<arg name="maxdelaytime" def="0.2" />
+		<arg name="delaytime" def="0.2" />
+		<arg name="decaytime" def="1.0" />
+	</ugen>
+
+	<ugen class="AllpassC" rates="audio control">
+		<arg name="input" def="0.0" />
+		<arg name="maxdelaytime" def="0.2" />
+		<arg name="delaytime" def="0.2" />
+		<arg name="decaytime" def="1.0" />
+	</ugen>
+
+	<ugen class="AllpassL" rates="audio control">
+		<arg name="input" def="0.0" />
+		<arg name="maxdelaytime" def="0.2" />
+		<arg name="delaytime" def="0.2" />
+		<arg name="decaytime" def="1.0" />
+	</ugen>
+
+	<ugen class="AllpassN" rates="audio control">
+		<arg name="input" def="0.0" />
+		<arg name="maxdelaytime" def="0.2" />
+		<arg name="delaytime" def="0.2" />
+		<arg name="decaytime" def="1.0" />
+	</ugen>
+
+	<ugen class="CombC" rates="audio control">
+		<arg name="input" def="0.0" />
+		<arg name="maxdelaytime" def="0.2" />
+		<arg name="delaytime" def="0.2" />
+		<arg name="decaytime" def="1.0" />
+	</ugen>
+
+	<ugen class="CombL" rates="audio control">
+		<arg name="input" def="0.0" />
+		<arg name="maxdelaytime" def="0.2" />
+		<arg name="delaytime" def="0.2" />
+		<arg name="decaytime" def="1.0" />
+	</ugen>
+
+	<ugen class="DelayN" rates="audio control">
+		<arg name="input" def="0.0" />
+		<arg name="maxdelaytime" def="0.2" />
+		<arg name="delaytime" def="0.2" />
+	</ugen>
+
+	<ugen class="DelayC" rates="audio control">
+		<arg name="input" def="0.0" />
+		<arg name="maxdelaytime" def="0.2" />
+		<arg name="delaytime" def="0.2" />
+	</ugen>
+
+	<ugen class="DelayL" rates="audio control">
+		<arg name="input" def="0.0" />
+		<arg name="maxdelaytime" def="0.2" />
+		<arg name="delaytime" def="0.2" />
+	</ugen>
+
+	<ugen class="Delay1" rates="audio control">
+		<arg name="input" def="0.0" />
+	</ugen>
+
+	<ugen class="Delay2" rates="audio control">
+		<arg name="input" def="0.0" />
+	</ugen>
+	
+	<ugen class="KeyState" rates="control">		<!-- MacOS only -->
+		<arg name="keycode" def="0" />
+		<arg name="minval" def="0" />
+		<arg name="maxval" def="1" />
+		<arg name="lag" def="0.2" />
+	</ugen>
+
+	<ugen class="MouseButton" rates="control">		<!-- MacOS only -->
+		<arg name="minval" def="0" />
+		<arg name="maxval" def="1" />
+		<arg name="lag" def="0.2" />
+	</ugen>
+
+	<ugen class="MouseX" rates="control">		<!-- MacOS only -->
+		<arg name="minval" def="0" />
+		<arg name="maxval" def="1" />
+		<arg name="warp" def="0" />
+		<arg name="lag" def="0.2" />
+	</ugen>
+
+	<ugen class="MouseY" rates="control">		<!-- MacOS only -->
+		<arg name="minval" def="0" />
+		<arg name="maxval" def="1" />
+		<arg name="warp" def="0" />
+		<arg name="lag" def="0.2" />
+	</ugen>
+
+	<!-- TWChoose : wrongly defined as a UGen subclass -->
+
+	<ugen class="Vibrato" rates="audio control">
+		<arg name="freq" def="440.0" />
+		<arg name="rate" def="6" />
+		<arg name="depth" def="0.02" />
+		<arg name="delay" def="0.0" />
+		<arg name="onset" def="0.0" />
+		<arg name="rateVariation" def="0.04" />
+		<arg name="depthVariation" def="0.1" />
+		<arg name="iphase" def="0.0" />
+	</ugen>
+
+	<ugen class="Select" rates="audio control">
+		<arg name="which" />
+		<arg name="array" type="array" />
+	</ugen>
+
+	<ugen class="DegreeToKey" rates="audio control">
+		<arg name="bufnum" />
+		<arg name="input" def="0.0" />
+		<arg name="octave" def="12.0" />
+	</ugen>
+
+	<ugen class="Index" rates="audio control">
+		<arg name="bufnum" />
+		<arg name="input" def="0.0" />
+	</ugen>
+
+	<ugen class="Shaper" rates="audio control">
+		<arg name="bufnum" />
+		<arg name="input" def="0.0" />
+	</ugen>
+
+	<ugen class="WrapIndex" rates="audio control">
+		<arg name="bufnum" />
+		<arg name="input" def="0.0" />
+	</ugen>
+
+	<ugen class="TPulse" range="unipolar" rates="audio control">
+		<arg name="trig" def="0.0" />
+		<arg name="freq" def="440.0" />
+		<arg name="width" def="0.5" />
+	</ugen>
+
+	<ugen class="SyncSaw" rates="audio control">
+		<arg name="syncFreq" def="440.0" />
+		<arg name="sawFreq" def="440.0" />
+	</ugen>
+
+	<ugen class="Impulse" range="unipolar" rates="audio control">
+		<arg name="freq" def="440.0" />
+		<arg name="phase" def="0.0" />
+	</ugen>
+
+	<ugen class="VarSaw" rates="audio control">
+		<arg name="freq" def="440.0" />
+		<arg name="iphase" def="0.0" />
+		<arg name="width" def="0.5" />
+	</ugen>
+
+	<ugen class="LFPulse" range="unipolar" rates="audio control">
+		<arg name="freq" def="440.0" />
+		<arg name="iphase" def="0.0" />
+		<arg name="width" def="0.5" />
+	</ugen>
+
+	<ugen class="LFSaw" rates="audio control">
+		<arg name="freq" def="440.0" />
+		<arg name="iphase" def="0.0" />
+	</ugen>
+
+	<ugen class="LFTri" rates="audio control">
+		<arg name="freq" def="440.0" />
+		<arg name="iphase" def="0.0" />
+	</ugen>
+
+	<ugen class="LFCub" rates="audio control">
+		<arg name="freq" def="440.0" />
+		<arg name="iphase" def="0.0" />
+	</ugen>
+
+	<ugen class="LFPar" rates="audio control">
+		<arg name="freq" def="440.0" />
+		<arg name="iphase" def="0.0" />
+	</ugen>
+
+	<ugen class="Formant" rates="audio">
+		<arg name="fundfreq" def="440.0" />
+		<arg name="formfreq" def="1760.0" />
+		<arg name="bwfreq" def="880.0" />
+	</ugen>
+
+	<ugen class="COsc" rates="audio control">
+		<arg name="bufnum" />
+		<arg name="freq" def="440.0" />
+		<arg name="beats" def="0.5" />
+	</ugen>
+
+	<ugen class="VOsc3" rates="audio control">
+		<arg name="bufpos" />
+		<arg name="freq1" def="110.0" />
+		<arg name="freq2" def="220.0" />
+		<arg name="freq3" def="440.0" />
+	</ugen>
+
+	<ugen class="VOsc" rates="audio control">
+		<arg name="bufpos" />
+		<arg name="freq" def="440.0" />
+		<arg name="phase" def="0.0" />
+	</ugen>
+
+	<ugen class="OscN" rates="audio control">
+		<arg name="bufnum" />
+		<arg name="freq" def="440.0" />
+		<arg name="phase" def="0.0" />
+	</ugen>
+
+	<ugen class="SinOscFB" rates="audio control">
+		<arg name="freq" def="440.0" />
+		<arg name="feedback" def="0.0" />
+	</ugen>
+
+	<ugen class="SinOsc" rates="audio control">
+		<arg name="freq" def="440.0" />
+		<arg name="phase" def="0.0" />
+	</ugen>
+
+	<ugen class="Osc" rates="audio control">
+		<arg name="bufnum" />
+		<arg name="freq" def="440.0" />
+		<arg name="phase" def="0.0" />
+	</ugen>
+	
+	<ugen class="XFade2" rates="audio control">
+		<arg name="inA" />
+		<arg name="inB" def="0.0" />
+		<arg name="pan" def="0.0" />
+		<arg name="level" def="1.0" />
+	</ugen>
+
+	<ugen class="LinXFade2" rates="audio control">
+		<arg name="inA" />
+		<arg name="inB" def="0.0" />
+		<arg name="pan" def="0.0" />
+	</ugen>
+
+	<ugen class="PanAz" rates="audio control">
+		<arg name="input" />
+		<arg name="pos" def="0.0" />
+		<arg name="level" def="1.0" />
+		<arg name="width" def="2.0" />
+		<arg name="orientation" def="0.5" />
+		<outputs type="arg" />
+	</ugen>
+
+	<ugen class="DecodeB2" rates="audio control">
+		<arg name="w" />
+		<arg name="x" />
+		<arg name="y" />
+		<arg name="orientation" def="0.5" />
+		<outputs type="arg" />
+	</ugen>
+
+	<ugen class="BiPanB2" rates="audio control">
+		<arg name="inA" />
+		<arg name="inB" />
+		<arg name="azimuth" />
+		<arg name="gain" def="1" />
+		<outputs type="fixed" val="3" />
+	</ugen>
+
+	<ugen class="PanB2" rates="audio control">
+		<arg name="input" />
+		<arg name="azimuth" def="0" />
+		<arg name="gain" def="1" />
+		<outputs type="fixed" val="3" />
+	</ugen>
+
+	<ugen class="PanB" rates="audio control">
+		<arg name="input" />
+		<arg name="azimuth" def="0" />
+		<arg name="elevation" def="0" />
+		<arg name="gain" def="1" />
+		<outputs type="fixed" val="4" />
+	</ugen>
+
+	<ugen class="Rotate2" rates="audio control">
+		<arg name="x" />
+		<arg name="y" />
+		<arg name="pos" def="0.0" />
+		<outputs type="fixed" val="2" />
+	</ugen>
+
+	<ugen class="Balance2" rates="audio control">
+		<arg name="left" />
+		<arg name="right" />
+		<arg name="pos" def="0.0" />
+		<arg name="level" def="1.0" />
+		<outputs type="fixed" val="2" />
+	</ugen>
+
+	<ugen class="Pan4" rates="audio control">
+		<arg name="input" />
+		<arg name="xpos" def="0.0" />
+		<arg name="ypos" def="0.0" />
+		<arg name="level" def="1.0" />
+		<outputs type="fixed" val="4" />
+	</ugen>
+
+	<ugen class="Pan2" rates="audio control">
+		<arg name="input" />
+		<arg name="pos" def="0.0" />
+		<arg name="level" def="1.0" />
+		<outputs type="fixed" val="2" />
+	</ugen>
+
+	<ugen class="LinPan2" rates="audio control">
+		<arg name="input" />
+		<arg name="pos" def="0.0" />
+		<arg name="level" def="1.0" />
+		<outputs type="fixed" val="2" />
+	</ugen>
+
+	<ugen class="Dbrown" rates="demand">
+		<arg name="lo" />
+		<arg name="hi" />
+		<arg name="step" />
+		<arg name="length" def="Infinity" />
+	</ugen>
+
+	<ugen class="Dibrown" rates="demand">
+		<arg name="lo" />
+		<arg name="hi" />
+		<arg name="step" />
+		<arg name="length" def="Infinity" />
+	</ugen>
+
+	<ugen class="Dwhite" rates="demand">
+		<arg name="lo" />
+		<arg name="hi" />
+		<arg name="length" def="Infinity" />
+	</ugen>
+
+	<ugen class="Diwhite" rates="demand">
+		<arg name="lo" />
+		<arg name="hi" />
+		<arg name="length" def="Infinity" />
+	</ugen>
+
+	<ugen class="Dswitch1" rates="demand">
+		<arg name="index" />
+		<arg name="list" type="array" />
+	</ugen>
+
+	<ugen class="Dseq" rates="demand">
+		<arg name="repeats" def="1" />
+		<arg name="list" type="array" />
+	</ugen>
+
+	<ugen class="Dser" rates="demand">
+		<arg name="repeats" def="1" />
+		<arg name="list" type="array" />
+	</ugen>
+
+	<ugen class="Drand" rates="demand">
+		<arg name="repeats" def="1" />
+		<arg name="list" type="array" />
+	</ugen>
+
+	<ugen class="Dxrand" rates="demand">
+		<arg name="repeats" def="1" />
+		<arg name="list" type="array" />
+	</ugen>
+
+	<ugen class="Dgeom" rates="demand">
+		<arg name="start" def="1" />
+		<arg name="grow" def="2" />
+		<arg name="length" def="100" />
+	</ugen>
+
+	<ugen class="Dseries" rates="demand">
+		<arg name="start" def="1" />
+		<arg name="step" def="1" />
+		<arg name="length" def="100" />
+	</ugen>
+
+	<ugen class="DemandEnvGen" rates="audio control">
+		<arg name="level" />
+		<arg name="dur" />
+		<arg name="shape" def="1" />
+		<arg name="curve" def="0" />
+		<arg name="gate" def="1.0" />
+		<arg name="reset" def="1.0" />
+		<arg name="levelScale" def="1.0" />
+		<arg name="levelBias" def="0.0" />
+		<arg name="timeScale" def="1.0" />
+		<arg name="doneAction" def="0" />
+	</ugen>
+
+	<ugen class="Duty" rates="audio control">
+		<arg name="dur" def="1.0" />
+		<arg name="reset" def="0.0" />
+		<arg name="level" def="1.0" />
+		<arg name="doneAction" def="0" />
+	</ugen>
+
+	<ugen class="TDuty" rates="audio control">
+		<arg name="dur" def="1.0" />
+		<arg name="reset" def="0.0" />
+		<arg name="level" def="1.0" />
+		<arg name="doneAction" def="0" />
+	</ugen>
+
+	<ugen class="Demand" rates="audio control">
+		<arg name="trig" />
+		<arg name="reset" />
+		<arg name="demandUGens" type="array" />
+		<outputs type="arraySize" val="demandUGens" />
+	</ugen>
+
+	<ugen class="LastValue" rates="audio control">
+		<arg name="input" def="0.0" />
+		<arg name="diff" def="0.01" />
+	</ugen>
+
+	<ugen class="MostChange" rates="audio control">
+		<arg name="a" def="0.0" />
+		<arg name="b" def="0.0" />
+	</ugen>
+
+	<ugen class="LeastChange" rates="audio control">
+		<arg name="a" def="0.0" />
+		<arg name="b" def="0.0" />
+	</ugen>
+
+	<ugen class="Trapezoid" rates="audio control">
+		<arg name="input" def="0.0" />
+		<arg name="a" def="0.2" />
+		<arg name="b" def="0.4" />
+		<arg name="c" def="0.6" />
+		<arg name="d" def="0.8" />
+	</ugen>
+
+	<ugen class="InRect" rates="audio control">
+		<arg name="y" def="0.0" />
+		<arg name="y" def="0.0" />
+		<arg name="left" />
+		<arg name="top" />
+		<arg name="right" />
+		<arg name="bottom" />
+	</ugen>
+
+	<ugen class="InRange" rates="audio control">
+		<arg name="input" def="0.0" />
+		<arg name="lo" def="0.0" />
+		<arg name="hi" def="1.0" />
+	</ugen>
+
+	<ugen class="Fold" rates="audio control">
+		<arg name="input" def="0.0" />
+		<arg name="lo" def="0.0" />
+		<arg name="hi" def="1.0" />
+	</ugen>
+
+	<ugen class="Clip" rates="audio control">
+		<arg name="input" def="0.0" />
+		<arg name="lo" def="0.0" />
+		<arg name="hi" def="1.0" />
+	</ugen>
+
+	<ugen class="Wrap" rates="audio control">
+		<arg name="input" def="0.0" />
+		<arg name="lo" def="0.0" />
+		<arg name="hi" def="1.0" />
+	</ugen>
+
+	<ugen class="Schmidt" rates="audio control">
+		<arg name="input" def="0.0" />
+		<arg name="lo" def="0.0" />
+		<arg name="hi" def="1.0" />
+	</ugen>
+
+	<ugen class="Pitch" rates="control">
+		<arg name="input" def="0.0" />
+		<arg name="initFreq" def="440.0" />
+		<arg name="minFreq" def="60.0" />
+		<arg name="maxFreq" def="4000.0" />
+		<arg name="execFreq" def="100.0" />
+		<arg name="maxBinsPerOctave" def="16" />
+		<arg name="median" def="1" />
+		<arg name="ampThreshold" def="0.01" />
+		<arg name="peakThreshold" def="0.5" />
+		<arg name="downSample" def="1" />
+		<outputs type="fixed" val="2" />
+	</ugen>
+
+	<ugen class="PeakFollower" rates="audio control">
+		<arg name="input" def="0.0" />
+		<arg name="decay" def="0.999" />
+	</ugen>
+
+	<ugen class="Phasor" rates="audio control">
+		<arg name="trig" def="0.0" />
+		<arg name="rate" def="1.0" />
+		<arg name="start" def="0.0" />
+		<arg name="end" def="1.0" />
+		<arg name="resetPos" def="0.0" />
+	</ugen>
+
+	<ugen class="Sweep" rates="audio control">
+		<arg name="trig" def="0.0" />
+		<arg name="rate" def="1.0" />
+	</ugen>
+
+	<ugen class="Timer" rates="audio control">
+		<arg name="trig" def="0.0" />
+	</ugen>
+
+	<ugen class="ZeroCrossing" rates="audio control">
+		<arg name="input" def="0.0" />
+	</ugen>
+
+	<ugen class="ToggleFF" rates="audio control">
+		<arg name="trig" def="0.0" />
+	</ugen>
+
+	<ugen class="PulseDivider" rates="audio control">
+		<arg name="trig" def="0.0" />
+		<arg name="div" def="2.0" />
+		<arg name="start" def="0.0" />
+	</ugen>
+
+	<ugen class="Stepper" rates="audio control">
+		<arg name="trig" def="0" />
+		<arg name="reset" def="0" />
+		<arg name="min" def="0" />
+		<arg name="max" def="7" />
+		<arg name="step" def="1" />
+		<arg name="resetval" />	<!-- default = min -->
+	</ugen>
+
+	<ugen class="PulseCount" rates="audio control">
+		<arg name="trig" def="0.0" />
+		<arg name="reset" def="0.0" />
+	</ugen>
+
+	<ugen class="SetResetFF" rates="audio control">
+		<arg name="trig" def="0.0" />
+		<arg name="reset" def="0.0" />
+	</ugen>
+
+	<ugen class="Peak" rates="audio control">
+		<arg name="trig" def="0.0" />
+		<arg name="reset" def="0.0" />
+	</ugen>
+
+	<ugen class="Latch" rates="audio control">
+		<arg name="input" def="0.0" />
+		<arg name="trig" def="0.0" />
+	</ugen>
+
+	<ugen class="Gate" rates="audio control">
+		<arg name="input" def="0.0" />
+		<arg name="trig" def="0.0" />
+	</ugen>
+
+	<ugen class="SendTrig" rates="audio control">
+		<arg name="input" def="0.0" />
+		<arg name="id" def="0" />
+		<arg name="value" def="0.0" />
+		<outputs type="fixed" val="0" />
+	</ugen>
+
+	<ugen class="Trig1" range="unipolar" rates="audio control">
+		<arg name="input" def="0.0" />
+		<arg name="dur" def="0.1" />
+	</ugen>
+
+	<ugen class="TDelay" range="unipolar" rates="audio control">
+		<arg name="input" def="0.0" />
+		<arg name="dur" def="0.1" />
+	</ugen>
+
+	<ugen class="Trig" range="unipolar" rates="audio control">
+		<arg name="input" def="0.0" />
+		<arg name="dur" def="0.1" />
+	</ugen>
+	
+	<ugen class="SharedOut" rates="control">
+		<arg name="bus" />
+		<arg name="channelsArray" type="array" />
+		<outputs type="fixed" val="0" />
+	</ugen>
+
+	<ugen class="XOut" rates="audio control">
+		<arg name="bus" />
+		<arg name="xfade" />
+		<arg name="channelsArray" type="array" />
+		<outputs type="fixed" val="0" />
+	</ugen>
+
+	<ugen class="LocalOut" rates="audio control">
+		<arg name="channelsArray" type="array" />
+		<outputs type="fixed" val="0" />
+	</ugen>
+
+	<ugen class="Out" rates="audio control">
+		<arg name="bus" />
+		<arg name="channelsArray" type="array" />
+		<outputs type="fixed" val="0" />
+	</ugen>
+
+	<ugen class="OffsetOut" rates="audio control">
+		<arg name="bus" />
+		<arg name="channelsArray" type="array" />
+		<outputs type="fixed" val="0" />
+	</ugen>
+
+	<ugen class="ReplaceOut" rates="audio control">
+		<arg name="bus" />
+		<arg name="channelsArray" type="array" />
+		<outputs type="fixed" val="0" />
+	</ugen>
+
+	<ugen class="SharedIn" rates="control">
+		<arg name="bus" def="0" />
+		<outputs type="arg" val="1" />
+	</ugen>
+
+	<ugen class="InTrig" rates="control">
+		<arg name="bus" def="0" />
+		<outputs type="arg" val="1" />
+	</ugen>
+
+	<ugen class="InFeedback" rates="audio">
+		<arg name="bus" def="0" />
+		<outputs type="arg" val="1" />
+	</ugen>
+
+	<ugen class="LagIn" rates="control">
+		<arg name="bus" def="0" />
+		<arg name="lag" def="0.1" />
+		<outputs type="arg" val="1" />
+	</ugen>
+
+	<ugen class="LocalIn" rates="audio control">
+		<outputs type="arg" val="1" />
+	</ugen>
+
+	<ugen class="In" rates="audio control">
+		<arg name="bus" def="0" />
+		<outputs type="arg" val="1" />
+	</ugen>
+
+<!--
+	these cannot be instantiated through new UGen()
+	because of the necessity to create ControlDescs.
+	Also note that the arg nodes are wrong, these
+	are not ordinary UGen inputs!
+
+	<ugen class="Control" rates="control scalar">
+		<arg name="values" type="array" />
+		<outputs type="arraySize" val="values" />
+	</ugen>
+	
+	<ugen class="LagControl" rates="control">
+		<arg name="valuesAndLags" type="array" />
+		<outputs type="arraySize" val="valuesAndLags" mul="0.5" />
+	</ugen>
+
+	<ugen class="TrigControl" rates="control">
+		<arg name="values" type="array" />
+		<outputs type="arraySize" val="values" />
+	</ugen>
+-->
+
+	<ugen class="DiskIn" rates="audio">
+		<arg name="bufnum" />
+		<outputs type="arg" />
+	</ugen>
+
+	<ugen class="DiskOut" rates="audio">
+		<arg name="bufnum" />
+		<arg name="channelsArray" type="array" />
+		<outputs type="fixed" val="0" />
+	</ugen>
+
+	<!-- Tap : wrongly defined as a UGen subclass -->
+
+	<ugen class="ScopeOut" rates="audio control">
+		<arg name="bufnum" def="0" />
+		<arg name="inputArray" type="array" />
+		<outputs type="fixed" val="0" />
+	</ugen>
+
+	<ugen class="RecordBuf" rates="audio">
+		<arg name="bufnum" def="0" />
+		<arg name="offset" def="0.0" />
+		<arg name="recLevel" def="1.0" />
+		<arg name="preLevel" def="0.0" />
+		<arg name="run" def="1.0" />
+		<arg name="loop" def="1.0" />
+		<arg name="trigger" def="1.0" />
+		<arg name="inputArray" type="array" />
+	</ugen>
+
+	<ugen class="BufWr" rates="audio control">
+		<arg name="bufnum" def="0" />
+		<arg name="phase" def="0.0" />
+		<arg name="loop" def="1.0" />
+		<arg name="inputArray" type="array" />
+		<!-- outputs fixed="0" XXX -->
+	</ugen>
+
+	<ugen class="BufRd" rates="audio control">
+		<arg name="bufnum" def="0" />
+		<arg name="phase" def="0.0" />
+		<arg name="loop" def="1.0" />
+		<arg name="interpolation" def="2" />
+		<outputs type="arg" />
+	</ugen>
+
+	<ugen class="TGrains" rates="audio">
+		<arg name="trigger" def="0" />
+		<arg name="bufnum" def="0" />
+		<arg name="rate" def="1" />
+		<arg name="centerPos" def="0" />
+		<arg name="dur" def="0.1" />
+		<arg name="pan" def="0" />
+		<arg name="amp" def="0.1" />
+		<arg name="interp" def="4" />
+		<outputs type="arg" />
+	</ugen>
+	
+	<ugen class="PlayBuf" rates="audio">
+		<arg name="bufnum" def="0" />
+		<arg name="rate" def="1.0" />
+		<arg name="trigger" def="1.0" />
+		<arg name="startPos" def="0.0" />
+		<arg name="loop" def="0.0" />
+		<outputs type="arg" />
+	</ugen>
+
+	<ugen class="Silent" rates="audio">
+		<outputs type="arg" val="1" />
+	</ugen>
+
+	<ugen class="DC" rates="audio control">
+		<arg name="input" type="array" />
+		<outputs type="arraySize" val="input" />
+	</ugen>
+
+	<ugen class="A2K" rates="control">
+		<arg name="input" def="0.0" />
+	</ugen>
+
+	<ugen class="K2A" rates="audio">
+		<arg name="input" def="0.0" />
+	</ugen>
+
+	<ugen class="AmpCompA" rates="audio control scalar">
+		<arg name="freq" def="1000" />
+		<arg name="root" def="0" />
+		<arg name="minAmp" def="0.32" />
+		<arg name="rootAmp" def="1.0" />
+	</ugen>
+
+	<ugen class="AmpComp" rates="audio control scalar">
+		<arg name="freq" def="261.6256" />
+		<arg name="root" def="261.6256" />
+		<arg name="exp" def="0.3333" />
+	</ugen>
+
+	<ugen class="LinLin" rates="audio control">
+		<arg name="input" def="0.0" />
+		<arg name="srclo" def="0.0" />
+		<arg name="srchi" def="1.0" />
+		<arg name="dstlo" def="1.0" />
+		<arg name="dsthi" def="2.0" />
+	</ugen>
+
+	<ugen class="LinExp" rates="audio control">
+		<arg name="input" def="0.0" />
+		<arg name="srclo" def="0.0" />
+		<arg name="srchi" def="1.0" />
+		<arg name="dstlo" def="1.0" />
+		<arg name="dsthi" def="2.0" />
+	</ugen>
+
+	<ugen class="XLine" rates="audio control">
+		<arg name="start" def="1.0" />
+		<arg name="end" def="2.0" />
+		<arg name="dur" def="1.0" />
+		<arg name="doneAction" def="0" />
+	</ugen>
+
+	<ugen class="Line" rates="audio control">
+		<arg name="start" def="0.0" />
+		<arg name="end" def="1.0" />
+		<arg name="dur" def="1.0" />
+		<arg name="doneAction" def="0" />
+	</ugen>
+
+	<ugen class="LorenzL" rates="audio">
+		<arg name="freq" def="22050" />
+		<arg name="s" def="10" />
+		<arg name="r" def="28" />
+		<arg name="b" def="2.667" />
+		<arg name="h" def="0.05" />
+		<arg name="xi" def="0.1" />
+		<arg name="yi" def="0" />
+		<arg name="zi" def="0" />
+	</ugen>
+
+	<ugen class="FBSineN" rates="audio">
+		<arg name="freq" def="22050" />
+		<arg name="im" def="1" />
+		<arg name="fb" def="0.1" />
+		<arg name="a" def="1.1" />
+		<arg name="c" def="0.5" />
+		<arg name="xi" def="0.1" />
+		<arg name="yi" def="0.1" />
+	</ugen>
+
+	<ugen class="FBSineC" rates="audio">
+		<arg name="freq" def="22050" />
+		<arg name="im" def="1" />
+		<arg name="fb" def="0.1" />
+		<arg name="a" def="1.1" />
+		<arg name="c" def="0.5" />
+		<arg name="xi" def="0.1" />
+		<arg name="yi" def="0.1" />
+	</ugen>
+
+	<ugen class="FBSineL" rates="audio">
+		<arg name="freq" def="22050" />
+		<arg name="im" def="1" />
+		<arg name="fb" def="0.1" />
+		<arg name="a" def="1.1" />
+		<arg name="c" def="0.5" />
+		<arg name="xi" def="0.1" />
+		<arg name="yi" def="0.1" />
+	</ugen>
+
+	<ugen class="StandardN" rates="audio">
+		<arg name="freq" def="22050" />
+		<arg name="k" def="1.0" />
+		<arg name="xi" def="0.5" />
+		<arg name="yi" def="0" />
+	</ugen>
+
+	<ugen class="StandardL" rates="audio">
+		<arg name="freq" def="22050" />
+		<arg name="k" def="1.0" />
+		<arg name="xi" def="0.5" />
+		<arg name="yi" def="0" />
+	</ugen>
+
+	<ugen class="LinCongN" rates="audio">
+		<arg name="freq" def="22050" />
+		<arg name="a" def="1.1" />
+		<arg name="c" def="0.13" />
+		<arg name="m" def="1.0" />
+		<arg name="xi" def="0" />
+	</ugen>
+
+	<ugen class="LinCongC" rates="audio">
+		<arg name="freq" def="22050" />
+		<arg name="a" def="1.1" />
+		<arg name="c" def="0.13" />
+		<arg name="m" def="1.0" />
+		<arg name="xi" def="0" />
+	</ugen>
+
+	<ugen class="LinCongL" rates="audio">
+		<arg name="freq" def="22050" />
+		<arg name="a" def="1.1" />
+		<arg name="c" def="0.13" />
+		<arg name="m" def="1.0" />
+		<arg name="xi" def="0" />
+	</ugen>
+
+	<ugen class="LatoocarfianN" rates="audio">
+		<arg name="freq" def="22050" />
+		<arg name="a" def="1" />
+		<arg name="b" def="3" />
+		<arg name="c" def="0.5" />
+		<arg name="d" def="0.5" />
+		<arg name="xi" def="0.5" />
+		<arg name="yi" def="0.5" />
+	</ugen>
+
+	<ugen class="LatoocarfianC" rates="audio">
+		<arg name="freq" def="22050" />
+		<arg name="a" def="1" />
+		<arg name="b" def="3" />
+		<arg name="c" def="0.5" />
+		<arg name="d" def="0.5" />
+		<arg name="xi" def="0.5" />
+		<arg name="yi" def="0.5" />
+	</ugen>
+
+	<ugen class="LatoocarfianL" rates="audio">
+		<arg name="freq" def="22050" />
+		<arg name="a" def="1" />
+		<arg name="b" def="3" />
+		<arg name="c" def="0.5" />
+		<arg name="d" def="0.5" />
+		<arg name="xi" def="0.5" />
+		<arg name="yi" def="0.5" />
+	</ugen>
+
+	<ugen class="HenonN" rates="audio">
+		<arg name="freq" def="22050" />
+		<arg name="a" def="1.4" />
+		<arg name="b" def="0.3" />
+		<arg name="x0" def="0" />
+		<arg name="x1" def="0" />
+	</ugen>
+
+	<ugen class="HenonC" rates="audio">
+		<arg name="freq" def="22050" />
+		<arg name="a" def="1.4" />
+		<arg name="b" def="0.3" />
+		<arg name="x0" def="0" />
+		<arg name="x1" def="0" />
+	</ugen>
+
+	<ugen class="HenonL" rates="audio">
+		<arg name="freq" def="22050" />
+		<arg name="a" def="1.4" />
+		<arg name="b" def="0.3" />
+		<arg name="x0" def="0" />
+		<arg name="x1" def="0" />
+	</ugen>
+
+	<ugen class="GbmanN" rates="audio">
+		<arg name="freq" def="22050" />
+		<arg name="xi" def="1.2" />
+		<arg name="yi" def="2.1" />
+	</ugen>
+
+	<ugen class="GbmanL" rates="audio">
+		<arg name="freq" def="22050" />
+		<arg name="xi" def="1.2" />
+		<arg name="yi" def="2.1" />
+	</ugen>
+
+	<ugen class="CuspN" rates="audio">
+		<arg name="freq" def="22050" />
+		<arg name="a" def="1" />
+		<arg name="b" def="1.9" />
+		<arg name="xi" def="0" />
+	</ugen>
+
+	<ugen class="CuspL" rates="audio">
+		<arg name="freq" def="22050" />
+		<arg name="a" def="1" />
+		<arg name="b" def="1.9" />
+		<arg name="xi" def="0" />
+	</ugen>
+
+	<ugen class="QuadN" rates="audio">
+		<arg name="freq" def="22050" />
+		<arg name="a" def="1" />
+		<arg name="b" def="-1" />
+		<arg name="c" def="-0.75" />
+		<arg name="xi" def="0" />
+	</ugen>
+
+	<ugen class="QuadC" rates="audio">
+		<arg name="freq" def="22050" />
+		<arg name="a" def="1" />
+		<arg name="b" def="-1" />
+		<arg name="c" def="-0.75" />
+		<arg name="xi" def="0" />
+	</ugen>
+
+	<ugen class="QuadL" rates="audio">
+		<arg name="freq" def="22050" />
+		<arg name="a" def="1" />
+		<arg name="b" def="-1" />
+		<arg name="c" def="-0.75" />
+		<arg name="xi" def="0" />
+	</ugen>
+
+	<ugen class="Latoocarfian" rates="audio control">
+		<arg name="a" />
+		<arg name="b" />
+		<arg name="c" />
+		<arg name="d" />
+	</ugen>
+
+	<ugen class="Dust2" rates="audio control">
+		<arg name="density" def="0.0" />
+	</ugen>
+
+	<ugen class="Dust" range="unipolar" rates="audio control">
+		<arg name="density" def="0.0" />
+	</ugen>
+
+	<ugen class="MantissaMask" rates="audio control">
+		<arg name="input" def="0.0" />
+		<arg name="bits" def="3" />
+	</ugen>
+
+	<ugen class="Hasher" rates="audio control">
+		<arg name="input" def="0.0" />
+	</ugen>
+
+	<ugen class="LFNoise0" rates="audio control">
+		<arg name="freq" def="500.0" />
+	</ugen>
+
+	<ugen class="LFDClipNoise" rates="audio control">
+		<arg name="freq" def="500.0" />
+	</ugen>
+
+	<ugen class="LFDNoise3" rates="audio control">
+		<arg name="freq" def="500.0" />
+	</ugen>
+
+	<ugen class="LFDNoise1" rates="audio control">
+		<arg name="freq" def="500.0" />
+	</ugen>
+
+	<ugen class="LFDNoise0" rates="audio control">
+		<arg name="freq" def="500.0" />
+	</ugen>
+
+	<ugen class="LFClipNoise" rates="audio control">
+		<arg name="freq" def="500.0" />
+	</ugen>
+
+	<ugen class="LFNoise2" rates="audio control">
+		<arg name="freq" def="500.0" />
+	</ugen>
+
+	<ugen class="LFNoise1" rates="audio control">
+		<arg name="freq" def="500.0" />
+	</ugen>
+
+	<ugen class="Logistic" rates="audio control">
+		<arg name="chaosParam" def="3.0" />
+		<arg name="freq" def="1000.0" />
+	</ugen>
+
+	<ugen class="Crackle" rates="audio control">
+		<arg name="chaosParam" def="1.5" />
+	</ugen>
+
+	<ugen class="WhiteNoise" rates="audio control" />
+
+	<ugen class="NoahNoise" rates="audio control" />
+
+	<ugen class="GrayNoise" rates="audio control" />
+
+	<ugen class="ClipNoise" rates="audio control" />
+
+	<ugen class="PinkNoise" rates="audio control" />
+
+	<ugen class="BrownNoise" rates="audio control" />
+
+	<ugen class="TWindex" rates="audio control">
+		<arg name="input" />
+		<arg name="normalize" def="0" />
+		<arg name="array" type="array" />
+	</ugen>
+
+	<ugen class="CoinGate" rates="audio control">
+		<arg name="prob" />
+		<arg name="input" />
+	</ugen>
+
+	<ugen class="TExpRand" rates="audio control">
+		<arg name="lo" def="0.01" />
+		<arg name="hi" def="1.0" />
+		<arg name="trig" def="0.0" />
+	</ugen>
+
+	<ugen class="ExpRand" rates="scalar">
+		<arg name="lo" def="0.01" />
+		<arg name="hi" def="1.0" />
+	</ugen>
+
+	<ugen class="NRand" rates="scalar">
+		<arg name="lo" def="0.0" />
+		<arg name="hi" def="1.0" />
+		<arg name="n" def="0" />
+	</ugen>
+
+	<ugen class="LinRand" rates="scalar">
+		<arg name="lo" def="0.0" />
+		<arg name="hi" def="1.0" />
+		<arg name="minmax" def="0" />
+	</ugen>
+
+	<ugen class="TIRand" rates="audio control">
+		<arg name="lo" def="0" />
+		<arg name="hi" def="127" />
+		<arg name="trig" def="0.0" />
+	</ugen>
+
+	<ugen class="TRand" rates="audio control">
+		<arg name="lo" def="0.0" />
+		<arg name="hi" def="1.0" />
+		<arg name="trig" def="0.0" />
+	</ugen>
+
+	<ugen class="IRand" rates="scalar">
+		<arg name="lo" def="0" />
+		<arg name="hi" def="127" />
+	</ugen>
+
+	<ugen class="Rand" rates="scalar">
+		<arg name="lo" def="0.0" />
+		<arg name="hi" def="1.0" />
+	</ugen>
+
+	<ugen class="RandID" rates="control scalar">
+		<arg name="id" def="0.0" />
+		<outputs type="fixed" val="0" />
+	</ugen>
+
+	<ugen class="RandSeed" rates="control scalar">
+		<arg name="trig" def="0.0" />
+		<arg name="seed" def="56789" />
+		<outputs type="fixed" val="0" />
+	</ugen>
+
+	<!-- skipped : ImageWarp -->
+	<!-- skipped : XY -->
+</ugendefs>
