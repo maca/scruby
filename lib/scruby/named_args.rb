@@ -21,8 +21,6 @@ module NamedArgs
           "#{m}_original(" + args + ");" +
         "end"
         
-        
-                        
         self.class_eval hacked_method
 
         alias_method "#{m}_original", m

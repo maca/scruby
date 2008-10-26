@@ -235,7 +235,7 @@ describe Ugen do
       MulAdd = mock( 'MulAdd', :new => nil )
       @ugen = Ugen.new(:audio, 100, 100)
       MulAdd.should_receive( :new ).with( @ugen, 1, 1)
-      @ugen.muladd(1, 1)
+      @ugen.muladd(1, 1).should be_nil
     end
   end
 end

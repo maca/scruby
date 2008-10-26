@@ -1,2247 +1,3421 @@
 --- 
 A2K: 
-  :rates: 
-  - :control
-  :args: 
-    :input: 0.0
+  :control: 
+  - - :input
+    - 0.0
 APF: 
-  :rates: 
-  - :audio
-  - :control
-  :args: 
-    :radius: 0.8
-    :freq: 440.0
-    :input: 0.0
+  :control: 
+  - - :input
+    - 0.0
+  - - :freq
+    - 440.0
+  - - :radius
+    - 0.8
+  :audio: 
+  - - :input
+    - 0.0
+  - - :freq
+    - 440.0
+  - - :radius
+    - 0.8
 AllpassC: 
-  :rates: 
-  - :audio
-  - :control
-  :args: 
-    :decaytime: 1.0
-    :delaytime: 0.2
-    :input: 0.0
-    :maxdelaytime: 0.2
+  :control: 
+  - - :input
+    - 0.0
+  - - :maxdelaytime
+    - 0.2
+  - - :delaytime
+    - 0.2
+  - - :decaytime
+    - 1.0
+  :audio: 
+  - - :input
+    - 0.0
+  - - :maxdelaytime
+    - 0.2
+  - - :delaytime
+    - 0.2
+  - - :decaytime
+    - 1.0
 AllpassL: 
-  :rates: 
-  - :audio
-  - :control
-  :args: 
-    :decaytime: 1.0
-    :delaytime: 0.2
-    :input: 0.0
-    :maxdelaytime: 0.2
+  :control: 
+  - - :input
+    - 0.0
+  - - :maxdelaytime
+    - 0.2
+  - - :delaytime
+    - 0.2
+  - - :decaytime
+    - 1.0
+  :audio: 
+  - - :input
+    - 0.0
+  - - :maxdelaytime
+    - 0.2
+  - - :delaytime
+    - 0.2
+  - - :decaytime
+    - 1.0
 AllpassN: 
-  :rates: 
-  - :audio
-  - :control
-  :args: 
-    :decaytime: 1.0
-    :delaytime: 0.2
-    :input: 0.0
-    :maxdelaytime: 0.2
+  :control: 
+  - - :input
+    - 0.0
+  - - :maxdelaytime
+    - 0.2
+  - - :delaytime
+    - 0.2
+  - - :decaytime
+    - 1.0
+  :audio: 
+  - - :input
+    - 0.0
+  - - :maxdelaytime
+    - 0.2
+  - - :delaytime
+    - 0.2
+  - - :decaytime
+    - 1.0
 AmpComp: 
-  :rates: 
-  - :audio
-  - :control
-  - :scalar
-  :args: 
-    :exp: 0.3333
-    :root: 261.6256
-    :freq: 261.6256
+  :scalar: 
+  - - :freq
+    - 261.6256
+  - - :root
+    - 261.6256
+  - - :exp
+    - 0.3333
+  :control: 
+  - - :freq
+    - 261.6256
+  - - :root
+    - 261.6256
+  - - :exp
+    - 0.3333
+  :audio: 
+  - - :freq
+    - 261.6256
+  - - :root
+    - 261.6256
+  - - :exp
+    - 0.3333
 AmpCompA: 
-  :rates: 
-  - :audio
-  - :control
-  - :scalar
-  :args: 
-    :minAmp: 0.32
-    :rootAmp: 1.0
-    :root: 0.0
-    :freq: 1000.0
+  :scalar: 
+  - - :freq
+    - 1000.0
+  - - :root
+    - 0.0
+  - - :minAmp
+    - 0.32
+  - - :rootAmp
+    - 1.0
+  :control: 
+  - - :freq
+    - 1000.0
+  - - :root
+    - 0.0
+  - - :minAmp
+    - 0.32
+  - - :rootAmp
+    - 1.0
+  :audio: 
+  - - :freq
+    - 1000.0
+  - - :root
+    - 0.0
+  - - :minAmp
+    - 0.32
+  - - :rootAmp
+    - 1.0
 Amplitude: 
-  :rates: 
-  - :audio
-  - :control
-  :args: 
-    :releaseTime: 0.01
-    :attackTime: 0.01
-    :input: 0.0
+  :control: 
+  - - :input
+    - 0.0
+  - - :attackTime
+    - 0.01
+  - - :releaseTime
+    - 0.01
+  :audio: 
+  - - :input
+    - 0.0
+  - - :attackTime
+    - 0.01
+  - - :releaseTime
+    - 0.01
 BPF: 
-  :rates: 
-  - :audio
-  - :control
-  :args: 
-    :rq: 1.0
-    :freq: 440.0
-    :input: 0.0
+  :control: 
+  - - :input
+    - 0.0
+  - - :freq
+    - 440.0
+  - - :rq
+    - 1.0
+  :audio: 
+  - - :input
+    - 0.0
+  - - :freq
+    - 440.0
+  - - :rq
+    - 1.0
 BPZ2: 
-  :rates: 
-  - :audio
-  - :control
-  :args: 
-    :input: 0.0
+  :control: 
+  - - :input
+    - 0.0
+  :audio: 
+  - - :input
+    - 0.0
 BRF: 
-  :rates: 
-  - :audio
-  - :control
-  :args: 
-    :rq: 1.0
-    :freq: 440.0
-    :input: 0.0
+  :control: 
+  - - :input
+    - 0.0
+  - - :freq
+    - 440.0
+  - - :rq
+    - 1.0
+  :audio: 
+  - - :input
+    - 0.0
+  - - :freq
+    - 440.0
+  - - :rq
+    - 1.0
 BRZ2: 
-  :rates: 
-  - :audio
-  - :control
-  :args: 
-    :input: 0.0
+  :control: 
+  - - :input
+    - 0.0
+  :audio: 
+  - - :input
+    - 0.0
 Balance2: 
-  :rates: 
-  - :audio
-  - :control
-  :args: 
-    :level: 1.0
-    :right: 
-    :pos: 0.0
-    :left: 
+  :control: 
+  - - :left
+    - 
+  - - :right
+    - 
+  - - :pos
+    - 0.0
+  - - :level
+    - 1.0
+  :audio: 
+  - - :left
+    - 
+  - - :right
+    - 
+  - - :pos
+    - 0.0
+  - - :level
+    - 1.0
 Ball: 
-  :rates: 
-  - :audio
-  :args: 
-    :g: 10.0
-    :damp: 0.0
-    :friction: 0.01
-    :input: 0.0
+  :audio: 
+  - - :input
+    - 0.0
+  - - :g
+    - 10.0
+  - - :damp
+    - 0.0
+  - - :friction
+    - 0.01
 BiPanB2: 
-  :rates: 
-  - :audio
-  - :control
-  :args: 
-    :azimuth: 
-    :gain: 1.0
-    :inA: 
-    :inB: 
+  :control: 
+  - - :inA
+    - 
+  - - :inB
+    - 
+  - - :azimuth
+    - 
+  - - :gain
+    - 1.0
+  :audio: 
+  - - :inA
+    - 
+  - - :inB
+    - 
+  - - :azimuth
+    - 
+  - - :gain
+    - 1.0
 Blip: 
-  :rates: 
-  - :audio
-  :args: 
-    :numharm: 200.0
-    :freq: 440.0
+  :audio: 
+  - - :freq
+    - 440.0
+  - - :numharm
+    - 200.0
 BrownNoise: 
-  :rates: 
-  - :audio
-  - :control
-  :args: {}
+  :control: []
+
+  :audio: []
 
 BufAllpassC: 
-  :rates: 
-  - :audio
-  :args: 
-    :decaytime: 1.0
-    :buf: 0.0
-    :delaytime: 0.2
-    :input: 0.0
+  :audio: 
+  - - :buf
+    - 0.0
+  - - :input
+    - 0.0
+  - - :delaytime
+    - 0.2
+  - - :decaytime
+    - 1.0
 BufAllpassL: 
-  :rates: 
-  - :audio
-  :args: 
-    :decaytime: 1.0
-    :buf: 0.0
-    :delaytime: 0.2
-    :input: 0.0
+  :audio: 
+  - - :buf
+    - 0.0
+  - - :input
+    - 0.0
+  - - :delaytime
+    - 0.2
+  - - :decaytime
+    - 1.0
 BufAllpassN: 
-  :rates: 
-  - :audio
-  :args: 
-    :decaytime: 1.0
-    :buf: 0.0
-    :delaytime: 0.2
-    :input: 0.0
+  :audio: 
+  - - :buf
+    - 0.0
+  - - :input
+    - 0.0
+  - - :delaytime
+    - 0.2
+  - - :decaytime
+    - 1.0
 BufChannels: 
-  :rates: 
-  - :control
-  - :scalar
-  :args: 
-    :bufnum: 
+  :scalar: 
+  - - :bufnum
+    - 
+  :control: 
+  - - :bufnum
+    - 
 BufCombC: 
-  :rates: 
-  - :audio
-  :args: 
-    :decaytime: 1.0
-    :buf: 0.0
-    :delaytime: 0.2
-    :input: 0.0
+  :audio: 
+  - - :buf
+    - 0.0
+  - - :input
+    - 0.0
+  - - :delaytime
+    - 0.2
+  - - :decaytime
+    - 1.0
 BufCombL: 
-  :rates: 
-  - :audio
-  :args: 
-    :decaytime: 1.0
-    :buf: 0.0
-    :delaytime: 0.2
-    :input: 0.0
+  :audio: 
+  - - :buf
+    - 0.0
+  - - :input
+    - 0.0
+  - - :delaytime
+    - 0.2
+  - - :decaytime
+    - 1.0
 BufCombN: 
-  :rates: 
-  - :audio
-  :args: 
-    :decaytime: 1.0
-    :buf: 0.0
-    :delaytime: 0.2
-    :input: 0.0
+  :audio: 
+  - - :buf
+    - 0.0
+  - - :input
+    - 0.0
+  - - :delaytime
+    - 0.2
+  - - :decaytime
+    - 1.0
 BufDelayC: 
-  :rates: 
-  - :audio
-  - :control
-  :args: 
-    :buf: 0.0
-    :delaytime: 0.2
-    :input: 0.0
+  :control: 
+  - - :buf
+    - 0.0
+  - - :input
+    - 0.0
+  - - :delaytime
+    - 0.2
+  :audio: 
+  - - :buf
+    - 0.0
+  - - :input
+    - 0.0
+  - - :delaytime
+    - 0.2
 BufDelayL: 
-  :rates: 
-  - :audio
-  - :control
-  :args: 
-    :buf: 0.0
-    :delaytime: 0.2
-    :input: 0.0
+  :control: 
+  - - :buf
+    - 0.0
+  - - :input
+    - 0.0
+  - - :delaytime
+    - 0.2
+  :audio: 
+  - - :buf
+    - 0.0
+  - - :input
+    - 0.0
+  - - :delaytime
+    - 0.2
 BufDelayN: 
-  :rates: 
-  - :audio
-  - :control
-  :args: 
-    :buf: 0.0
-    :delaytime: 0.2
-    :input: 0.0
+  :control: 
+  - - :buf
+    - 0.0
+  - - :input
+    - 0.0
+  - - :delaytime
+    - 0.2
+  :audio: 
+  - - :buf
+    - 0.0
+  - - :input
+    - 0.0
+  - - :delaytime
+    - 0.2
 BufDur: 
-  :rates: 
-  - :control
-  - :scalar
-  :args: 
-    :bufnum: 
+  :scalar: 
+  - - :bufnum
+    - 
+  :control: 
+  - - :bufnum
+    - 
 BufFrames: 
-  :rates: 
-  - :control
-  - :scalar
-  :args: 
-    :bufnum: 
+  :scalar: 
+  - - :bufnum
+    - 
+  :control: 
+  - - :bufnum
+    - 
 BufRateScale: 
-  :rates: 
-  - :control
-  - :scalar
-  :args: 
-    :bufnum: 
+  :scalar: 
+  - - :bufnum
+    - 
+  :control: 
+  - - :bufnum
+    - 
 BufRd: 
-  :rates: 
-  - :audio
-  - :control
-  :args: 
-    :interpolation: 2.0
-    :loop: 1.0
-    :bufnum: 0.0
-    :phase: 0.0
+  :control: 
+  - - :bufnum
+    - 0.0
+  - - :phase
+    - 0.0
+  - - :loop
+    - 1.0
+  - - :interpolation
+    - 2.0
+  :audio: 
+  - - :bufnum
+    - 0.0
+  - - :phase
+    - 0.0
+  - - :loop
+    - 1.0
+  - - :interpolation
+    - 2.0
 BufSampleRate: 
-  :rates: 
-  - :control
-  - :scalar
-  :args: 
-    :bufnum: 
+  :scalar: 
+  - - :bufnum
+    - 
+  :control: 
+  - - :bufnum
+    - 
 BufSamples: 
-  :rates: 
-  - :control
-  - :scalar
-  :args: 
-    :bufnum: 
+  :scalar: 
+  - - :bufnum
+    - 
+  :control: 
+  - - :bufnum
+    - 
 BufWr: 
-  :rates: 
-  - :audio
-  - :control
-  :args: 
-    :loop: 1.0
-    :bufnum: 0.0
-    :phase: 0.0
-    :inputArray: 
+  :control: 
+  - - :bufnum
+    - 0.0
+  - - :phase
+    - 0.0
+  - - :loop
+    - 1.0
+  - - :inputArray
+    - 
+  :audio: 
+  - - :bufnum
+    - 0.0
+  - - :phase
+    - 0.0
+  - - :loop
+    - 1.0
+  - - :inputArray
+    - 
 COsc: 
-  :rates: 
-  - :audio
-  - :control
-  :args: 
-    :beats: 0.5
-    :bufnum: 
-    :freq: 440.0
+  :control: 
+  - - :bufnum
+    - 
+  - - :freq
+    - 440.0
+  - - :beats
+    - 0.5
+  :audio: 
+  - - :bufnum
+    - 
+  - - :freq
+    - 440.0
+  - - :beats
+    - 0.5
 Clip: 
-  :rates: 
-  - :audio
-  - :control
-  :args: 
-    :lo: 0.0
-    :hi: 1.0
-    :input: 0.0
+  :control: 
+  - - :input
+    - 0.0
+  - - :lo
+    - 0.0
+  - - :hi
+    - 1.0
+  :audio: 
+  - - :input
+    - 0.0
+  - - :lo
+    - 0.0
+  - - :hi
+    - 1.0
 ClipNoise: 
-  :rates: 
-  - :audio
-  - :control
-  :args: {}
+  :control: []
+
+  :audio: []
 
 CoinGate: 
-  :rates: 
-  - :audio
-  - :control
-  :args: 
-    :prob: 
-    :input: 
+  :control: 
+  - - :prob
+    - 
+  - - :input
+    - 
+  :audio: 
+  - - :prob
+    - 
+  - - :input
+    - 
 CombC: 
-  :rates: 
-  - :audio
-  - :control
-  :args: 
-    :decaytime: 1.0
-    :delaytime: 0.2
-    :input: 0.0
-    :maxdelaytime: 0.2
+  :control: 
+  - - :input
+    - 0.0
+  - - :maxdelaytime
+    - 0.2
+  - - :delaytime
+    - 0.2
+  - - :decaytime
+    - 1.0
+  :audio: 
+  - - :input
+    - 0.0
+  - - :maxdelaytime
+    - 0.2
+  - - :delaytime
+    - 0.2
+  - - :decaytime
+    - 1.0
 CombL: 
-  :rates: 
-  - :audio
-  - :control
-  :args: 
-    :decaytime: 1.0
-    :delaytime: 0.2
-    :input: 0.0
-    :maxdelaytime: 0.2
+  :control: 
+  - - :input
+    - 0.0
+  - - :maxdelaytime
+    - 0.2
+  - - :delaytime
+    - 0.2
+  - - :decaytime
+    - 1.0
+  :audio: 
+  - - :input
+    - 0.0
+  - - :maxdelaytime
+    - 0.2
+  - - :delaytime
+    - 0.2
+  - - :decaytime
+    - 1.0
 CombN: 
-  :rates: 
-  - :audio
-  - :control
-  :args: 
-    :decaytime: 1.0
-    :delaytime: 0.2
-    :input: 0.0
-    :maxdelaytime: 0.2
+  :control: 
+  - - :input
+    - 0.0
+  - - :maxdelaytime
+    - 0.2
+  - - :delaytime
+    - 0.2
+  - - :decaytime
+    - 1.0
+  :audio: 
+  - - :input
+    - 0.0
+  - - :maxdelaytime
+    - 0.2
+  - - :delaytime
+    - 0.2
+  - - :decaytime
+    - 1.0
 Compander: 
-  :rates: 
-  - :audio
-  :args: 
-    :slopeAbove: 1.0
-    :clampTime: 0.01
-    :control: 0.0
-    :relaxTime: 0.1
-    :thresh: 0.5
-    :slopeBelow: 1.0
-    :input: 0.0
+  :audio: 
+  - - :input
+    - 0.0
+  - - :control
+    - 0.0
+  - - :thresh
+    - 0.5
+  - - :slopeBelow
+    - 1.0
+  - - :slopeAbove
+    - 1.0
+  - - :clampTime
+    - 0.01
+  - - :relaxTime
+    - 0.1
 ControlRate: 
-  :rates: 
-  - :scalar
-  :args: {}
+  :scalar: []
 
 Convolution2: 
-  :rates: 
-  - :audio
-  :args: 
-    :bufnum: 
-    :trigger: 
-    :input: 
-    :framesize: 512.0
+  :audio: 
+  - - :input
+    - 
+  - - :bufnum
+    - 
+  - - :trigger
+    - 
+  - - :framesize
+    - 512.0
 Convolution: 
-  :rates: 
-  - :audio
-  :args: 
-    :kernel: 
-    :input: 
-    :framesize: 512.0
+  :audio: 
+  - - :input
+    - 
+  - - :kernel
+    - 
+  - - :framesize
+    - 512.0
 Crackle: 
-  :rates: 
-  - :audio
-  - :control
-  :args: 
-    :chaosParam: 1.5
+  :control: 
+  - - :chaosParam
+    - 1.5
+  :audio: 
+  - - :chaosParam
+    - 1.5
 CuspL: 
-  :rates: 
-  - :audio
-  :args: 
-    :xi: 0.0
-    :a: 1.0
-    :b: 1.9
-    :freq: 22050.0
+  :audio: 
+  - - :freq
+    - 22050.0
+  - - :a
+    - 1.0
+  - - :b
+    - 1.9
+  - - :xi
+    - 0.0
 CuspN: 
-  :rates: 
-  - :audio
-  :args: 
-    :xi: 0.0
-    :a: 1.0
-    :b: 1.9
-    :freq: 22050.0
+  :audio: 
+  - - :freq
+    - 22050.0
+  - - :a
+    - 1.0
+  - - :b
+    - 1.9
+  - - :xi
+    - 0.0
 DC: 
-  :rates: 
-  - :audio
-  - :control
-  :args: 
-    :input: 
+  :control: 
+  - - :input
+    - 
+  :audio: 
+  - - :input
+    - 
 Dbrown: 
-  :rates: 
-  - :demand
-  :args: 
-    :lo: 
-    :hi: 
-    :step: 
-    :length: 0.0
+  :demand: 
+  - - :lo
+    - 
+  - - :hi
+    - 
+  - - :step
+    - 
+  - - :length
+    - 0.0
 Decay2: 
-  :rates: 
-  - :audio
-  - :control
-  :args: 
-    :attackTime: 0.01
-    :input: 0.0
-    :decayTime: 1.0
+  :control: 
+  - - :input
+    - 0.0
+  - - :attackTime
+    - 0.01
+  - - :decayTime
+    - 1.0
+  :audio: 
+  - - :input
+    - 0.0
+  - - :attackTime
+    - 0.01
+  - - :decayTime
+    - 1.0
 Decay: 
-  :rates: 
-  - :audio
-  - :control
-  :args: 
-    :input: 0.0
-    :decayTime: 1.0
+  :control: 
+  - - :input
+    - 0.0
+  - - :decayTime
+    - 1.0
+  :audio: 
+  - - :input
+    - 0.0
+  - - :decayTime
+    - 1.0
 DecodeB2: 
-  :rates: 
-  - :audio
-  - :control
-  :args: 
-    :orientation: 0.5
-    :x: 
-    :y: 
-    :w: 
+  :control: 
+  - - :w
+    - 
+  - - :x
+    - 
+  - - :y
+    - 
+  - - :orientation
+    - 0.5
+  :audio: 
+  - - :w
+    - 
+  - - :x
+    - 
+  - - :y
+    - 
+  - - :orientation
+    - 0.5
 DegreeToKey: 
-  :rates: 
-  - :audio
-  - :control
-  :args: 
-    :octave: 12.0
-    :bufnum: 
-    :input: 0.0
+  :control: 
+  - - :bufnum
+    - 
+  - - :input
+    - 0.0
+  - - :octave
+    - 12.0
+  :audio: 
+  - - :bufnum
+    - 
+  - - :input
+    - 0.0
+  - - :octave
+    - 12.0
 Delay1: 
-  :rates: 
-  - :audio
-  - :control
-  :args: 
-    :input: 0.0
+  :control: 
+  - - :input
+    - 0.0
+  :audio: 
+  - - :input
+    - 0.0
 Delay2: 
-  :rates: 
-  - :audio
-  - :control
-  :args: 
-    :input: 0.0
+  :control: 
+  - - :input
+    - 0.0
+  :audio: 
+  - - :input
+    - 0.0
 DelayC: 
-  :rates: 
-  - :audio
-  - :control
-  :args: 
-    :delaytime: 0.2
-    :input: 0.0
-    :maxdelaytime: 0.2
+  :control: 
+  - - :input
+    - 0.0
+  - - :maxdelaytime
+    - 0.2
+  - - :delaytime
+    - 0.2
+  :audio: 
+  - - :input
+    - 0.0
+  - - :maxdelaytime
+    - 0.2
+  - - :delaytime
+    - 0.2
 DelayL: 
-  :rates: 
-  - :audio
-  - :control
-  :args: 
-    :delaytime: 0.2
-    :input: 0.0
-    :maxdelaytime: 0.2
+  :control: 
+  - - :input
+    - 0.0
+  - - :maxdelaytime
+    - 0.2
+  - - :delaytime
+    - 0.2
+  :audio: 
+  - - :input
+    - 0.0
+  - - :maxdelaytime
+    - 0.2
+  - - :delaytime
+    - 0.2
 DelayN: 
-  :rates: 
-  - :audio
-  - :control
-  :args: 
-    :delaytime: 0.2
-    :input: 0.0
-    :maxdelaytime: 0.2
+  :control: 
+  - - :input
+    - 0.0
+  - - :maxdelaytime
+    - 0.2
+  - - :delaytime
+    - 0.2
+  :audio: 
+  - - :input
+    - 0.0
+  - - :maxdelaytime
+    - 0.2
+  - - :delaytime
+    - 0.2
 Demand: 
-  :rates: 
-  - :audio
-  - :control
-  :args: 
-    :reset: 
-    :demandUGens: 
-    :trig: 
+  :control: 
+  - - :trig
+    - 
+  - - :reset
+    - 
+  - - :demandUGens
+    - 
+  :audio: 
+  - - :trig
+    - 
+  - - :reset
+    - 
+  - - :demandUGens
+    - 
 DemandEnvGen: 
-  :rates: 
-  - :audio
-  - :control
-  :args: 
-    :levelBias: 0.0
-    :shape: 1.0
-    :level: 
-    :reset: 1.0
-    :doneAction: 0.0
-    :timeScale: 1.0
-    :curve: 0.0
-    :gate: 1.0
-    :levelScale: 1.0
-    :dur: 
+  :control: 
+  - - :level
+    - 
+  - - :dur
+    - 
+  - - :shape
+    - 1.0
+  - - :curve
+    - 0.0
+  - - :gate
+    - 1.0
+  - - :reset
+    - 1.0
+  - - :levelScale
+    - 1.0
+  - - :levelBias
+    - 0.0
+  - - :timeScale
+    - 1.0
+  - - :doneAction
+    - 0.0
+  :audio: 
+  - - :level
+    - 
+  - - :dur
+    - 
+  - - :shape
+    - 1.0
+  - - :curve
+    - 0.0
+  - - :gate
+    - 1.0
+  - - :reset
+    - 1.0
+  - - :levelScale
+    - 1.0
+  - - :levelBias
+    - 0.0
+  - - :timeScale
+    - 1.0
+  - - :doneAction
+    - 0.0
 DetectSilence: 
-  :rates: 
-  - :audio
-  - :control
-  :args: 
-    :amp: 0.0001
-    :doneAction: 0.0
-    :time: 0.1
-    :input: 0.0
+  :control: 
+  - - :input
+    - 0.0
+  - - :amp
+    - 0.0001
+  - - :time
+    - 0.1
+  - - :doneAction
+    - 0.0
+  :audio: 
+  - - :input
+    - 0.0
+  - - :amp
+    - 0.0001
+  - - :time
+    - 0.1
+  - - :doneAction
+    - 0.0
 Dgeom: 
-  :rates: 
-  - :demand
-  :args: 
-    :start: 1.0
-    :length: 100.0
-    :grow: 2.0
+  :demand: 
+  - - :start
+    - 1.0
+  - - :grow
+    - 2.0
+  - - :length
+    - 100.0
 Dibrown: 
-  :rates: 
-  - :demand
-  :args: 
-    :lo: 
-    :hi: 
-    :step: 
-    :length: 0.0
+  :demand: 
+  - - :lo
+    - 
+  - - :hi
+    - 
+  - - :step
+    - 
+  - - :length
+    - 0.0
 DiskIn: 
-  :rates: 
-  - :audio
-  :args: 
-    :bufnum: 
+  :audio: 
+  - - :bufnum
+    - 
 DiskOut: 
-  :rates: 
-  - :audio
-  :args: 
-    :channelsArray: 
-    :bufnum: 
+  :audio: 
+  - - :bufnum
+    - 
+  - - :channelsArray
+    - 
 Diwhite: 
-  :rates: 
-  - :demand
-  :args: 
-    :lo: 
-    :hi: 
-    :length: 0.0
+  :demand: 
+  - - :lo
+    - 
+  - - :hi
+    - 
+  - - :length
+    - 0.0
 Done: 
-  :rates: 
-  - :control
-  :args: 
-    :src: 
+  :control: 
+  - - :src
+    - 
 Drand: 
-  :rates: 
-  - :demand
-  :args: 
-    :repeats: 1.0
-    :list: 
+  :demand: 
+  - - :repeats
+    - 1.0
+  - - :list
+    - 
 Dseq: 
-  :rates: 
-  - :demand
-  :args: 
-    :repeats: 1.0
-    :list: 
+  :demand: 
+  - - :repeats
+    - 1.0
+  - - :list
+    - 
 Dser: 
-  :rates: 
-  - :demand
-  :args: 
-    :repeats: 1.0
-    :list: 
+  :demand: 
+  - - :repeats
+    - 1.0
+  - - :list
+    - 
 Dseries: 
-  :rates: 
-  - :demand
-  :args: 
-    :start: 1.0
-    :step: 1.0
-    :length: 100.0
+  :demand: 
+  - - :start
+    - 1.0
+  - - :step
+    - 1.0
+  - - :length
+    - 100.0
 Dswitch1: 
-  :rates: 
-  - :demand
-  :args: 
-    :index: 
-    :list: 
+  :demand: 
+  - - :index
+    - 
+  - - :list
+    - 
 Dust2: 
-  :rates: 
-  - :audio
-  - :control
-  :args: 
-    :density: 0.0
+  :control: 
+  - - :density
+    - 0.0
+  :audio: 
+  - - :density
+    - 0.0
 Dust: 
-  :rates: 
-  - :audio
-  - :control
-  :args: 
-    :density: 0.0
+  :control: 
+  - - :density
+    - 0.0
+  :audio: 
+  - - :density
+    - 0.0
 Duty: 
-  :rates: 
-  - :audio
-  - :control
-  :args: 
-    :level: 1.0
-    :reset: 0.0
-    :doneAction: 0.0
-    :dur: 1.0
+  :control: 
+  - - :dur
+    - 1.0
+  - - :reset
+    - 0.0
+  - - :level
+    - 1.0
+  - - :doneAction
+    - 0.0
+  :audio: 
+  - - :dur
+    - 1.0
+  - - :reset
+    - 0.0
+  - - :level
+    - 1.0
+  - - :doneAction
+    - 0.0
 Dwhite: 
-  :rates: 
-  - :demand
-  :args: 
-    :lo: 
-    :hi: 
-    :length: 0.0
+  :demand: 
+  - - :lo
+    - 
+  - - :hi
+    - 
+  - - :length
+    - 0.0
 Dxrand: 
-  :rates: 
-  - :demand
-  :args: 
-    :repeats: 1.0
-    :list: 
+  :demand: 
+  - - :repeats
+    - 1.0
+  - - :list
+    - 
 EnvGen: 
-  :rates: 
-  - :audio
-  - :control
-  :args: 
-    :levelBias: 0.0
-    :doneAction: 0.0
-    :timeScale: 1.0
-    :gate: 1.0
-    :envelope: 
-    :levelScale: 1.0
+  :control: 
+  - - :envelope
+    -
+  - - :gate
+    - 1.0
+  - - :levelScale
+    - 1.0
+  - - :levelBias
+    - 0.0
+  - - :timeScale
+    - 1.0
+  - - :doneAction
+    - 0.0
+  :audio: 
+  - - :envelope
+    -
+  - - :gate
+    - 1.0
+  - - :levelScale
+    - 1.0
+  - - :levelBias
+    - 0.0
+  - - :timeScale
+    - 1.0
+  - - :doneAction
+    - 0.0
 ExpRand: 
-  :rates: 
-  - :scalar
-  :args: 
-    :lo: 0.01
-    :hi: 1.0
+  :scalar: 
+  - - :lo
+    - 0.01
+  - - :hi
+    - 1.0
 FBSineC: 
-  :rates: 
-  - :audio
-  :args: 
-    :xi: 0.1
-    :a: 1.1
-    :yi: 0.1
-    :im: 1.0
-    :freq: 22050.0
-    :c: 0.5
-    :fb: 0.1
+  :audio: 
+  - - :freq
+    - 22050.0
+  - - :im
+    - 1.0
+  - - :fb
+    - 0.1
+  - - :a
+    - 1.1
+  - - :c
+    - 0.5
+  - - :xi
+    - 0.1
+  - - :yi
+    - 0.1
 FBSineL: 
-  :rates: 
-  - :audio
-  :args: 
-    :xi: 0.1
-    :a: 1.1
-    :yi: 0.1
-    :im: 1.0
-    :freq: 22050.0
-    :c: 0.5
-    :fb: 0.1
+  :audio: 
+  - - :freq
+    - 22050.0
+  - - :im
+    - 1.0
+  - - :fb
+    - 0.1
+  - - :a
+    - 1.1
+  - - :c
+    - 0.5
+  - - :xi
+    - 0.1
+  - - :yi
+    - 0.1
 FBSineN: 
-  :rates: 
-  - :audio
-  :args: 
-    :xi: 0.1
-    :a: 1.1
-    :yi: 0.1
-    :im: 1.0
-    :freq: 22050.0
-    :c: 0.5
-    :fb: 0.1
+  :audio: 
+  - - :freq
+    - 22050.0
+  - - :im
+    - 1.0
+  - - :fb
+    - 0.1
+  - - :a
+    - 1.1
+  - - :c
+    - 0.5
+  - - :xi
+    - 0.1
+  - - :yi
+    - 0.1
 FFT: 
-  :rates: 
-  - :control
-  :args: 
-    :input: 0.0
-    :buffer: 
+  :control: 
+  - - :buffer
+    - 
+  - - :input
+    - 0.0
 FOS: 
-  :rates: 
-  - :audio
-  :args: 
-    :b1: 0.0
-    :a0: 0.0
-    :input: 0.0
-    :a1: 0.0
+  :audio: 
+  - - :input
+    - 0.0
+  - - :a0
+    - 0.0
+  - - :a1
+    - 0.0
+  - - :b1
+    - 0.0
 FSinOsc: 
-  :rates: 
-  - :audio
-  - :control
-  :args: 
-    :iphase: 0.0
-    :freq: 440.0
+  :control: 
+  - - :freq
+    - 440.0
+  - - :iphase
+    - 0.0
+  :audio: 
+  - - :freq
+    - 440.0
+  - - :iphase
+    - 0.0
 Fold: 
-  :rates: 
-  - :audio
-  - :control
-  :args: 
-    :lo: 0.0
-    :hi: 1.0
-    :input: 0.0
+  :control: 
+  - - :input
+    - 0.0
+  - - :lo
+    - 0.0
+  - - :hi
+    - 1.0
+  :audio: 
+  - - :input
+    - 0.0
+  - - :lo
+    - 0.0
+  - - :hi
+    - 1.0
 Formant: 
-  :rates: 
-  - :audio
-  :args: 
-    :formfreq: 1760.0
-    :bwfreq: 880.0
-    :fundfreq: 440.0
+  :audio: 
+  - - :fundfreq
+    - 440.0
+  - - :formfreq
+    - 1760.0
+  - - :bwfreq
+    - 880.0
 Formlet: 
-  :rates: 
-  - :audio
-  - :control
-  :args: 
-    :attacktime: 1.0
-    :decaytime: 1.0
-    :freq: 440.0
-    :input: 0.0
+  :control: 
+  - - :input
+    - 0.0
+  - - :freq
+    - 440.0
+  - - :attacktime
+    - 1.0
+  - - :decaytime
+    - 1.0
+  :audio: 
+  - - :input
+    - 0.0
+  - - :freq
+    - 440.0
+  - - :attacktime
+    - 1.0
+  - - :decaytime
+    - 1.0
 Free: 
-  :rates: 
-  - :control
-  :args: 
-    :trig: 
-    :id: 
+  :control: 
+  - - :trig
+    - 
+  - - :id
+    - 
 FreeSelf: 
-  :rates: 
-  - :control
-  :args: 
-    :input: 
+  :control: 
+  - - :input
+    - 
 FreeSelfWhenDone: 
-  :rates: 
-  - :control
-  :args: 
-    :src: 
+  :control: 
+  - - :src
+    - 
 Gate: 
-  :rates: 
-  - :audio
-  - :control
-  :args: 
-    :trig: 0.0
-    :input: 0.0
+  :control: 
+  - - :input
+    - 0.0
+  - - :trig
+    - 0.0
+  :audio: 
+  - - :input
+    - 0.0
+  - - :trig
+    - 0.0
 GbmanL: 
-  :rates: 
-  - :audio
-  :args: 
-    :xi: 1.2
-    :yi: 2.1
-    :freq: 22050.0
+  :audio: 
+  - - :freq
+    - 22050.0
+  - - :xi
+    - 1.2
+  - - :yi
+    - 2.1
 GbmanN: 
-  :rates: 
-  - :audio
-  :args: 
-    :xi: 1.2
-    :yi: 2.1
-    :freq: 22050.0
+  :audio: 
+  - - :freq
+    - 22050.0
+  - - :xi
+    - 1.2
+  - - :yi
+    - 2.1
 Gendy1: 
-  :rates: 
-  - :audio
-  - :control
-  :args: 
-    :ddparam: 1.0
-    :maxfreq: 660.0
-    :ampscale: 0.5
-    :durscale: 0.5
-    :ampdist: 1.0
-    :initCPs: 12.0
-    :durdist: 1.0
-    :knum: 
-    :adparam: 1.0
-    :minfreq: 440.0
+  :control: 
+  - - :ampdist
+    - 1.0
+  - - :durdist
+    - 1.0
+  - - :adparam
+    - 1.0
+  - - :ddparam
+    - 1.0
+  - - :minfreq
+    - 440.0
+  - - :maxfreq
+    - 660.0
+  - - :ampscale
+    - 0.5
+  - - :durscale
+    - 0.5
+  - - :initCPs
+    - 12.0
+  - - :knum
+    - :nil
+  :audio: 
+  - - :ampdist
+    - 1.0
+  - - :durdist
+    - 1.0
+  - - :adparam
+    - 1.0
+  - - :ddparam
+    - 1.0
+  - - :minfreq
+    - 440.0
+  - - :maxfreq
+    - 660.0
+  - - :ampscale
+    - 0.5
+  - - :durscale
+    - 0.5
+  - - :initCPs
+    - 12.0
+  - - :knum
+    - :nil
 Gendy2: 
-  :rates: 
-  - :audio
-  - :control
-  :args: 
-    :ddparam: 1.0
-    :maxfreq: 660.0
-    :a: 1.17
-    :ampscale: 0.5
-    :durscale: 0.5
-    :ampdist: 1.0
-    :initCPs: 12.0
-    :durdist: 1.0
-    :knum: 
-    :adparam: 1.0
-    :c: 0.31
-    :minfreq: 440.0
+  :control: 
+  - - :ampdist
+    - 1.0
+  - - :durdist
+    - 1.0
+  - - :adparam
+    - 1.0
+  - - :ddparam
+    - 1.0
+  - - :minfreq
+    - 440.0
+  - - :maxfreq
+    - 660.0
+  - - :ampscale
+    - 0.5
+  - - :durscale
+    - 0.5
+  - - :initCPs
+    - 12.0
+  - - :knum
+    - :nil
+  - - :a
+    - 1.17
+  - - :c
+    - 0.31
+  :audio: 
+  - - :ampdist
+    - 1.0
+  - - :durdist
+    - 1.0
+  - - :adparam
+    - 1.0
+  - - :ddparam
+    - 1.0
+  - - :minfreq
+    - 440.0
+  - - :maxfreq
+    - 660.0
+  - - :ampscale
+    - 0.5
+  - - :durscale
+    - 0.5
+  - - :initCPs
+    - 12.0
+  - - :knum
+    - :nil
+  - - :a
+    - 1.17
+  - - :c
+    - 0.31
 Gendy3: 
-  :rates: 
-  - :audio
-  - :control
-  :args: 
-    :ddparam: 1.0
-    :ampscale: 0.5
-    :durscale: 0.5
-    :ampdist: 1.0
-    :initCPs: 12.0
-    :durdist: 1.0
-    :knum: 
-    :freq: 440.0
-    :adparam: 1.0
+  :control: 
+  - - :ampdist
+    - 1.0
+  - - :durdist
+    - 1.0
+  - - :adparam
+    - 1.0
+  - - :ddparam
+    - 1.0
+  - - :freq
+    - 440.0
+  - - :ampscale
+    - 0.5
+  - - :durscale
+    - 0.5
+  - - :initCPs
+    - 12.0
+  - - :knum
+    - :nil
+  :audio: 
+  - - :ampdist
+    - 1.0
+  - - :durdist
+    - 1.0
+  - - :adparam
+    - 1.0
+  - - :ddparam
+    - 1.0
+  - - :freq
+    - 440.0
+  - - :ampscale
+    - 0.5
+  - - :durscale
+    - 0.5
+  - - :initCPs
+    - 12.0
+  - - :knum
+    - :nil
 GrayNoise: 
-  :rates: 
-  - :audio
-  - :control
-  :args: {}
+  :control: []
+
+  :audio: []
 
 HPF: 
-  :rates: 
-  - :audio
-  - :control
-  :args: 
-    :freq: 440.0
-    :input: 0.0
+  :control: 
+  - - :input
+    - 0.0
+  - - :freq
+    - 440.0
+  :audio: 
+  - - :input
+    - 0.0
+  - - :freq
+    - 440.0
 HPZ1: 
-  :rates: 
-  - :audio
-  - :control
-  :args: 
-    :input: 0.0
+  :control: 
+  - - :input
+    - 0.0
+  :audio: 
+  - - :input
+    - 0.0
 HPZ2: 
-  :rates: 
-  - :audio
-  - :control
-  :args: 
-    :input: 0.0
+  :control: 
+  - - :input
+    - 0.0
+  :audio: 
+  - - :input
+    - 0.0
 Hasher: 
-  :rates: 
-  - :audio
-  - :control
-  :args: 
-    :input: 0.0
+  :control: 
+  - - :input
+    - 0.0
+  :audio: 
+  - - :input
+    - 0.0
 HenonC: 
-  :rates: 
-  - :audio
-  :args: 
-    :x0: 0.0
-    :a: 1.4
-    :x1: 0.0
-    :b: 0.3
-    :freq: 22050.0
+  :audio: 
+  - - :freq
+    - 22050.0
+  - - :a
+    - 1.4
+  - - :b
+    - 0.3
+  - - :x0
+    - 0.0
+  - - :x1
+    - 0.0
 HenonL: 
-  :rates: 
-  - :audio
-  :args: 
-    :x0: 0.0
-    :a: 1.4
-    :x1: 0.0
-    :b: 0.3
-    :freq: 22050.0
+  :audio: 
+  - - :freq
+    - 22050.0
+  - - :a
+    - 1.4
+  - - :b
+    - 0.3
+  - - :x0
+    - 0.0
+  - - :x1
+    - 0.0
 HenonN: 
-  :rates: 
-  - :audio
-  :args: 
-    :x0: 0.0
-    :a: 1.4
-    :x1: 0.0
-    :b: 0.3
-    :freq: 22050.0
+  :audio: 
+  - - :freq
+    - 22050.0
+  - - :a
+    - 1.4
+  - - :b
+    - 0.3
+  - - :x0
+    - 0.0
+  - - :x1
+    - 0.0
 IFFT: 
-  :rates: 
-  - :audio
-  :args: 
-    :buffer: 
+  :audio: 
+  - - :buffer
+    - 
 IRand: 
-  :rates: 
-  - :scalar
-  :args: 
-    :lo: 0.0
-    :hi: 127.0
+  :scalar: 
+  - - :lo
+    - 0.0
+  - - :hi
+    - 127.0
 Impulse: 
-  :rates: 
-  - :audio
-  - :control
-  :args: 
-    :phase: 0.0
-    :freq: 440.0
+  :control: 
+  - - :freq
+    - 440.0
+  - - :phase
+    - 0.0
+  :audio: 
+  - - :freq
+    - 440.0
+  - - :phase
+    - 0.0
 In: 
-  :rates: 
-  - :audio
-  - :control
-  :args: 
-    :bus: 0.0
+  :control: 
+  - - :bus
+    - 0.0
+  :audio: 
+  - - :bus
+    - 0.0
 InFeedback: 
-  :rates: 
-  - :audio
-  :args: 
-    :bus: 0.0
+  :audio: 
+  - - :bus
+    - 0.0
 InRange: 
-  :rates: 
-  - :audio
-  - :control
-  :args: 
-    :lo: 0.0
-    :hi: 1.0
-    :input: 0.0
+  :control: 
+  - - :input
+    - 0.0
+  - - :lo
+    - 0.0
+  - - :hi
+    - 1.0
+  :audio: 
+  - - :input
+    - 0.0
+  - - :lo
+    - 0.0
+  - - :hi
+    - 1.0
 InRect: 
-  :rates: 
-  - :audio
-  - :control
-  :args: 
-    :right: 
-    :y: 0.0
-    :top: 
-    :left: 
-    :bottom: 
+  :control: 
+  - - :y
+    - 0.0
+  - - :y
+    - 0.0
+  - - :left
+    - 
+  - - :top
+    - 
+  - - :right
+    - 
+  - - :bottom
+    - 
+  :audio: 
+  - - :y
+    - 0.0
+  - - :y
+    - 0.0
+  - - :left
+    - 
+  - - :top
+    - 
+  - - :right
+    - 
+  - - :bottom
+    - 
 InTrig: 
-  :rates: 
-  - :control
-  :args: 
-    :bus: 0.0
+  :control: 
+  - - :bus
+    - 0.0
 Index: 
-  :rates: 
-  - :audio
-  - :control
-  :args: 
-    :bufnum: 
-    :input: 0.0
+  :control: 
+  - - :bufnum
+    - 
+  - - :input
+    - 0.0
+  :audio: 
+  - - :bufnum
+    - 
+  - - :input
+    - 0.0
 Integrator: 
-  :rates: 
-  - :audio
-  - :control
-  :args: 
-    :coef: 1.0
-    :input: 0.0
+  :control: 
+  - - :input
+    - 0.0
+  - - :coef
+    - 1.0
+  :audio: 
+  - - :input
+    - 0.0
+  - - :coef
+    - 1.0
 K2A: 
-  :rates: 
-  - :audio
-  :args: 
-    :input: 0.0
+  :audio: 
+  - - :input
+    - 0.0
 KeyState: 
-  :rates: 
-  - :control
-  :args: 
-    :keycode: 0.0
-    :minval: 0.0
-    :maxval: 1.0
-    :lag: 0.2
+  :control: 
+  - - :keycode
+    - 0.0
+  - - :minval
+    - 0.0
+  - - :maxval
+    - 1.0
+  - - :lag
+    - 0.2
 Klang: 
-  :rates: 
-  - :audio
-  :args: 
-    :freqoffset: 0.0
-    :specs: 
-    :freqscale: 1.0
+  :audio: 
+  - - :freqscale
+    - 1.0
+  - - :freqoffset
+    - 0.0
+  - - :specs
+    - :nil
 Klank: 
-  :rates: 
-  - :audio
-  :args: 
-    :freqoffset: 0.0
-    :decayscale: 1.0
-    :specs: 
-    :input: 
-    :freqscale: 1.0
+  :audio: 
+  - - :input
+    - 
+  - - :freqscale
+    - 1.0
+  - - :freqoffset
+    - 0.0
+  - - :decayscale
+    - 1.0
+  - - :specs
+    - :nil
 LFClipNoise: 
-  :rates: 
-  - :audio
-  - :control
-  :args: 
-    :freq: 500.0
+  :control: 
+  - - :freq
+    - 500.0
+  :audio: 
+  - - :freq
+    - 500.0
 LFCub: 
-  :rates: 
-  - :audio
-  - :control
-  :args: 
-    :iphase: 0.0
-    :freq: 440.0
+  :control: 
+  - - :freq
+    - 440.0
+  - - :iphase
+    - 0.0
+  :audio: 
+  - - :freq
+    - 440.0
+  - - :iphase
+    - 0.0
 LFDClipNoise: 
-  :rates: 
-  - :audio
-  - :control
-  :args: 
-    :freq: 500.0
+  :control: 
+  - - :freq
+    - 500.0
+  :audio: 
+  - - :freq
+    - 500.0
 LFDNoise0: 
-  :rates: 
-  - :audio
-  - :control
-  :args: 
-    :freq: 500.0
+  :control: 
+  - - :freq
+    - 500.0
+  :audio: 
+  - - :freq
+    - 500.0
 LFDNoise1: 
-  :rates: 
-  - :audio
-  - :control
-  :args: 
-    :freq: 500.0
+  :control: 
+  - - :freq
+    - 500.0
+  :audio: 
+  - - :freq
+    - 500.0
 LFDNoise3: 
-  :rates: 
-  - :audio
-  - :control
-  :args: 
-    :freq: 500.0
+  :control: 
+  - - :freq
+    - 500.0
+  :audio: 
+  - - :freq
+    - 500.0
 LFNoise0: 
-  :rates: 
-  - :audio
-  - :control
-  :args: 
-    :freq: 500.0
+  :control: 
+  - - :freq
+    - 500.0
+  :audio: 
+  - - :freq
+    - 500.0
 LFNoise1: 
-  :rates: 
-  - :audio
-  - :control
-  :args: 
-    :freq: 500.0
+  :control: 
+  - - :freq
+    - 500.0
+  :audio: 
+  - - :freq
+    - 500.0
 LFNoise2: 
-  :rates: 
-  - :audio
-  - :control
-  :args: 
-    :freq: 500.0
+  :control: 
+  - - :freq
+    - 500.0
+  :audio: 
+  - - :freq
+    - 500.0
 LFPar: 
-  :rates: 
-  - :audio
-  - :control
-  :args: 
-    :iphase: 0.0
-    :freq: 440.0
+  :control: 
+  - - :freq
+    - 440.0
+  - - :iphase
+    - 0.0
+  :audio: 
+  - - :freq
+    - 440.0
+  - - :iphase
+    - 0.0
 LFPulse: 
-  :rates: 
-  - :audio
-  - :control
-  :args: 
-    :width: 0.5
-    :iphase: 0.0
-    :freq: 440.0
+  :control: 
+  - - :freq
+    - 440.0
+  - - :iphase
+    - 0.0
+  - - :width
+    - 0.5
+  :audio: 
+  - - :freq
+    - 440.0
+  - - :iphase
+    - 0.0
+  - - :width
+    - 0.5
 LFSaw: 
-  :rates: 
-  - :audio
-  - :control
-  :args: 
-    :iphase: 0.0
-    :freq: 440.0
+  :control: 
+  - - :freq
+    - 440.0
+  - - :iphase
+    - 0.0
+  :audio: 
+  - - :freq
+    - 440.0
+  - - :iphase
+    - 0.0
 LFTri: 
-  :rates: 
-  - :audio
-  - :control
-  :args: 
-    :iphase: 0.0
-    :freq: 440.0
+  :control: 
+  - - :freq
+    - 440.0
+  - - :iphase
+    - 0.0
+  :audio: 
+  - - :freq
+    - 440.0
+  - - :iphase
+    - 0.0
 LPF: 
-  :rates: 
-  - :audio
-  - :control
-  :args: 
-    :freq: 440.0
-    :input: 0.0
+  :control: 
+  - - :input
+    - 0.0
+  - - :freq
+    - 440.0
+  :audio: 
+  - - :input
+    - 0.0
+  - - :freq
+    - 440.0
 LPZ1: 
-  :rates: 
-  - :audio
-  - :control
-  :args: 
-    :input: 0.0
+  :control: 
+  - - :input
+    - 0.0
+  :audio: 
+  - - :input
+    - 0.0
 LPZ2: 
-  :rates: 
-  - :audio
-  - :control
-  :args: 
-    :input: 0.0
+  :control: 
+  - - :input
+    - 0.0
+  :audio: 
+  - - :input
+    - 0.0
 Lag2: 
-  :rates: 
-  - :audio
-  - :control
-  :args: 
-    :lagTime: 0.1
-    :input: 0.0
+  :control: 
+  - - :input
+    - 0.0
+  - - :lagTime
+    - 0.1
+  :audio: 
+  - - :input
+    - 0.0
+  - - :lagTime
+    - 0.1
 Lag3: 
-  :rates: 
-  - :audio
-  - :control
-  :args: 
-    :lagTime: 0.1
-    :input: 0.0
+  :control: 
+  - - :input
+    - 0.0
+  - - :lagTime
+    - 0.1
+  :audio: 
+  - - :input
+    - 0.0
+  - - :lagTime
+    - 0.1
 Lag: 
-  :rates: 
-  - :audio
-  - :control
-  :args: 
-    :lagTime: 0.1
-    :input: 0.0
+  :control: 
+  - - :input
+    - 0.0
+  - - :lagTime
+    - 0.1
+  :audio: 
+  - - :input
+    - 0.0
+  - - :lagTime
+    - 0.1
 LagIn: 
-  :rates: 
-  - :control
-  :args: 
-    :bus: 0.0
-    :lag: 0.1
+  :control: 
+  - - :bus
+    - 0.0
+  - - :lag
+    - 0.1
 LastValue: 
-  :rates: 
-  - :audio
-  - :control
-  :args: 
-    :diff: 0.01
-    :input: 0.0
+  :control: 
+  - - :input
+    - 0.0
+  - - :diff
+    - 0.01
+  :audio: 
+  - - :input
+    - 0.0
+  - - :diff
+    - 0.01
 Latch: 
-  :rates: 
-  - :audio
-  - :control
-  :args: 
-    :trig: 0.0
-    :input: 0.0
+  :control: 
+  - - :input
+    - 0.0
+  - - :trig
+    - 0.0
+  :audio: 
+  - - :input
+    - 0.0
+  - - :trig
+    - 0.0
 Latoocarfian: 
-  :rates: 
-  - :audio
-  - :control
-  :args: 
-    :d: 
-    :a: 
-    :b: 
-    :c: 
+  :control: 
+  - - :a
+    - 
+  - - :b
+    - 
+  - - :c
+    - 
+  - - :d
+    - 
+  :audio: 
+  - - :a
+    - 
+  - - :b
+    - 
+  - - :c
+    - 
+  - - :d
+    - 
 LatoocarfianC: 
-  :rates: 
-  - :audio
-  :args: 
-    :d: 0.5
-    :xi: 0.5
-    :a: 1.0
-    :yi: 0.5
-    :b: 3.0
-    :freq: 22050.0
-    :c: 0.5
+  :audio: 
+  - - :freq
+    - 22050.0
+  - - :a
+    - 1.0
+  - - :b
+    - 3.0
+  - - :c
+    - 0.5
+  - - :d
+    - 0.5
+  - - :xi
+    - 0.5
+  - - :yi
+    - 0.5
 LatoocarfianL: 
-  :rates: 
-  - :audio
-  :args: 
-    :d: 0.5
-    :xi: 0.5
-    :a: 1.0
-    :yi: 0.5
-    :b: 3.0
-    :freq: 22050.0
-    :c: 0.5
+  :audio: 
+  - - :freq
+    - 22050.0
+  - - :a
+    - 1.0
+  - - :b
+    - 3.0
+  - - :c
+    - 0.5
+  - - :d
+    - 0.5
+  - - :xi
+    - 0.5
+  - - :yi
+    - 0.5
 LatoocarfianN: 
-  :rates: 
-  - :audio
-  :args: 
-    :d: 0.5
-    :xi: 0.5
-    :a: 1.0
-    :yi: 0.5
-    :b: 3.0
-    :freq: 22050.0
-    :c: 0.5
+  :audio: 
+  - - :freq
+    - 22050.0
+  - - :a
+    - 1.0
+  - - :b
+    - 3.0
+  - - :c
+    - 0.5
+  - - :d
+    - 0.5
+  - - :xi
+    - 0.5
+  - - :yi
+    - 0.5
 LeakDC: 
-  :rates: 
-  - :audio
-  - :control
-  :args: 
-    :coef: 0.995
-    :input: 0.0
+  :control: 
+  - - :input
+    - 0.0
+  - - :coef
+    - 0.995
+  :audio: 
+  - - :input
+    - 0.0
+  - - :coef
+    - 0.995
 LeastChange: 
-  :rates: 
-  - :audio
-  - :control
-  :args: 
-    :a: 0.0
-    :b: 0.0
+  :control: 
+  - - :a
+    - 0.0
+  - - :b
+    - 0.0
+  :audio: 
+  - - :a
+    - 0.0
+  - - :b
+    - 0.0
 Limiter: 
-  :rates: 
-  - :audio
-  :args: 
-    :level: 1.0
-    :input: 
-    :dur: 0.01
+  :audio: 
+  - - :input
+    - 
+  - - :level
+    - 1.0
+  - - :dur
+    - 0.01
 LinCongC: 
-  :rates: 
-  - :audio
-  :args: 
-    :xi: 0.0
-    :a: 1.1
-    :m: 1.0
-    :freq: 22050.0
-    :c: 0.13
+  :audio: 
+  - - :freq
+    - 22050.0
+  - - :a
+    - 1.1
+  - - :c
+    - 0.13
+  - - :m
+    - 1.0
+  - - :xi
+    - 0.0
 LinCongL: 
-  :rates: 
-  - :audio
-  :args: 
-    :xi: 0.0
-    :a: 1.1
-    :m: 1.0
-    :freq: 22050.0
-    :c: 0.13
+  :audio: 
+  - - :freq
+    - 22050.0
+  - - :a
+    - 1.1
+  - - :c
+    - 0.13
+  - - :m
+    - 1.0
+  - - :xi
+    - 0.0
 LinCongN: 
-  :rates: 
-  - :audio
-  :args: 
-    :xi: 0.0
-    :a: 1.1
-    :m: 1.0
-    :freq: 22050.0
-    :c: 0.13
+  :audio: 
+  - - :freq
+    - 22050.0
+  - - :a
+    - 1.1
+  - - :c
+    - 0.13
+  - - :m
+    - 1.0
+  - - :xi
+    - 0.0
 LinExp: 
-  :rates: 
-  - :audio
-  - :control
-  :args: 
-    :dsthi: 2.0
-    :srclo: 0.0
-    :srchi: 1.0
-    :dstlo: 1.0
-    :input: 0.0
+  :control: 
+  - - :input
+    - 0.0
+  - - :srclo
+    - 0.0
+  - - :srchi
+    - 1.0
+  - - :dstlo
+    - 1.0
+  - - :dsthi
+    - 2.0
+  :audio: 
+  - - :input
+    - 0.0
+  - - :srclo
+    - 0.0
+  - - :srchi
+    - 1.0
+  - - :dstlo
+    - 1.0
+  - - :dsthi
+    - 2.0
 LinLin: 
-  :rates: 
-  - :audio
-  - :control
-  :args: 
-    :dsthi: 2.0
-    :srclo: 0.0
-    :srchi: 1.0
-    :dstlo: 1.0
-    :input: 0.0
+  :control: 
+  - - :input
+    - 0.0
+  - - :srclo
+    - 0.0
+  - - :srchi
+    - 1.0
+  - - :dstlo
+    - 1.0
+  - - :dsthi
+    - 2.0
+  :audio: 
+  - - :input
+    - 0.0
+  - - :srclo
+    - 0.0
+  - - :srchi
+    - 1.0
+  - - :dstlo
+    - 1.0
+  - - :dsthi
+    - 2.0
 LinPan2: 
-  :rates: 
-  - :audio
-  - :control
-  :args: 
-    :level: 1.0
-    :pos: 0.0
-    :input: 
+  :control: 
+  - - :input
+    - 
+  - - :pos
+    - 0.0
+  - - :level
+    - 1.0
+  :audio: 
+  - - :input
+    - 
+  - - :pos
+    - 0.0
+  - - :level
+    - 1.0
 LinRand: 
-  :rates: 
-  - :scalar
-  :args: 
-    :minmax: 0.0
-    :lo: 0.0
-    :hi: 1.0
+  :scalar: 
+  - - :lo
+    - 0.0
+  - - :hi
+    - 1.0
+  - - :minmax
+    - 0.0
 LinXFade2: 
-  :rates: 
-  - :audio
-  - :control
-  :args: 
-    :inA: 
-    :inB: 0.0
-    :pan: 0.0
+  :control: 
+  - - :inA
+    - 
+  - - :inB
+    - 0.0
+  - - :pan
+    - 0.0
+  :audio: 
+  - - :inA
+    - 
+  - - :inB
+    - 0.0
+  - - :pan
+    - 0.0
 Line: 
-  :rates: 
-  - :audio
-  - :control
-  :args: 
-    :end: 1.0
-    :doneAction: 0.0
-    :start: 0.0
-    :dur: 1.0
+  :control: 
+  - - :start
+    - 0.0
+  - - :finish
+    - 1.0
+  - - :dur
+    - 1.0
+  - - :doneAction
+    - 0.0
+  :audio: 
+  - - :start
+    - 0.0
+  - - :finish
+    - 1.0
+  - - :dur
+    - 1.0
+  - - :doneAction
+    - 0.0
 Linen: 
-  :rates: 
-  - :control
-  :args: 
-    :doneAction: 0.0
-    :gate: 1.0
-    :susLevel: 1.0
-    :releaseTime: 1.0
-    :attackTime: 0.01
+  :control: 
+  - - :gate
+    - 1.0
+  - - :attackTime
+    - 0.01
+  - - :susLevel
+    - 1.0
+  - - :releaseTime
+    - 1.0
+  - - :doneAction
+    - 0.0
 LocalIn: 
-  :rates: 
-  - :audio
-  - :control
-  :args: {}
+  :control: []
+
+  :audio: []
 
 LocalOut: 
-  :rates: 
-  - :audio
-  - :control
-  :args: 
-    :channelsArray: 
+  :control: 
+  - - :channelsArray
+    - 
+  :audio: 
+  - - :channelsArray
+    - 
 Logistic: 
-  :rates: 
-  - :audio
-  - :control
-  :args: 
-    :freq: 1000.0
-    :chaosParam: 3.0
+  :control: 
+  - - :chaosParam
+    - 3.0
+  - - :freq
+    - 1000.0
+  :audio: 
+  - - :chaosParam
+    - 3.0
+  - - :freq
+    - 1000.0
 LorenzL: 
-  :rates: 
-  - :audio
-  :args: 
-    :r: 28.0
-    :xi: 0.1
-    :yi: 0.0
-    :s: 10.0
-    :zi: 0.0
-    :b: 2.667
-    :h: 0.05
-    :freq: 22050.0
+  :audio: 
+  - - :freq
+    - 22050.0
+  - - :s
+    - 10.0
+  - - :r
+    - 28.0
+  - - :b
+    - 2.667
+  - - :h
+    - 0.05
+  - - :xi
+    - 0.1
+  - - :yi
+    - 0.0
+  - - :zi
+    - 0.0
 MantissaMask: 
-  :rates: 
-  - :audio
-  - :control
-  :args: 
-    :bits: 3.0
-    :input: 0.0
+  :control: 
+  - - :input
+    - 0.0
+  - - :bits
+    - 3.0
+  :audio: 
+  - - :input
+    - 0.0
+  - - :bits
+    - 3.0
 Median: 
-  :rates: 
-  - :audio
-  - :control
-  :args: 
-    :length: 3.0
-    :input: 0.0
+  :control: 
+  - - :length
+    - 3.0
+  - - :input
+    - 0.0
+  :audio: 
+  - - :length
+    - 3.0
+  - - :input
+    - 0.0
 MidEQ: 
-  :rates: 
-  - :audio
-  - :control
-  :args: 
-    :rq: 1.0
-    :db: 0.0
-    :freq: 440.0
-    :input: 0.0
+  :control: 
+  - - :input
+    - 0.0
+  - - :freq
+    - 440.0
+  - - :rq
+    - 1.0
+  - - :db
+    - 0.0
+  :audio: 
+  - - :input
+    - 0.0
+  - - :freq
+    - 440.0
+  - - :rq
+    - 1.0
+  - - :db
+    - 0.0
 MostChange: 
-  :rates: 
-  - :audio
-  - :control
-  :args: 
-    :a: 0.0
-    :b: 0.0
+  :control: 
+  - - :a
+    - 0.0
+  - - :b
+    - 0.0
+  :audio: 
+  - - :a
+    - 0.0
+  - - :b
+    - 0.0
 MouseButton: 
-  :rates: 
-  - :control
-  :args: 
-    :minval: 0.0
-    :maxval: 1.0
-    :lag: 0.2
+  :control: 
+  - - :minval
+    - 0.0
+  - - :maxval
+    - 1.0
+  - - :lag
+    - 0.2
 MouseX: 
-  :rates: 
-  - :control
-  :args: 
-    :minval: 0.0
-    :maxval: 1.0
-    :lag: 0.2
-    :warp: 0.0
+  :control: 
+  - - :minval
+    - 0.0
+  - - :maxval
+    - 1.0
+  - - :warp
+    - 0.0
+  - - :lag
+    - 0.2
 MouseY: 
-  :rates: 
-  - :control
-  :args: 
-    :minval: 0.0
-    :maxval: 1.0
-    :lag: 0.2
-    :warp: 0.0
+  :control: 
+  - - :minval
+    - 0.0
+  - - :maxval
+    - 1.0
+  - - :warp
+    - 0.0
+  - - :lag
+    - 0.2
 NRand: 
-  :rates: 
-  - :scalar
-  :args: 
-    :n: 0.0
-    :lo: 0.0
-    :hi: 1.0
+  :scalar: 
+  - - :lo
+    - 0.0
+  - - :hi
+    - 1.0
+  - - :n
+    - 0.0
 NoahNoise: 
-  :rates: 
-  - :audio
-  - :control
-  :args: {}
+  :control: []
+
+  :audio: []
 
 Normalizer: 
-  :rates: 
-  - :audio
-  :args: 
-    :level: 1.0
-    :input: 
-    :dur: 0.01
+  :audio: 
+  - - :input
+    - 
+  - - :level
+    - 1.0
+  - - :dur
+    - 0.01
 NumAudioBuses: 
-  :rates: 
-  - :scalar
-  :args: {}
+  :scalar: []
 
 NumBuffers: 
-  :rates: 
-  - :scalar
-  :args: {}
+  :scalar: []
 
 NumControlBuses: 
-  :rates: 
-  - :scalar
-  :args: {}
+  :scalar: []
 
 NumInputBuses: 
-  :rates: 
-  - :scalar
-  :args: {}
+  :scalar: []
 
 NumOutputBuses: 
-  :rates: 
-  - :scalar
-  :args: {}
+  :scalar: []
 
 NumRunningSynths: 
-  :rates: 
-  - :scalar
-  :args: {}
+  :scalar: []
 
 OffsetOut: 
-  :rates: 
-  - :audio
-  - :control
-  :args: 
-    :bus: 
-    :channelsArray: 
+  :control: 
+  - - :bus
+    - 
+  - - :channelsArray
+    - 
+  :audio: 
+  - - :bus
+    - 
+  - - :channelsArray
+    - 
 OnePole: 
-  :rates: 
-  - :audio
-  - :control
-  :args: 
-    :coef: 0.5
-    :input: 0.0
+  :control: 
+  - - :input
+    - 0.0
+  - - :coef
+    - 0.5
+  :audio: 
+  - - :input
+    - 0.0
+  - - :coef
+    - 0.5
 OneZero: 
-  :rates: 
-  - :audio
-  - :control
-  :args: 
-    :coef: 0.5
-    :input: 0.0
+  :control: 
+  - - :input
+    - 0.0
+  - - :coef
+    - 0.5
+  :audio: 
+  - - :input
+    - 0.0
+  - - :coef
+    - 0.5
 Osc: 
-  :rates: 
-  - :audio
-  - :control
-  :args: 
-    :bufnum: 
-    :phase: 0.0
-    :freq: 440.0
+  :control: 
+  - - :bufnum
+    - 
+  - - :freq
+    - 440.0
+  - - :phase
+    - 0.0
+  :audio: 
+  - - :bufnum
+    - 
+  - - :freq
+    - 440.0
+  - - :phase
+    - 0.0
 OscN: 
-  :rates: 
-  - :audio
-  - :control
-  :args: 
-    :bufnum: 
-    :phase: 0.0
-    :freq: 440.0
+  :control: 
+  - - :bufnum
+    - 
+  - - :freq
+    - 440.0
+  - - :phase
+    - 0.0
+  :audio: 
+  - - :bufnum
+    - 
+  - - :freq
+    - 440.0
+  - - :phase
+    - 0.0
 Out: 
-  :rates: 
-  - :audio
-  - :control
-  :args: 
-    :bus: 
-    :channelsArray: 
+  :control: 
+  - - :bus
+    - 
+  - - :channelsArray
+    - 
+  :audio: 
+  - - :bus
+    - 
+  - - :channelsArray
+    - 
 PSinGrain: 
-  :rates: 
-  - :audio
-  :args: 
-    :amp: 1.0
-    :freq: 440.0
-    :dur: 0.2
+  :audio: 
+  - - :freq
+    - 440.0
+  - - :dur
+    - 0.2
+  - - :amp
+    - 1.0
 PV_Add: 
-  :rates: 
-  - :control
-  :args: 
-    :bufferA: 
-    :bufferB: 
+  :control: 
+  - - :bufferA
+    - 
+  - - :bufferB
+    - 
 PV_BinScramble: 
-  :rates: 
-  - :control
-  :args: 
-    :width: 0.2
-    :trig: 0.0
-    :wipe: 0.0
-    :buffer: 
+  :control: 
+  - - :buffer
+    - 
+  - - :wipe
+    - 0.0
+  - - :width
+    - 0.2
+  - - :trig
+    - 0.0
 PV_BinShift: 
-  :rates: 
-  - :control
-  :args: 
-    :stretch: 1.0
-    :shift: 0.0
-    :buffer: 
+  :control: 
+  - - :buffer
+    - 
+  - - :stretch
+    - 1.0
+  - - :shift
+    - 0.0
 PV_BinWipe: 
-  :rates: 
-  - :control
-  :args: 
-    :bufferA: 
-    :bufferB: 
-    :wipe: 0.0
+  :control: 
+  - - :bufferA
+    - 
+  - - :bufferB
+    - 
+  - - :wipe
+    - 0.0
 PV_BrickWall: 
-  :rates: 
-  - :control
-  :args: 
-    :wipe: 0.0
-    :buffer: 
+  :control: 
+  - - :buffer
+    - 
+  - - :wipe
+    - 0.0
 PV_ConformalMap: 
-  :rates: 
-  - :control
-  :args: 
-    :areal: 0.0
-    :aimag: 0.0
-    :buffer: 
+  :control: 
+  - - :buffer
+    - 
+  - - :areal
+    - 0.0
+  - - :aimag
+    - 0.0
 PV_CopyPhase: 
-  :rates: 
-  - :control
-  :args: 
-    :bufferA: 
-    :bufferB: 
+  :control: 
+  - - :bufferA
+    - 
+  - - :bufferB
+    - 
 PV_Diffuser: 
-  :rates: 
-  - :control
-  :args: 
-    :trig: 0.0
-    :buffer: 
+  :control: 
+  - - :buffer
+    - 
+  - - :trig
+    - 0.0
 PV_HainsworthFoote: 
-  :rates: 
-  - :audio
-  :args: 
-    :threshold: 1.0
-    :proph: 0.0
-    :propf: 0.0
-    :waittime: 0.04
-    :buffer: 
+  :audio: 
+  - - :buffer
+    - 
+  - - :proph
+    - 0.0
+  - - :propf
+    - 0.0
+  - - :threshold
+    - 1.0
+  - - :waittime
+    - 0.04
 PV_JensenAndersen: 
-  :rates: 
-  - :audio
-  :args: 
-    :propsc: 0.25
-    :threshold: 1.0
-    :prophfe: 0.25
-    :prophfc: 0.25
-    :propsf: 0.25
-    :waittime: 0.04
-    :buffer: 
+  :audio: 
+  - - :buffer
+    - 
+  - - :propsc
+    - 0.25
+  - - :prophfe
+    - 0.25
+  - - :prophfc
+    - 0.25
+  - - :propsf
+    - 0.25
+  - - :threshold
+    - 1.0
+  - - :waittime
+    - 0.04
 PV_LocalMax: 
-  :rates: 
-  - :control
-  :args: 
-    :threshold: 0.0
-    :buffer: 
+  :control: 
+  - - :buffer
+    - 
+  - - :threshold
+    - 0.0
 PV_MagAbove: 
-  :rates: 
-  - :control
-  :args: 
-    :threshold: 0.0
-    :buffer: 
+  :control: 
+  - - :buffer
+    - 
+  - - :threshold
+    - 0.0
 PV_MagBelow: 
-  :rates: 
-  - :control
-  :args: 
-    :threshold: 0.0
-    :buffer: 
+  :control: 
+  - - :buffer
+    - 
+  - - :threshold
+    - 0.0
 PV_MagClip: 
-  :rates: 
-  - :control
-  :args: 
-    :threshold: 0.0
-    :buffer: 
+  :control: 
+  - - :buffer
+    - 
+  - - :threshold
+    - 0.0
 PV_MagFreeze: 
-  :rates: 
-  - :control
-  :args: 
-    :freeze: 0.0
-    :buffer: 
+  :control: 
+  - - :buffer
+    - 
+  - - :freeze
+    - 0.0
 PV_MagMul: 
-  :rates: 
-  - :control
-  :args: 
-    :bufferA: 
-    :bufferB: 
+  :control: 
+  - - :bufferA
+    - 
+  - - :bufferB
+    - 
 PV_MagNoise: 
-  :rates: 
-  - :control
-  :args: 
-    :buffer: 
+  :control: 
+  - - :buffer
+    - 
 PV_MagShift: 
-  :rates: 
-  - :control
-  :args: 
-    :stretch: 1.0
-    :shift: 0.0
-    :buffer: 
+  :control: 
+  - - :buffer
+    - 
+  - - :stretch
+    - 1.0
+  - - :shift
+    - 0.0
 PV_MagSmear: 
-  :rates: 
-  - :control
-  :args: 
-    :bins: 0.0
-    :buffer: 
+  :control: 
+  - - :buffer
+    - 
+  - - :bins
+    - 0.0
 PV_MagSquared: 
-  :rates: 
-  - :control
-  :args: 
-    :buffer: 
+  :control: 
+  - - :buffer
+    - 
 PV_Max: 
-  :rates: 
-  - :control
-  :args: 
-    :bufferA: 
-    :bufferB: 
+  :control: 
+  - - :bufferA
+    - 
+  - - :bufferB
+    - 
 PV_Min: 
-  :rates: 
-  - :control
-  :args: 
-    :bufferA: 
-    :bufferB: 
+  :control: 
+  - - :bufferA
+    - 
+  - - :bufferB
+    - 
 PV_Mul: 
-  :rates: 
-  - :control
-  :args: 
-    :bufferA: 
-    :bufferB: 
+  :control: 
+  - - :bufferA
+    - 
+  - - :bufferB
+    - 
 PV_PhaseShift270: 
-  :rates: 
-  - :control
-  :args: 
-    :buffer: 
+  :control: 
+  - - :buffer
+    - 
 PV_PhaseShift90: 
-  :rates: 
-  - :control
-  :args: 
-    :buffer: 
+  :control: 
+  - - :buffer
+    - 
 PV_PhaseShift: 
-  :rates: 
-  - :control
-  :args: 
-    :shift: 
-    :buffer: 
+  :control: 
+  - - :buffer
+    - 
+  - - :shift
+    - 
 PV_RandComb: 
-  :rates: 
-  - :control
-  :args: 
-    :trig: 0.0
-    :wipe: 0.0
-    :buffer: 
+  :control: 
+  - - :buffer
+    - 
+  - - :wipe
+    - 0.0
+  - - :trig
+    - 0.0
 PV_RandWipe: 
-  :rates: 
-  - :control
-  :args: 
-    :bufferA: 
-    :bufferB: 
-    :trig: 0.0
-    :wipe: 0.0
+  :control: 
+  - - :bufferA
+    - 
+  - - :bufferB
+    - 
+  - - :wipe
+    - 0.0
+  - - :trig
+    - 0.0
 PV_RectComb2: 
-  :rates: 
-  - :control
-  :args: 
-    :bufferA: 
-    :bufferB: 
-    :width: 0.5
-    :numTeeth: 0.0
-    :phase: 0.0
+  :control: 
+  - - :bufferA
+    - 
+  - - :bufferB
+    - 
+  - - :numTeeth
+    - 0.0
+  - - :phase
+    - 0.0
+  - - :width
+    - 0.5
 PV_RectComb: 
-  :rates: 
-  - :control
-  :args: 
-    :width: 0.5
-    :numTeeth: 0.0
-    :phase: 0.0
-    :buffer: 
+  :control: 
+  - - :buffer
+    - 
+  - - :numTeeth
+    - 0.0
+  - - :phase
+    - 0.0
+  - - :width
+    - 0.5
 Pan2: 
-  :rates: 
-  - :audio
-  - :control
-  :args: 
-    :level: 1.0
-    :pos: 0.0
-    :input: 
+  :control: 
+  - - :input
+    - 
+  - - :pos
+    - 0.0
+  - - :level
+    - 1.0
+  :audio: 
+  - - :input
+    - 
+  - - :pos
+    - 0.0
+  - - :level
+    - 1.0
 Pan4: 
-  :rates: 
-  - :audio
-  - :control
-  :args: 
-    :level: 1.0
-    :xpos: 0.0
-    :input: 
-    :ypos: 0.0
+  :control: 
+  - - :input
+    - 
+  - - :xpos
+    - 0.0
+  - - :ypos
+    - 0.0
+  - - :level
+    - 1.0
+  :audio: 
+  - - :input
+    - 
+  - - :xpos
+    - 0.0
+  - - :ypos
+    - 0.0
+  - - :level
+    - 1.0
 PanAz: 
-  :rates: 
-  - :audio
-  - :control
-  :args: 
-    :orientation: 0.5
-    :level: 1.0
-    :width: 2.0
-    :pos: 0.0
-    :input: 
+  :control: 
+  - - :input
+    - 
+  - - :pos
+    - 0.0
+  - - :level
+    - 1.0
+  - - :width
+    - 2.0
+  - - :orientation
+    - 0.5
+  :audio: 
+  - - :input
+    - 
+  - - :pos
+    - 0.0
+  - - :level
+    - 1.0
+  - - :width
+    - 2.0
+  - - :orientation
+    - 0.5
 PanB2: 
-  :rates: 
-  - :audio
-  - :control
-  :args: 
-    :azimuth: 0.0
-    :gain: 1.0
-    :input: 
+  :control: 
+  - - :input
+    - 
+  - - :azimuth
+    - 0.0
+  - - :gain
+    - 1.0
+  :audio: 
+  - - :input
+    - 
+  - - :azimuth
+    - 0.0
+  - - :gain
+    - 1.0
 PanB: 
-  :rates: 
-  - :audio
-  - :control
-  :args: 
-    :azimuth: 0.0
-    :gain: 1.0
-    :elevation: 0.0
-    :input: 
+  :control: 
+  - - :input
+    - 
+  - - :azimuth
+    - 0.0
+  - - :elevation
+    - 0.0
+  - - :gain
+    - 1.0
+  :audio: 
+  - - :input
+    - 
+  - - :azimuth
+    - 0.0
+  - - :elevation
+    - 0.0
+  - - :gain
+    - 1.0
 Pause: 
-  :rates: 
-  - :control
-  :args: 
-    :gate: 
-    :id: 
+  :control: 
+  - - :gate
+    - 
+  - - :id
+    - 
 PauseSelf: 
-  :rates: 
-  - :control
-  :args: 
-    :input: 
+  :control: 
+  - - :input
+    - 
 PauseSelfWhenDone: 
-  :rates: 
-  - :control
-  :args: 
-    :src: 
+  :control: 
+  - - :src
+    - 
 Peak: 
-  :rates: 
-  - :audio
-  - :control
-  :args: 
-    :reset: 0.0
-    :trig: 0.0
+  :control: 
+  - - :trig
+    - 0.0
+  - - :reset
+    - 0.0
+  :audio: 
+  - - :trig
+    - 0.0
+  - - :reset
+    - 0.0
 PeakFollower: 
-  :rates: 
-  - :audio
-  - :control
-  :args: 
-    :decay: 0.999
-    :input: 0.0
+  :control: 
+  - - :input
+    - 0.0
+  - - :decay
+    - 0.999
+  :audio: 
+  - - :input
+    - 0.0
+  - - :decay
+    - 0.999
 Phasor: 
-  :rates: 
-  - :audio
-  - :control
-  :args: 
-    :end: 1.0
-    :rate: 1.0
-    :start: 0.0
-    :trig: 0.0
-    :resetPos: 0.0
+  :control: 
+  - - :trig
+    - 0.0
+  - - :rate
+    - 1.0
+  - - :start
+    - 0.0
+  - - :finish
+    - 1.0
+  - - :resetPos
+    - 0.0
+  :audio: 
+  - - :trig
+    - 0.0
+  - - :rate
+    - 1.0
+  - - :start
+    - 0.0
+  - - :finish
+    - 1.0
+  - - :resetPos
+    - 0.0
 PinkNoise: 
-  :rates: 
-  - :audio
-  - :control
-  :args: {}
+  :control: []
+
+  :audio: []
 
 Pitch: 
-  :rates: 
-  - :control
-  :args: 
-    :median: 1.0
-    :initFreq: 440.0
-    :ampThreshold: 0.01
-    :minFreq: 60.0
-    :peakThreshold: 0.5
-    :maxFreq: 4000.0
-    :downSample: 1.0
-    :execFreq: 100.0
-    :maxBinsPerOctave: 16.0
-    :input: 0.0
+  :control: 
+  - - :input
+    - 0.0
+  - - :initFreq
+    - 440.0
+  - - :minFreq
+    - 60.0
+  - - :maxFreq
+    - 4000.0
+  - - :execFreq
+    - 100.0
+  - - :maxBinsPerOctave
+    - 16.0
+  - - :median
+    - 1.0
+  - - :ampThreshold
+    - 0.01
+  - - :peakThreshold
+    - 0.5
+  - - :downSample
+    - 1.0
 PitchShift: 
-  :rates: 
-  - :audio
-  :args: 
-    :windowSize: 0.2
-    :pitchRatio: 1.0
-    :pitchDispersion: 0.0
-    :timeDispersion: 0.0
-    :input: 0.0
+  :audio: 
+  - - :input
+    - 0.0
+  - - :windowSize
+    - 0.2
+  - - :pitchRatio
+    - 1.0
+  - - :pitchDispersion
+    - 0.0
+  - - :timeDispersion
+    - 0.0
 PlayBuf: 
-  :rates: 
-  - :audio
-  :args: 
-    :rate: 1.0
-    :loop: 0.0
-    :bufnum: 0.0
-    :trigger: 1.0
-    :startPos: 0.0
+  :audio: 
+  - - :bufnum
+    - 0.0
+  - - :rate
+    - 1.0
+  - - :trigger
+    - 1.0
+  - - :startPos
+    - 0.0
+  - - :loop
+    - 0.0
 Pulse: 
-  :rates: 
-  - :audio
-  :args: 
-    :width: 0.5
-    :freq: 440.0
+  :audio: 
+  - - :freq
+    - 440.0
+  - - :width
+    - 0.5
 PulseCount: 
-  :rates: 
-  - :audio
-  - :control
-  :args: 
-    :reset: 0.0
-    :trig: 0.0
+  :control: 
+  - - :trig
+    - 0.0
+  - - :reset
+    - 0.0
+  :audio: 
+  - - :trig
+    - 0.0
+  - - :reset
+    - 0.0
 PulseDivider: 
-  :rates: 
-  - :audio
-  - :control
-  :args: 
-    :div: 2.0
-    :start: 0.0
-    :trig: 0.0
+  :control: 
+  - - :trig
+    - 0.0
+  - - :div
+    - 2.0
+  - - :start
+    - 0.0
+  :audio: 
+  - - :trig
+    - 0.0
+  - - :div
+    - 2.0
+  - - :start
+    - 0.0
 QuadC: 
-  :rates: 
-  - :audio
-  :args: 
-    :xi: 0.0
-    :a: 1.0
-    :b: -1.0
-    :freq: 22050.0
-    :c: -0.75
+  :audio: 
+  - - :freq
+    - 22050.0
+  - - :a
+    - 1.0
+  - - :b
+    - -1.0
+  - - :c
+    - -0.75
+  - - :xi
+    - 0.0
 QuadL: 
-  :rates: 
-  - :audio
-  :args: 
-    :xi: 0.0
-    :a: 1.0
-    :b: -1.0
-    :freq: 22050.0
-    :c: -0.75
+  :audio: 
+  - - :freq
+    - 22050.0
+  - - :a
+    - 1.0
+  - - :b
+    - -1.0
+  - - :c
+    - -0.75
+  - - :xi
+    - 0.0
 QuadN: 
-  :rates: 
-  - :audio
-  :args: 
-    :xi: 0.0
-    :a: 1.0
-    :b: -1.0
-    :freq: 22050.0
-    :c: -0.75
+  :audio: 
+  - - :freq
+    - 22050.0
+  - - :a
+    - 1.0
+  - - :b
+    - -1.0
+  - - :c
+    - -0.75
+  - - :xi
+    - 0.0
 RHPF: 
-  :rates: 
-  - :audio
-  - :control
-  :args: 
-    :rq: 1.0
-    :freq: 440.0
-    :input: 0.0
+  :control: 
+  - - :input
+    - 0.0
+  - - :freq
+    - 440.0
+  - - :rq
+    - 1.0
+  :audio: 
+  - - :input
+    - 0.0
+  - - :freq
+    - 440.0
+  - - :rq
+    - 1.0
 RLPF: 
-  :rates: 
-  - :audio
-  - :control
-  :args: 
-    :rq: 1.0
-    :freq: 440.0
-    :input: 0.0
+  :control: 
+  - - :input
+    - 0.0
+  - - :freq
+    - 440.0
+  - - :rq
+    - 1.0
+  :audio: 
+  - - :input
+    - 0.0
+  - - :freq
+    - 440.0
+  - - :rq
+    - 1.0
 RadiansPerSample: 
-  :rates: 
-  - :scalar
-  :args: {}
+  :scalar: []
 
 Ramp: 
-  :rates: 
-  - :audio
-  - :control
-  :args: 
-    :lagTime: 0.1
-    :input: 0.0
+  :control: 
+  - - :input
+    - 0.0
+  - - :lagTime
+    - 0.1
+  :audio: 
+  - - :input
+    - 0.0
+  - - :lagTime
+    - 0.1
 Rand: 
-  :rates: 
-  - :scalar
-  :args: 
-    :lo: 0.0
-    :hi: 1.0
+  :scalar: 
+  - - :lo
+    - 0.0
+  - - :hi
+    - 1.0
 RandID: 
-  :rates: 
-  - :control
-  - :scalar
-  :args: 
-    :id: 0.0
+  :scalar: 
+  - - :id
+    - 0.0
+  :control: 
+  - - :id
+    - 0.0
 RandSeed: 
-  :rates: 
-  - :control
-  - :scalar
-  :args: 
-    :seed: 56789.0
-    :trig: 0.0
+  :scalar: 
+  - - :trig
+    - 0.0
+  - - :seed
+    - 56789.0
+  :control: 
+  - - :trig
+    - 0.0
+  - - :seed
+    - 56789.0
 RecordBuf: 
-  :rates: 
-  - :audio
-  :args: 
-    :recLevel: 1.0
-    :preLevel: 0.0
-    :run: 1.0
-    :loop: 1.0
-    :bufnum: 0.0
-    :offset: 0.0
-    :trigger: 1.0
-    :inputArray: 
+  :audio: 
+  - - :bufnum
+    - 0.0
+  - - :offset
+    - 0.0
+  - - :recLevel
+    - 1.0
+  - - :preLevel
+    - 0.0
+  - - :run
+    - 1.0
+  - - :loop
+    - 1.0
+  - - :trigger
+    - 1.0
+  - - :inputArray
+    - 
 ReplaceOut: 
-  :rates: 
-  - :audio
-  - :control
-  :args: 
-    :bus: 
-    :channelsArray: 
+  :control: 
+  - - :bus
+    - 
+  - - :channelsArray
+    - 
+  :audio: 
+  - - :bus
+    - 
+  - - :channelsArray
+    - 
 Resonz: 
-  :rates: 
-  - :audio
-  - :control
-  :args: 
-    :bwr: 1.0
-    :freq: 440.0
-    :input: 0.0
+  :control: 
+  - - :input
+    - 0.0
+  - - :freq
+    - 440.0
+  - - :bwr
+    - 1.0
+  :audio: 
+  - - :input
+    - 0.0
+  - - :freq
+    - 440.0
+  - - :bwr
+    - 1.0
 Ringz: 
-  :rates: 
-  - :audio
-  - :control
-  :args: 
-    :decaytime: 1.0
-    :freq: 440.0
-    :input: 0.0
+  :control: 
+  - - :input
+    - 0.0
+  - - :freq
+    - 440.0
+  - - :decaytime
+    - 1.0
+  :audio: 
+  - - :input
+    - 0.0
+  - - :freq
+    - 440.0
+  - - :decaytime
+    - 1.0
 Rotate2: 
-  :rates: 
-  - :audio
-  - :control
-  :args: 
-    :x: 
-    :y: 
-    :pos: 0.0
+  :control: 
+  - - :x
+    - 
+  - - :y
+    - 
+  - - :pos
+    - 0.0
+  :audio: 
+  - - :x
+    - 
+  - - :y
+    - 
+  - - :pos
+    - 0.0
 RunningSum: 
-  :rates: 
-  - :audio
-  - :control
-  :args: 
-    :numsamp: 40.0
-    :input: 
+  :control: 
+  - - :input
+    - 
+  - - :numsamp
+    - 40.0
+  :audio: 
+  - - :input
+    - 
+  - - :numsamp
+    - 40.0
 SOS: 
-  :rates: 
-  - :audio
-  :args: 
-    :a2: 0.0
-    :b1: 0.0
-    :b2: 0.0
-    :a0: 0.0
-    :input: 0.0
-    :a1: 0.0
+  :audio: 
+  - - :input
+    - 0.0
+  - - :a0
+    - 0.0
+  - - :a1
+    - 0.0
+  - - :a2
+    - 0.0
+  - - :b1
+    - 0.0
+  - - :b2
+    - 0.0
 SampleDur: 
-  :rates: 
-  - :scalar
-  :args: {}
+  :scalar: []
 
 SampleRate: 
-  :rates: 
-  - :scalar
-  :args: {}
+  :scalar: []
 
 Saw: 
-  :rates: 
-  - :audio
-  :args: 
-    :freq: 440.0
+  :audio: 
+  - - :freq
+    - 440.0
 Schmidt: 
-  :rates: 
-  - :audio
-  - :control
-  :args: 
-    :lo: 0.0
-    :hi: 1.0
-    :input: 0.0
+  :control: 
+  - - :input
+    - 0.0
+  - - :lo
+    - 0.0
+  - - :hi
+    - 1.0
+  :audio: 
+  - - :input
+    - 0.0
+  - - :lo
+    - 0.0
+  - - :hi
+    - 1.0
 ScopeOut: 
-  :rates: 
-  - :audio
-  - :control
-  :args: 
-    :bufnum: 0.0
-    :inputArray: 
+  :control: 
+  - - :bufnum
+    - 0.0
+  - - :inputArray
+    - 
+  :audio: 
+  - - :bufnum
+    - 0.0
+  - - :inputArray
+    - 
 Select: 
-  :rates: 
-  - :audio
-  - :control
-  :args: 
-    :array: 
-    :which: 
+  :control: 
+  - - :which
+    - 
+  - - :array
+    - 
+  :audio: 
+  - - :which
+    - 
+  - - :array
+    - 
 SendTrig: 
-  :rates: 
-  - :audio
-  - :control
-  :args: 
-    :value: 0.0
-    :id: 0.0
-    :input: 0.0
+  :control: 
+  - - :input
+    - 0.0
+  - - :id
+    - 0.0
+  - - :value
+    - 0.0
+  :audio: 
+  - - :input
+    - 0.0
+  - - :id
+    - 0.0
+  - - :value
+    - 0.0
 SetResetFF: 
-  :rates: 
-  - :audio
-  - :control
-  :args: 
-    :reset: 0.0
-    :trig: 0.0
+  :control: 
+  - - :trig
+    - 0.0
+  - - :reset
+    - 0.0
+  :audio: 
+  - - :trig
+    - 0.0
+  - - :reset
+    - 0.0
 Shaper: 
-  :rates: 
-  - :audio
-  - :control
-  :args: 
-    :bufnum: 
-    :input: 0.0
+  :control: 
+  - - :bufnum
+    - 
+  - - :input
+    - 0.0
+  :audio: 
+  - - :bufnum
+    - 
+  - - :input
+    - 0.0
 SharedIn: 
-  :rates: 
-  - :control
-  :args: 
-    :bus: 0.0
+  :control: 
+  - - :bus
+    - 0.0
 SharedOut: 
-  :rates: 
-  - :control
-  :args: 
-    :bus: 
-    :channelsArray: 
+  :control: 
+  - - :bus
+    - 
+  - - :channelsArray
+    - 
 Silent: 
-  :rates: 
-  - :audio
-  :args: {}
+  :audio: []
 
 SinOsc: 
-  :rates: 
-  - :audio
-  - :control
-  :args: 
-    :phase: 0.0
-    :freq: 440.0
+  :control: 
+  - - :freq
+    - 440.0
+  - - :phase
+    - 0.0
+  :audio: 
+  - - :freq
+    - 440.0
+  - - :phase
+    - 0.0
 SinOscFB: 
-  :rates: 
-  - :audio
-  - :control
-  :args: 
-    :feedback: 0.0
-    :freq: 440.0
+  :control: 
+  - - :freq
+    - 440.0
+  - - :feedback
+    - 0.0
+  :audio: 
+  - - :freq
+    - 440.0
+  - - :feedback
+    - 0.0
 Slew: 
-  :rates: 
-  - :audio
-  - :control
-  :args: 
-    :up: 1.0
-    :dn: 1.0
-    :input: 0.0
+  :control: 
+  - - :input
+    - 0.0
+  - - :up
+    - 1.0
+  - - :dn
+    - 1.0
+  :audio: 
+  - - :input
+    - 0.0
+  - - :up
+    - 1.0
+  - - :dn
+    - 1.0
 Slope: 
-  :rates: 
-  - :audio
-  - :control
-  :args: 
-    :input: 0.0
+  :control: 
+  - - :input
+    - 0.0
+  :audio: 
+  - - :input
+    - 0.0
 Spring: 
-  :rates: 
-  - :audio
-  :args: 
-    :spring: 0.0
-    :damp: 0.0
-    :input: 0.0
+  :audio: 
+  - - :input
+    - 0.0
+  - - :spring
+    - 0.0
+  - - :damp
+    - 0.0
 StandardL: 
-  :rates: 
-  - :audio
-  :args: 
-    :k: 1.0
-    :xi: 0.5
-    :yi: 0.0
-    :freq: 22050.0
+  :audio: 
+  - - :freq
+    - 22050.0
+  - - :k
+    - 1.0
+  - - :xi
+    - 0.5
+  - - :yi
+    - 0.0
 StandardN: 
-  :rates: 
-  - :audio
-  :args: 
-    :k: 1.0
-    :xi: 0.5
-    :yi: 0.0
-    :freq: 22050.0
+  :audio: 
+  - - :freq
+    - 22050.0
+  - - :k
+    - 1.0
+  - - :xi
+    - 0.5
+  - - :yi
+    - 0.0
 Stepper: 
-  :rates: 
-  - :audio
-  - :control
-  :args: 
-    :resetval: 
-    :max: 7.0
-    :reset: 0.0
-    :step: 1.0
-    :trig: 0.0
-    :min: 0.0
+  :control: 
+  - - :trig
+    - 0.0
+  - - :reset
+    - 0.0
+  - - :min
+    - 0.0
+  - - :max
+    - 7.0
+  - - :step
+    - 1.0
+  - - :resetval
+    - :nil
+  :audio: 
+  - - :trig
+    - 0.0
+  - - :reset
+    - 0.0
+  - - :min
+    - 0.0
+  - - :max
+    - 7.0
+  - - :step
+    - 1.0
+  - - :resetval
+    - :nil
 SubsampleOffset: 
-  :rates: 
-  - :scalar
-  :args: {}
+  :scalar: []
 
 Sweep: 
-  :rates: 
-  - :audio
-  - :control
-  :args: 
-    :rate: 1.0
-    :trig: 0.0
+  :control: 
+  - - :trig
+    - 0.0
+  - - :rate
+    - 1.0
+  :audio: 
+  - - :trig
+    - 0.0
+  - - :rate
+    - 1.0
 SyncSaw: 
-  :rates: 
-  - :audio
-  - :control
-  :args: 
-    :syncFreq: 440.0
-    :sawFreq: 440.0
+  :control: 
+  - - :syncFreq
+    - 440.0
+  - - :sawFreq
+    - 440.0
+  :audio: 
+  - - :syncFreq
+    - 440.0
+  - - :sawFreq
+    - 440.0
 TBall: 
-  :rates: 
-  - :audio
-  :args: 
-    :g: 10.0
-    :damp: 0.0
-    :friction: 0.01
-    :input: 0.0
+  :audio: 
+  - - :input
+    - 0.0
+  - - :g
+    - 10.0
+  - - :damp
+    - 0.0
+  - - :friction
+    - 0.01
 TDelay: 
-  :rates: 
-  - :audio
-  - :control
-  :args: 
-    :input: 0.0
-    :dur: 0.1
+  :control: 
+  - - :input
+    - 0.0
+  - - :dur
+    - 0.1
+  :audio: 
+  - - :input
+    - 0.0
+  - - :dur
+    - 0.1
 TDuty: 
-  :rates: 
-  - :audio
-  - :control
-  :args: 
-    :level: 1.0
-    :reset: 0.0
-    :doneAction: 0.0
-    :dur: 1.0
+  :control: 
+  - - :dur
+    - 1.0
+  - - :reset
+    - 0.0
+  - - :level
+    - 1.0
+  - - :doneAction
+    - 0.0
+  :audio: 
+  - - :dur
+    - 1.0
+  - - :reset
+    - 0.0
+  - - :level
+    - 1.0
+  - - :doneAction
+    - 0.0
 TExpRand: 
-  :rates: 
-  - :audio
-  - :control
-  :args: 
-    :lo: 0.01
-    :hi: 1.0
-    :trig: 0.0
+  :control: 
+  - - :lo
+    - 0.01
+  - - :hi
+    - 1.0
+  - - :trig
+    - 0.0
+  :audio: 
+  - - :lo
+    - 0.01
+  - - :hi
+    - 1.0
+  - - :trig
+    - 0.0
 TGrains: 
-  :rates: 
-  - :audio
-  :args: 
-    :rate: 1.0
-    :amp: 0.1
-    :bufnum: 0.0
-    :centerPos: 0.0
-    :interp: 4.0
-    :trigger: 0.0
-    :pan: 0.0
-    :dur: 0.1
+  :audio: 
+  - - :trigger
+    - 0.0
+  - - :bufnum
+    - 0.0
+  - - :rate
+    - 1.0
+  - - :centerPos
+    - 0.0
+  - - :dur
+    - 0.1
+  - - :pan
+    - 0.0
+  - - :amp
+    - 0.1
+  - - :interp
+    - 4.0
 TIRand: 
-  :rates: 
-  - :audio
-  - :control
-  :args: 
-    :lo: 0.0
-    :hi: 127.0
-    :trig: 0.0
+  :control: 
+  - - :lo
+    - 0.0
+  - - :hi
+    - 127.0
+  - - :trig
+    - 0.0
+  :audio: 
+  - - :lo
+    - 0.0
+  - - :hi
+    - 127.0
+  - - :trig
+    - 0.0
 TPulse: 
-  :rates: 
-  - :audio
-  - :control
-  :args: 
-    :width: 0.5
-    :trig: 0.0
-    :freq: 440.0
+  :control: 
+  - - :trig
+    - 0.0
+  - - :freq
+    - 440.0
+  - - :width
+    - 0.5
+  :audio: 
+  - - :trig
+    - 0.0
+  - - :freq
+    - 440.0
+  - - :width
+    - 0.5
 TRand: 
-  :rates: 
-  - :audio
-  - :control
-  :args: 
-    :lo: 0.0
-    :hi: 1.0
-    :trig: 0.0
+  :control: 
+  - - :lo
+    - 0.0
+  - - :hi
+    - 1.0
+  - - :trig
+    - 0.0
+  :audio: 
+  - - :lo
+    - 0.0
+  - - :hi
+    - 1.0
+  - - :trig
+    - 0.0
 TWindex: 
-  :rates: 
-  - :audio
-  - :control
-  :args: 
-    :array: 
-    :normalize: 0.0
-    :input: 
+  :control: 
+  - - :input
+    - 
+  - - :normalize
+    - 0.0
+  - - :array
+    - 
+  :audio: 
+  - - :input
+    - 
+  - - :normalize
+    - 0.0
+  - - :array
+    - 
 Timer: 
-  :rates: 
-  - :audio
-  - :control
-  :args: 
-    :trig: 0.0
+  :control: 
+  - - :trig
+    - 0.0
+  :audio: 
+  - - :trig
+    - 0.0
 ToggleFF: 
-  :rates: 
-  - :audio
-  - :control
-  :args: 
-    :trig: 0.0
+  :control: 
+  - - :trig
+    - 0.0
+  :audio: 
+  - - :trig
+    - 0.0
 Trapezoid: 
-  :rates: 
-  - :audio
-  - :control
-  :args: 
-    :d: 0.8
-    :a: 0.2
-    :b: 0.4
-    :input: 0.0
-    :c: 0.6
+  :control: 
+  - - :input
+    - 0.0
+  - - :a
+    - 0.2
+  - - :b
+    - 0.4
+  - - :c
+    - 0.6
+  - - :d
+    - 0.8
+  :audio: 
+  - - :input
+    - 0.0
+  - - :a
+    - 0.2
+  - - :b
+    - 0.4
+  - - :c
+    - 0.6
+  - - :d
+    - 0.8
 Trig1: 
-  :rates: 
-  - :audio
-  - :control
-  :args: 
-    :input: 0.0
-    :dur: 0.1
+  :control: 
+  - - :input
+    - 0.0
+  - - :dur
+    - 0.1
+  :audio: 
+  - - :input
+    - 0.0
+  - - :dur
+    - 0.1
 Trig: 
-  :rates: 
-  - :audio
-  - :control
-  :args: 
-    :input: 0.0
-    :dur: 0.1
+  :control: 
+  - - :input
+    - 0.0
+  - - :dur
+    - 0.1
+  :audio: 
+  - - :input
+    - 0.0
+  - - :dur
+    - 0.1
 TwoPole: 
-  :rates: 
-  - :audio
-  - :control
-  :args: 
-    :radius: 0.8
-    :freq: 440.0
-    :input: 0.0
+  :control: 
+  - - :input
+    - 0.0
+  - - :freq
+    - 440.0
+  - - :radius
+    - 0.8
+  :audio: 
+  - - :input
+    - 0.0
+  - - :freq
+    - 440.0
+  - - :radius
+    - 0.8
 TwoZero: 
-  :rates: 
-  - :audio
-  - :control
-  :args: 
-    :radius: 0.8
-    :freq: 440.0
-    :input: 0.0
+  :control: 
+  - - :input
+    - 0.0
+  - - :freq
+    - 440.0
+  - - :radius
+    - 0.8
+  :audio: 
+  - - :input
+    - 0.0
+  - - :freq
+    - 440.0
+  - - :radius
+    - 0.8
 VOsc3: 
-  :rates: 
-  - :audio
-  - :control
-  :args: 
-    :freq3: 440.0
-    :bufpos: 
-    :freq1: 110.0
-    :freq2: 220.0
+  :control: 
+  - - :bufpos
+    - 
+  - - :freq1
+    - 110.0
+  - - :freq2
+    - 220.0
+  - - :freq3
+    - 440.0
+  :audio: 
+  - - :bufpos
+    - 
+  - - :freq1
+    - 110.0
+  - - :freq2
+    - 220.0
+  - - :freq3
+    - 440.0
 VOsc: 
-  :rates: 
-  - :audio
-  - :control
-  :args: 
-    :phase: 0.0
-    :bufpos: 
-    :freq: 440.0
+  :control: 
+  - - :bufpos
+    - 
+  - - :freq
+    - 440.0
+  - - :phase
+    - 0.0
+  :audio: 
+  - - :bufpos
+    - 
+  - - :freq
+    - 440.0
+  - - :phase
+    - 0.0
 VarSaw: 
-  :rates: 
-  - :audio
-  - :control
-  :args: 
-    :width: 0.5
-    :iphase: 0.0
-    :freq: 440.0
+  :control: 
+  - - :freq
+    - 440.0
+  - - :iphase
+    - 0.0
+  - - :width
+    - 0.5
+  :audio: 
+  - - :freq
+    - 440.0
+  - - :iphase
+    - 0.0
+  - - :width
+    - 0.5
 Vibrato: 
-  :rates: 
-  - :audio
-  - :control
-  :args: 
-    :depth: 0.02
-    :rate: 6.0
-    :delay: 0.0
-    :onset: 0.0
-    :rateVariation: 0.04
-    :iphase: 0.0
-    :depthVariation: 0.1
-    :freq: 440.0
+  :control: 
+  - - :freq
+    - 440.0
+  - - :rate
+    - 6.0
+  - - :depth
+    - 0.02
+  - - :delay
+    - 0.0
+  - - :onset
+    - 0.0
+  - - :rateVariation
+    - 0.04
+  - - :depthVariation
+    - 0.1
+  - - :iphase
+    - 0.0
+  :audio: 
+  - - :freq
+    - 440.0
+  - - :rate
+    - 6.0
+  - - :depth
+    - 0.02
+  - - :delay
+    - 0.0
+  - - :onset
+    - 0.0
+  - - :rateVariation
+    - 0.04
+  - - :depthVariation
+    - 0.1
+  - - :iphase
+    - 0.0
 WhiteNoise: 
-  :rates: 
-  - :audio
-  - :control
-  :args: {}
+  :control: []
+
+  :audio: []
 
 Wrap: 
-  :rates: 
-  - :audio
-  - :control
-  :args: 
-    :lo: 0.0
-    :hi: 1.0
-    :input: 0.0
+  :control: 
+  - - :input
+    - 0.0
+  - - :lo
+    - 0.0
+  - - :hi
+    - 1.0
+  :audio: 
+  - - :input
+    - 0.0
+  - - :lo
+    - 0.0
+  - - :hi
+    - 1.0
 WrapIndex: 
-  :rates: 
-  - :audio
-  - :control
-  :args: 
-    :bufnum: 
-    :input: 0.0
+  :control: 
+  - - :bufnum
+    - 
+  - - :input
+    - 0.0
+  :audio: 
+  - - :bufnum
+    - 
+  - - :input
+    - 0.0
 XFade2: 
-  :rates: 
-  - :audio
-  - :control
-  :args: 
-    :level: 1.0
-    :inA: 
-    :inB: 0.0
-    :pan: 0.0
+  :control: 
+  - - :inA
+    - 
+  - - :inB
+    - 0.0
+  - - :pan
+    - 0.0
+  - - :level
+    - 1.0
+  :audio: 
+  - - :inA
+    - 
+  - - :inB
+    - 0.0
+  - - :pan
+    - 0.0
+  - - :level
+    - 1.0
 XLine: 
-  :rates: 
-  - :audio
-  - :control
-  :args: 
-    :end: 2.0
-    :doneAction: 0.0
-    :start: 1.0
-    :dur: 1.0
+  :control: 
+  - - :start
+    - 1.0
+  - - :finish
+    - 2.0
+  - - :dur
+    - 1.0
+  - - :doneAction
+    - 0.0
+  :audio: 
+  - - :start
+    - 1.0
+  - - :finish
+    - 2.0
+  - - :dur
+    - 1.0
+  - - :doneAction
+    - 0.0
 XOut: 
-  :rates: 
-  - :audio
-  - :control
-  :args: 
-    :bus: 
-    :channelsArray: 
-    :xfade: 
+  :control: 
+  - - :bus
+    - 
+  - - :xfade
+    - 
+  - - :channelsArray
+    - 
+  :audio: 
+  - - :bus
+    - 
+  - - :xfade
+    - 
+  - - :channelsArray
+    - 
 ZeroCrossing: 
-  :rates: 
-  - :audio
-  - :control
-  :args: 
-    :input: 0.0
+  :control: 
+  - - :input
+    - 0.0
+  :audio: 
+  - - :input
+    - 0.0

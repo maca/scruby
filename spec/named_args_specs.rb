@@ -9,14 +9,10 @@ class A
 end
 
 class B
-  # named_args_for :test
   def test(uno = 1, dos = 2, tres = 3, cuatro = 4, cinco = 5, seis = 6, siete = 7, ocho = 8, nueve = 9, diez = 10, once = 11, doce = 12, trece = 13, catorce = 14, quince = 15, dieciseis = 16)
   end
-  B.send( :named_args_for, :test) #why can't I use act_as style?
+  named_args_for :test
 end
-
-
-
 
 describe NamedArgs do
 
@@ -34,6 +30,12 @@ describe NamedArgs do
       end
       
       def six( uno = 1, dos = 2, tres = 3, cuatro = 4, cinco = 5, seis = 6)
+      end
+      
+      class << self
+      def dos( uno = 1, dos = 2)
+      end
+      named_args_for :dos
       end
     end
     @unbound = mock('unbound', :args => [], :arg_names => [] )
@@ -166,6 +168,15 @@ describe NamedArgs do
     end
     
   end
+  
+  describe 'Class methods' do
+    
+    it do
+      Klass.should_receive(:dos_original)
+      Klass.dos
+    end
+    
+  end 
 end
 
 
@@ -187,6 +198,24 @@ describe 'benchmark' do
       end
       x.report do
         10000.times { @a.test(:uno => 1, :dos => 2, :tres => 3) }
+      end
+    end
+  end
+  
+  it do
+    Benchmark.bm do |x|
+      x.report do
+        class C
+          def test(uno = 1, dos = 2, tres = 3, cuatro = 4, cinco = 5, seis = 6, siete = 7, ocho = 8, nueve = 9, diez = 10, once = 11, doce = 12, trece = 13, catorce = 14, quince = 15, dieciseis = 16)
+          end
+        end
+      end
+      x.report do
+        class D
+          def test(uno = 1, dos = 2, tres = 3, cuatro = 4, cinco = 5, seis = 6, siete = 7, ocho = 8, nueve = 9, diez = 10, once = 11, doce = 12, trece = 13, catorce = 14, quince = 15, dieciseis = 16)
+          end
+          named_args_for :test
+        end
       end
     end
   end
