@@ -418,7 +418,7 @@ BufWr:
   - - :loop
     - 1.0
   - - :inputArray
-    - 
+    - "[]"
   :audio: 
   - - :bufnum
     - 0.0
@@ -427,7 +427,7 @@ BufWr:
   - - :loop
     - 1.0
   - - :inputArray
-    - 
+    - "[]"
 COsc: 
   :control: 
   - - :bufnum
@@ -1373,31 +1373,31 @@ InRange:
     - 1.0
 InRect: 
   :control: 
-  - - :y
+  - - :x
     - 0.0
   - - :y
     - 0.0
   - - :left
-    - 
+    - :nil
   - - :top
-    - 
+    - :nil
   - - :right
-    - 
+    - :nil
   - - :bottom
-    - 
+    - :nil
   :audio: 
-  - - :y
+  - - :x
     - 0.0
   - - :y
     - 0.0
   - - :left
-    - 
+    - :nil
   - - :top
-    - 
+    - :nil
   - - :right
-    - 
+    - :nil
   - - :bottom
-    - 
+    - :nil
 InTrig: 
   :control: 
   - - :bus
@@ -2719,7 +2719,7 @@ RecordBuf:
   - - :trigger
     - 1.0
   - - :inputArray
-    - 
+    - "[]"
 ReplaceOut: 
   :control: 
   - - :bus
@@ -2831,12 +2831,12 @@ ScopeOut:
   - - :bufnum
     - 0.0
   - - :inputArray
-    - 
+    - "[]"
   :audio: 
   - - :bufnum
     - 0.0
   - - :inputArray
-    - 
+    - "[]"
 Select: 
   :control: 
   - - :which
@@ -3147,14 +3147,14 @@ TWindex:
   - - :normalize
     - 0.0
   - - :array
-    - 
+    - "[]"
   :audio: 
   - - :input
     - 
   - - :normalize
     - 0.0
   - - :array
-    - 
+    - "[]"
 Timer: 
   :control: 
   - - :trig
