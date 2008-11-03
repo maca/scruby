@@ -17,6 +17,14 @@ class Numeric
   def rate
     :scalar
   end
+  
+  def max( other )
+    self > other ? self : other
+  end
+  
+  def min( other )
+    self < other ? self : other
+  end
 end
 
 class Numeric
@@ -24,10 +32,19 @@ class Numeric
   def collect_constants #:nodoc:
     self
   end  
+  
+  def input_specs( synthdef )
+    [-1, synthdef.constants.index(self)]
+  end
 end
 
 class Fixnum
   include Scruby::Audio::Ugens::UgenOperations
+  
+  def encode
+    [self >> 8,0,self,0]
+  end
+  
 end
 
 class Float
@@ -54,9 +71,19 @@ class Array
     size.times { |i| self[ i ] = self[ i % original_size ] }
     self
   end
+  
+  def wrap_and_zip( *args )
+	  max = args.map{ |a| instance_of?(Array) ? a.size : 0 }.max.max( self.size )
+    args = args.collect{ |a| a.to_array.wrap_to( max ) }
+	  self.wrap_to( max ).zip( *args )
+  end
 
   def to_array
     self
+  end
+  
+  def encode_floats
+    [self.size].pack('n') + self.pack('g*')
   end
   
   private
@@ -72,6 +99,12 @@ class Proc
     when 1: self.to_sexp.assoc( :dasgn_curr )[1].to_array
     else self.to_sexp[2][1][1..-1].collect{ |arg| arg[1]  }
     end
+  end
+end
+
+class String
+  def encode
+    [self.size & 255].pack('C*') + self[0..255]
   end
 end
 

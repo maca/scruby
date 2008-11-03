@@ -2,16 +2,23 @@ module Scruby
   module Audio
     module Ugens
       class Ugen
-        attr_reader :inputs, :rate, :index
-
-        RATES = [ :scalar, :trigger, :demand, :control, :audio ]
+        attr_reader :inputs, :rate, :index, :special_index, :output_index, :outputs
+        
+        RATES   = [ :scalar, :trigger, :demand, :control, :audio ]
+        E_RATES = [ :scalar, :control, :audio, :demand ]
         @@synthdef = nil
 
         include UgenOperations
 
         def initialize( rate, *inputs) 
           @rate, @inputs = rate, inputs
-          @index = add_to_synthdef
+          
+          #defaults
+          @special_index ||= 0
+          @output_index ||= 0 
+          @outputs ||= [1] 
+          
+          @index = add_to_synthdef || 0
         end
         
         def muladd( mul, add )
@@ -26,6 +33,10 @@ module Scruby
           true
         end
 
+        def encode
+          self.class.to_s.encode + [E_RATES.index(rate)].pack('w') + [inputs.size, outputs.size, special_index, collect_input_specs].flatten.pack('n*') + [output_specs].pack('w') 
+        end
+        
         private
         def synthdef
           @synthdef ||= self.class.synthdef
@@ -37,6 +48,18 @@ module Scruby
         
         def collect_constants
           @inputs.send( :collect_constants )
+        end
+        
+        def input_specs( synthdef )
+          [index, output_index]
+        end
+        
+        def collect_input_specs
+          @inputs.collect{ |i| i.send( :input_specs, synthdef ) }
+        end
+        
+        def output_specs
+          E_RATES.index(rate)
         end
 
         class << self

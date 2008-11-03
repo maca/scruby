@@ -175,11 +175,57 @@ describe SynthDef, 'instantiation' do
       children = [ Ugen.new(:audio, 100), [ Ugen.new(:audio, 400), [ Ugen.new(:audio, 200), Ugen.new(:audio, 100, 300) ] ] ]
       @sdef.send( :collect_constants, children).should == [100, 400, 200, 300]
     end
-    
-    
-
   end
   
+end
+
+
+describe "sending" do
+
+  before :all do
+    class SinOsc < Ugen
+      def self.ar( freq=440.0, phase=0.0 ) #not interested in muladd
+        new(:audio, freq, phase)
+      end
+    end
+  end
+  
+  before do
+    @sdef = SynthDef.new(:hola) { SinOsc.ar }
+    @encoded = [ 83, 67, 103, 102, 0, 0, 0, 1, 0, 1, 4, 104, 111, 108, 97, 0, 2, 67, -36, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 6, 83, 105, 110, 79, 115, 99, 2, 0, 2, 0, 1, 0, 0, -1, -1, 0, 0, -1, -1, 0, 1, 2, 0, 0 ].pack('C*')
+  end
+  
+  it "should get values" do
+    @sdef.values
+  end
+  
+  it "should encode init stream" do
+    @sdef.encode[0..9].should == @encoded[0..9]
+  end
+  
+  it "should encode is, name" do
+    @sdef.encode[0..14].should == @encoded[0..14]
+  end
+  
+  it "should encode is, name, constants" do
+    @sdef.encode[0..24].should == @encoded[0..24]
+  end
+  
+  it "should encode is, name, consts, values" do
+    @sdef.encode[0..26].should == @encoded[0..26]
+  end
+
+  it "should encode is, name, consts, values, controls" do
+    @sdef.encode[0..28].should == @encoded[0..28]
+  end
+  
+  it "should encode is, name, consts, values, controls, children" do
+    @sdef.encode[0..53].should == @encoded[0..53]
+  end
+  
+  it "should encode is, name, consts, values, controls, children, variants stub" do
+    @sdef.encode.should == @encoded
+  end
 end
 
 

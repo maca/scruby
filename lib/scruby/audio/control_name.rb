@@ -1,7 +1,7 @@
 module Scruby
   module Audio
     class ControlName
-      attr_accessor :name, :value, :rate, :index
+      attr_accessor :name, :value, :rate, :index, 
       RATES = { 'n_' => :noncontrol, 'i_' => :scalar, 'k_' => :control, 't_' => :trigger }
 
       def initialize(  name, value, rate, index )

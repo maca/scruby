@@ -13,13 +13,31 @@ module Scruby
         @control_names = collect_control_names( block, values, rates )
         build_ugen_graph( block, @control_names )
         @constants = collect_constants( @children )
-
+        
+        @variants = [] #stub!!
+        
         warn( 'A SynthDef without a block is useless' ) unless block_given?
       end
       
+      #Sending
+      def encode
+        controls = @control_names.reject { |cn| cn.non_control? }
+        encoded_controls = [controls.size].pack('n') + controls.collect{ |c| c.name.encode + [c].index.pack('n') }.to_s
+        
+        init_stream + name.encode + constants.encode_floats + values.flatten.encode_floats + encoded_controls +
+            [children.size].pack('n') + children.collect{ |u| u.encode }.join('') +
+            [@variants.size].pack('n') #stub!!!
+      end
+      
+      def init_stream(file_version = 1, number_of_synths = 1) #:nodoc:
+        'SCgf' + [file_version].pack('N') + [number_of_synths].pack('n')
+      end
+      
+      def values
+        @control_names.collect{ |control| control.value }
+      end
+      
       private
-      attr_writer :name, :children, :constants, :control_names
-
       def collect_control_names( function, values, rates ) #:nodoc:
         return [] if (names = function.argument_names).empty?
         names.zip( values, rates ).collect_with_index{ |array, index| ControlName.new *(array << index)  }
@@ -43,7 +61,6 @@ module Scruby
         children.send( :collect_constants ).flatten.uniq
       end
       
-      #to ugen
     end
   end
 end

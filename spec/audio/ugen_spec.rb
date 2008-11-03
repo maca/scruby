@@ -1,6 +1,6 @@
 require File.join( File.expand_path(File.dirname(__FILE__)), '..',"helper")
 require 'yaml'
-
+ 
 require "#{LIB_DIR}/audio/ugens/ugen_operations" 
 require "#{LIB_DIR}/audio/ugens/ugen" 
 require "#{LIB_DIR}/extensions"
@@ -9,6 +9,19 @@ include Scruby
 include Audio
 include Ugens
 
+
+class SinOsc < Ugen
+  class << self
+    def ar( freq=440.0, phase=0.0 ) #not interested in muladd
+      new(:audio, freq, phase)
+    end
+    
+    def kr( freq=440.0, phase=0.0 ) 
+      new(:control, freq, phase)
+    end
+  end
+end
+    
 
 describe Ugen do
   
@@ -72,6 +85,10 @@ describe Ugen do
         
     it "should not have synthdef" do
       Ugen.new( :audio, 1, 2 ).send( :synthdef ).should be_nil
+    end
+    
+    it "should have 0 as index if not belonging to ugen" do
+      Ugen.new( :audio, 1, 2 ).index.should be_zero
     end
     
     it "should have synthdef" do
@@ -238,6 +255,68 @@ describe Ugen do
       @ugen.muladd(1, 1).should be_nil
     end
   end
+
+  
+end
+
+describe Ugen, 'encoding' do
+  
+  before do
+    args = [400.0, 0.0]
+    @sin = SinOsc.kr(*args)
+    @synthdef = mock('synthdef', :constants => args )
+    @sin.stub!(:index).and_return(1) #as if was the first child of a synthdef
+    @sin.stub!( :synthdef ).and_return( @synthdef )
+    
+    @encoded = [6, 83, 105, 110, 79, 115, 99, 1, 0, 2, 0, 1, 0, 0, -1, -1, 0, 0, -1, -1, 0, 1, 1].pack('C*')
+  end
+  
+  it "should stub synthdef" do
+    @sin.send( :synthdef ).should == @synthdef
+  end
+  
+  it "should encode have 0 as special index" do
+    @sin.send(:special_index).should == 0
+  end
+  
+  it "should encode have 0 as output index" do
+    @sin.send(:output_index).should == 0
+  end
+  
+  it "should encode have [1] as output index" do
+    @sin.send(:outputs).should == [1]
+  end
+  
+  it "should return input_specs" do
+    @sin.send( :input_specs, nil ).should == [1,0]
+  end
+  
+  it "should collect input_specs" do
+    @sin.send(:collect_input_specs).should == [[-1, 0], [-1, 1]]
+  end
+  
+  it "should collect input_specs" do
+    @sin.send(:collect_input_specs).flatten.collect { |e| e.encode }
+  end
+  
+  
+  it "should encode class name" do
+    @sin.encode[0..6].should == @encoded[0..6]
+  end
+  
+  it "should encode classname, rate" do
+    @sin.encode[0..7].should == @encoded[0..7]
+  end
+  
+  it "should encode cn, rt, inputs, outputs, special_index" do
+    @sin.encode[0..13].should == @encoded[0..13]
+  end
+  
+  it "should encode cn, rt, in, out, si, collect_input_specs" do
+    @sin.encode.should == @encoded
+  end
+    
+  
 end
 
 
