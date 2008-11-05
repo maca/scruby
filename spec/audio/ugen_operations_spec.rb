@@ -13,7 +13,7 @@ Klass = nil
 describe UgenOperations, 'loading module' do
   
   before :all do
-    class BinaryOpUgen
+    class BinaryOpUGen
       attr_accessor :inputs, :operator
       def initialize(op, *args)
         @operator = op
@@ -52,7 +52,7 @@ describe UgenOperations, 'loading module' do
     
     it "should sum" do
       Klass.send( :include, UgenOperations )
-      (Klass.new + @ugen).should be_instance_of(BinaryOpUgen)
+      (Klass.new + @ugen).should be_instance_of(BinaryOpUGen)
     end
     
     it do
@@ -92,7 +92,7 @@ describe UgenOperations, 'loading module' do
     end
     
     it "should return a BinarayOpUgen when adding an Ugen" do
-      (1 + @ugen).should be_instance_of( BinaryOpUgen )
+      (1 + @ugen).should be_instance_of( BinaryOpUGen )
     end
     
     it "should set the correct inputs and operator for the binopugen" do
@@ -129,8 +129,8 @@ describe UgenOperations, 'loading module' do
     end
 
     it "should return" do
-      BinaryOpUgen.should_receive( :new ).with( :+, [1,2], @ugen )
-      ([1, 2] + @ugen)
+      BinaryOpUGen.should_receive( :new ).with( :*, [1,2], @ugen )
+      ([1, 2] * @ugen)
     end    
   end
   

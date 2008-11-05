@@ -8,7 +8,7 @@ describe Numeric do
   
   before :all do
     @bin_op = mock('binop')
-    BinaryOpUgen = mock( 'BinaryOpUgen', :new => @bin_on )
+    BinaryOpUGen = mock( 'BinaryOpUGen', :new => @bin_on )
     @ugen = mock( 'ugen' )
     Ugen = mock( 'Ugen', :new => @ugen)
   end

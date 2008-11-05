@@ -18,8 +18,8 @@ module Scruby
             end
 
             def get_rate( *inputs ) #:nodoc:
-              max_index = inputs.flatten.collect{ |ugen| RATES.index( ugen.rate ) }.max
-              RATES[max_index]
+              max_index = inputs.flatten.collect{ |ugen| Ugen::RATES.index( ugen.rate ) }.max
+              Ugen::RATES[max_index]
             end
           end
         end
@@ -34,7 +34,7 @@ module Scruby
           end
         end
 
-        class BinaryOpUgen < BasicOpUgen
+        class BinaryOpUGen < BasicOpUgen
           def self.new( operator, left, right )
             super
           end
@@ -46,12 +46,14 @@ module Scruby
 
         class MulAdd < Ugen
           def self.new( input, mul, add )
+            
+            
             no_mul = ( mul == 1.0 )
             minus  = ( mul == -1.0 )
-            return add         if mul.zero?
-            return input       if no_mul && add.zero?
-            return input.neg   if minus && add.zero?
-            return input * mul if add.zero?
+            return add         if mul == 0
+            return input       if no_mul and add == 0
+            return input.neg   if minus  and add == 0
+            return input * mul if add == 0
             return add - input if minus
             return input + add if no_mul
 

@@ -1,11 +1,11 @@
 module Scruby
   module Audio
     class ControlName
-      attr_accessor :name, :value, :rate, :index, 
+      attr_accessor :name, :value, :rate, :index
       RATES = { 'n_' => :noncontrol, 'i_' => :scalar, 'k_' => :control, 't_' => :trigger }
 
       def initialize(  name, value, rate, index )
-        @name, @value, @rate, @index = name, value.to_f, set_rate( name, rate ), index
+        @name, @value, @rate, @index = name.to_s, value.to_f, set_rate( name, rate ), index
       end
 
       def set_rate( name, rate )
@@ -19,6 +19,11 @@ module Scruby
       def non_control?
         @rate == :noncontrol
       end
+      
+      def valid_ugen_input?
+        true
+      end
+      
     end
   end
 end

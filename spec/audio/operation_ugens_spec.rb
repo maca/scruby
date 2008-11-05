@@ -15,10 +15,10 @@ describe UnaryOpUgen do
   RATES = [ :scalar, :demand, :control, :audio ]
   
   before do
-    @scalar  = mock( 'ugen', :rate => :scalar, :valid_ugen_input? => true ) 
-    @demand  = mock( 'ugen', :rate => :demand, :valid_ugen_input? => true ) 
+    @scalar  = mock( 'ugen', :rate => :scalar,  :valid_ugen_input? => true ) 
+    @demand  = mock( 'ugen', :rate => :demand,  :valid_ugen_input? => true ) 
     @control = mock( 'ugen', :rate => :control, :valid_ugen_input? => true ) 
-    @audio   = mock( 'ugen', :rate => :audio, :valid_ugen_input? => true ) 
+    @audio   = mock( 'ugen', :rate => :audio,   :valid_ugen_input? => true ) 
   end
   
   describe UnaryOpUgen do
@@ -62,38 +62,38 @@ describe UnaryOpUgen do
     end    
   end
   
-  describe BinaryOpUgen do
+  describe BinaryOpUGen do
     
     before do
       @arg_array = [@audio, [@scalar, @audio, [@demand, [@control, @demand]]] ]
-      @op_arr = BinaryOpUgen.new(:+, @audio, @arg_array )
+      @op_arr = BinaryOpUGen.new(:+, @audio, @arg_array )
     end
     
     it "should return special index" do
-      BinaryOpUgen.new( :+, @audio, @audio ).special_index.should eql(0)
-      BinaryOpUgen.new( :-, @audio, @audio ).special_index.should eql(1)
-      BinaryOpUgen.new( :*, @audio, @audio ).special_index.should eql(2)
-      BinaryOpUgen.new( :/, @audio, @audio ).special_index.should eql(4)
+      BinaryOpUGen.new( :+, @audio, @audio ).special_index.should eql(0)
+      BinaryOpUGen.new( :-, @audio, @audio ).special_index.should eql(1)
+      BinaryOpUGen.new( :*, @audio, @audio ).special_index.should eql(2)
+      BinaryOpUGen.new( :/, @audio, @audio ).special_index.should eql(4)
     end
   
     it "should accept exactly two inputs" do
-      lambda{ BinaryOpUgen.new(:+, @audio) }.should raise_error( ArgumentError )
-      lambda{ BinaryOpUgen.new(:+, @audio, @demand, @demand) }.should raise_error( ArgumentError )
+      lambda{ BinaryOpUGen.new(:+, @audio) }.should raise_error( ArgumentError )
+      lambda{ BinaryOpUGen.new(:+, @audio, @demand, @demand) }.should raise_error( ArgumentError )
     end
 
     it "should have correct inputs and operator when two inputs" do
-      arr = BinaryOpUgen.new( :+, @audio, @demand )
+      arr = BinaryOpUGen.new( :+, @audio, @demand )
       arr.inputs.should == [@audio, @demand]
       arr.operator.should == :+
       arr.rate.should == :audio
     end
   
     it "should accept array as input" do
-      BinaryOpUgen.new(:+, @audio, [@audio, @scalar] ).should be_instance_of(Array)
+      BinaryOpUGen.new(:+, @audio, [@audio, @scalar] ).should be_instance_of(Array)
     end
   
     it "should return an array of UnaryOpUgens" do
-      @op_arr.flatten.map { |op| op.should be_instance_of(BinaryOpUgen)  }
+      @op_arr.flatten.map { |op| op.should be_instance_of(BinaryOpUGen)  }
     end
   
     it "should set rate for all operations" do
@@ -105,7 +105,7 @@ describe UnaryOpUgen do
     end
   
     it "should set correct inputs when provided an array" do
-      arr = BinaryOpUgen.new(:+, @control, [@audio, @scalar] )
+      arr = BinaryOpUGen.new(:+, @control, [@audio, @scalar] )
       arr.first.inputs.should == [@control, @audio]
       arr.last.inputs.should == [@control, @scalar]
     end
@@ -116,7 +116,7 @@ describe UnaryOpUgen do
   
     it "should replicate the array passed" do
       last = lambda do |i| 
-        if i.instance_of?( BinaryOpUgen) 
+        if i.instance_of?( BinaryOpUGen) 
           i.inputs.first.should == @audio
           i.inputs.last 
         else 
@@ -127,14 +127,14 @@ describe UnaryOpUgen do
     end
     
     it "should accept numbers as inputs" do
-      arr = BinaryOpUgen.new(:+, @control, [100, 200.0] )
+      arr = BinaryOpUGen.new(:+, @control, [100, 200.0] )
       arr.first.inputs.should == [@control, 100]
       arr.last.inputs.should == [@control, 200.0]
-      BinaryOpUgen.new(:+, 100, @control ).inputs.should == [100, @control]
+      BinaryOpUGen.new(:+, 100, @control ).inputs.should == [100, @control]
     end
     
     it "should accept array as input" do
-      arr = BinaryOpUgen.new(:+, [@audio, @scalar], @control  )
+      arr = BinaryOpUGen.new(:+, [@audio, @scalar], @control  )
       arr.first.inputs.should == [@audio, @control]
       arr.last.inputs.should == [@scalar, @control]
     end
@@ -165,11 +165,20 @@ describe UnaryOpUgen do
       @audio.should_receive( :+ ).and_return( plus )
       
       MulAdd.new( @audio, 0, 0.5 ).should be_instance_of( Float )
-      MulAdd.new( @audio, 1, 0 ).should  == @audio
-      MulAdd.new( @audio, -1, 0 ).should == unary_op
+      MulAdd.new( @audio, 1, 0 ).should   == @audio
+      MulAdd.new( @audio, -1, 0 ).should  == unary_op
       MulAdd.new( @audio, 0.5, 0 ).should == mult
       MulAdd.new( @audio, -1, add ).should == minus
       MulAdd.new( @audio, 1, 0.5 ).should == plus
+    end
+    
+    it "should accept ugens" do
+      MulAdd.new( @audio, @audio, 1 ).should be_instance_of(MulAdd)
+      MulAdd.new( @audio, @audio, @scalar ).should be_instance_of(MulAdd)
+      
+      bin_op_ugen = mock('binary op ugen')
+      @audio.stub!( :* ).and_return( bin_op_ugen )
+      MulAdd.new( @audio, @audio, 0 ).should == bin_op_ugen
     end
   end
   

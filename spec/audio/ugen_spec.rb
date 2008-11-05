@@ -57,7 +57,7 @@ describe Ugen do
   describe 'operations' do
     before :all do
       @op_ugen = mock( 'op_ugen', :ugen? => true )
-      BinaryOpUgen = mock( 'bynary_op_ugen', :new => @op_ugen )
+      BinaryOpUGen = mock( 'bynary_op_ugen', :new => @op_ugen )
       UnaryOpUgen  = mock( 'unary_op_ugen', :new => @op_ugen )
     end
     
@@ -71,7 +71,7 @@ describe Ugen do
     end
     
     it "should sum" do
-      BinaryOpUgen.should_receive( :new ).with( :+, @ugen, @ugen2)
+      BinaryOpUGen.should_receive( :new ).with( :+, @ugen, @ugen2)
       @ugen + @ugen2
     end
   end
@@ -172,6 +172,11 @@ describe Ugen do
     
     it "should set rate" do
       @ugen.rate.should == :audio
+    end
+    
+    it "should have empty inputs" do
+      Ugen.new( :audio ).inputs.should == []
+      Ugen.new( :audio, [nil] ).inputs.should == []
     end
   end
   

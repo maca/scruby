@@ -75,7 +75,7 @@ describe Control do
   it "should instantiate output proxies with the right attributes" do
     @control = mock('control', :outputs= => nil)
     Control.stub!( :new ).and_return( @control )
-    @names.collect_with_index { |n, i| OutputProxy.should_receive(:new).with(@control, n, i) }
+    @names.collect_with_index { |n, i| OutputProxy.should_receive(:new).with( :control, @control, n, i) }
     Control.and_proxies_from( @names )
   end
   

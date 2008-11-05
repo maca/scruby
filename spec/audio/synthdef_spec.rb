@@ -152,11 +152,12 @@ describe SynthDef, 'instantiation' do
       @sdef.send( :build_controls, @control_names ).collect{ |p| p.control_name.index }.should == (0...@control_names.size).map
     end
     
-    it  do
-      function = mock("function")
+    it "should call graph function with correct args" do
+      function = mock("function", :call => [] )
       proxies  = @sdef.send( :build_controls, @control_names )
-      function.should_receive( :call ).with(proxies)
-      @sdef.send( :build_ugen_graph, function, proxies)
+      @sdef.stub!( :build_controls ).and_return( proxies )
+      function.should_receive( :call ).with( *proxies )
+      @sdef.send( :build_ugen_graph, function, @control_names)
     end
     
     it "should set @sdef" do

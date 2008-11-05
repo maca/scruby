@@ -11,12 +11,11 @@ module Scruby
         include UgenOperations
 
         def initialize( rate, *inputs) 
-          @rate, @inputs = rate, inputs
+          @rate, @inputs = rate, inputs.compact
           
-          #defaults
           @special_index ||= 0
-          @output_index ||= 0 
-          @outputs ||= [1] 
+          @output_index  ||= 0 
+          @outputs       ||= [1] 
           
           @index = add_to_synthdef || 0
         end
@@ -34,7 +33,7 @@ module Scruby
         end
 
         def encode
-          self.class.to_s.encode + [E_RATES.index(rate)].pack('w') + [inputs.size, outputs.size, special_index, collect_input_specs].flatten.pack('n*') + [output_specs].pack('w') 
+          self.class.to_s.split('::').last.encode + [E_RATES.index(rate)].pack('w') + [inputs.size, outputs.size, special_index, collect_input_specs].flatten.pack('n*') + output_specs.pack('w*')
         end
         
         private
@@ -59,7 +58,7 @@ module Scruby
         end
         
         def output_specs
-          E_RATES.index(rate)
+          [E_RATES.index(rate)]
         end
 
         class << self

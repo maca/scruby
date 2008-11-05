@@ -4,8 +4,11 @@ require "named_arguments"
 
 require "#{LIB_DIR}/audio/ugens/ugen_operations"
 require "#{LIB_DIR}/audio/ugens/ugen"
+require "#{LIB_DIR}/audio/ugens/multi_out_ugens"
 
 require "#{LIB_DIR}/audio/ugens/operation_ugens"
+require "#{LIB_DIR}/audio/ugens/ugen"
+
 require "#{LIB_DIR}/audio/ugens/ugens"
 require "#{LIB_DIR}/audio/control_name"
 require "#{LIB_DIR}/audio/synthdef"
@@ -16,39 +19,28 @@ require "#{LIB_DIR}/extensions"
 include Scruby
 include Audio
 include Ugens
+include OperationUgens
 
 
-describe "building ugen graph" do
+
+
+describe "synthdef examples" do
+  
   before do
-    @sdef  = SynthDef.new( :name ) do end
-    @ugen  = Ugen.new( :audio, 100, 200 )
-  end
-
-  it "should return nil #sytnth_def" do
-    @ugen.send( :synthdef ).should eql(nil)
+    @sdef = SynthDef.new(:hola){ |a, b| SinOsc.kr( a ) + SinOsc.kr( b ) } 
+    @expected = [ 83, 67, 103, 102, 0, 0, 0, 1, 0, 1, 4, 104, 111, 108, 97, 0, 1, 0, 0, 0, 0, 0, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 1, 97, 0, 0, 1, 98, 0, 1, 0, 4, 7, 67, 111, 110, 116, 114, 111, 108, 1, 0, 0, 0, 2, 0, 0, 1, 1, 6, 83, 105, 110, 79, 115, 99, 1, 0, 2, 0, 1, 0, 0, 0, 0, 0, 0, -1, -1, 0, 0, 1, 6, 83, 105, 110, 79, 115, 99, 1, 0, 2, 0, 1, 0, 0, 0, 0, 0, 1, -1, -1, 0, 0, 1, 12, 66, 105, 110, 97, 114, 121, 79, 112, 85, 71, 101, 110, 1, 0, 2, 0, 1, 0, 0, 0, 1, 0, 0, 0, 2, 0, 0, 1, 0, 0 ].pack('C*')
   end
   
-  it "should set synthdef to the synth def for ugens instantiated inside ugen graph" do
-    function = lambda { Ugen.new( :audio, 100, 200 ).send( :synthdef ).should eql( @sdef ) }
-    @sdef.send :build_ugen_graph, function, []
-    Ugen.new( :audio, 100, 200 ).send( :synthdef ).should eql( nil )
-  end
-
-end
-
-describe "encoding examples" do
-  
-  before :all do
-    @sdef = 
-    SynthDef.new(:cacahuate, :values => [1, 456, 0.34, 0.45]) do |gate, freq, ancho, amp|
-      # sig = Pulse.ar( freq, ancho, amp, 0 )
-      # env = EnvGen.kr( Env.asr(2, 1, 1), gate, :doneAction => 2 )
-      # Out.ar( 0, sig*env )
-    end
+  it "should have correct children" do
+    @sdef.should have(4).children
+    @sdef.children[0].should be_instance_of( Control )
+    @sdef.children[1].should be_instance_of( SinOsc )
+    @sdef.children[2].should be_instance_of( SinOsc )
+    @sdef.children[3].should be_instance_of( BinaryOpUGen )
   end
   
-  it do
+  it "should encode" do
+    @sdef.encode.should == @expected
   end
-  
   
 end

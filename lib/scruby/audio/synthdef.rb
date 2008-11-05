@@ -22,7 +22,7 @@ module Scruby
       #Sending
       def encode
         controls = @control_names.reject { |cn| cn.non_control? }
-        encoded_controls = [controls.size].pack('n') + controls.collect{ |c| c.name.encode + [c].index.pack('n') }.to_s
+        encoded_controls = [controls.size].pack('n') + controls.collect{ |c| c.name.encode + [c.index].pack('n') }.to_s
         
         init_stream + name.encode + constants.encode_floats + values.flatten.encode_floats + encoded_controls +
             [children.size].pack('n') + children.collect{ |u| u.encode }.join('') +
@@ -51,9 +51,9 @@ module Scruby
         end.flatten.compact.sort_by{ |proxy| proxy.control_name.index }
       end
 
-      def build_ugen_graph( function, output_proxies ) #:nodoc:
+      def build_ugen_graph( function, control_names ) #:nodoc:
         Ugen.synthdef = self
-        function.call output_proxies
+        function.call *build_controls( control_names)
         Ugen.synthdef = nil
       end
       
