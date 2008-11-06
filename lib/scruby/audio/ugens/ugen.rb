@@ -25,7 +25,7 @@ module Scruby
         end
         
         def to_s
-          "#{self.class} inputs: #{self.inputs.join(', ')}"
+          "#{self.class.to_s.split('::').last} inputs:[#{self.inputs.join(',')}]"
         end
 
         def ugen?
@@ -33,7 +33,9 @@ module Scruby
         end
 
         def encode
-          self.class.to_s.split('::').last.encode + [E_RATES.index(rate)].pack('w') + [inputs.size, channels.size, special_index, collect_input_specs].flatten.pack('n*') + output_specs.pack('w*')
+          self.class.to_s.split('::').last.encode + [E_RATES.index(rate)].pack('w') + 
+          [inputs.size, channels.size, special_index, collect_input_specs].flatten.pack('n*') + 
+          output_specs.pack('w*')
         end
         
         private
@@ -54,7 +56,7 @@ module Scruby
         end
         
         def collect_input_specs
-          @inputs.collect{ |i| i.send( :input_specs, synthdef ) }
+          @inputs.collect{ |i| i.send( :input_specs, synthdef )  }
         end
         
         def output_specs

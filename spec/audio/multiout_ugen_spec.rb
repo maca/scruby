@@ -10,90 +10,107 @@ include Audio
 include Ugens
 
 
+
+
+
 describe MultiOutUgen do
-  
-  it "should respond to channels and channels" do
-    # MultiOutUgen.new( :audio, 1 ).should respond_to(:channels)
-    MultiOutUgen.new( :audio, 1 ).should respond_to(:channels)
-  end
-  
-end
-
-describe Control do
-
-  
   before do
-    @control = mock('control', :channels= => nil)
-    @names = Array.new( rand(7) + 3 ){ |i| mock('name', :rate => :control)  }
-    Ugen.synthdef = nil
-    @proxy = mock('proxy', :instance_of_proxy? => true)
-    OutputProxy.stub!( :new ).and_return( @proxy )
+    sdef = mock( 'sdef', :children => [] )
+    Ugen.should_receive( :synthdef ).and_return( sdef )
+    @proxies = MultiOutUgen.new( :audio, 1, 2, 3 )
+    @multi   = sdef.children.first
   end
 
-  it "should instantiate just with rate" do
-    Control.new( :audio ).should be_instance_of( Control )
+  it "should return an array of channels" do
+    @proxies.should be_instance_of( Array )
+    @proxies.should == [1,2,3]
   end
-  
-  it "should have empty inputs" do
-    Control.new( :audio ).inputs.should == []
+
+  it "should be instace of Control" do
+    @multi.should be_instance_of( MultiOutUgen )
   end
-  
-  it "should add to synthdef" do
-    sdef = mock('synthdef', :children => [])
-    Ugen.synthdef = sdef
-    Control.new( :audio )
-    sdef.children.should have(1).control
+
+  it do
+    @multi.rate.should == :audio
   end
-  
-  it "should have an empty array for inputs" do
-    Control.new( :audio ).inputs.should == []
+
+  it do
+    @multi.channels.should == [1,2,3]
   end
   
   it do
-    Control.should respond_to(:and_proxies_from)
+    @multi.inputs.should == []
   end
-  
-  it "should return an array" do
-    Control.and_proxies_from( @names ).should be_instance_of(Array)
+end
+
+describe Control do
+  before do
+    sdef = mock( 'sdef', :children => [] )
+    Ugen.stub!( :synthdef ).and_return( sdef )
+
+    @proxy = mock('proxy', :instance_of_proxy? => true)
+    OutputProxy.stub!( :new ).and_return( @proxy )
+
+    @names = Array.new( rand(7) + 3 ){ |i| mock('name', :rate => :audio, :valid_ugen_input? => true)  }
+    @proxies = Control.new( :audio, *@names )
+    @control = sdef.children.first
   end
-  
-  it "should instantiate a control" do
-    Control.should_receive(:new).and_return( @control )
-    Control.and_proxies_from( @names )
-  end
-  
-  it "should set rate to the rate of the names of the array" do
-    Control.should_receive(:new).with(:control).and_return( @control )
-    Control.and_proxies_from( @names )
-  end
-  
-  it "should instantiate an output proxy for each passed name" do
-    OutputProxy.should_receive( :new ).exactly( @names.size ).times
-    Control.and_proxies_from( @names )
-  end
-  
-  it "should instantiate output proxies with the right attributes" do
-    @control = mock('control', :channels= => nil)
-    Control.stub!( :new ).and_return( @control )
-    @names.collect_with_index { |n, i| OutputProxy.should_receive(:new).with( :control, @control, n, i) }
-    Control.and_proxies_from( @names )
-  end
-  
+
   it "should return an array of proxies" do
-    Control.and_proxies_from( @names ).each do |proxy|
-      proxy.should be_instance_of_proxy
-    end
+    @proxies.should be_instance_of( Array )
+    @proxies.should have( @names.size ).proxies
+  end
+
+  it "should set channels" do
+    @control.should be_instance_of( Control )
+    @control.channels.should == @names.map{ @proxy }
+  end
+
+  it "should be added to synthdef" do
+    Ugen.should_receive( :synthdef )
+    Control.new( :audio, [])
   end
   
-  it "should set channels" do
-    @control.should_receive( :channels= )
-    Control.stub!( :new ).and_return( @control )
+  it "should instantiate with #and_proxies_from" do
+    Control.should_receive(:new).with( :audio, *@names )
     Control.and_proxies_from( @names )
   end
+  
+  it "should have index" do
+    @control.index.should == 0
+  end
+  
 end
 
 describe OutputProxy do
-
-
+  
+  before do
+    @sdef = mock( 'sdef', :children => [] )
+    Ugen.stub!( :synthdef ).and_return( @sdef )
+    
+    @source = mock('source', :index => 0, :valid_ugen_input? => true )
+    @name   = mock('control name', :valid_ugen_input? => true)
+    @output_index = mock('output_idex', :valid_ugen_input? => true)
+    
+    @names = [mock('name', :rate => :audio, :valid_ugen_input? => true)]
+    
+  end
+  
+  it "should receive index from control" do
+    Control.and_proxies_from( @names ).first.index.should == 0
+    @sdef.children.first.index.should == 0
+  end
+  
+  it "should have empty inputs" do
+    OutputProxy.new( :audio, @source, @name, @output_index ).inputs.should == []
+  end
+  
+  
+  it "should not be added to synthdef" do
+    Ugen.should_not_receive( :synthdef )
+    OutputProxy.new( :audio, @source, @name, @output_index  )
+  end
+  
 end
+
 
