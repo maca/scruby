@@ -2,7 +2,7 @@ module Scruby
   module Audio
     module Ugens
       class Ugen
-        attr_reader :inputs, :rate, :index, :special_index, :output_index, :outputs
+        attr_reader :inputs, :rate, :index, :special_index, :output_index, :channels
         
         RATES   = [ :scalar, :trigger, :demand, :control, :audio ]
         E_RATES = [ :scalar, :control, :audio, :demand ]
@@ -15,7 +15,7 @@ module Scruby
           
           @special_index ||= 0
           @output_index  ||= 0 
-          @outputs       ||= [1] 
+          @channels       ||= [1] 
           
           @index = add_to_synthdef || 0
         end
@@ -33,12 +33,12 @@ module Scruby
         end
 
         def encode
-          self.class.to_s.split('::').last.encode + [E_RATES.index(rate)].pack('w') + [inputs.size, outputs.size, special_index, collect_input_specs].flatten.pack('n*') + output_specs.pack('w*')
+          self.class.to_s.split('::').last.encode + [E_RATES.index(rate)].pack('w') + [inputs.size, channels.size, special_index, collect_input_specs].flatten.pack('n*') + output_specs.pack('w*')
         end
         
         private
         def synthdef
-          @synthdef ||= self.class.synthdef
+          @synthdef ||= Ugen.synthdef
         end
 
         def add_to_synthdef #:nodoc:

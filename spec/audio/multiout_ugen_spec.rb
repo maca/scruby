@@ -12,9 +12,9 @@ include Ugens
 
 describe MultiOutUgen do
   
-  it "should respond to channels and outputs" do
+  it "should respond to channels and channels" do
+    # MultiOutUgen.new( :audio, 1 ).should respond_to(:channels)
     MultiOutUgen.new( :audio, 1 ).should respond_to(:channels)
-    MultiOutUgen.new( :audio, 1 ).should respond_to(:outputs)
   end
   
 end
@@ -23,7 +23,7 @@ describe Control do
 
   
   before do
-    @control = mock('control', :outputs= => nil)
+    @control = mock('control', :channels= => nil)
     @names = Array.new( rand(7) + 3 ){ |i| mock('name', :rate => :control)  }
     Ugen.synthdef = nil
     @proxy = mock('proxy', :instance_of_proxy? => true)
@@ -73,7 +73,7 @@ describe Control do
   end
   
   it "should instantiate output proxies with the right attributes" do
-    @control = mock('control', :outputs= => nil)
+    @control = mock('control', :channels= => nil)
     Control.stub!( :new ).and_return( @control )
     @names.collect_with_index { |n, i| OutputProxy.should_receive(:new).with( :control, @control, n, i) }
     Control.and_proxies_from( @names )
@@ -85,8 +85,8 @@ describe Control do
     end
   end
   
-  it "should set outputs" do
-    @control.should_receive( :outputs= )
+  it "should set channels" do
+    @control.should_receive( :channels= )
     Control.stub!( :new ).and_return( @control )
     Control.and_proxies_from( @names )
   end

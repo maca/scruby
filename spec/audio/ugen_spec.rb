@@ -289,7 +289,7 @@ describe Ugen, 'encoding' do
   end
   
   it "should encode have [1] as output index" do
-    @sin.send(:outputs).should == [1]
+    @sin.send(:channels).should == [1]
   end
   
   it "should return input_specs" do
@@ -313,7 +313,7 @@ describe Ugen, 'encoding' do
     @sin.encode[0..7].should == @encoded[0..7]
   end
   
-  it "should encode cn, rt, inputs, outputs, special_index" do
+  it "should encode cn, rt, inputs, channels, special_index" do
     @sin.encode[0..13].should == @encoded[0..13]
   end
   
