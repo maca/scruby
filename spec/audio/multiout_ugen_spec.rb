@@ -9,10 +9,6 @@ include Scruby
 include Audio
 include Ugens
 
-
-
-
-
 describe MultiOutUgen do
   before do
     sdef = mock( 'sdef', :children => [] )
@@ -102,13 +98,13 @@ describe OutputProxy do
   end
   
   it "should have empty inputs" do
-    OutputProxy.new( :audio, @source, @name, @output_index ).inputs.should == []
+    OutputProxy.new( :audio, @source, @output_index, @name ).inputs.should == []
   end
   
   
   it "should not be added to synthdef" do
     Ugen.should_not_receive( :synthdef )
-    OutputProxy.new( :audio, @source, @name, @output_index  )
+    OutputProxy.new( :audio, @source, @output_index, @name )
   end
   
 end

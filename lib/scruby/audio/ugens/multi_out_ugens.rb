@@ -1,11 +1,11 @@
 module Scruby
   module Audio
     module Ugens 
-      
+
       class OutputProxy < Ugen
         attr_reader :source, :control_name, :output_index
         
-        def initialize( rate, source, name, output_index )
+        def initialize( rate, source, output_index, name = nil )
           super rate
           @source, @control_name, @output_index = source, name, output_index
         end
@@ -19,8 +19,8 @@ module Scruby
       
       class MultiOutUgen < Ugen
         def initialize( rate, *channels )
-          @channels = channels
           super rate
+          @channels = channels
         end
         
         def self.new( rate, *args )
@@ -35,7 +35,7 @@ module Scruby
 
       class Control < MultiOutUgen #:nodoc:
         def initialize( rate, *names )
-          super rate, *names.collect_with_index{|n, i| OutputProxy.new rate, self, n, i }
+          super rate, *names.collect_with_index{|n, i| OutputProxy.new rate, self, i, n }
         end
         
         def self.and_proxies_from( names )

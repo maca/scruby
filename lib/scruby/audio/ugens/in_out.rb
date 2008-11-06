@@ -3,23 +3,40 @@ module Scruby
     module Ugens
 
       class In < MultiOutUgen
-        def self.ar( bus, num_channels = 1 )
-          new :audio, num_channels, bus
+        def initialize( rate, channels, bus )
+          super rate, *(0...channels).map{ |i| OutputProxy.new rate, self, i }
+          @inputs = [bus]
+        end
+        
+        def self.ar( bus, channels = 1 )
+          new :audio, channels, bus
         end
         
         def self.kr( bus, num_channels = 1 )
-          new :control, num_channels, bus
+          new :control, channels, bus
         end
       end
-      
-      class AbstractOut 
+
+      class Out < Ugen
+        def initialize(*args)
+          super
+          @channels = []
+        end
+
+        def self.ar (  bus, *inputs )
+          inputs = *inputs
+          new :audio, bus, *inputs; 0.0    #Out has no output
+        end
+
+        def self.kr (  bus, *inputs )
+          inputs = *inputs
+          new :control, bus, *inputs; 0.0  #Out has no output
+        end
+
+        def output_specs
+          []
+        end
       end
-      
-      class Out
-        
-        
-      end
-      
       
     end
   end

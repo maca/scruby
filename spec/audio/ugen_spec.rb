@@ -218,6 +218,12 @@ describe Ugen do
       ugen.inputs.should == [1, 2]
     end
     
+    it "should return ugen" do
+      ugen = Ugen.new( :audio, [1, 2] )
+      ugen.should be_instance_of( Ugen )
+      ugen.inputs.should == [1, 2]
+    end
+    
     it "should instantiate when passing array" do
       Ugen.should_receive(:instantiate).twice
       ugen = Ugen.new( :audio, 100, [210, 220] )

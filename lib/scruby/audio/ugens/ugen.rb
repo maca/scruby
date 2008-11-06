@@ -15,7 +15,7 @@ module Scruby
           
           @special_index ||= 0
           @output_index  ||= 0 
-          @channels       ||= [1] 
+          @channels      ||= [1] 
           
           @index = add_to_synthdef || 0
         end

@@ -169,12 +169,12 @@ describe SynthDef, 'instantiation' do
     
     it "should collect constants for simple children array" do
       children = [Ugen.new(:audio, 100), Ugen.new(:audio, 200), Ugen.new(:audio, 100, 300)]
-      @sdef.send( :collect_constants, children).should == [100, 200, 300]
+      @sdef.send( :collect_constants, children).should == [100.0, 200.0, 300.0]
     end
     
     it "should collect constants for simple children array" do
       children = [ Ugen.new(:audio, 100), [ Ugen.new(:audio, 400), [ Ugen.new(:audio, 200), Ugen.new(:audio, 100, 300) ] ] ]
-      @sdef.send( :collect_constants, children).should == [100, 400, 200, 300]
+      @sdef.send( :collect_constants, children).should == [100.0, 400.0, 200.0, 300.0]
     end
   end
   

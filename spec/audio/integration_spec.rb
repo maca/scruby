@@ -5,6 +5,8 @@ require "named_arguments"
 require "#{LIB_DIR}/audio/ugens/ugen_operations"
 require "#{LIB_DIR}/audio/ugens/ugen"
 require "#{LIB_DIR}/audio/ugens/multi_out_ugens"
+require "#{LIB_DIR}/audio/ugens/in_out"
+
 
 require "#{LIB_DIR}/audio/ugens/operation_ugens"
 require "#{LIB_DIR}/audio/ugens/ugen"
@@ -14,10 +16,14 @@ require "#{LIB_DIR}/audio/control_name"
 require "#{LIB_DIR}/audio/synthdef"
 require "#{LIB_DIR}/extensions"
 
+
+
 include Scruby
 include Audio
 include Ugens
 include OperationUgens
+
+
 
 
 describe "synthdef examples" do
@@ -34,13 +40,27 @@ describe "synthdef examples" do
     @sdef.children[3].should be_instance_of( BinaryOpUGen )
   end
 
-  it "should encode" do
+  it "should encode with control" do
     @sdef.encode.should == @expected
   end
 
-  it "should encode" do
+  it "should encode with ops" do
     expected = [ 83, 67, 103, 102, 0, 0, 0, 1, 0, 1, 4, 104, 101, 108, 112, 0, 2, 67, -36, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 5, 6, 83, 105, 110, 79, 115, 99, 2, 0, 2, 0, 1, 0, 0, -1, -1, 0, 0, -1, -1, 0, 1, 2, 6, 83, 105, 110, 79, 115, 99, 2, 0, 2, 0, 1, 0, 0, -1, -1, 0, 0, -1, -1, 0, 1, 2, 12, 66, 105, 110, 97, 114, 121, 79, 112, 85, 71, 101, 110, 2, 0, 2, 0, 1, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 2, 6, 83, 105, 110, 79, 115, 99, 2, 0, 2, 0, 1, 0, 0, -1, -1, 0, 0, -1, -1, 0, 1, 2, 12, 66, 105, 110, 97, 114, 121, 79, 112, 85, 71, 101, 110, 2, 0, 2, 0, 1, 0, 2, 0, 2, 0, 0, 0, 3, 0, 0, 2, 0, 0 ].pack('C*')
     SynthDef.new(:help){ (SinOsc.ar() + SinOsc.ar()) * SinOsc.ar() }.encode.should == expected
+  end
+
+  it "should encode with out" do
+    sdef = SynthDef.new(:out){ Out.ar(0, SinOsc.ar) }
+    sdef.children.should have(2).children
+    
+    sdef.children[0].should be_instance_of( SinOsc )
+    sdef.children[1].should be_instance_of( Out ) 
+    
+    sdef.constants.should == [ 440, 0 ]
+    sdef.children[1].channels.should == []
+    
+    expected = [ 83, 67, 103, 102, 0, 0, 0, 1, 0, 1, 3, 111, 117, 116, 0, 2, 67, -36, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 6, 83, 105, 110, 79, 115, 99, 2, 0, 2, 0, 1, 0, 0, -1, -1, 0, 0, -1, -1, 0, 1, 2, 3, 79, 117, 116, 2, 0, 2, 0, 0, 0, 0, -1, -1, 0, 1, 0, 0, 0, 0, 0, 0 ].pack('C*')
+    sdef.encode.should == expected
   end
 
 
