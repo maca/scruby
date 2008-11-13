@@ -180,6 +180,9 @@ describe UnaryOpUgen do
       @audio.stub!( :* ).and_return( bin_op_ugen )
       MulAdd.new( @audio, @audio, 0 ).should == bin_op_ugen
     end
+    
+    it "should accept array"
+    
   end
   
 end

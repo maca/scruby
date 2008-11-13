@@ -2,8 +2,10 @@ module Scruby
   module Audio
     module Ugens
       ugen_defs = YAML::load( File.open( "#{LIB_DIR}/audio/ugens/ugen_defs.yaml" ) )
+      putc 'Loading ugen definitions'
       
       def self.define_ugen(name, rates)
+        putc '.'
         rate_name = {:audio => :ar, :control => :kr, :scalar => :ir, :demand => :new}
         rates.delete_if{ |key, value| key == :demand  } #I don't know what to do with these
         

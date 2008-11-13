@@ -1,5 +1,4 @@
 class Env
-
   attr_accessor :levels, :times, :curves, :release_node, :array
   SHAPE_NAMES = {
     :step => 0,
@@ -63,7 +62,7 @@ class Env
 
 
   def to_array
-    *contents = levels[0], times.size, @release_node || -99, @loop_node || -99
+    *contents = levels[0], times.size, release_node, loop_node
     contents + levels[1..-1].wrap_and_zip( times, shape_numbers, curve_values  ).flatten
   end
   
@@ -78,6 +77,20 @@ class Env
       curve.valid_ugen_input? ? curve : 0
     end
   end
+  
+  def release_node
+    @release_node ||= -99
+  end
+  
+  def loop_node
+    @loop_node ||= -99
+  end
+  
+  def valid_ugen_input? #returns true
+    true
+  end
+  
+  def collect_constants #:nodoc:
+  end
 
- 
 end

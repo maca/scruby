@@ -14,9 +14,10 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #++
-
 require 'rubygems'
 require 'ruby2ruby'
+require "named_arguments"
+require 'osc'
 require 'yaml'
 
 LIB_DIR = File.join( File.expand_path(File.dirname(__FILE__) ), 'scruby' )
@@ -24,11 +25,24 @@ LIB_DIR = File.join( File.expand_path(File.dirname(__FILE__) ), 'scruby' )
 $:.unshift( File.dirname(__FILE__) ) unless
   $:.include?(File.dirname(__FILE__)) || $:.include?(File.expand_path(File.dirname(__FILE__)))
 
-require 'scruby/audio/ugens/ugen_operations' 
-require 'scruby/audio/ugens/ugen' 
-require 'scruby/audio/ugens/operation_ugens'
-require 'scruby/audio/control_name'
-require 'scruby/audio/synthdef'
-require 'scruby/extensions'
 
+require "scruby/audio/ugens/ugen_operations"
+require "scruby/audio/ugens/ugen"
+require "scruby/audio/ugens/multi_out_ugens"
+require "scruby/audio/ugens/in_out"
+
+require "scruby/audio/ugens/operation_ugens"
+require "scruby/audio/ugens/ugen"
+
+require "scruby/audio/ugens/ugens"
+require "scruby/audio/control_name"
+require "scruby/audio/synthdef"
+require "scruby/extensions"
+
+require "scruby/audio/server"
+
+include Scruby
+include Audio
+include Ugens
+include OperationUgens
 

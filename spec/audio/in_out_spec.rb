@@ -100,14 +100,7 @@ describe Out do
     out = @sdef.children.last
     out.inputs.should == [1, @ugen1, @ugen2, @ugen3]
   end
-  
-  it "should encode" do
-    Out.ar(0, SinOsc.ar)
-    p @sdef.children.last.encode.should == "\003Out\002\000\002\000\000\000\000\377\377\000\001\000\000\000\000\000\000"
 
-    
-  end
-  
   it "should validate rate"
   it "should substitute zero with silence"
   it "should spec passing array on init"

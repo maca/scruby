@@ -34,6 +34,9 @@ module Scruby
         end
       
         module UnaryOperators
+          
+     
+          
           UNARY.each_key do |op|
             eval "def #{op}; UnaryOpUgen.new(:#{op}, self); end"
           end

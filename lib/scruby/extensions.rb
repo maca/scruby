@@ -3,11 +3,11 @@ class Object
   def to_array
     [*self]
   end
-  
+
   def ugen?
     false
   end
-  
+
   def valid_ugen_input?
     false
   end
@@ -17,11 +17,11 @@ class Numeric
   def rate
     :scalar
   end
-  
+
   def max( other )
     self > other ? self : other
   end
-  
+
   def min( other )
     self < other ? self : other
   end
@@ -32,7 +32,7 @@ class Numeric
   def collect_constants #:nodoc:
     self
   end  
-  
+
   def input_specs( synthdef )
     [-1, synthdef.constants.index(self)]
   end
@@ -40,11 +40,6 @@ end
 
 class Fixnum
   include Scruby::Audio::Ugens::UgenOperations
-  
-  def encode
-    [self >> 8,0,self,0]
-  end
-  
 end
 
 class Float
@@ -53,7 +48,7 @@ end
 
 class Array
   include Scruby::Audio::Ugens::UgenOperations
-  
+
   #collect with index
   def collect_with_index
     indices = (0...self.size).map
@@ -71,21 +66,25 @@ class Array
     size.times { |i| self[ i ] = self[ i % original_size ] }
     self
   end
-  
+
   def wrap_and_zip( *args )
-	  max = args.map{ |a| instance_of?(Array) ? a.size : 0 }.max.max( self.size )
+    max = args.map{ |a| instance_of?(Array) ? a.size : 0 }.max.max( self.size )
     args = args.collect{ |a| a.to_array.wrap_to( max ) }
-	  self.wrap_to( max ).zip( *args )
+    self.wrap_to( max ).zip( *args )
   end
 
   def to_array
     self
   end
-  
+
   def encode_floats
     [self.size].pack('n') + self.pack('g*')
   end
-  
+
+  def muladd( mul, add )
+    self.collect{ |u| MulAdd.new( u, mul, add ) }
+  end
+
   private
   def collect_constants #:nodoc:
     self.collect{ |e| e.send( :collect_constants )  }

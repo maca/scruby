@@ -25,7 +25,7 @@ module Scruby
         end
         
         def to_s
-          "#{self.class.to_s.split('::').last} inputs:[#{self.inputs.join(',')}]"
+          "#{self.class.to_s.split('::').last}"
         end
 
         def ugen?

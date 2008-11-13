@@ -46,8 +46,6 @@ module Scruby
 
         class MulAdd < Ugen
           def self.new( input, mul, add )
-            
-            
             no_mul = ( mul == 1.0 )
             minus  = ( mul == -1.0 )
             return add         if mul == 0

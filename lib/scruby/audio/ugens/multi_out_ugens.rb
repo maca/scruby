@@ -24,7 +24,7 @@ module Scruby
         end
         
         def self.new( rate, *args )
-          super( rate, *args ).channels.compact #returns the channels but gets instantiated
+          super( rate, *args ).channels #returns the channels but gets instantiated
         end
         
         private     

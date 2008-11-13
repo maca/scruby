@@ -54,6 +54,7 @@ describe Ugens do
     Gendy1.ar( 4, 5, 6, :knum => 100, :mul => 2, :add => 3 )
   end
   
+  it "should work with arrays"
   
 end
 
