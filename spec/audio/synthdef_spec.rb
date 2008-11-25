@@ -1,10 +1,10 @@
 require File.join( File.expand_path(File.dirname(__FILE__)), '..',"helper")
 
-require "#{LIB_DIR}/audio/ugens/ugen_operations"
-require "#{LIB_DIR}/extensions"
-require "#{LIB_DIR}/audio/synthdef" 
-require "#{LIB_DIR}/audio/ugens/ugen"
-require "#{LIB_DIR}/audio/ugens/multi_out_ugens"
+require "#{SCRUBY_DIR}/audio/ugens/ugen_operations"
+require "#{SCRUBY_DIR}/extensions"
+require "#{SCRUBY_DIR}/audio/synthdef" 
+require "#{SCRUBY_DIR}/audio/ugens/ugen"
+require "#{SCRUBY_DIR}/audio/ugens/multi_out_ugens"
 
 
 include Scruby
@@ -118,7 +118,7 @@ describe SynthDef, 'instantiation' do
     before :all do
       Object.send(:remove_const, 'ControlName') 
       RATES = [:scalar, :trigger, :control]
-      require "#{LIB_DIR}/audio/control_name"
+      require "#{SCRUBY_DIR}/audio/control_name"
     end
     
     before do

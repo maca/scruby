@@ -2,7 +2,7 @@ module Scruby
   module Audio
     module Ugens
       module UgenOperations
-        operation_indices = YAML::load( File.open( "#{LIB_DIR}/audio/ugens/operation_indices.yaml" ) )
+        operation_indices = YAML::load( File.open( "#{SCRUBY_DIR}/audio/ugens/operation_indices.yaml" ) )
         UNARY  = operation_indices['unary']
         BINARY = operation_indices['binary']      
         OP_SYMBOLS = { :+ => :plus, :- => :minus, :* => :mult, :/ => :div2, :<= => :less_than_or_eql, :>= => :more_than_or_eql }

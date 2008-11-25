@@ -1,11 +1,11 @@
 require File.join( File.expand_path(File.dirname(__FILE__)), '..', "helper")
 
 require 'named_arguments'
-require "#{LIB_DIR}/audio/ugens/ugen_operations"
-require "#{LIB_DIR}/audio/ugens/ugen"
-require "#{LIB_DIR}/extensions"
-require "#{LIB_DIR}/audio/env"
-require "#{LIB_DIR}/audio/ugens/env_gen"
+require "#{SCRUBY_DIR}/audio/ugens/ugen_operations"
+require "#{SCRUBY_DIR}/audio/ugens/ugen"
+require "#{SCRUBY_DIR}/extensions"
+require "#{SCRUBY_DIR}/audio/env"
+require "#{SCRUBY_DIR}/audio/ugens/env_gen"
 
 include Scruby
 include Audio

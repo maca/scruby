@@ -1,9 +1,9 @@
 require File.join( File.expand_path(File.dirname(__FILE__)),"helper")
 
-require "#{LIB_DIR}/audio/ugens/ugen_operations"
-require "#{LIB_DIR}/extensions"
+require "#{SCRUBY_DIR}/audio/ugens/ugen_operations"
+require "#{SCRUBY_DIR}/extensions"
 require 'named_arguments'
-require "#{LIB_DIR}/audio/env"
+require "#{SCRUBY_DIR}/audio/env"
 
 
 describe Env do

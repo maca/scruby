@@ -2,10 +2,10 @@ require File.join( File.expand_path(File.dirname(__FILE__)), '..',"helper")
 require 'yaml'
 require 'named_arguments'
 
-require "#{LIB_DIR}/audio/ugens/ugen_operations" 
-require "#{LIB_DIR}/audio/ugens/ugen" 
-require "#{LIB_DIR}/audio/ugens/ugens" 
-require "#{LIB_DIR}/extensions"
+require "#{SCRUBY_DIR}/audio/ugens/ugen_operations" 
+require "#{SCRUBY_DIR}/audio/ugens/ugen" 
+require "#{SCRUBY_DIR}/audio/ugens/ugens" 
+require "#{SCRUBY_DIR}/extensions"
 
 
 module UgenTest
@@ -22,7 +22,7 @@ include Ugens
 describe Ugens do
   
   before do
-    @udefs = YAML::load( File.open( "#{LIB_DIR}/audio/ugens/ugen_defs.yaml" ) )
+    @udefs = YAML::load( File.open( "#{SCRUBY_DIR}/audio/ugens/ugen_defs.yaml" ) )
   end
 
   it do

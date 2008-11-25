@@ -2,23 +2,23 @@ require File.join( File.expand_path(File.dirname(__FILE__)), '..',"helper")
 require "named_arguments"
 require 'osc'
 
-require "#{LIB_DIR}/audio/ugens/ugen_operations"
-require "#{LIB_DIR}/audio/ugens/ugen"
-require "#{LIB_DIR}/audio/ugens/multi_out_ugens"
-require "#{LIB_DIR}/audio/ugens/in_out"
+require "#{SCRUBY_DIR}/audio/ugens/ugen_operations"
+require "#{SCRUBY_DIR}/audio/ugens/ugen"
+require "#{SCRUBY_DIR}/audio/ugens/multi_out_ugens"
+require "#{SCRUBY_DIR}/audio/ugens/in_out"
 
-require "#{LIB_DIR}/audio/ugens/operation_ugens"
-require "#{LIB_DIR}/audio/ugens/ugen"
+require "#{SCRUBY_DIR}/audio/ugens/operation_ugens"
+require "#{SCRUBY_DIR}/audio/ugens/ugen"
 
-require "#{LIB_DIR}/audio/ugens/ugens"
-require "#{LIB_DIR}/audio/control_name"
-require "#{LIB_DIR}/audio/synthdef"
-require "#{LIB_DIR}/extensions"
+require "#{SCRUBY_DIR}/audio/ugens/ugens"
+require "#{SCRUBY_DIR}/audio/control_name"
+require "#{SCRUBY_DIR}/audio/synthdef"
+require "#{SCRUBY_DIR}/extensions"
 
-require "#{LIB_DIR}/audio/server"
+require "#{SCRUBY_DIR}/audio/server"
 
-require "#{LIB_DIR}/audio/env"
-require "#{LIB_DIR}/audio/ugens/env_gen"
+require "#{SCRUBY_DIR}/audio/env"
+require "#{SCRUBY_DIR}/audio/ugens/env_gen"
 
 include Scruby
 include Audio

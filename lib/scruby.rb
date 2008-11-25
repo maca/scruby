@@ -20,29 +20,36 @@ require "named_arguments"
 require 'osc'
 require 'yaml'
 
-LIB_DIR = File.join( File.expand_path(File.dirname(__FILE__) ), 'scruby' )
-
-$:.unshift( File.dirname(__FILE__) ) unless
-  $:.include?(File.dirname(__FILE__)) || $:.include?(File.expand_path(File.dirname(__FILE__)))
+SCRUBY_DIR = File.join( File.expand_path(File.dirname(__FILE__) ), 'scruby' )
 
 
-require "scruby/audio/ugens/ugen_operations"
-require "scruby/audio/ugens/ugen"
-require "scruby/audio/ugens/multi_out_ugens"
-require "scruby/audio/ugens/in_out"
+require "#{SCRUBY_DIR}/audio/ugens/ugen_operations"
+require "#{SCRUBY_DIR}/audio/ugens/ugen"
+require "#{SCRUBY_DIR}/audio/ugens/multi_out_ugens"
+require "#{SCRUBY_DIR}/audio/ugens/in_out"
 
-require "scruby/audio/ugens/operation_ugens"
-require "scruby/audio/ugens/ugen"
+require "#{SCRUBY_DIR}/audio/ugens/operation_ugens"
+require "#{SCRUBY_DIR}/audio/ugens/ugen"
 
-require "scruby/audio/ugens/ugens"
-require "scruby/audio/control_name"
-require "scruby/audio/synthdef"
-require "scruby/extensions"
+require "#{SCRUBY_DIR}/audio/ugens/ugens"
+require "#{SCRUBY_DIR}/audio/control_name"
+require "#{SCRUBY_DIR}/audio/synthdef"
+require "#{SCRUBY_DIR}/extensions"
 
-require "scruby/audio/server"
+require "#{SCRUBY_DIR}/audio/server"
+
+require "#{SCRUBY_DIR}/audio/env"
+require "#{SCRUBY_DIR}/audio/ugens/env_gen"
+
 
 include Scruby
 include Audio
 include Ugens
 include OperationUgens
+
+
+class Notice < String; end
+class Warning < String; end
+class Special < String; end
+
 
