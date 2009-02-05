@@ -3,7 +3,7 @@ module Scruby
     module Ugens
 
       class In < MultiOutUgen
-        def initialize( rate, channels, bus )
+        def initialize( rate, channels, bus ) #:nodoc:
           super rate, *(0...channels).map{ |i| OutputProxy.new rate, self, i }
           @inputs = [bus]
         end
@@ -18,7 +18,7 @@ module Scruby
       end
 
       class Out < Ugen
-        def initialize(*args)
+        def initialize(*args) #:nodoc:
           super
           @channels = []
         end

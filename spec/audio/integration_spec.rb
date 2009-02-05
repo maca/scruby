@@ -64,30 +64,18 @@ describe "synthdef examples" do
 
   it "should encode another with out" do
     sdef = SynthDef.new(:out){ sig = SinOsc.ar(100, 200) * SinOsc.ar(200); Out.ar(0, sig) }
-    
-    sdef.should have(4).children
-    sdef.children[0].should be_instance_of( SinOsc )
-    sdef.children[1].should be_instance_of( SinOsc )
-    sdef.children[2].should be_instance_of( BinaryOpUGen )
-    sdef.children[3].should be_instance_of( Out )
-    
     sdef.encode.should == [ 83, 67, 103, 102, 0, 0, 0, 1, 0, 1, 3, 111, 117, 116, 0, 3, 66, -56, 0, 0, 67, 72, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 4, 6, 83, 105, 110, 79, 115, 99, 2, 0, 2, 0, 1, 0, 0, -1, -1, 0, 0, -1, -1, 0, 1, 2, 6, 83, 105, 110, 79, 115, 99, 2, 0, 2, 0, 1, 0, 0, -1, -1, 0, 1, -1, -1, 0, 2, 2, 12, 66, 105, 110, 97, 114, 121, 79, 112, 85, 71, 101, 110, 2, 0, 2, 0, 1, 0, 2, 0, 0, 0, 0, 0, 1, 0, 0, 2, 3, 79, 117, 116, 2, 0, 2, 0, 0, 0, 0, -1, -1, 0, 2, 0, 2, 0, 0, 0, 0 ].pack('C*')
   end
   
   it "should encode out with two channels" do
     sdef = SynthDef.new( :out ){ sig = SinOsc.ar(100, [200, 200]) * SinOsc.ar(200); Out.ar(0, sig) }
-    sdef.should have(6).children
-    sdef.children[0..2].map { |u| u.should be_instance_of( SinOsc ) }
-    sdef.children[3..4].map { |u| u.should be_instance_of( BinaryOpUGen ) }
-    sdef.children[5].should be_instance_of( Out )
-    
     expected = [ 83, 67, 103, 102, 0, 0, 0, 1, 0, 1, 3, 111, 117, 116, 0, 3, 66, -56, 0, 0, 67, 72, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 6, 6, 83, 105, 110, 79, 115, 99, 2, 0, 2, 0, 1, 0, 0, -1, -1, 0, 0, -1, -1, 0, 1, 2, 6, 83, 105, 110, 79, 115, 99, 2, 0, 2, 0, 1, 0, 0, -1, -1, 0, 0, -1, -1, 0, 1, 2, 6, 83, 105, 110, 79, 115, 99, 2, 0, 2, 0, 1, 0, 0, -1, -1, 0, 1, -1, -1, 0, 2, 2, 12, 66, 105, 110, 97, 114, 121, 79, 112, 85, 71, 101, 110, 2, 0, 2, 0, 1, 0, 2, 0, 0, 0, 0, 0, 2, 0, 0, 2, 12, 66, 105, 110, 97, 114, 121, 79, 112, 85, 71, 101, 110, 2, 0, 2, 0, 1, 0, 2, 0, 1, 0, 0, 0, 2, 0, 0, 2, 3, 79, 117, 116, 2, 0, 3, 0, 0, 0, 0, -1, -1, 0, 2, 0, 3, 0, 0, 0, 4, 0, 0, 0, 0 ].pack('C*')
     sdef.encode.should == expected
   end
   
   it "should encode out with multidimensional array" do
     sdef = SynthDef.new( :out ){ sig = SinOsc.ar(100, [200,[100, 100]]) * SinOsc.ar(200); Out.ar(0, sig) }
-    sdef.should have(9).children
+
     child = sdef.children
     child[0..3].map { |u| u.should be_instance_of(SinOsc) }
     child[4].should be_instance_of(BinaryOpUGen)
@@ -95,7 +83,6 @@ describe "synthdef examples" do
     child[6].should be_instance_of(BinaryOpUGen)
     child[7].should be_instance_of(Out)
     child[8].should be_instance_of(Out)
-
     #the order of the elements is different than in supercollider, but at least has the encoded string is the same size so i guess its fine
     sdef.encode.should have(261).chars
   end

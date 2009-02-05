@@ -1,6 +1,58 @@
 module Scruby
   module Audio
     module Ugens
+      # All ugens inherit from this "abstract" class
+      #
+      # == Creation
+      #
+      # Ugens are usually instantiated inside an "ugen graph" or the block passed when creating a SynthDef 
+      # using either the ar, kr, ir or new methods wich will determine the rate.
+      #   * ar: audio rate
+      #   * kr: control rate
+      #   * ir: scalar rate
+      #   * new: demand rate
+      #
+      # Not all the ugens provide all the rates
+      #
+      # Two ugens inside an ugen graph: 
+      #   SynthDef.new('simple'){ Out.ar(0, SinOsc.ar) }
+      #   # Out and SinOsc are both ugens
+      #
+      #
+      # == Passing arguments when creating
+      #
+      # Usually when instantiating an ugen the arguments can be passed in order:
+      #   Pitch.kr(0, 220, 80, ...)
+      #
+      # Or using a hash where the keys are symbols corresponding to the argument name. 
+      #   Pitch.kr( :initFreq => 220, :execFreq => 300 )
+      #
+      # Or a combination of both ways:
+      #   Pitch.kr(0, 220, :execFreq => 300)
+      #
+      # Arguments not passed in either way will resort to default
+      #
+      #
+      # == Defining ugens
+      #
+      # This named arguments functionality is provided for all the default Ugens but can be provided when defining a new Ugen by calling
+      # <tt>#named_args_for</tt> passing a symbol with the name of a defined method:
+      #
+      #   class Umaguma < Ugen
+      #     class << self
+      #       def ar(karma = 200, pitch = 20, rate = 200)
+      #         ...
+      #       end
+      #       named_args_for :ar
+      #     end
+      #     
+      #   end
+      #
+      # For more info and limitations on named arguments check the gem: http://github.com/maca/namedarguments/tree/master
+      #
+      # Otherwise usage is pretty the same as in SuperCollider
+      #
+      # TODO: Provide a way of getting the argument names and default values
       class Ugen
         attr_reader :inputs, :rate, :index, :special_index, :output_index, :channels
         
@@ -20,14 +72,17 @@ module Scruby
           @index = add_to_synthdef || 0
         end
         
+        # Instantiate a new MulAdd passing self and the multiplication and addition arguments
         def muladd( mul, add )
           MulAdd.new( self, mul, add )
         end
         
+        # Demodulized class name
         def to_s
           "#{self.class.to_s.split('::').last}"
         end
-
+        
+        # True
         def ugen?
           true
         end
@@ -39,7 +94,7 @@ module Scruby
         end
         
         private
-        def synthdef
+        def synthdef #:nodoc:
           @synthdef ||= Ugen.synthdef
         end
 
@@ -47,19 +102,19 @@ module Scruby
           (synthdef.children << self).size - 1 if synthdef
         end
         
-        def collect_constants
+        def collect_constants #:nodoc:
           @inputs.send( :collect_constants )
         end
         
-        def input_specs( synthdef )
+        def input_specs( synthdef ) #:nodoc:
           [index, output_index]
         end
         
-        def collect_input_specs
+        def collect_input_specs #:nodoc:
           @inputs.collect{ |i| i.send( :input_specs, synthdef )  }
         end
         
-        def output_specs
+        def output_specs #:nodoc:
           [E_RATES.index(rate)]
         end
 

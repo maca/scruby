@@ -5,6 +5,8 @@ require "#{SCRUBY_DIR}/extensions"
 require "#{SCRUBY_DIR}/audio/synthdef" 
 require "#{SCRUBY_DIR}/audio/ugens/ugen"
 require "#{SCRUBY_DIR}/audio/ugens/multi_out_ugens"
+require "#{SCRUBY_DIR}/typed_array"
+
 
 
 include Scruby
@@ -81,35 +83,35 @@ describe SynthDef, 'instantiation' do
     
     it "should get the argument names for the provided function" do
       @function.should_receive( :argument_names ).and_return( [] )
-      @sdef.send( :collect_control_names, @function, [], [] )
+      @sdef.send_msg( :collect_control_names, @function, [], [] )
     end
     
     it "should return empty array if the names are empty" do
       @function.should_receive( :argument_names ).and_return( [] )
-      @sdef.send( :collect_control_names, @function, [], [] ).should eql([])
+      @sdef.send_msg( :collect_control_names, @function, [], [] ).should eql([])
     end
     
     it "should not return empty array if the names are not empty" do
-      @sdef.send( :collect_control_names, @function, [], [] ).should_not eql([])
+      @sdef.send_msg( :collect_control_names, @function, [], [] ).should_not eql([])
     end
     
     it "should instantiate and return a ControlName for each function name" do
       c_name = mock( :control_name )
       ControlName.should_receive( :new ).at_most(3).times.and_return( c_name )
-      control_names = @sdef.send( :collect_control_names, @function, [1,2,3], [] )
+      control_names = @sdef.send_msg( :collect_control_names, @function, [1,2,3], [] )
       control_names.size.should eql(3)
       control_names.collect { |e| e.should == c_name }
     end
     
     it "should pass the argument value, the argument index and the rate(if provided) to the ControlName at instantiation" do
-      @sdef.send( :collect_control_names, @function, [:a,:b,:c], [] ).should eql( [[:arg1, :a, nil, 0], [:arg2, :b, nil, 1], [:arg3, :c, nil, 2]])
-      @sdef.send( :collect_control_names, @function, [:a,:b,:c], [:ir, :tr, :ir] ).should eql( [[:arg1, :a, :ir, 0], [:arg2, :b, :tr, 1], [:arg3, :c, :ir, 2]])
+      @sdef.send_msg( :collect_control_names, @function, [:a,:b,:c], [] ).should eql( [[:arg1, :a, nil, 0], [:arg2, :b, nil, 1], [:arg3, :c, nil, 2]])
+      @sdef.send_msg( :collect_control_names, @function, [:a,:b,:c], [:ir, :tr, :ir] ).should eql( [[:arg1, :a, :ir, 0], [:arg2, :b, :tr, 1], [:arg3, :c, :ir, 2]])
     end
     
     it "should not return more elements than the function argument number" do
       c_name = mock( :control_name )
       ControlName.should_receive( :new ).at_most(3).times.and_return( c_name )
-      @sdef.send( :collect_control_names, @function, [:a, :b, :c, :d, :e], [] ).should have( 3 ).elements
+      @sdef.send_msg( :collect_control_names, @function, [:a, :b, :c, :d, :e], [] ).should have( 3 ).elements
     end
   end
 
@@ -130,51 +132,51 @@ describe SynthDef, 'instantiation' do
     it "should call Control#and_proxies.." do
         rates = @control_names.collect{ |c| c.rate }.uniq
         Control.should_receive(:and_proxies_from).exactly( rates.size ).times
-        @sdef.send( :build_controls, @control_names )
+        @sdef.send_msg( :build_controls, @control_names )
     end
     
     it "should call Control#and_proxies.. with args" do
       Control.should_receive(:and_proxies_from).with( @control_names.select{ |c| c.rate == :scalar  } ) unless @control_names.select{ |c| c.rate == :scalar  }.empty?
       Control.should_receive(:and_proxies_from).with( @control_names.select{ |c| c.rate == :trigger } ) unless @control_names.select{ |c| c.rate == :trigger }.empty?
       Control.should_receive(:and_proxies_from).with( @control_names.select{ |c| c.rate == :control } ) unless @control_names.select{ |c| c.rate == :control }.empty?
-      @sdef.send( :build_controls, @control_names )
+      @sdef.send_msg( :build_controls, @control_names )
     end
     
     it do
-      @sdef.send( :build_controls, @control_names ).should be_instance_of(Array)
+      @sdef.send_msg( :build_controls, @control_names ).should be_instance_of(Array)
     end
 
     it "should return an array of OutputProxies" do
-      @sdef.send( :build_controls, @control_names ).each { |e| e.should be_instance_of(OutputProxy) }
+      @sdef.send_msg( :build_controls, @control_names ).each { |e| e.should be_instance_of(OutputProxy) }
     end
     
     it "should return an array of OutputProxies sorted by ControlNameIndex" do
-      @sdef.send( :build_controls, @control_names ).collect{ |p| p.control_name.index }.should == (0...@control_names.size).map
+      @sdef.send_msg( :build_controls, @control_names ).collect{ |p| p.control_name.index }.should == (0...@control_names.size).map
     end
     
     it "should call graph function with correct args" do
       function = mock("function", :call => [] )
-      proxies  = @sdef.send( :build_controls, @control_names )
+      proxies  = @sdef.send_msg( :build_controls, @control_names )
       @sdef.stub!( :build_controls ).and_return( proxies )
       function.should_receive( :call ).with( *proxies )
-      @sdef.send( :build_ugen_graph, function, @control_names)
+      @sdef.send_msg( :build_ugen_graph, function, @control_names)
     end
     
     it "should set @sdef" do
       function = lambda{}
       Ugen.should_receive( :synthdef= ).with( @sdef )
       Ugen.should_receive( :synthdef= ).with( nil )      
-      @sdef.send( :build_ugen_graph, function, [] )
+      @sdef.send_msg( :build_ugen_graph, function, [] )
     end
     
     it "should collect constants for simple children array" do
       children = [Ugen.new(:audio, 100), Ugen.new(:audio, 200), Ugen.new(:audio, 100, 300)]
-      @sdef.send( :collect_constants, children).should == [100.0, 200.0, 300.0]
+      @sdef.send_msg( :collect_constants, children).should == [100.0, 200.0, 300.0]
     end
     
     it "should collect constants for children arrays" do
       children = [ Ugen.new(:audio, 100), [ Ugen.new(:audio, 400), [ Ugen.new(:audio, 200), Ugen.new(:audio, 100, 300) ] ] ]
-      @sdef.send( :collect_constants, children).should == [100.0, 400.0, 200.0, 300.0]
+      @sdef.send_msg( :collect_constants, children).should == [100.0, 400.0, 200.0, 300.0]
     end
     
     it "should remove nil from constants array"
@@ -184,7 +186,7 @@ describe SynthDef, 'instantiation' do
 end
 
 
-describe "sending" do
+describe "encoding" do
 
   before :all do
     class SinOsc < Ugen
@@ -230,6 +232,44 @@ describe "sending" do
   it "should encode is, name, consts, values, controls, children, variants stub" do
     @sdef.encode.should == @encoded
   end
+  
+  describe "sending" do
+
+    before :all do
+      @server = mock('server', :instance_of? => true, :send_synth_def => nil)
+      Server  = mock('Server', :all => [@server])
+    end
+    
+    before do
+      @servers = (0..3).map{ mock('server', :instance_of? => true, :send_synth_def => nil) }
+      @sdef = SynthDef.new(:hola) { SinOsc.ar }
+    end
+    
+    it "should accept an array or several Servers" do
+      @sdef.send( @servers )
+      @sdef.send( *@servers )
+    end
+    
+    it "should not accept non servers" do
+      lambda{ @sdef.send( [1,2] ) }.should raise_error(NoMethodError)
+      lambda{ @sdef.send( 1,2 ) }.should   raise_error(NoMethodError)
+    end
+    
+    it "should send self to each of the servers" do
+      @servers.each{ |s| s.should_receive(:send_synth_def).with(@sdef) }
+      @sdef.send( @servers )
+    end
+    
+    it "should send to Server.all if not provided with a list of servers" do
+      @server.should_receive(:send_synth_def).with(@sdef)
+      Server.should_receive(:all).and_return([@server])
+      @sdef.send
+    end
+
+  end
+  
 end
+
+
 
 

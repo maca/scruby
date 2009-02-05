@@ -23,6 +23,8 @@ require 'yaml'
 SCRUBY_DIR = File.join( File.expand_path(File.dirname(__FILE__) ), 'scruby' )
 
 
+require "#{SCRUBY_DIR}/typed_array"
+
 require "#{SCRUBY_DIR}/audio/ugens/ugen_operations"
 require "#{SCRUBY_DIR}/audio/ugens/ugen"
 require "#{SCRUBY_DIR}/audio/ugens/multi_out_ugens"
@@ -40,6 +42,9 @@ require "#{SCRUBY_DIR}/audio/server"
 
 require "#{SCRUBY_DIR}/audio/env"
 require "#{SCRUBY_DIR}/audio/ugens/env_gen"
+
+require "#{SCRUBY_DIR}/audio/node"
+require "#{SCRUBY_DIR}/audio/synth"
 
 
 include Scruby

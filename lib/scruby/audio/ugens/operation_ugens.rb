@@ -2,7 +2,7 @@ module Scruby
   module Audio
     module Ugens
       module OperationUgens
-        class BasicOpUgen < Ugen #:nodoc:
+        class BasicOpUgen < Ugen
           attr_accessor :operator
 
           class << self
