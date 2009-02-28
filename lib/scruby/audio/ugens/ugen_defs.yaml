@@ -3330,9 +3330,7 @@ Vibrato:
     - 0
 WhiteNoise: 
   :control: []
-
   :audio: []
-
 Wrap: 
   :control: 
   - - :input

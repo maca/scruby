@@ -7,6 +7,7 @@ module Scruby
 
       alias :udp_send :send 
       def send( command, host, port, *args )
+        args = args.collect{ |arg| arg.kind_of?(Symbol) ? arg.to_s : arg }
         udp_send( OSC::Message.new( command, type_tag(args), *args ), 0, host, port )
       end
 
@@ -36,7 +37,7 @@ module Scruby
       end
       
       # Boots the local binary of the scsynth forking a process, it will rise a SCError if the scsynth 
-      # binary is not found in /Applications/SuperCollider/scsynt (default Mac OS path) or given path. 
+      # binary is not found in /Applications/SuperCollider/scsynth (default Mac OS path) or given path. 
       # The default path can be overriden using Server.scsynt_path=('path')
       def boot
         raise SCError.new('Scsynth not found in the given path') unless File.exists?( @@sc_path )
@@ -44,12 +45,21 @@ module Scruby
           path = @@sc_path.scan(/[^\/]+/)
           @server_pipe = IO.popen( "cd /#{ path[0..-2].join('/') }; ./#{ path.last } -u #{ @port }" )
           loop { p Special.new(@server_pipe.gets.chomp) }
-        end unless @server_pipe        
+        end unless @server_pipe   
+        sleep 2 # TODO: There should be a better way to wait for the server to start
+        send "/g_new", 1  
+        self   
+      end
+      
+      def stop
+        send "/g_freeAll", 0
+        send "/clearSched"
+        send "/g_new", 1
       end
       
       # Sends the /quit OSC signal to the scsynth server and kills the forked process if the scsynth
       # server is running locally
-      def stop
+      def quit
         send '/quit'
         Process.kill 'KILL', @server_pipe.pid if @server_pipe
         @server_pipe = nil
@@ -58,7 +68,8 @@ module Scruby
       # Sends an OSC command to the scsyth server.
       # E.g. <tt>server.send('/dumpOSC', 1)</tt>
       def send( command, *args )
-        return $UDP_Sender.send( command, @host, @port, *args )
+        $UDP_Sender.send( command, @host, @port, *args )
+        self
       end
       
       # Encodes and sends a SynthDef to the scsynth server
@@ -89,6 +100,11 @@ module Scruby
         # Returns an array with all the registered servers
         def all
           @@servers
+        end
+        
+        # Clear the servers array
+        def clear_servers
+          @@servers.clear
         end
       
         # Return a server corresponding to the specified index of the registered servers array

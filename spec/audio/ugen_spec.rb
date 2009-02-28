@@ -310,7 +310,6 @@ describe Ugen, 'encoding' do
     @sin.send(:collect_input_specs).flatten.collect { |e| e.encode }
   end
   
-  
   it "should encode class name" do
     @sin.encode[0..6].should == @encoded[0..6]
   end

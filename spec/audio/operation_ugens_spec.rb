@@ -138,6 +138,11 @@ describe UnaryOpUgen do
       arr.first.inputs.should == [@audio, @control]
       arr.last.inputs.should == [@scalar, @control]
     end
+    
+    it "should accept numeric arg as first arg" do
+      arr = BinaryOpUGen.new(:+, 1, @control  )
+      arr.inputs.should == [1, @control]
+    end
   end
   
   describe MulAdd do
@@ -180,9 +185,7 @@ describe UnaryOpUgen do
       @audio.stub!( :* ).and_return( bin_op_ugen )
       MulAdd.new( @audio, @audio, 0 ).should == bin_op_ugen
     end
-    
-    it "should accept array"
-    
+        
   end
   
 end

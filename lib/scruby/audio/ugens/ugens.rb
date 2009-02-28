@@ -9,7 +9,7 @@ module Scruby
         rates.delete_if{ |key, value| key == :demand  } #I don't know what to do with these
         
         methods = rates.collect{ |r| ":#{rate_name[r.first]}" }.join(', ')
-        
+        # TODO: Get rid of meta-metaprogramming (named args)
         klass = "class #{name} < Ugen\nclass << self\n" +
         rates.collect do |r|
             new_args = ( [r.first] + r.last.collect{|a|a.first} ).join(', ')

@@ -2,6 +2,7 @@ require File.join( File.expand_path(File.dirname(__FILE__)), '..',"helper")
 require 'yaml'
 
 require "#{SCRUBY_DIR}/audio/ugens/ugen_operations" 
+require "#{SCRUBY_DIR}/audio/ugens/ugen" 
 require "#{SCRUBY_DIR}/extensions"
 
 include Scruby
@@ -98,6 +99,20 @@ describe UgenOperations, 'loading module' do
     it "should set the correct inputs and operator for the binopugen" do
       (1.0 + @ugen).inputs.should == [1.0, @ugen]
       (1 + @ugen).operator.should == :+
+    end
+    
+    it "ugen should sum numeric" do
+      ugen = Ugen.new( :audio )
+      sum  = (ugen + 1)
+      sum.should be_kind_of(BinaryOpUGen)
+      sum.inputs.should == [ugen, 1]
+    end
+    
+    it 'ugen should sum array' do
+      ugen = Ugen.new( :audio )
+      sum  = (ugen + [1,2])
+      sum.should be_kind_of(BinaryOpUGen)
+      sum.inputs.should == [ugen, [1,2]]
     end
   end
   

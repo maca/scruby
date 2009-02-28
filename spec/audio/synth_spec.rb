@@ -34,13 +34,17 @@ describe Synth do
   end
   
   it "should send /s_new message" do
-    @servers.each{ |s| s.should_receive(:send).with( '/s_new', ['synth', 2002, 0, 1, :attack, 10] ) }
-    s = Synth.new( :synth, :attack => 10, :servers => @servers )
+    servers = (0..3).map{ s = mock( 'server') }
+    servers.each{ |s| s.should_receive(:send).with( 9, 'synth', 2002, 0, 1, :attack, 10 ) }
+    s = Synth.new( :synth, :attack => 10, :servers => servers )
   end
   
   it "should send set message and return self" do
-    @servers.each{ |s| s.should_receive(:send).with( '/n_set', [2001, :attack, 20] ) }
-    @synth.set( :attack => 20 ).should == @synth
+    s = mock('server')
+    s.should_receive(:send).with( 15, 2002, :attack, 20 )
+    s.should_receive(:send).with( 9, "synth", 2002, 0, 1 )
+    synth = Synth.new( :synth, :servers => s)
+    synth.set( :attack => 20 ).should == synth
   end
-
+  
 end

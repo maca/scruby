@@ -107,3 +107,21 @@ class String
   end
 end
 
+
+class Symbol
+  def to_proc
+    proc { |obj, *args| obj.send(self, *args) }
+  end
+end
+
+# Musical math
+class Fixnum  
+  def freq
+    440 * (2 ** ((self - 69) * 0.083333333333) )
+  end
+end
+
+
+
+
+

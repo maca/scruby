@@ -69,7 +69,8 @@ module Live
     
     # Starts a live session using a named pipe to receive code from a remote source and evaluates it within a context, a bit like an IRB session but evaluates code sent from a text editor
     def initialize 
-      return p( Exception.new("Another session sems to be running") ) if File.exist?( "#{Dir.tmpdir}/ruby_live.pipe" )
+      return p( Exception.new("Another session sems to be running: #{Dir.tmpdir}/ruby_live.pipe") ) if File.exist?( "#{Dir.tmpdir}/ruby_live.pipe" )
+      
       p( Notice.new("Live Session") )
       get_binding
       init_pipe
