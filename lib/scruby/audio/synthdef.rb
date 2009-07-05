@@ -50,11 +50,11 @@ module Scruby
       # but the results will be interpreted in the same way
       def encode
         controls = @control_names.reject { |cn| cn.non_control? }
-        encoded_controls = [controls.size].pack('n') + controls.collect{ |c| c.name.encode + [c.index].pack('n') }.to_s
+        encoded_controls = [controls.size].pack('n') + controls.collect{ |c| c.name.encode + [c.index].pack('n') }.join
         
         init_stream + name.encode + constants.encode_floats + values.flatten.encode_floats + encoded_controls +
-            [children.size].pack('n') + children.collect{ |u| u.encode }.join('') +
-            [@variants.size].pack('n') #stub!!!
+          [children.size].pack('n') + children.collect{ |u| u.encode }.join('') +
+          [@variants.size].pack('n') #stub!!!
       end
       
       def init_stream file_version = 1, number_of_synths = 1 #:nodoc:
@@ -80,8 +80,8 @@ module Scruby
       #   # this synthdef is sent to both s and r
       #
       def send *servers
-        servers = *servers
-        (servers ? servers.to_array : Server.all).each{ |s| s.send_synth_def( self ) } 
+        servers = servers.first if servers.first.kind_of? Array if servers.size == 1
+        (servers.empty? ? Server.all : servers.to_array ).each{ |s| s.send_synth_def( self ) } 
         self
       end
       

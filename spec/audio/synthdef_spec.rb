@@ -236,8 +236,8 @@ describe "encoding" do
   describe "sending" do
 
     before :all do
-      @server = mock('server', :instance_of? => true, :send_synth_def => nil)
-      ::Server  = mock('Server', :all => [@server])
+      @server  = mock('server', :instance_of? => true, :send_synth_def => nil)
+      ::Server = mock('Server', :all => [@server])
     end
     
     before do
@@ -246,8 +246,8 @@ describe "encoding" do
     end
     
     it "should accept an array or several Servers" do
-      @sdef.send( @servers )
-      @sdef.send( *@servers )
+      @sdef.send @servers
+      @sdef.send *@servers
     end
     
     it "should not accept non servers" do
