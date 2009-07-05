@@ -36,14 +36,14 @@ module Scruby
       # == Defining ugens
       #
       # This named arguments functionality is provided for all the default Ugens but can be provided when defining a new Ugen by calling
-      # <tt>#named_args_for</tt> passing a symbol with the name of a defined method:
+      # <tt>#named_arguments_for</tt> passing a symbol with the name of a defined method:
       #
       #   class Umaguma < Ugen
       #     class << self
       #       def ar(karma = 200, pitch = 20, rate = 200)
       #         ...
       #       end
-      #       named_args_for :ar
+      #       named_arguments_for :ar
       #     end
       #     
       #   end
@@ -62,7 +62,7 @@ module Scruby
 
         include UgenOperations
 
-        def initialize( rate, *inputs) 
+        def initialize rate, *inputs
           @rate, @inputs = rate, inputs.compact
           
           @special_index ||= 0
@@ -73,8 +73,8 @@ module Scruby
         end
         
         # Instantiate a new MulAdd passing self and the multiplication and addition arguments
-        def muladd( mul, add )
-          MulAdd.new( self, mul, add )
+        def muladd mul, add
+          MulAdd.new self, mul, add
         end
         
         # Demodulized class name
@@ -83,14 +83,12 @@ module Scruby
         end
         
         # True
-        def ugen?
-          true
-        end
+        def ugen?; true; end
 
         def encode
-          self.class.to_s.split('::').last.encode + [E_RATES.index(rate)].pack('w') + 
-          [inputs.size, channels.size, special_index, collect_input_specs].flatten.pack('n*') + 
-          output_specs.pack('w*')
+          self.class.to_s.split('::').last.encode + [ E_RATES.index(rate) ].pack('w') + 
+            [ inputs.size, channels.size, special_index, collect_input_specs ].flatten.pack('n*') + 
+            output_specs.pack('w*')
         end
         
         private
@@ -106,12 +104,12 @@ module Scruby
           @inputs.send( :collect_constants )
         end
         
-        def input_specs( synthdef ) #:nodoc:
+        def input_specs synthdef #:nodoc:
           [index, output_index]
         end
         
         def collect_input_specs #:nodoc:
-          @inputs.collect{ |i| i.send( :input_specs, synthdef )  }
+          @inputs.collect{ |i| i.send :input_specs, synthdef  }
         end
         
         def output_specs #:nodoc:
@@ -119,23 +117,22 @@ module Scruby
         end
 
         class << self
-          def new( rate, *inputs ) #:nodoc:
+          def new rate, *inputs #:nodoc:
             raise ArgumentError.new( "#{rate} not a defined rate") unless RATES.include?( rate.to_sym )
             inputs.each{ |i| raise ArgumentError.new( "#{i} is not a valid ugen input") unless i.valid_ugen_input? }
 
-            inputs = *inputs #if args is an array peel off one array skin
-            inputs = inputs.to_array #may return a non_array object so we turn it into array, does nothing if already array
-            size = inputs.select{ |a| a.instance_of? Array }.map{ |a| a.size }.max || 1 #get the size of the largest array element if present
+            inputs = inputs.first if inputs.first.kind_of? Array if inputs.size == 1
+            size   = inputs.select{ |a| a.kind_of? Array }.map{ |a| a.size }.max || 1 #get the size of the largest array element if present
             inputs.flatten! if size == 1 #if there is one or more arrays with just one element flatten the input array
             return instantiate( rate, *inputs ) unless size > 1 #return an Ugen if no array was passed as an input
 
-            inputs = inputs.map{ |argument| argument.instance_of?( Array ) ? argument.wrap_to( size ) : Array.new( size, argument ) }.transpose
-            inputs.map{ |new_inputs| new( rate, *new_inputs ) }
+            inputs = inputs.map{ |input| input.instance_of?( Array ) ? input.wrap_to( size ) : Array.new( size, input ) }.transpose
+            inputs.map{ |new_inputs| new rate, *new_inputs }
           end
 
-          def instantiate( *args ) #:nodoc:
+          def instantiate *args #:nodoc:
             obj = allocate        
-            obj.__send__( :initialize, *args )
+            obj.__send__ :initialize, *args
             obj
           end
 
@@ -143,7 +140,7 @@ module Scruby
             @@synthdef
           end
 
-          def synthdef=( synthdef ) #:nodoc:
+          def synthdef= synthdef #:nodoc:
             @@synthdef = synthdef
           end
         end

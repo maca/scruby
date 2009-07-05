@@ -119,7 +119,7 @@ describe SynthDef, 'instantiation' do
     
     before :all do
       Object.send(:remove_const, 'ControlName') 
-      RATES = [:scalar, :trigger, :control]
+      ::RATES = [:scalar, :trigger, :control]
       require "#{SCRUBY_DIR}/audio/control_name"
     end
     
@@ -151,7 +151,7 @@ describe SynthDef, 'instantiation' do
     end
     
     it "should return an array of OutputProxies sorted by ControlNameIndex" do
-      @sdef.send_msg( :build_controls, @control_names ).collect{ |p| p.control_name.index }.should == (0...@control_names.size).map
+      @sdef.send_msg( :build_controls, @control_names ).collect{ |p| p.control_name.index }.should == (0...@control_names.size).to_a
     end
     
     it "should call graph function with correct args" do
@@ -189,7 +189,7 @@ end
 describe "encoding" do
 
   before :all do
-    class SinOsc < Ugen
+    class ::SinOsc < Ugen
       def self.ar( freq=440.0, phase=0.0 ) #not interested in muladd
         new(:audio, freq, phase)
       end
@@ -237,7 +237,7 @@ describe "encoding" do
 
     before :all do
       @server = mock('server', :instance_of? => true, :send_synth_def => nil)
-      Server  = mock('Server', :all => [@server])
+      ::Server  = mock('Server', :all => [@server])
     end
     
     before do

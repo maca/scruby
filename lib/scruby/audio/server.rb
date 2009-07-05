@@ -6,18 +6,18 @@ module Scruby
       include Singleton
 
       alias :udp_send :send 
-      def send( command, host, port, *args )
-        args = args.collect{ |arg| arg.kind_of?(Symbol) ? arg.to_s : arg }
-        udp_send( OSC::Message.new( command, type_tag(args), *args ), 0, host, port )
+      def send command, host, port, *args
+        args = args.collect{ |arg| arg.kind_of? Symbol ? arg.to_s : arg }
+        udp_send OSC::Message.new( command, type_tag(args), *args ), 0, host, port
       end
 
-      def send_message( message, host, port )
-        udp_send( message, 0, host, port )
+      def send_message message, host, port
+        udp_send message, 0, host, port
       end
 
-      def type_tag(*args)
+      def type_tag *args
         args = *args
-        args.collect{ |msg| OSC::Packet.tag( msg ) }.to_s
+        args.collect{ |msg| OSC::Packet.tag msg }.to_s
       end
     end
     $UDP_Sender = UDPSender.instance
@@ -31,7 +31,7 @@ module Scruby
       # The server is a Ruby representation of scsynth which can be a local binary or a remote    
       # server already running.
       # Server class keeps an array with all the instantiated servers
-      def initialize( host = 'localhost', port = 57111)
+      def initialize host = 'localhost', port = 57111
         @host, @port = host, port
         @@servers << self
       end
@@ -40,7 +40,7 @@ module Scruby
       # binary is not found in /Applications/SuperCollider/scsynth (default Mac OS path) or given path. 
       # The default path can be overriden using Server.scsynt_path=('path')
       def boot
-        raise SCError.new('Scsynth not found in the given path') unless File.exists?( @@sc_path )
+        raise SCError.new('Scsynth not found in the given path') unless File.exists? @@sc_path
         Thread.new do
           path = @@sc_path.scan(/[^\/]+/)
           @server_pipe = IO.popen( "cd /#{ path[0..-2].join('/') }; ./#{ path.last } -u #{ @port }" )
@@ -67,28 +67,28 @@ module Scruby
       
       # Sends an OSC command to the scsyth server.
       # E.g. <tt>server.send('/dumpOSC', 1)</tt>
-      def send( command, *args )
-        $UDP_Sender.send( command, @host, @port, *args )
+      def send command, *args
+        $UDP_Sender.send command, @host, @port, *args
         self
       end
       
       # Encodes and sends a SynthDef to the scsynth server
-      def send_synth_def( synth_def )
+      def send_synth_def synth_def
         *blob = OSC::Blob.new( synth_def.encode ), 0
         def_message = OSC::Message.new( '/d_recv', $UDP_Sender.type_tag( blob ), *blob )
-        send_message( OSC::Bundle.new( nil, def_message ) )
+        send_message OSC::Bundle.new( nil, def_message )
       end
       
       private
-      def send_message( message ) #:nodoc:
-        $UDP_Sender.send_message( message, @host, @port )
+      def send_message message #:nodoc:
+        $UDP_Sender.send_message message, @host, @port
       end
       
       public
       class << self
         
         # Specify the scsynth binary path
-        def sc_path=( path )
+        def sc_path= path
           @@sc_path = path
         end
 
@@ -108,12 +108,12 @@ module Scruby
         end
       
         # Return a server corresponding to the specified index of the registered servers array
-        def [](index)
+        def [] index
           @@servers[index]
         end
         
         # Set a server to the specified index of the registered servers array
-        def []=(index)
+        def []= index
           @@servers[index]
           @@servers.uniq!
         end

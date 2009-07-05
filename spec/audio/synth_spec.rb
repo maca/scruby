@@ -1,7 +1,4 @@
 require File.join( File.expand_path(File.dirname(__FILE__)), '..',"helper")
-require 'yaml'
-require 'named_arguments'
-
 
 require "#{SCRUBY_DIR}/typed_array" 
 require "#{SCRUBY_DIR}/audio/node"
@@ -12,7 +9,7 @@ include Scruby
 describe Synth do
   
   before :all do
-    Server = mock('server')
+    ::Server = mock('server')
   end
   
   before do

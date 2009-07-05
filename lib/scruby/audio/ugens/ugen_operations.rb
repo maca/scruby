@@ -1,6 +1,16 @@
 module Scruby
   module Audio
     module Ugens
+      # This module enables Ugen operations for Ugens, Numeric and Arrays, when any instance of this classes executes an operation with an Ugen a BinaryUgenOp 
+      # is instantiated where both objects are the inputs of the operation, an UnaryUgenOp is instantiated for unary operations
+      # This are the permited operations:
+      #
+      # Binary: 
+      # +, -, *, div, /, mod, <=, >=, minimum, maximum, lcm, gcd, round, roundUp, trunc, atan2, hypot, hypotApx, pow, leftShift, rightShift, unsignedRightShift, ring1, ring2, ring3, ring4, difsqr, sumsqr, sqrsum, sqrdif, absdif, thresh, amclip, scaleneg, clip2, excess, fold2, wrap2, rrand and exprand 
+      # 
+      # Unary:
+      # neg, bitNot, abs, asFloat, ceil, floor, frac, sign, squared, cubed, sqrt, exp, reciprocal, midicps, cpsmidi, midiratio, ratiomidi, dbamp, ampdb, octcps, cpsoct, log, log2, log10, sin, cos, tam, asin, acos, atan, sinh, cosh, tanh, rand, rand2, linrand, bilinrand, sum3rand, distort, softclip, coin, rectWindow, hanWindow, welWindow, triWindow, ramp and scurve 
+      # 
       module UgenOperations
         operation_indices = YAML::load( File.open( "#{SCRUBY_DIR}/audio/ugens/operation_indices.yaml" ) )
         UNARY  = operation_indices['unary']
@@ -11,8 +21,8 @@ module Scruby
           true
         end
         
-        def self.included( klass )
-          klass.send( :include, BinaryOperations )
+        def self.included klass
+          klass.send :include, BinaryOperations
           begin; klass.send( :include, UnaryOperators ) if klass.new.ugen?; rescue; end
         
           BINARY.each_key do |operator|

@@ -37,7 +37,7 @@ describe TypedArray do
     ta = TypedArray.new( Type )
     o = Type.new
     sum = ta + [o]
-    sum.should be_instance_of(TypedArray)
+    # sum.should be_instance_of(TypedArray)
     sum.should == [o]
   end
   

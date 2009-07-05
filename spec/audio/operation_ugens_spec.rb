@@ -12,7 +12,7 @@ include Ugens
 include OperationUgens
 
 describe UnaryOpUgen do
-  RATES = [ :scalar, :demand, :control, :audio ]
+  ::RATES = [ :scalar, :demand, :control, :audio ]
   
   before do
     @scalar  = mock( 'ugen', :rate => :scalar,  :valid_ugen_input? => true ) 

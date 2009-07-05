@@ -2,30 +2,31 @@ module Scruby
   module Audio
     module Ugens
       module OperationUgens
-        class BasicOpUgen < Ugen
+        class BasicOpUgen < Ugen #:nodoc:
           attr_accessor :operator
 
           class << self
-            def new( operator, *inputs ) #:nodoc:
-              obj = super( get_rate(inputs), *inputs )
-              set_operator_for( obj, operator )
+            def new operator, *inputs #:nodoc:
+              obj = super get_rate(inputs), *inputs
+              set_operator_for obj, operator
               obj
             end
 
             private
-            def set_operator_for( input, operator ) #:nodoc:
-              input.instance_of?(Array) ? input.map{ |element| set_operator_for( element, operator )  } : input.operator = operator
+            #:nodoc:
+            def set_operator_for input, operator 
+              input.instance_of? Array ? input.map{ |element| set_operator_for element, operator  } : input.operator = operator
             end
 
             def get_rate( *inputs ) #:nodoc:
-              max_index = inputs.flatten.collect{ |ugen| Ugen::RATES.index( ugen.rate ) }.max
+              max_index = inputs.flatten.collect{ |ugen| Ugen::RATES.index ugen.rate }.max
               Ugen::RATES[max_index]
             end
           end
         end
 
-        class UnaryOpUgen < BasicOpUgen
-          def self.new( operator, input )
+        class UnaryOpUgen < BasicOpUgen 
+          def self.new operator, input
             super
           end
 
@@ -35,7 +36,7 @@ module Scruby
         end
 
         class BinaryOpUGen < BasicOpUgen
-          def self.new( operator, left, right )
+          def self.new operator, left, right
             super
           end
 
@@ -45,7 +46,7 @@ module Scruby
         end
 
         class MulAdd < Ugen
-          def self.new( input, mul, add )
+          def self.new input, mul, add
             no_mul = ( mul == 1.0 )
             minus  = ( mul == -1.0 )
             return add         if mul == 0
@@ -55,7 +56,7 @@ module Scruby
             return add - input if minus
             return input + add if no_mul
 
-            super( input.rate, input, mul, add )
+            super input.rate, input, mul, add
           end
         end
       end

@@ -3,7 +3,7 @@ module Scruby
     @@base_id = 2000
     attr_reader :name, :servers
 
-    def initialize( name, *servers )
+    def initialize name, *servers
       @name = name.to_s
       servers  = *servers
       @servers = servers ? TypedArray.new( Server, [*servers] ) : Server.all

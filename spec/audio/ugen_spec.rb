@@ -57,7 +57,7 @@ describe Ugen do
   describe 'operations' do
     before :all do
       @op_ugen = mock( 'op_ugen', :ugen? => true )
-      BinaryOpUGen = mock( 'bynary_op_ugen', :new => @op_ugen )
+      ::BinaryOpUGen = mock( 'bynary_op_ugen', :new => @op_ugen )
       UnaryOpUgen  = mock( 'unary_op_ugen', :new => @op_ugen )
     end
     
@@ -71,7 +71,7 @@ describe Ugen do
     end
     
     it "should sum" do
-      BinaryOpUGen.should_receive( :new ).with( :+, @ugen, @ugen2)
+      ::BinaryOpUGen.should_receive( :new ).with( :+, @ugen, @ugen2)
       @ugen + @ugen2
     end
   end
@@ -183,10 +183,10 @@ describe Ugen do
   describe 'initialization with array as argument' do
     
     before :all do
-      *@i_1 = 100, 210 
-      *@i_2 = 100, 220 
-      *@i_3 = 100, 230 
-      *@i_4 = 100, 240
+      @i_1 = 100, 210 
+      @i_2 = 100, 220 
+      @i_3 = 100, 230 
+      @i_4 = 100, 240
     end
     
     it "should not care if an array was passed" do
@@ -260,9 +260,9 @@ describe Ugen do
     end
   
     it "should return muladd" do
-      MulAdd = mock( 'MulAdd', :new => nil )
+      ::MulAdd = mock( 'MulAdd', :new => nil )
       @ugen = Ugen.new(:audio, 100, 100)
-      MulAdd.should_receive( :new ).with( @ugen, 1, 1)
+      ::MulAdd.should_receive( :new ).with( @ugen, 1, 1)
       @ugen.muladd(1, 1).should be_nil
     end
   end
@@ -274,10 +274,10 @@ describe Ugen, 'encoding' do
   
   before do
     args = [400.0, 0.0]
-    @sin = SinOsc.kr(*args)
-    @synthdef = mock('synthdef', :constants => args )
-    @sin.stub!(:index).and_return(1) #as if was the first child of a synthdef
-    @sin.stub!( :synthdef ).and_return( @synthdef )
+    @sin = SinOsc.kr *args
+    @synthdef = mock 'synthdef', :constants => args
+    @sin.stub!( :index ).and_return 1 #as if was the first child of a synthdef
+    @sin.stub!( :synthdef ).and_return @synthdef
     
     @encoded = [6, 83, 105, 110, 79, 115, 99, 1, 0, 2, 0, 1, 0, 0, -1, -1, 0, 0, -1, -1, 0, 1, 1].pack('C*')
   end
@@ -306,9 +306,9 @@ describe Ugen, 'encoding' do
     @sin.send(:collect_input_specs).should == [[-1, 0], [-1, 1]]
   end
   
-  it "should collect input_specs" do
-    @sin.send(:collect_input_specs).flatten.collect { |e| e.encode }
-  end
+  # it "should collect input_specs" do
+  #   @sin.send(:collect_input_specs).flatten.collect { |e| e.encode }
+  # end
   
   it "should encode class name" do
     @sin.encode[0..6].should == @encoded[0..6]

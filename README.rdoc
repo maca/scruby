@@ -1,5 +1,18 @@
 
 
+== Scruby 
+
+Is a bare-bones SuperCollider livecoding library for Ruby, it provides comunication with a remote or local scsynth server and SynthDef creation with a
+very similar syntax as Sclang.
+
+SynthDef creation and sending is robust but some features are not implemented such as SynthDef variations and others I may not be aware of.
+
+livecode.rb executable is located in the bin directory and a TextMate bundle included in extras permits livecoding from TextMate, comunication is 
+thrugh *nix pipes. Similar functionality shouldn't be too dificult to implement from Emacs or Vim.
+
+== TODO
+
+Receive OSC messages from SuperCollider
 
 == LICENSE:
 
@@ -18,9 +31,6 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-== NOTES
-
-Ruby has operation precendence
 
 
 

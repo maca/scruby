@@ -1,14 +1,11 @@
 require File.join( File.expand_path(File.dirname(__FILE__)), '..',"helper")
-require 'yaml'
-require 'named_arguments'
 
 
 require "#{SCRUBY_DIR}/typed_array" 
 require "#{SCRUBY_DIR}/audio/node" 
+
+class Server; end
 include Scruby
-
-
-
 
 describe Node do  
   before :all do

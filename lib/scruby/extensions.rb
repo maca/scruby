@@ -1,27 +1,29 @@
 
 class Object
+  
+  # Wraps self int an array, #to_a seems to be deprecated
   def to_array
     [*self]
   end
 
-  def ugen?
-    false
-  end
+  # TODO : deprecate
+  def ugen?; false; end
 
-  def valid_ugen_input?
+  def valid_ugen_input? #:nodoc:
     false
   end
 end
 
 class Numeric
-  def rate
-    :scalar
-  end
+  # Rate is :scalar
+  def rate; :scalar; end
 
+  # Compares itself with +other+ and returns biggest
   def max( other )
     self > other ? self : other
   end
 
+  # Compares itself with +other+ and returns smallest
   def min( other )
     self < other ? self : other
   end
@@ -68,20 +70,19 @@ class Array
   end
 
   def wrap_and_zip( *args )
-    max = args.map{ |a| instance_of?(Array) ? a.size : 0 }.max.max( self.size )
+    max  = args.map{ |a| instance_of?(Array) ? a.size : 0 }.max.max( self.size )
     args = args.collect{ |a| a.to_array.wrap_to( max ) }
     self.wrap_to( max ).zip( *args )
   end
 
-  def to_array
-    self
-  end
+  # Returns self
+  def to_array; self; end
 
-  def encode_floats
+  def encode_floats #:nodoc:
     [self.size].pack('n') + self.pack('g*')
   end
 
-  def muladd( mul, add )
+  def muladd( mul, add ) #:nodoc:
     self.collect{ |u| MulAdd.new( u, mul, add ) }
   end
 
@@ -92,17 +93,18 @@ class Array
 end
 
 class Proc
+  # Returns an array of symbols corresponding to the argument names
   def argument_names
     case self.arity
-    when -1..0: []
-    when 1: self.to_sexp.assoc( :dasgn_curr )[1].to_array
+    when -1..0 then []
+    when 1 then self.to_sexp.assoc( :dasgn_curr )[1].to_array
     else self.to_sexp[2][1][1..-1].collect{ |arg| arg[1]  }
     end
   end
 end
 
 class String
-  def encode
+  def encode #:nodoc:
     [self.size & 255].pack('C*') + self[0..255]
   end
 end

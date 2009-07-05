@@ -1,8 +1,6 @@
 require File.join( File.expand_path(File.dirname(__FILE__)), '..',"helper")
-require 'yaml'
-require 'tempfile'
 
-require 'named_arguments'
+require 'tempfile'
 require 'osc'
 require "#{SCRUBY_DIR}/audio/server"
 

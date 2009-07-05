@@ -9,12 +9,11 @@ include Scruby
 include Audio
 include Ugens
 
-Klass = nil
 
 describe UgenOperations, 'loading module' do
   
   before :all do
-    class BinaryOpUGen
+    class ::BinaryOpUGen
       attr_accessor :inputs, :operator
       def initialize(op, *args)
         @operator = op
@@ -25,7 +24,6 @@ describe UgenOperations, 'loading module' do
   end
   
   before do
-    Object.send(:remove_const, 'Klass') 
     class Klass; end
   end
   
@@ -67,7 +65,6 @@ describe UgenOperations, 'loading module' do
     end
     
     it "should call the original #+" do
-      Object.send(:remove_const, 'Klass') 
       class Klass; def +( input ); end; end
       Klass.send( :include, UgenOperations )
       (Klass.new + Klass.new).should be_nil

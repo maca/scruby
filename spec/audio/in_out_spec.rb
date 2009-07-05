@@ -6,16 +6,22 @@ require "#{SCRUBY_DIR}/audio/ugens/ugen"
 require "#{SCRUBY_DIR}/audio/ugens/multi_out_ugens"
 require "#{SCRUBY_DIR}/audio/ugens/in_out"
 
-
-require 'named_arguments'
-
 include Scruby
 include Audio
 include Ugens
 
 class SinOsc < Ugen
-  def self.ar( freq=440.0, phase=0.0 ) #not interested in muladd
-    new(:audio, freq, phase)
+   #not interested in muladd
+  def self.ar freq=440.0, phase=0.0
+    new :audio, freq, phase
+  end
+end
+
+describe In, Out, 'instantiation' do
+  
+  it "should not instantiate with #new" do
+    lambda { In.new(:audio, 1, 2) }.should raise_error
+    lambda { Out.new(:audio, 1, 2) }.should raise_error
   end
 end
 
@@ -105,3 +111,9 @@ describe Out do
   it "should substitute zero with silence"
   it "should spec passing array on init"
 end
+
+
+
+
+
+

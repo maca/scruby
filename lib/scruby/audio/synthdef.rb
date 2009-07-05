@@ -27,16 +27,16 @@ module Scruby
       #       Out.ar(0, sig*env*amp);
       #   }).send(s)
       #
-      def initialize( name, options = {}, &block )
+      def initialize name, options = {}, &block
         @name, @children = name.to_s, []
 
         values = options.delete( :values ) || []
         rates  = options.delete( :rates )  || []
         block  = block || Proc.new{}
 
-        @control_names = collect_control_names( block, values, rates )
-        build_ugen_graph( block, @control_names )
-        @constants = collect_constants( @children )
+        @control_names = collect_control_names block, values, rates
+        build_ugen_graph block, @control_names
+        @constants = collect_constants @children
         
         @variants = [] #stub!!!
         
@@ -57,7 +57,7 @@ module Scruby
             [@variants.size].pack('n') #stub!!!
       end
       
-      def init_stream(file_version = 1, number_of_synths = 1) #:nodoc:
+      def init_stream file_version = 1, number_of_synths = 1 #:nodoc:
         'SCgf' + [file_version].pack('N') + [number_of_synths].pack('n')
       end
       
@@ -79,19 +79,19 @@ module Scruby
       #   SynthDef.new('sdef2'){ Out.ar(1, SinOsc.ar(222)) }.send
       #   # this synthdef is sent to both s and r
       #
-      def send( *servers )
+      def send *servers
         servers = *servers
         (servers ? servers.to_array : Server.all).each{ |s| s.send_synth_def( self ) } 
         self
       end
       
       private
-      def collect_control_names( function, values, rates ) #:nodoc:
+      def collect_control_names function, values, rates #:nodoc:
         return [] if (names = function.argument_names).empty?
         names.zip( values, rates ).collect_with_index{ |array, index| ControlName.new *(array << index)  }
       end
       
-      def build_controls( control_names ) #:nodoc:
+      def build_controls control_names #:nodoc:
         # control_names.select{ |c| c.rate == :noncontrol }.sort_by{ |c| c.control_name.index } + 
         [:scalar, :trigger, :control].collect do |rate| 
           same_rate_array = control_names.select{ |control| control.rate == rate }
@@ -99,13 +99,13 @@ module Scruby
         end.flatten.compact.sort_by{ |proxy| proxy.control_name.index }
       end
 
-      def build_ugen_graph( function, control_names ) #:nodoc:
+      def build_ugen_graph function, control_names #:nodoc:
         Ugen.synthdef = self
-        function.call *build_controls( control_names)
+        function.call *build_controls(control_names)
         Ugen.synthdef = nil
       end
       
-      def collect_constants( children ) #:nodoc:
+      def collect_constants children #:nodoc:
         children.send( :collect_constants ).flatten.compact.uniq
       end
       
