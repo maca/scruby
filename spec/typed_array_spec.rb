@@ -15,7 +15,7 @@ describe TypedArray do
     objs = (0..3).map{ Type.new }
     ta   = TypedArray.new( Type, objs )
     ta.type.should == Type
-    ta.should == objs
+    ta.should      == objs
   end
   
   it "should instantiate with an array" do
@@ -34,8 +34,8 @@ describe TypedArray do
   end
   
   it "+ success" do
-    ta = TypedArray.new( Type )
-    o = Type.new
+    ta  = TypedArray.new( Type )
+    o   = Type.new
     sum = ta + [o]
     # sum.should be_instance_of(TypedArray)
     sum.should == [o]

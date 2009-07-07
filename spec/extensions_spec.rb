@@ -1,44 +1,62 @@
 require File.join( File.expand_path(File.dirname(__FILE__)),"helper")
 
-require "#{SCRUBY_DIR}/audio/ugens/ugen_operations"
 require "#{SCRUBY_DIR}/extensions"
 
 describe Numeric do
-  
   before :all do
-    @bin_op = mock('binop')
-    BinaryOpUGen = mock( 'BinaryOpUGen', :new => @bin_on )
-    @ugen = mock( 'ugen' )
-    Ugen = mock( 'Ugen', :new => @ugen)
-  end
+      @bin_op = mock 'binop'
+      ::BinaryOpUGen = mock 'BinaryOpUGen', :new => @bin_on
+      @ugen   = mock 'ugen'
+      ::Ugen  = mock 'Ugen', :new => @ugen
+    end
   
   it "shoud have an scalar rate" do
-    1.rate.should eql(:scalar)
+      1.rate.should == :scalar
+    end
+    
+   it "should have an scalar rate" do
+     100.0.rate.should == :scalar
+   end
+   
+   it "sum as usual" do
+     (100 + 100).should == 200 
+   end
+   
+   it "should #collect_constants" do
+     1.send( :collect_constants ).should   == 1
+     1.5.send( :collect_constants ).should == 1.5
+   end
+   
+   it "should spec #input_specs" do
+     synthdef = mock('synthdef', :constants => [200.0,1,3, 400.0] )
+     200.0.send( :input_specs, synthdef ).should == [-1,0]
+     3.send( :input_specs, synthdef ).should == [-1,2]
+     400.0.send( :input_specs, synthdef ).should == [-1,3]
+   end
+   
+   it "should spec encode"  
+end
+
+
+describe Proc do
+  describe "#arguments" do
+    
+    it do
+      Proc.new{}.should respond_to( :arguments )
+    end
+    
+    it "should get empty array if proc has no args" do
+      Proc.new{}.arguments.should eql( [] )
+    end
+    
+    it "should get one argument name" do
+      Proc.new{ |arg|  }.arguments.should eql( [ :arg ] )
+    end
+    
+    it "should get arg names with several args" do
+      Proc.new{ |arg, arg2, arg3|  }.arguments.should eql( [ :arg, :arg2, :arg3 ] )
+    end
   end
-  
-  it "should have an scalar rate" do
-    100.0.rate.should == :scalar
-  end
-  
-  it "sum as usual" do
-    (100 + 100).should == 200 
-  end
-  
-  it "should #collect_constants" do
-    1.send( :collect_constants ).should == 1
-    1.5.send( :collect_constants ).should == 1.5
-  end
-  
-  it "should spec #input_specs" do
-    synthdef = mock('synthdef', :constants => [200.0,1,3, 400.0] )
-    200.0.send( :input_specs, synthdef ).should == [-1,0]
-    3.send( :input_specs, synthdef ).should == [-1,2]
-    400.0.send( :input_specs, synthdef ).should == [-1,3]
-  end
-  
-  it "should spec encode"
-  
-  
 end
 
 describe Array, "monkey patches" do
@@ -58,42 +76,12 @@ describe Array, "monkey patches" do
     
     it "should wrap and zip" do
       [:a,:b,:c].wrap_and_zip([1]).flatten.should == [:a,1,:b,1,:c,1]
-      
-       [0.5, 0.5].wrap_and_zip([3],[5]).flatten.should == [0.5,3,5,0.5,3,5]
-       [0.01, 1.0].wrap_and_zip([-4.0],[5]).flatten.should ==  [0.01, -4.0, 5, 1.0, -4.0, 5]
-    end
-    
-    it "should sum with Ugen"
-    it "should collect constants"
-    
-    
-  end
-end
-
-describe Proc do
-  describe "#argument_names" do
-    
-    it do
-      Proc.new{}.should respond_to( :argument_names )
-    end
-    
-    it "should get empty array if proc has no args" do
-      Proc.new{}.argument_names.should eql( [] )
-    end
-    
-    it "should get one argument name" do
-      Proc.new{ |arg|  }.argument_names.should eql( [ :arg ] )
-    end
-    
-    it "should get arg names with several args" do
-      Proc.new{ |arg, arg2, arg3|  }.argument_names.should eql( [ :arg, :arg2, :arg3 ] )
+      [0.5, 0.5].wrap_and_zip([3],[5]).flatten.should == [0.5,3,5,0.5,3,5]
+      [0.01, 1.0].wrap_and_zip([-4.0],[5]).flatten.should ==  [0.01, -4.0, 5, 1.0, -4.0, 5]
     end
   end
-end
-
-describe Array do
+  
   describe "#wrap_to" do
-    
     it do
       Array.new.should respond_to( :wrap_to )
     end
@@ -110,14 +98,13 @@ describe Array do
       a = [1,2,3,4]
       a.wrap_to( 4 ).should == a
     end
-    
-    it "should etc..."
-    
   end
+  
+  it "should sum with Ugen"
+  it "should collect constants"
 end
 
 describe String do
-  
   it "should encode" do
     "SinOsc".encode.should == [6, 83, 105, 110, 79, 115, 99].pack('C*')
   end

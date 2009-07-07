@@ -12,7 +12,7 @@ include Ugens
 
 class SinOsc < Ugen
    #not interested in muladd
-  def self.ar freq=440.0, phase=0.0
+  def self.ar freq = 440.0, phase = 0.0
     new :audio, freq, phase
   end
 end
@@ -20,8 +20,8 @@ end
 describe In, Out, 'instantiation' do
   
   it "should not instantiate with #new" do
-    lambda { In.new(:audio, 1, 2) }.should raise_error
-    lambda { Out.new(:audio, 1, 2) }.should raise_error
+    lambda { In.new :audio, 1, 2 }.should raise_error
+    lambda { Out.new :audio, 1, 2 }.should raise_error
   end
 end
 
@@ -35,7 +35,7 @@ describe In do
     @proxies = (1..10).map{ @proxy }
     OutputProxy.stub!(:new).and_return( @proxy )
     
-    @ar = In.ar( 3 )
+    @ar = In.ar 3
   end
   
   it "respond to #kr and #ar "do
@@ -65,47 +65,49 @@ end
 describe Out do
   
   before do
-    @sdef = mock( 'sdef', :children => [], :constants => [400, 0] )
-    Ugen.should_receive( :synthdef ).at_least( :once ).and_return( @sdef )
+    @sdef = mock 'sdef', :children => [], :constants => [400, 0]
+    Ugen.should_receive( :synthdef ).at_least( :once ).and_return @sdef
     
   end               
   
   it "should accept one ugen" do
-    @ugen1 = Ugen.new( :audio )
+    @ugen1 = Ugen.new :audio
     
     Out.kr( 1, @ugen1 ).should == 0.0
     
     @sdef.children.should have(2).ugens
     
     out = @sdef.children.last
-    out.rate.should   == :control
-    out.inputs.should == [1, @ugen1]
+    out.rate.should     == :control
+    out.inputs.should   == [1, @ugen1]
     out.channels.should == []
-  end       
+  end
+  
+  it "should accept several inputs from array" do
+    @ugen1 = Ugen.new :audio
+    @ugen2 = Ugen.new :audio
+    @ugen3 = Ugen.new :audio
+    
+    Out.kr 1, [@ugen1, @ugen2, @ugen3]
+    @sdef.children.should have(4).ugens
+    
+    out = @sdef.children.last
+    out.inputs.should == [1, @ugen1, @ugen2, @ugen3]
+  end
   
   it "should accept several inputs" do
-    @ugen1 = Ugen.new( :audio )
-    @ugen2 = Ugen.new( :audio )
-    @ugen3 = Ugen.new( :audio )
+    @ugen1 = Ugen.new :audio
+    @ugen2 = Ugen.new :audio
+    @ugen3 = Ugen.new :audio
     
-    Out.kr( 1, @ugen1, @ugen2, @ugen3 )
+    Out.kr 1, @ugen1, @ugen2, @ugen3
     @sdef.children.should have(4).ugens
     
     out = @sdef.children.last
     out.inputs.should == [1, @ugen1, @ugen2, @ugen3]
   end    
   
-  it "should accept several inputs from array" do
-    @ugen1 = Ugen.new( :audio )
-    @ugen2 = Ugen.new( :audio )
-    @ugen3 = Ugen.new( :audio )
-    
-    Out.kr( 1, [@ugen1, @ugen2, @ugen3] )
-    @sdef.children.should have(4).ugens
-    
-    out = @sdef.children.last
-    out.inputs.should == [1, @ugen1, @ugen2, @ugen3]
-  end
+
 
   it "should validate rate"
   it "should substitute zero with silence"

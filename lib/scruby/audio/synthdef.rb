@@ -37,12 +37,12 @@ module Scruby
         @control_names = collect_control_names block, values, rates
         build_ugen_graph block, @control_names
         @constants = collect_constants @children
-        
-        @variants = [] #stub!!!
-        
+
+        @variants  = [] #stub!!!
+
         warn( 'A SynthDef without a block is useless' ) unless block_given?
       end
-      
+
       # Returns a string representing the encoded SynthDef in a way scsynth can interpret and generate.
       # This method is called by a server instance when sending the synthdef via OSC.
       #
@@ -51,20 +51,20 @@ module Scruby
       def encode
         controls = @control_names.reject { |cn| cn.non_control? }
         encoded_controls = [controls.size].pack('n') + controls.collect{ |c| c.name.encode + [c.index].pack('n') }.join
-        
+
         init_stream + name.encode + constants.encode_floats + values.flatten.encode_floats + encoded_controls +
-          [children.size].pack('n') + children.collect{ |u| u.encode }.join('') +
-          [@variants.size].pack('n') #stub!!!
+        [children.size].pack('n') + children.collect{ |u| u.encode }.join('') +
+        [@variants.size].pack('n') #stub!!!
       end
-      
+
       def init_stream file_version = 1, number_of_synths = 1 #:nodoc:
         'SCgf' + [file_version].pack('N') + [number_of_synths].pack('n')
       end
-      
+
       def values #:nodoc:
         @control_names.collect{ |control| control.value }
       end
-      
+
       alias :send_msg :send
       # Sends itself to the given servers. One or more servers or an array of servers can be passed.
       # If no arguments are given the synthdef gets sent to all instantiated servers
@@ -80,35 +80,36 @@ module Scruby
       #   # this synthdef is sent to both s and r
       #
       def send *servers
-        servers = servers.first if servers.first.kind_of? Array if servers.size == 1
-        (servers.empty? ? Server.all : servers.to_array ).each{ |s| s.send_synth_def( self ) } 
+        servers.peel!
+        (servers.empty? ? Server.all : servers).each{ |s| s.send_synth_def( self ) } 
         self
       end
-      
+
       private
-      def collect_control_names function, values, rates #:nodoc:
-        return [] if (names = function.argument_names).empty?
+      #:nodoc:
+      def collect_control_names function, values, rates
+        names = function.arguments
         names.zip( values, rates ).collect_with_index{ |array, index| ControlName.new *(array << index)  }
       end
-      
-      def build_controls control_names #:nodoc:
+      #:nodoc:
+      def build_controls control_names
         # control_names.select{ |c| c.rate == :noncontrol }.sort_by{ |c| c.control_name.index } + 
         [:scalar, :trigger, :control].collect do |rate| 
           same_rate_array = control_names.select{ |control| control.rate == rate }
           Control.and_proxies_from( same_rate_array ) unless same_rate_array.empty?
         end.flatten.compact.sort_by{ |proxy| proxy.control_name.index }
       end
-
-      def build_ugen_graph function, control_names #:nodoc:
+      #:nodoc:
+      def build_ugen_graph function, control_names
         Ugen.synthdef = self
         function.call *build_controls(control_names)
         Ugen.synthdef = nil
       end
-      
-      def collect_constants children #:nodoc:
+      #:nodoc:
+      def collect_constants children
         children.send( :collect_constants ).flatten.compact.uniq
       end
-      
+
     end
   end
 end

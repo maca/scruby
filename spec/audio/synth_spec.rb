@@ -1,5 +1,6 @@
 require File.join( File.expand_path(File.dirname(__FILE__)), '..',"helper")
 
+require "#{SCRUBY_DIR}/extensions" 
 require "#{SCRUBY_DIR}/typed_array" 
 require "#{SCRUBY_DIR}/audio/node"
 require "#{SCRUBY_DIR}/audio/synth"
@@ -15,12 +16,12 @@ describe Synth do
   before do
     Node.reset!
     @servers = (0..3).map{ s = mock( 'server'); s.stub!(:send); s }
-    @synth = Synth.new( :synth, :attack => 10, :servers => @servers )
+    @synth = Synth.new :synth, :attack => 10, :servers => @servers
   end
 
   it "should initialize" do
-    s = Synth.new( 'synth', :attack => 10, :servers => @servers )
-    s.name.should == 'synth'
+    s = Synth.new 'synth', :attack => 10, :servers => @servers
+    s.name.should    == 'synth'
     s.servers.should == @servers
   end
   

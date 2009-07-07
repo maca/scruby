@@ -24,6 +24,7 @@ describe UgenOperations, 'loading module' do
   end
   
   before do
+    Object.remove_const Klass rescue nil
     class Klass; end
   end
   
@@ -44,7 +45,7 @@ describe UgenOperations, 'loading module' do
       Klass.included_modules.should include( UgenOperations::BinaryOperations )
     end
     
-    it do
+    it 'should respond to +' do
       Klass.send( :include, UgenOperations )
       Klass.new.should respond_to( :+ )
     end
@@ -54,7 +55,7 @@ describe UgenOperations, 'loading module' do
       (Klass.new + @ugen).should be_instance_of(BinaryOpUGen)
     end
     
-    it do
+    it 'should sum integer' do
       Klass.send( :include, UgenOperations )
       lambda{ Klass.new + 1 }.should raise_error(ArgumentError)
     end

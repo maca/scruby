@@ -20,6 +20,8 @@ require 'arguments'
 require 'rosc'
 require 'yaml'
 
+require 'methopara' if RUBY_VERSION.to_f >= 1.9 
+
 
 $:.unshift(File.dirname(__FILE__)) unless $:.include?(File.dirname(__FILE__)) || $:.include?(File.expand_path(File.dirname(__FILE__)))
 
@@ -30,6 +32,7 @@ end
 SCRUBY_DIR = File.join( File.expand_path(File.dirname(__FILE__) ), 'scruby' )
 
 require "scruby/typed_array"
+require "scruby/extensions"
 
 require "scruby/audio/ugens/ugen_operations"
 require "scruby/audio/ugens/ugen"
@@ -42,10 +45,8 @@ require "scruby/audio/ugens/ugen"
 require "scruby/audio/ugens/ugens"
 require "scruby/audio/control_name"
 require "scruby/audio/synthdef"
-require "scruby/extensions"
 
 require "scruby/audio/server"
-
 require "scruby/audio/env"
 require "scruby/audio/ugens/env_gen"
 

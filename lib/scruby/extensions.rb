@@ -40,16 +40,7 @@ class Numeric
   end
 end
 
-class Fixnum
-  include Scruby::Audio::Ugens::UgenOperations
-end
-
-class Float
-  include Scruby::Audio::Ugens::UgenOperations
-end
-
 class Array
-  include Scruby::Audio::Ugens::UgenOperations
 
   #collect with index
   def collect_with_index
@@ -85,7 +76,15 @@ class Array
   def muladd( mul, add ) #:nodoc:
     self.collect{ |u| MulAdd.new( u, mul, add ) }
   end
-
+  
+  def peel!
+    self.replace self.first if self.first.kind_of? Array if self.size == 1
+  end
+  
+  def peel
+    self.dup.peel! || self
+  end
+  
   private
   def collect_constants #:nodoc:
     self.collect{ |e| e.send( :collect_constants )  }
@@ -94,7 +93,7 @@ end
 
 class Proc
   # Returns an array of symbols corresponding to the argument names
-  def argument_names
+  def arguments
     case self.arity
     when -1..0 then []
     when 1 then self.to_sexp.assoc( :dasgn_curr )[1].to_array

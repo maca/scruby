@@ -24,8 +24,8 @@ describe SynthDef, 'instantiation' do
   
   describe 'initialize' do
     before do
-    @sdef = SynthDef.new( :name )
-    @sdef.stub!( :collect_control_names )
+    @sdef = SynthDef.new :name
+    @sdef.stub! :collect_control_names
   end
 
     it "should instantiate" do
@@ -46,17 +46,17 @@ describe SynthDef, 'instantiation' do
   end
   
     it "should accept name and set it as an attribute as string" do
-    @sdef.name.should eql( 'name' )
+    @sdef.name.should == 'name'
   end
 
     it "should initialize with an empty array for children" do
-    @sdef.children.should eql( [] )
+    @sdef.children.should == []
   end
   end
   
   describe "options" do
     before do
-      @options = mock( Hash )
+      @options = mock Hash
     end
   
     it "should accept options" do
@@ -64,8 +64,8 @@ describe SynthDef, 'instantiation' do
     end
     
     it "should use options" do
-      @options.should_receive(:delete).with( :values )
-      @options.should_receive(:delete).with( :rates  )
+      @options.should_receive(:delete).with :values
+      @options.should_receive(:delete).with :rates
       
       sdef = SynthDef.new( :hola, @options ){}
     end
@@ -78,39 +78,39 @@ describe SynthDef, 'instantiation' do
   describe '#collect_control_names' do
     before do
       @sdef     = SynthDef.new( :name ){}
-      @function = mock( "grap_function", :argument_names => [:arg1, :arg2, :arg3] )
+      @function = mock "grap_function", :arguments => [:arg1, :arg2, :arg3]
     end
     
     it "should get the argument names for the provided function" do
-      @function.should_receive( :argument_names ).and_return( [] )
-      @sdef.send_msg( :collect_control_names, @function, [], [] )
+      @function.should_receive( :arguments ).and_return []
+      @sdef.send_msg :collect_control_names, @function, [], []
     end
     
     it "should return empty array if the names are empty" do
-      @function.should_receive( :argument_names ).and_return( [] )
-      @sdef.send_msg( :collect_control_names, @function, [], [] ).should eql([])
+      @function.should_receive( :arguments ).and_return []
+      @sdef.send_msg( :collect_control_names, @function, [], [] ).should == []
     end
     
     it "should not return empty array if the names are not empty" do
-      @sdef.send_msg( :collect_control_names, @function, [], [] ).should_not eql([])
+      @sdef.send_msg( :collect_control_names, @function, [], [] ).should_not == []
     end
     
     it "should instantiate and return a ControlName for each function name" do
-      c_name = mock( :control_name )
-      ControlName.should_receive( :new ).at_most(3).times.and_return( c_name )
-      control_names = @sdef.send_msg( :collect_control_names, @function, [1,2,3], [] )
-      control_names.size.should eql(3)
+      c_name = mock :control_name
+      ControlName.should_receive( :new ).at_most(3).times.and_return c_name
+      control_names = @sdef.send_msg :collect_control_names, @function, [1,2,3], []
+      control_names.size.should == 3
       control_names.collect { |e| e.should == c_name }
     end
     
     it "should pass the argument value, the argument index and the rate(if provided) to the ControlName at instantiation" do
-      @sdef.send_msg( :collect_control_names, @function, [:a,:b,:c], [] ).should eql( [[:arg1, :a, nil, 0], [:arg2, :b, nil, 1], [:arg3, :c, nil, 2]])
-      @sdef.send_msg( :collect_control_names, @function, [:a,:b,:c], [:ir, :tr, :ir] ).should eql( [[:arg1, :a, :ir, 0], [:arg2, :b, :tr, 1], [:arg3, :c, :ir, 2]])
+      @sdef.send_msg( :collect_control_names, @function, [:a,:b,:c], [] ).should == [[:arg1, :a, nil, 0], [:arg2, :b, nil, 1], [:arg3, :c, nil, 2]]
+      @sdef.send_msg( :collect_control_names, @function, [:a,:b,:c], [:ir, :tr, :ir] ).should == [[:arg1, :a, :ir, 0], [:arg2, :b, :tr, 1], [:arg3, :c, :ir, 2]]
     end
     
     it "should not return more elements than the function argument number" do
-      c_name = mock( :control_name )
-      ControlName.should_receive( :new ).at_most(3).times.and_return( c_name )
+      c_name = mock :control_name
+      ControlName.should_receive( :new ).at_most(3).times.and_return c_name
       @sdef.send_msg( :collect_control_names, @function, [:a, :b, :c, :d, :e], [] ).should have( 3 ).elements
     end
   end
@@ -118,21 +118,21 @@ describe SynthDef, 'instantiation' do
   describe '#build_controls' do
     
     before :all do
-      Object.send(:remove_const, 'ControlName') 
+      Object.send :remove_const, 'ControlName'
       ::RATES = [:scalar, :trigger, :control]
       require "#{SCRUBY_DIR}/audio/control_name"
     end
     
     before do
       @sdef     = SynthDef.new( :name ){}
-      @function = mock( "grap_function", :argument_names => [:arg1, :arg2, :arg3, :arg4] )
+      @function = mock "grap_function", :arguments => [:arg1, :arg2, :arg3, :arg4]
       @control_names = Array.new( rand(10)+15 ) { |i| ControlName.new "arg#{i+1}".to_sym, i, RATES[ rand(3) ], i }
     end
 
     it "should call Control#and_proxies.." do
         rates = @control_names.collect{ |c| c.rate }.uniq
         Control.should_receive(:and_proxies_from).exactly( rates.size ).times
-        @sdef.send_msg( :build_controls, @control_names )
+        @sdef.send_msg :build_controls, @control_names
     end
     
     it "should call Control#and_proxies.. with args" do
@@ -190,8 +190,8 @@ describe "encoding" do
 
   before :all do
     class ::SinOsc < Ugen
-      def self.ar( freq=440.0, phase=0.0 ) #not interested in muladd
-        new(:audio, freq, phase)
+      def self.ar freq=440.0, phase=0.0 #not interested in muladd
+        new :audio, freq, phase
       end
     end
   end

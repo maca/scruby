@@ -1,24 +1,6 @@
 require File.join( File.expand_path(File.dirname(__FILE__)), '..',"helper")
 
-require 'osc'
-
-require "#{SCRUBY_DIR}/audio/ugens/ugen_operations"
-require "#{SCRUBY_DIR}/audio/ugens/ugen"
-require "#{SCRUBY_DIR}/audio/ugens/multi_out_ugens"
-require "#{SCRUBY_DIR}/audio/ugens/in_out"
-
-require "#{SCRUBY_DIR}/audio/ugens/operation_ugens"
-require "#{SCRUBY_DIR}/audio/ugens/ugen"
-
-require "#{SCRUBY_DIR}/audio/ugens/ugens"
-require "#{SCRUBY_DIR}/audio/control_name"
-require "#{SCRUBY_DIR}/audio/synthdef"
-require "#{SCRUBY_DIR}/extensions"
-
-require "#{SCRUBY_DIR}/audio/server"
-
-require "#{SCRUBY_DIR}/audio/env"
-require "#{SCRUBY_DIR}/audio/ugens/env_gen"
+require "#{SCRUBY_DIR}/../scruby"
 
 include Scruby
 include Audio
@@ -28,7 +10,7 @@ include OperationUgens
 describe "synthdef examples" do
 
   before :all do
-    @sdef = SynthDef.new(:hola){ |a, b| SinOsc.kr( a ) + SinOsc.kr( b ) } 
+    @sdef = SynthDef.new :hola do |a, b| SinOsc.kr( a ) + SinOsc.kr( b ) end
     @expected = [ 83, 67, 103, 102, 0, 0, 0, 1, 0, 1, 4, 104, 111, 108, 97, 0, 1, 0, 0, 0, 0, 0, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 1, 97, 0, 0, 1, 98, 0, 1, 0, 4, 7, 67, 111, 110, 116, 114, 111, 108, 1, 0, 0, 0, 2, 0, 0, 1, 1, 6, 83, 105, 110, 79, 115, 99, 1, 0, 2, 0, 1, 0, 0, 0, 0, 0, 0, -1, -1, 0, 0, 1, 6, 83, 105, 110, 79, 115, 99, 1, 0, 2, 0, 1, 0, 0, 0, 0, 0, 1, -1, -1, 0, 0, 1, 12, 66, 105, 110, 97, 114, 121, 79, 112, 85, 71, 101, 110, 1, 0, 2, 0, 1, 0, 0, 0, 1, 0, 0, 0, 2, 0, 0, 1, 0, 0 ].pack('C*')
   end
 

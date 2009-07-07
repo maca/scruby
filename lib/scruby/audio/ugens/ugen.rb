@@ -117,11 +117,13 @@ module Scruby
         end
 
         class << self
-          def new rate, *inputs #:nodoc:
+          #:nodoc:
+          def new rate, *inputs 
             raise ArgumentError.new( "#{rate} not a defined rate") unless RATES.include?( rate.to_sym )
-            inputs.each{ |i| raise ArgumentError.new( "#{i} is not a valid ugen input") unless i.valid_ugen_input? }
 
-            inputs = inputs.first if inputs.first.kind_of? Array if inputs.size == 1
+            inputs.each{ |i| raise ArgumentError.new( "#{i} is not a valid ugen input") unless i.valid_ugen_input? }
+            inputs.peel!
+
             size   = inputs.select{ |a| a.kind_of? Array }.map{ |a| a.size }.max || 1 #get the size of the largest array element if present
             inputs.flatten! if size == 1 #if there is one or more arrays with just one element flatten the input array
             return instantiate( rate, *inputs ) unless size > 1 #return an Ugen if no array was passed as an input
@@ -129,14 +131,16 @@ module Scruby
             inputs = inputs.map{ |input| input.instance_of?( Array ) ? input.wrap_to( size ) : Array.new( size, input ) }.transpose
             inputs.map{ |new_inputs| new rate, *new_inputs }
           end
-
-          def instantiate *args #:nodoc:
+          
+          #:nodoc:
+          def instantiate *args 
             obj = allocate        
             obj.__send__ :initialize, *args
             obj
           end
 
-          def synthdef #:nodoc:
+          #:nodoc:
+          def synthdef
             @@synthdef
           end
 

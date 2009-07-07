@@ -52,3 +52,15 @@ module Scruby
     end
   end
 end
+
+class Fixnum
+  include Scruby::Audio::Ugens::UgenOperations
+end
+
+class Float
+  include Scruby::Audio::Ugens::UgenOperations
+end
+
+class Array
+  include Scruby::Audio::Ugens::UgenOperations
+end

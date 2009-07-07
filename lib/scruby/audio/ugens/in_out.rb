@@ -3,7 +3,8 @@ module Scruby
     module Ugens
 
       class In < MultiOutUgen
-        def initialize rate, channels, bus #:nodoc:
+        #:nodoc:
+        def initialize rate, channels, bus 
           super rate, *(0...channels).map{ |i| OutputProxy.new rate, self, i }
           @inputs = [bus]
         end
@@ -30,19 +31,19 @@ module Scruby
           @channels = []
         end
         
-        def output_specs #:nodoc:
-          []
-        end
+        #:nodoc:
+        def output_specs; []; end
+        
         class << self
           # New Out with :audio rate, inputs should be valid Ugen inputs or Ugens, arguments can be passed as an options hash or in the given order
           def ar bus, *inputs
-            inputs = *inputs
+            inputs.peel!
             new :audio, bus, *inputs; 0.0 #Out has no output
           end
 
           # New Out with :control rate, inputs should be valid Ugen inputs or Ugens, arguments can be passed as an options hash or in the given order
           def kr bus, *inputs
-            inputs = *inputs
+            inputs.peel!
             new :control, bus, *inputs; 0.0 #Out has no output
           end
           

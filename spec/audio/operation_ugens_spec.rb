@@ -12,13 +12,13 @@ include Ugens
 include OperationUgens
 
 describe UnaryOpUgen do
-  ::RATES = [ :scalar, :demand, :control, :audio ]
+  ::RATES = :scalar, :demand, :control, :audio
   
   before do
-    @scalar  = mock( 'ugen', :rate => :scalar,  :valid_ugen_input? => true ) 
-    @demand  = mock( 'ugen', :rate => :demand,  :valid_ugen_input? => true ) 
-    @control = mock( 'ugen', :rate => :control, :valid_ugen_input? => true ) 
-    @audio   = mock( 'ugen', :rate => :audio,   :valid_ugen_input? => true ) 
+    @scalar  = mock 'ugen', :rate => :scalar,  :valid_ugen_input? => true
+    @demand  = mock 'ugen', :rate => :demand,  :valid_ugen_input? => true
+    @control = mock 'ugen', :rate => :control, :valid_ugen_input? => true
+    @audio   = mock 'ugen', :rate => :audio,   :valid_ugen_input? => true
   end
   
   describe UnaryOpUgen do
@@ -28,14 +28,14 @@ describe UnaryOpUgen do
     end
     
     it "should return special index" do
-      UnaryOpUgen.new( :neg, @audio ).special_index.should == 0
-      UnaryOpUgen.new( :bitNot, @audio ).special_index.should == 4
-      UnaryOpUgen.new( :abs, @audio ).special_index.should == 5
+      UnaryOpUgen.new( :neg, @audio ).special_index.should     == 0
+      UnaryOpUgen.new( :bitNot, @audio ).special_index.should  == 4
+      UnaryOpUgen.new( :abs, @audio ).special_index.should     == 5
       UnaryOpUgen.new( :asFloat, @audio ).special_index.should == 6
     end
   
     it "should accept just one input" do
-      lambda{ UnaryOpUgen.new(:neg, @audio, @demand) }.should raise_error( ArgumentError )
+      lambda{ UnaryOpUgen.new(:neg, @audio, @demand) }.should raise_error ArgumentError
     end
   
     it "should just accept defined operators" # do
@@ -43,8 +43,8 @@ describe UnaryOpUgen do
      #  end
   
     it "should get max rate" do
-      UnaryOpUgen.send(:get_rate, @scalar, @demand ).should == :demand
-      UnaryOpUgen.send(:get_rate, @scalar, @demand, @audio ).should == :audio
+      UnaryOpUgen.send(:get_rate, @scalar, @demand ).should                       == :demand
+      UnaryOpUgen.send(:get_rate, @scalar, @demand, @audio ).should               == :audio
       UnaryOpUgen.send(:get_rate, @scalar, [@demand, [@control, @audio]] ).should == :audio
     end
   
@@ -53,7 +53,7 @@ describe UnaryOpUgen do
     end
   
     it "should set rate" do
-      UnaryOpUgen.new(:neg, @audio).rate.should == :audio
+      UnaryOpUgen.new(:neg, @audio).rate.should  == :audio
       UnaryOpUgen.new(:neg, @scalar).rate.should == :scalar
     end
   
@@ -70,10 +70,10 @@ describe UnaryOpUgen do
     end
     
     it "should return special index" do
-      BinaryOpUGen.new( :+, @audio, @audio ).special_index.should eql(0)
-      BinaryOpUGen.new( :-, @audio, @audio ).special_index.should eql(1)
-      BinaryOpUGen.new( :*, @audio, @audio ).special_index.should eql(2)
-      BinaryOpUGen.new( :/, @audio, @audio ).special_index.should eql(4)
+      BinaryOpUGen.new( :+, @audio, @audio ).special_index.should == 0
+      BinaryOpUGen.new( :-, @audio, @audio ).special_index.should == 1
+      BinaryOpUGen.new( :*, @audio, @audio ).special_index.should == 2
+      BinaryOpUGen.new( :/, @audio, @audio ).special_index.should == 4
     end
   
     it "should accept exactly two inputs" do
@@ -107,7 +107,7 @@ describe UnaryOpUgen do
     it "should set correct inputs when provided an array" do
       arr = BinaryOpUGen.new(:+, @control, [@audio, @scalar] )
       arr.first.inputs.should == [@control, @audio]
-      arr.last.inputs.should == [@control, @scalar]
+      arr.last.inputs.should  == [@control, @scalar]
     end
     
     it "should create the correct number of operations" do
@@ -129,14 +129,14 @@ describe UnaryOpUgen do
     it "should accept numbers as inputs" do
       arr = BinaryOpUGen.new(:+, @control, [100, 200.0] )
       arr.first.inputs.should == [@control, 100]
-      arr.last.inputs.should == [@control, 200.0]
+      arr.last.inputs.should  == [@control, 200.0]
       BinaryOpUGen.new(:+, 100, @control ).inputs.should == [100, @control]
     end
     
     it "should accept array as input" do
       arr = BinaryOpUGen.new(:+, [@audio, @scalar], @control  )
       arr.first.inputs.should == [@audio, @control]
-      arr.last.inputs.should == [@scalar, @control]
+      arr.last.inputs.should  == [@scalar, @control]
     end
     
     it "should accept numeric arg as first arg" do
@@ -151,7 +151,7 @@ describe UnaryOpUgen do
     end
 
     it do
-      MulAdd.new( @audio, 0.5, 0.5 ).rate.should == :audio
+      MulAdd.new( @audio, 0.5, 0.5 ).rate.should   == :audio
     end
     
     it do
@@ -159,10 +159,10 @@ describe UnaryOpUgen do
     end
     
     it "should not be instance of MulAdd" do
-      unary_op = mock('neg')
-      mult     = mock('mult')
-      minus    = mock('minus')
-      plus     = mock('plus')
+      unary_op = mock 'neg'
+      mult     = mock 'mult'
+      minus    = mock 'minus'
+      plus     = mock 'plus'
       
       @audio.should_receive( :neg ).and_return( unary_op )
       @audio.should_receive( :* ).and_return( mult )
@@ -181,8 +181,8 @@ describe UnaryOpUgen do
       MulAdd.new( @audio, @audio, 1 ).should be_instance_of(MulAdd)
       MulAdd.new( @audio, @audio, @scalar ).should be_instance_of(MulAdd)
       
-      bin_op_ugen = mock('binary op ugen')
-      @audio.stub!( :* ).and_return( bin_op_ugen )
+      bin_op_ugen = mock 'binary op ugen'
+      @audio.stub!( :* ).and_return bin_op_ugen
       MulAdd.new( @audio, @audio, 0 ).should == bin_op_ugen
     end
         

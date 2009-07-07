@@ -1,6 +1,6 @@
 require File.join( File.expand_path(File.dirname(__FILE__)), '..',"helper")
 
-
+require "#{SCRUBY_DIR}/extensions" 
 require "#{SCRUBY_DIR}/typed_array" 
 require "#{SCRUBY_DIR}/audio/node" 
 

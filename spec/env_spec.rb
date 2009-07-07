@@ -1,14 +1,15 @@
 require File.join( File.expand_path(File.dirname(__FILE__)),"helper")
 
 require "#{SCRUBY_DIR}/audio/ugens/ugen_operations"
+require "#{SCRUBY_DIR}/audio/ugens/ugen"
 require "#{SCRUBY_DIR}/extensions"
 require "#{SCRUBY_DIR}/audio/env"
 
+include Scruby
 
-describe Env do
-  
-  it "Env.new([0,1,0], [0.5, 1])" do
-    env = Env.new([0,1,0], [0.5, 1])
+describe Env do  
+  it "Env.new [0,1,0], [0.5, 1]" do
+    env = Env.new [0,1,0], [0.5, 1]
     env.times.should         == [0.5, 1]
     env.levels.should        == [ 0, 1, 0 ]
     env.shape_numbers.should == [1]
@@ -16,7 +17,7 @@ describe Env do
   end
   
   it do
-    env = Env.new([0,1,0], [0.5, 1])
+    env = Env.new [0,1,0], [0.5, 1]
     env.to_array.collect{ |i| i.to_f }.should == [ 0, 2, -99, -99, 1, 0.5, 1, 0, 0, 1, 1, 0 ].collect{ |i| i.to_f }
   end
 
@@ -27,7 +28,6 @@ describe Env do
   it "#perc" do
     perc = Env.perc
     perc.to_array.collect{ |i| i.to_f }.should == [ 0, 2, -99, -99, 1, 0.01, 5, -4, 0, 1, 5, -4 ].collect{ |i| i.to_f }
-    p perc.to_array
   end
 
   it '#sine' do

@@ -4,9 +4,10 @@ module Scruby
     attr_reader :name, :servers
 
     def initialize name, *servers
-      @name = name.to_s
-      servers  = *servers
-      @servers = servers ? TypedArray.new( Server, [*servers] ) : Server.all
+      servers.peel!
+      servers.compact!
+      @name    = name.to_s
+      @servers = servers.empty? ? Server.all : TypedArray.new( Server, servers )
     end
 
     def id

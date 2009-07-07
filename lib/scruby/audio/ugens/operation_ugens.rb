@@ -15,10 +15,11 @@ module Scruby
             private
             #:nodoc:
             def set_operator_for input, operator 
-              input.instance_of? Array ? input.map{ |element| set_operator_for element, operator  } : input.operator = operator
+              input.kind_of?(Array) ? input.map{ |element| set_operator_for element, operator  } : input.operator = operator
             end
 
-            def get_rate( *inputs ) #:nodoc:
+            #:nodoc:
+            def get_rate *inputs
               max_index = inputs.flatten.collect{ |ugen| Ugen::RATES.index ugen.rate }.max
               Ugen::RATES[max_index]
             end
