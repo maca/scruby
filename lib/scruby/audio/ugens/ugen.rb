@@ -60,8 +60,6 @@ module Scruby
         E_RATES = [ :scalar, :control, :audio, :demand ]
         @@synthdef = nil
 
-        include UgenOperations
-
         def initialize rate, *inputs
           @rate, @inputs = rate, inputs.compact
           
@@ -82,9 +80,6 @@ module Scruby
           "#{self.class.to_s.split('::').last}"
         end
         
-        # True
-        def ugen?; true; end
-
         def encode
           self.class.to_s.split('::').last.encode + [ E_RATES.index(rate) ].pack('w') + 
             [ inputs.size, channels.size, special_index, collect_input_specs ].flatten.pack('n*') + 

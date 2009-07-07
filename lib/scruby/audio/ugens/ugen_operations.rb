@@ -12,55 +12,51 @@ module Scruby
       # neg, bitNot, abs, asFloat, ceil, floor, frac, sign, squared, cubed, sqrt, exp, reciprocal, midicps, cpsmidi, midiratio, ratiomidi, dbamp, ampdb, octcps, cpsoct, log, log2, log10, sin, cos, tam, asin, acos, atan, sinh, cosh, tanh, rand, rand2, linrand, bilinrand, sum3rand, distort, softclip, coin, rectWindow, hanWindow, welWindow, triWindow, ramp and scurve 
       # 
       module UgenOperations
-        operation_indices = YAML::load( File.open( "#{SCRUBY_DIR}/audio/ugens/operation_indices.yaml" ) )
-        UNARY  = operation_indices['unary']
-        BINARY = operation_indices['binary']      
-        OP_SYMBOLS = { :+ => :plus, :- => :minus, :* => :mult, :/ => :div2, :<= => :less_than_or_eql, :>= => :more_than_or_eql }
+        operation_indices = YAML::load File.open("#{SCRUBY_DIR}/audio/ugens/operation_indices.yaml")
+        UNARY      = operation_indices['unary']
+        BINARY     = operation_indices['binary']      
+        SAFE_NAMES = { :+ => :plus, :- => :minus, :* => :mult, :/ => :div2, :<= => :less_than_or_eql, :>= => :more_than_or_eql }
         
-        def valid_ugen_input?
-          true
-        end
+        # true
+        def valid_ugen_input?; true; end #TODO: Deprecate
         
         def self.included klass
           klass.send :include, BinaryOperations
-          begin; klass.send( :include, UnaryOperators ) if klass.new.ugen?; rescue; end
-        
-          BINARY.each_key do |operator|
-            override = OP_SYMBOLS[operator] || operator #can't name a method ugen_+ so use OP_SYMBOLS hash to get a 'safe' name
-            begin; klass.send :alias_method, "original_#{override}", operator; rescue; end #if there is an original operator method make an alias with the prefix 'original' so it may be called latter
-            klass.send :alias_method, operator, "ugen_#{override}" #alias the newly added operator method with the name of the operator( +, -, mod, etc...)
-          end
+          klass.send :include, UnaryOperators if klass.ancestors.include? Ugen
         end
       
         module BinaryOperations
           BINARY.each_key do |op|
-            method_name = OP_SYMBOLS[op] || op #get a 'safe' method name for the method to add
-            eval "def ugen_#{method_name}( input )
-                    return BinaryOpUGen.new(:#{op}, self, input) if input.ugen? or (self.kind_of?( Ugen ) and (input.kind_of?( Numeric ) or input.kind_of?( Array )))
-                    return self.original_#{method_name}( input ) if self.respond_to?( :original_#{method_name} )
-                    raise ArgumentError.new( %(Expected \#\{input\} to be an Ugen) )
-                  end"          
+            method_name = SAFE_NAMES[op] || op
+            define_method "__ugen_#{ method_name }" do |input|
+              case input
+              when Ugen
+                BinaryOpUGen.new op, self, input
+              when UgenOperations
+                kind_of?( Ugen ) ? BinaryOpUGen.new( op, self, input ) : __send__( "__original_#{ method_name }", input )
+              else
+                raise ArgumentError.new( "Expected `#{ input.inspect }` to be a valid Ugen input" )
+              end
+            end
+          end
+          
+          def self.included klass
+            BINARY.each_key do |operator|
+              safe_name = SAFE_NAMES[operator] || operator 
+              klass.send( :alias_method, "__original_#{ safe_name }", operator ) rescue nil
+              klass.send( :alias_method, operator, "__ugen_#{ safe_name }" )
+            end
           end
         end
       
         module UnaryOperators
-          UNARY.each_key do |op|
-            eval "def #{op}; UnaryOpUgen.new(:#{op}, self); end"
-          end
+          UNARY.each_key{ |op| define_method(op){ UnaryOpUGen.new op, self } }
         end
       end
+      
+      [Ugen, ::Fixnum, ::Float, ::Array].each{ |k| k.send :include, UgenOperations }
     end
   end
 end
 
-class Fixnum
-  include Scruby::Audio::Ugens::UgenOperations
-end
 
-class Float
-  include Scruby::Audio::Ugens::UgenOperations
-end
-
-class Array
-  include Scruby::Audio::Ugens::UgenOperations
-end

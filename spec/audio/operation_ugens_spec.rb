@@ -9,9 +9,8 @@ require "#{SCRUBY_DIR}/audio/ugens/operation_ugens"
 include Scruby
 include Audio
 include Ugens
-include OperationUgens
 
-describe UnaryOpUgen do
+describe UnaryOpUGen do
   ::RATES = :scalar, :demand, :control, :audio
   
   before do
@@ -21,44 +20,44 @@ describe UnaryOpUgen do
     @audio   = mock 'ugen', :rate => :audio,   :valid_ugen_input? => true
   end
   
-  describe UnaryOpUgen do
+  describe UnaryOpUGen do
     
     before do
-      @op = UnaryOpUgen.new( :neg, @audio )
+      @op = UnaryOpUGen.new( :neg, @audio )
     end
     
     it "should return special index" do
-      UnaryOpUgen.new( :neg, @audio ).special_index.should     == 0
-      UnaryOpUgen.new( :bitNot, @audio ).special_index.should  == 4
-      UnaryOpUgen.new( :abs, @audio ).special_index.should     == 5
-      UnaryOpUgen.new( :asFloat, @audio ).special_index.should == 6
+      UnaryOpUGen.new( :neg, @audio ).special_index.should     == 0
+      UnaryOpUGen.new( :bitNot, @audio ).special_index.should  == 4
+      UnaryOpUGen.new( :abs, @audio ).special_index.should     == 5
+      UnaryOpUGen.new( :asFloat, @audio ).special_index.should == 6
     end
   
     it "should accept just one input" do
-      lambda{ UnaryOpUgen.new(:neg, @audio, @demand) }.should raise_error ArgumentError
+      lambda{ UnaryOpUGen.new(:neg, @audio, @demand) }.should raise_error( ArgumentError )
     end
   
     it "should just accept defined operators" # do
-     #    lambda{ UnaryOpUgen.new(:not_operator, @audio) }.should raise_error( ArgumentError )
+     #    lambda{ UnaryOpUGen.new(:not_operator, @audio) }.should raise_error( ArgumentError )
      #  end
   
     it "should get max rate" do
-      UnaryOpUgen.send(:get_rate, @scalar, @demand ).should                       == :demand
-      UnaryOpUgen.send(:get_rate, @scalar, @demand, @audio ).should               == :audio
-      UnaryOpUgen.send(:get_rate, @scalar, [@demand, [@control, @audio]] ).should == :audio
+      UnaryOpUGen.send(:get_rate, @scalar, @demand ).should                       == :demand
+      UnaryOpUGen.send(:get_rate, @scalar, @demand, @audio ).should               == :audio
+      UnaryOpUGen.send(:get_rate, @scalar, [@demand, [@control, @audio]] ).should == :audio
     end
   
     it do
-      UnaryOpUgen.new(:neg, @audio).should be_instance_of(UnaryOpUgen)
+      UnaryOpUGen.new(:neg, @audio).should be_instance_of(UnaryOpUGen)
     end
   
     it "should set rate" do
-      UnaryOpUgen.new(:neg, @audio).rate.should  == :audio
-      UnaryOpUgen.new(:neg, @scalar).rate.should == :scalar
+      UnaryOpUGen.new(:neg, @audio).rate.should  == :audio
+      UnaryOpUGen.new(:neg, @scalar).rate.should == :scalar
     end
   
     it "should set operator" do
-      UnaryOpUgen.new(:neg, @audio).operator.should == :neg
+      UnaryOpUGen.new(:neg, @audio).operator.should == :neg
     end    
   end
   
@@ -92,7 +91,7 @@ describe UnaryOpUgen do
       BinaryOpUGen.new(:+, @audio, [@audio, @scalar] ).should be_instance_of(Array)
     end
   
-    it "should return an array of UnaryOpUgens" do
+    it "should return an array of UnaryOpUGens" do
       @op_arr.flatten.map { |op| op.should be_instance_of(BinaryOpUGen)  }
     end
   

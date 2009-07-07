@@ -6,9 +6,6 @@ class Object
     [*self]
   end
 
-  # TODO : deprecate
-  def ugen?; false; end
-
   def valid_ugen_input? #:nodoc:
     false
   end

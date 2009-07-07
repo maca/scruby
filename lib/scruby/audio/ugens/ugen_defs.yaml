@@ -737,14 +737,14 @@ Demand:
     - 
   - - :reset
     - 
-  - - :demandUGens
+  - - :demandUgens
     - 
   :audio: 
   - - :trig
     - 
   - - :reset
     - 
-  - - :demandUGens
+  - - :demandUgens
     - 
 DemandEnvGen: 
   :control: 

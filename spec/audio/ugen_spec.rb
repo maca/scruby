@@ -58,7 +58,7 @@ describe Ugen do
     before :all do
       @op_ugen = mock( 'op_ugen', :ugen? => true )
       ::BinaryOpUGen = mock( 'bynary_op_ugen', :new => @op_ugen )
-      UnaryOpUgen  = mock( 'unary_op_ugen', :new => @op_ugen )
+      UnaryOpUGen  = mock( 'unary_op_ugen', :new => @op_ugen )
     end
     
     before do

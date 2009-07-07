@@ -5,7 +5,6 @@ require "#{SCRUBY_DIR}/../scruby"
 include Scruby
 include Audio
 include Ugens
-include OperationUgens
 
 describe "synthdef examples" do
 
@@ -70,15 +69,15 @@ describe "synthdef examples" do
   end
   
   it "should encode 'complex' sdef" do
-    sdef = SynthDef.new( :am ) do |gate, portadora, moduladora, amp|
-      modulacion=SinOsc.kr(moduladora,0,0.5,0.5)
-      sig=SinOsc.ar(portadora,0,modulacion)
-      env=EnvGen.kr(Env.asr(2,1,2),gate, :doneAction => 2)
-      Out.ar(0,sig*env);
+    sdef  = SynthDef.new :am do |gate, portadora, moduladora, amp|
+      mod = SinOsc.kr moduladora, 0, 0.5, 0.5
+      sig = SinOsc.ar portadora, 0, mod
+      env = EnvGen.kr Env.asr(2, 1, 2), gate, :doneAction => 2
+      Out.ar 0, sig*env
     end
+    
     sdef.children.should have(8).children
     sdef.constants.should == [0, 0.5, 1, 2, -99, 5, -4]
-    
     expected = [ 83, 67, 103, 102, 0, 0, 0, 1, 0, 1, 2, 97, 109, 0, 7, 0, 0, 0, 0, 63, 0, 0, 0, 63, -128, 0, 0, 64, 0, 0, 0, -62, -58, 0, 0, 64, -96, 0, 0, -64, -128, 0, 0, 0, 4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 4, 4, 103, 97, 116, 101, 0, 0, 9, 112, 111, 114, 116, 97, 100, 111, 114, 97, 0, 1, 10, 109, 111, 100, 117, 108, 97, 100, 111, 114, 97, 0, 2, 3, 97, 109, 112, 0, 3, 0, 8, 7, 67, 111, 110, 116, 114, 111, 108, 1, 0, 0, 0, 4, 0, 0, 1, 1, 1, 1, 6, 83, 105, 110, 79, 115, 99, 1, 0, 2, 0, 1, 0, 0, 0, 0, 0, 2, -1, -1, 0, 0, 1, 6, 77, 117, 108, 65, 100, 100, 1, 0, 3, 0, 1, 0, 0, 0, 1, 0, 0, -1, -1, 0, 1, -1, -1, 0, 1, 1, 6, 83, 105, 110, 79, 115, 99, 2, 0, 2, 0, 1, 0, 0, 0, 0, 0, 1, -1, -1, 0, 0, 2, 12, 66, 105, 110, 97, 114, 121, 79, 112, 85, 71, 101, 110, 2, 0, 2, 0, 1, 0, 2, 0, 3, 0, 0, 0, 2, 0, 0, 2, 6, 69, 110, 118, 71, 101, 110, 1, 0, 17, 0, 1, 0, 0, 0, 0, 0, 0, -1, -1, 0, 2, -1, -1, 0, 0, -1, -1, 0, 2, -1, -1, 0, 3, -1, -1, 0, 0, -1, -1, 0, 3, -1, -1, 0, 2, -1, -1, 0, 4, -1, -1, 0, 2, -1, -1, 0, 3, -1, -1, 0, 5, -1, -1, 0, 6, -1, -1, 0, 0, -1, -1, 0, 3, -1, -1, 0, 5, -1, -1, 0, 6, 1, 12, 66, 105, 110, 97, 114, 121, 79, 112, 85, 71, 101, 110, 2, 0, 2, 0, 1, 0, 2, 0, 4, 0, 0, 0, 5, 0, 0, 2, 3, 79, 117, 116, 2, 0, 2, 0, 0, 0, 0, -1, -1, 0, 0, 0, 6, 0, 0, 0, 0 ].pack('c*')
     sdef.encode.should == expected
   end

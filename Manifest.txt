@@ -29,7 +29,7 @@ doc/classes/Scruby/Audio/Ugens/OperationUgens.html
 doc/classes/Scruby/Audio/Ugens/OperationUgens/BasicOpUgen.html
 doc/classes/Scruby/Audio/Ugens/OperationUgens/BinaryOpUGen.html
 doc/classes/Scruby/Audio/Ugens/OperationUgens/MulAdd.html
-doc/classes/Scruby/Audio/Ugens/OperationUgens/UnaryOpUgen.html
+doc/classes/Scruby/Audio/Ugens/OperationUgens/UnaryOpUGen.html
 doc/classes/Scruby/Audio/Ugens/Out.html
 doc/classes/Scruby/Audio/Ugens/OutputProxy.html
 doc/classes/Scruby/Audio/Ugens/Ugen.html

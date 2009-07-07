@@ -34,13 +34,12 @@ SCRUBY_DIR = File.join( File.expand_path(File.dirname(__FILE__) ), 'scruby' )
 require "scruby/typed_array"
 require "scruby/extensions"
 
-require "scruby/audio/ugens/ugen_operations"
 require "scruby/audio/ugens/ugen"
+require "scruby/audio/ugens/ugen_operations"
 require "scruby/audio/ugens/multi_out_ugens"
 require "scruby/audio/ugens/in_out"
 
 require "scruby/audio/ugens/operation_ugens"
-require "scruby/audio/ugens/ugen"
 
 require "scruby/audio/ugens/ugens"
 require "scruby/audio/control_name"
@@ -56,7 +55,6 @@ require "scruby/audio/synth"
 include Scruby
 include Audio
 include Ugens
-include OperationUgens
 
 class Notice < String; end
 class Warning < String; end
