@@ -12,7 +12,7 @@ module Scruby
       # neg, bitNot, abs, asFloat, ceil, floor, frac, sign, squared, cubed, sqrt, exp, reciprocal, midicps, cpsmidi, midiratio, ratiomidi, dbamp, ampdb, octcps, cpsoct, log, log2, log10, sin, cos, tam, asin, acos, atan, sinh, cosh, tanh, rand, rand2, linrand, bilinrand, sum3rand, distort, softclip, coin, rectWindow, hanWindow, welWindow, triWindow, ramp and scurve 
       # 
       module UgenOperations
-        operation_indices = YAML::load File.open("#{SCRUBY_DIR}/audio/ugens/operation_indices.yaml")
+        operation_indices = YAML::load File.open( File.dirname(__FILE__) + "/operation_indices.yaml" )
         UNARY      = operation_indices['unary']
         BINARY     = operation_indices['binary']      
         SAFE_NAMES = { :+ => :plus, :- => :minus, :* => :mult, :/ => :div2, :<= => :less_than_or_eql, :>= => :more_than_or_eql }

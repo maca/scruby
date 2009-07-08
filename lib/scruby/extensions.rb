@@ -1,14 +1,12 @@
 
 class Object
-  
   # Wraps self int an array, #to_a seems to be deprecated
   def to_array
     [*self]
   end
 
-  def valid_ugen_input? #:nodoc:
-    false
-  end
+  # Returns false
+  def valid_ugen_input?; false; end
 end
 
 class Numeric
@@ -16,12 +14,12 @@ class Numeric
   def rate; :scalar; end
 
   # Compares itself with +other+ and returns biggest
-  def max( other )
+  def max other
     self > other ? self : other
   end
 
   # Compares itself with +other+ and returns smallest
-  def min( other )
+  def min other
     self < other ? self : other
   end
 end
@@ -32,7 +30,7 @@ class Numeric
     self
   end  
 
-  def input_specs( synthdef )
+  def input_specs synthdef
     [-1, synthdef.constants.index(self)]
   end
 end
@@ -41,23 +39,22 @@ class Array
 
   #collect with index
   def collect_with_index
-    indices = (0...self.size).map
-    self.zip( indices ).collect{ |element_with_index| yield( element_with_index.first, element_with_index.last )  }
+    self.zip( (0...self.size).map ).collect{ |element, index| yield element, index }
   end
 
-  def wrap_to( size )
+  def wrap_to size
     return self if size == self.size
-    self.dup.wrap_to!( size )
+    self.dup.wrap_to! size
   end
 
-  def wrap_to!( size )
+  def wrap_to! size
     return nil if size == self.size
     original_size = self.size
     size.times { |i| self[ i ] = self[ i % original_size ] }
     self
   end
 
-  def wrap_and_zip( *args )
+  def wrap_and_zip *args
     max  = args.map{ |a| instance_of?(Array) ? a.size : 0 }.max.max( self.size )
     args = args.collect{ |a| a.to_array.wrap_to( max ) }
     self.wrap_to( max ).zip( *args )
@@ -67,10 +64,10 @@ class Array
   def to_array; self; end
 
   def encode_floats #:nodoc:
-    [self.size].pack('n') + self.pack('g*')
+    [self.size].pack('n') + self.pack('g*') #TODO: Deprecate
   end
 
-  def muladd( mul, add ) #:nodoc:
+  def muladd mul, add #:nodoc:
     self.collect{ |u| MulAdd.new( u, mul, add ) }
   end
   

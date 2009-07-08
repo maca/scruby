@@ -1,6 +1,6 @@
 require File.join( File.expand_path(File.dirname(__FILE__)),"helper")
 
-require "#{SCRUBY_DIR}/extensions"
+require "scruby/extensions"
 
 describe Numeric do
   before :all do

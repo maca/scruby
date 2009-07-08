@@ -1,9 +1,9 @@
 require File.join( File.expand_path(File.dirname(__FILE__)), '..',"helper")
 
-require "#{SCRUBY_DIR}/extensions"
-require "#{SCRUBY_DIR}/audio/ugens/ugen_operations" 
-require "#{SCRUBY_DIR}/audio/ugens/ugen"
-require "#{SCRUBY_DIR}/audio/ugens/ugens"
+require "scruby/extensions"
+require "scruby/audio/ugens/ugen"
+require "scruby/audio/ugens/ugen_operations" 
+require "scruby/audio/ugens/ugens"
 
 
 module UgenTest
@@ -20,7 +20,7 @@ include Ugens
 describe Ugens do
   
   before do
-    @udefs = YAML::load( File.open( "#{SCRUBY_DIR}/audio/ugens/ugen_defs.yaml" ) )
+    @udefs = YAML::load( File.open( "#{ File.dirname __FILE__ }/../../lib/scruby/audio/ugens/ugen_defs.yaml" ) )
   end
 
   it 'should define Ugen classes' do

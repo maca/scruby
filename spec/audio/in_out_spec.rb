@@ -1,10 +1,10 @@
 require File.join( File.expand_path(File.dirname(__FILE__)),"../helper")
 
-require "#{SCRUBY_DIR}/audio/ugens/ugen_operations"
-require "#{SCRUBY_DIR}/extensions"
-require "#{SCRUBY_DIR}/audio/ugens/ugen"
-require "#{SCRUBY_DIR}/audio/ugens/multi_out_ugens"
-require "#{SCRUBY_DIR}/audio/ugens/in_out"
+require "scruby/audio/ugens/ugen"
+require "scruby/audio/ugens/ugen_operations"
+require "scruby/extensions"
+require "scruby/audio/ugens/multi_out_ugens"
+require "scruby/audio/ugens/in_out"
 
 include Scruby
 include Audio

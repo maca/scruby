@@ -29,18 +29,16 @@ module Scruby
       #
       def initialize name, options = {}, &block
         @name, @children = name.to_s, []
-
+        raise( ArgumentError.new('An UGen graph (block) must be passed') ) unless block_given?
+        
         values = options.delete( :values ) || []
         rates  = options.delete( :rates )  || []
-        block  = block || Proc.new{}
 
         @control_names = collect_control_names block, values, rates
         build_ugen_graph block, @control_names
         @constants = collect_constants @children
 
         @variants  = [] #stub!!!
-
-        warn( 'A SynthDef without a block is useless' ) unless block_given?
       end
 
       # Returns a string representing the encoded SynthDef in a way scsynth can interpret and generate.

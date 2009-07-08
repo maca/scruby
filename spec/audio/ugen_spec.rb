@@ -1,9 +1,9 @@
 require File.join( File.expand_path(File.dirname(__FILE__)), '..',"helper")
 require 'yaml'
  
-require "#{SCRUBY_DIR}/audio/ugens/ugen_operations" 
-require "#{SCRUBY_DIR}/audio/ugens/ugen" 
-require "#{SCRUBY_DIR}/extensions"
+require "scruby/audio/ugens/ugen"
+require "scruby/audio/ugens/ugen_operations" 
+require "scruby/extensions"
 
 include Scruby
 include Audio
@@ -36,7 +36,6 @@ describe Ugen do
   end
 
   describe 'attributes' do
-    
     before do
       @ugen = Ugen.new( :audio, 1 )
     end
@@ -47,10 +46,6 @@ describe Ugen do
     
     it do
       @ugen.should respond_to( :rate )
-    end
-    
-    it do
-      @ugen.should be_ugen
     end
   end
 

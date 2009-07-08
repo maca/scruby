@@ -1,9 +1,10 @@
 require File.join( File.expand_path(File.dirname(__FILE__)),"helper")
 
-require "#{SCRUBY_DIR}/audio/ugens/ugen_operations"
-require "#{SCRUBY_DIR}/audio/ugens/ugen"
-require "#{SCRUBY_DIR}/extensions"
-require "#{SCRUBY_DIR}/audio/env"
+
+require "scruby/audio/ugens/ugen"
+require "scruby/audio/ugens/ugen_operations"
+require "scruby/extensions"
+require "scruby/audio/env"
 
 include Scruby
 
@@ -58,6 +59,14 @@ describe Env do
   it "#dadsr" do
     env = Env.adsr
     env.to_array.collect{ |i| i.to_f }.should == [ 0, 3, 2, -99, 1, 0.01, 5, -4, 0.5, 0.3, 5, -4, 0, 1, 5, -4 ].collect{ |i| i.to_f }
+  end
+  
+  describe 'Overriding defaults' do
+    
+    it "#asr" do
+      Env.asr(2, 1, 2).to_array.should == [ 0, 2, 1, -99, 1, 2, 5, -4, 0, 2, 5, -4 ]
+    end
+    
   end
   
 end

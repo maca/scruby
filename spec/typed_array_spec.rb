@@ -1,5 +1,5 @@
 require File.join( File.expand_path(File.dirname(__FILE__)), "helper")
-require "#{SCRUBY_DIR}/typed_array" 
+require "scruby/typed_array" 
 
 class Type
 end

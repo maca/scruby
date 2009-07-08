@@ -1,6 +1,6 @@
 require File.join( File.expand_path(File.dirname(__FILE__)), '..',"helper")
 
-require "#{SCRUBY_DIR}/../scruby"
+require "scruby"
 
 include Scruby
 include Audio
@@ -54,16 +54,20 @@ describe "synthdef examples" do
     sdef.encode.should == expected
   end
   
+  it "should instantiate and encode" do
+    expected = [ 83, 67, 103, 102, 0, 0, 0, 1, 0, 1, 4, 104, 101, 108, 112, 0, 2, 67, -36, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 5, 6, 83, 105, 110, 79, 115, 99, 2, 0, 2, 0, 1, 0, 0, -1, -1, 0, 0, -1, -1, 0, 1, 2, 6, 83, 105, 110, 79, 115, 99, 2, 0, 2, 0, 1, 0, 0, -1, -1, 0, 0, -1, -1, 0, 1, 2, 12, 66, 105, 110, 97, 114, 121, 79, 112, 85, 71, 101, 110, 2, 0, 2, 0, 1, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 2, 6, 83, 105, 110, 79, 115, 99, 2, 0, 2, 0, 1, 0, 0, -1, -1, 0, 0, -1, -1, 0, 1, 2, 12, 66, 105, 110, 97, 114, 121, 79, 112, 85, 71, 101, 110, 2, 0, 2, 0, 1, 0, 2, 0, 2, 0, 0, 0, 3, 0, 0, 2, 0, 0 ].pack('C*')
+    SynthDef.new( :help ){ (SinOsc.ar() + SinOsc.ar()) * SinOsc.ar() }.encode.should == expected
+  end
+  
   it "should encode out with multidimensional array" do
-    sdef = SynthDef.new( :out ){ sig = SinOsc.ar(100, [200,[100, 100]]) * SinOsc.ar(200); Out.ar(0, sig) }
-
-    child = sdef.children
-    child[0..3].map { |u| u.should be_instance_of(SinOsc) }
-    child[4].should be_instance_of(BinaryOpUGen)
-    child[5].should be_instance_of(BinaryOpUGen)
-    child[6].should be_instance_of(BinaryOpUGen)
-    child[7].should be_instance_of(Out)
-    child[8].should be_instance_of(Out)
+    sdef  = SynthDef.new( :out ){ sig = SinOsc.ar(100, [200,[100, 100]]) * SinOsc.ar(200); Out.ar(0, sig) }
+    children = sdef.children
+    children[0..3].map { |u| u.should be_instance_of(SinOsc) }
+    children[4].should be_instance_of(BinaryOpUGen)
+    children[5].should be_instance_of(BinaryOpUGen)
+    children[6].should be_instance_of(BinaryOpUGen)
+    children[7].should be_instance_of(Out)
+    children[8].should be_instance_of(Out)
     #the order of the elements is different than in supercollider, but at least has the encoded string is the same size so i guess its fine
     sdef.encode.should have(261).chars
   end
@@ -75,13 +79,11 @@ describe "synthdef examples" do
       env = EnvGen.kr Env.asr(2, 1, 2), gate, :doneAction => 2
       Out.ar 0, sig*env
     end
-    
+
     sdef.children.should have(8).children
     sdef.constants.should == [0, 0.5, 1, 2, -99, 5, -4]
     expected = [ 83, 67, 103, 102, 0, 0, 0, 1, 0, 1, 2, 97, 109, 0, 7, 0, 0, 0, 0, 63, 0, 0, 0, 63, -128, 0, 0, 64, 0, 0, 0, -62, -58, 0, 0, 64, -96, 0, 0, -64, -128, 0, 0, 0, 4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 4, 4, 103, 97, 116, 101, 0, 0, 9, 112, 111, 114, 116, 97, 100, 111, 114, 97, 0, 1, 10, 109, 111, 100, 117, 108, 97, 100, 111, 114, 97, 0, 2, 3, 97, 109, 112, 0, 3, 0, 8, 7, 67, 111, 110, 116, 114, 111, 108, 1, 0, 0, 0, 4, 0, 0, 1, 1, 1, 1, 6, 83, 105, 110, 79, 115, 99, 1, 0, 2, 0, 1, 0, 0, 0, 0, 0, 2, -1, -1, 0, 0, 1, 6, 77, 117, 108, 65, 100, 100, 1, 0, 3, 0, 1, 0, 0, 0, 1, 0, 0, -1, -1, 0, 1, -1, -1, 0, 1, 1, 6, 83, 105, 110, 79, 115, 99, 2, 0, 2, 0, 1, 0, 0, 0, 0, 0, 1, -1, -1, 0, 0, 2, 12, 66, 105, 110, 97, 114, 121, 79, 112, 85, 71, 101, 110, 2, 0, 2, 0, 1, 0, 2, 0, 3, 0, 0, 0, 2, 0, 0, 2, 6, 69, 110, 118, 71, 101, 110, 1, 0, 17, 0, 1, 0, 0, 0, 0, 0, 0, -1, -1, 0, 2, -1, -1, 0, 0, -1, -1, 0, 2, -1, -1, 0, 3, -1, -1, 0, 0, -1, -1, 0, 3, -1, -1, 0, 2, -1, -1, 0, 4, -1, -1, 0, 2, -1, -1, 0, 3, -1, -1, 0, 5, -1, -1, 0, 6, -1, -1, 0, 0, -1, -1, 0, 3, -1, -1, 0, 5, -1, -1, 0, 6, 1, 12, 66, 105, 110, 97, 114, 121, 79, 112, 85, 71, 101, 110, 2, 0, 2, 0, 1, 0, 2, 0, 4, 0, 0, 0, 5, 0, 0, 2, 3, 79, 117, 116, 2, 0, 2, 0, 0, 0, 0, -1, -1, 0, 0, 0, 6, 0, 0, 0, 0 ].pack('c*')
     sdef.encode.should == expected
   end
-
-
 end
 

@@ -1,30 +1,27 @@
 require File.join( File.expand_path(File.dirname(__FILE__)), '..',"helper")
 
-require "#{SCRUBY_DIR}/audio/ugens/ugen_operations"
-require "#{SCRUBY_DIR}/extensions"
-require "#{SCRUBY_DIR}/audio/synthdef" 
-require "#{SCRUBY_DIR}/audio/ugens/ugen"
-require "#{SCRUBY_DIR}/audio/ugens/multi_out_ugens"
-require "#{SCRUBY_DIR}/typed_array"
-
-
+require "scruby/audio/ugens/ugen"
+require "scruby/audio/ugens/ugen_operations"
+require "scruby/extensions"
+require "scruby/audio/synthdef" 
+require "scruby/audio/ugens/multi_out_ugens"
+require "scruby/typed_array"
 
 include Scruby
 include Audio
 include Ugens
 
 class ControlName
-  def self.new( *args )
+  def self.new *args
     args.flatten
   end
 end
-
 
 describe SynthDef, 'instantiation' do
   
   describe 'initialize' do
     before do
-    @sdef = SynthDef.new :name
+    @sdef = SynthDef.new( :name ){}
     @sdef.stub! :collect_control_names
   end
 
@@ -120,7 +117,7 @@ describe SynthDef, 'instantiation' do
     before :all do
       Object.send :remove_const, 'ControlName'
       ::RATES = [:scalar, :trigger, :control]
-      require "#{SCRUBY_DIR}/audio/control_name"
+      require "scruby/audio/control_name"
     end
     
     before do
@@ -189,15 +186,15 @@ end
 describe "encoding" do
 
   before :all do
-    class ::SinOsc < Ugen
-      def self.ar freq=440.0, phase=0.0 #not interested in muladd
+    class Spec::SinOsc < Ugen
+      def self.ar freq = 440.0, phase = 0.0 #not interested in muladd
         new :audio, freq, phase
       end
     end
   end
   
   before do
-    @sdef = SynthDef.new(:hola) { SinOsc.ar }
+    @sdef = SynthDef.new(:hola) { Spec::SinOsc.ar }
     @encoded = [ 83, 67, 103, 102, 0, 0, 0, 1, 0, 1, 4, 104, 111, 108, 97, 0, 2, 67, -36, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 6, 83, 105, 110, 79, 115, 99, 2, 0, 2, 0, 1, 0, 0, -1, -1, 0, 0, -1, -1, 0, 1, 2, 0, 0 ].pack('C*')
   end
   
@@ -242,7 +239,7 @@ describe "encoding" do
     
     before do
       @servers = (0..3).map{ mock('server', :instance_of? => true, :send_synth_def => nil) }
-      @sdef = SynthDef.new(:hola) { SinOsc.ar }
+      @sdef = SynthDef.new(:hola) { Spec::SinOsc.ar }
     end
     
     it "should accept an array or several Servers" do
@@ -251,8 +248,8 @@ describe "encoding" do
     end
     
     it "should not accept non servers" do
-      lambda{ @sdef.send( [1,2] ) }.should raise_error(NoMethodError)
-      lambda{ @sdef.send( 1,2 ) }.should   raise_error(NoMethodError)
+      lambda{ @sdef.send [1, 2] }.should raise_error(NoMethodError)
+      lambda{ @sdef.send 1, 2 }.should   raise_error(NoMethodError)
     end
     
     it "should send self to each of the servers" do

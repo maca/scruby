@@ -7,7 +7,7 @@ module Scruby
 
       alias :udp_send :send 
       def send command, host, port, *args
-        args = args.collect{ |arg| arg.kind_of? Symbol ? arg.to_s : arg }
+        args = args.collect{ |arg| arg.kind_of?( Symbol ) ? arg.to_s : arg }
         udp_send OSC::Message.new( command, type_tag(args), *args ), 0, host, port
       end
 
@@ -86,7 +86,6 @@ module Scruby
       
       public
       class << self
-        
         # Specify the scsynth binary path
         def sc_path= path
           @@sc_path = path
@@ -123,6 +122,5 @@ module Scruby
     
     class SCError < StandardError
     end
-
   end
 end

@@ -1,16 +1,16 @@
 require File.join( File.expand_path(File.dirname(__FILE__)), '..',"helper")
 
-require "#{SCRUBY_DIR}/extensions" 
-require "#{SCRUBY_DIR}/typed_array" 
-require "#{SCRUBY_DIR}/audio/node"
-require "#{SCRUBY_DIR}/audio/synth"
+require "scruby/extensions" 
+require "scruby/typed_array" 
+require "scruby/audio/node"
+require "scruby/audio/synth"
 
 include Scruby
 
 describe Synth do
   
   before :all do
-    ::Server = mock('server')
+    ::Server = mock('Server')
   end
   
   before do

@@ -75,7 +75,7 @@ module Scruby
         # # TODO: Load from ~/Ugens directory
       end
       
-      YAML::load( File.open( "#{SCRUBY_DIR}/audio/ugens/ugen_defs.yaml" ) ).each_pair{ |key, value| self.define_ugen key, value }
+      YAML::load( File.open( File.dirname(__FILE__) + "/ugen_defs.yaml" ) ).each_pair{ |key, value| self.define_ugen key, value }
     end
   end
 end

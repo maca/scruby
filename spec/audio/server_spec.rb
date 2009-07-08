@@ -2,7 +2,7 @@ require File.join( File.expand_path(File.dirname(__FILE__)), '..',"helper")
 
 require 'tempfile'
 require 'osc'
-require "#{SCRUBY_DIR}/audio/server"
+require "scruby/audio/server"
 
 include Scruby
 include Audio

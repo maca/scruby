@@ -7,11 +7,11 @@ require File.dirname(__FILE__) + '/lib/scruby'
 $hoe = Hoe.new('Scruby', Scruby::VERSION) do |p|
   p.developer('FIXME full name', 'FIXME email')
   p.changes              = p.paragraphs_of("History.txt", 0..1).join("\n\n")
-  p.post_install_message = 'PostInstall.txt' # TODO remove if post-install message not required
   p.rubyforge_name       = p.name # TODO this is default value
-  # p.extra_deps         = [
-  #   ['activesupport','>= 2.0.2'],
-  # ]
+  p.extra_deps         = [
+    ['maca-arguments','>= 0.4.2'],
+    ['maca-rosc','>= 0.4.2']
+  ]
   p.extra_dev_deps = [
     ['newgem', ">= #{::Newgem::VERSION}"]
   ]
