@@ -1,6 +1,8 @@
 require File.join( File.expand_path(File.dirname(__FILE__)), '..',"helper")
 require 'yaml'
- 
+
+require "scruby/audio/control_name"
+require "scruby/audio/env"
 require "scruby/audio/ugens/ugen"
 require "scruby/audio/ugens/ugen_operations" 
 require "scruby/extensions"
@@ -9,15 +11,14 @@ include Scruby
 include Audio
 include Ugens
 
-
 class SinOsc < Ugen
   class << self
-    def ar( freq=440.0, phase=0.0 ) #not interested in muladd
-      new(:audio, freq, phase)
+    def ar freq = 440.0, phase = 0.0 #not interested in muladd by now
+      new :audio, freq, phase
     end
     
-    def kr( freq=440.0, phase=0.0 ) 
-      new(:control, freq, phase)
+    def kr freq = 440.0, phase = 0.0
+      new :control, freq, phase
     end
   end
 end
@@ -26,7 +27,7 @@ end
 describe Ugen do
   
   before do
-    @sdef = mock( 'sdef', :children => [] )
+    @sdef = mock 'sdef', :children => []
   end
 
   it "should set constants " do
@@ -34,10 +35,16 @@ describe Ugen do
     UgenOperations::BINARY.should_not be_nil
     Ugen::RATES.should_not be_nil
   end
+  
+  it "should tell if valid input" do
+    Ugen.valid_input?( Ugen.new(:audio) ).should be_true
+    Ugen.valid_input?( Env.asr ).should be_true
+    Ugen.valid_input?( 'string' ).should be_false
+  end
 
   describe 'attributes' do
     before do
-      @ugen = Ugen.new( :audio, 1 )
+      @ugen = Ugen.new :audio, 1
     end
     
     it do
@@ -51,14 +58,14 @@ describe Ugen do
 
   describe 'operations' do
     before :all do
-      @op_ugen = mock( 'op_ugen', :ugen? => true )
-      ::BinaryOpUGen = mock( 'bynary_op_ugen', :new => @op_ugen )
-      UnaryOpUGen  = mock( 'unary_op_ugen', :new => @op_ugen )
+      @op_ugen = mock( 'op_ugen' )
+      ::BinaryOpUGen = mock 'bynary_op_ugen', :new => @op_ugen
+      UnaryOpUGen    = mock 'unary_op_ugen',  :new => @op_ugen
     end
     
     before do
-      @ugen  = Ugen.new( :audio, 1, 2 )
-      @ugen2 = Ugen.new( :audio, 1, 2 )
+      @ugen  = Ugen.new :audio, 1, 2
+      @ugen2 = Ugen.new :audio, 1, 2
     end
     
     it do #this specs all binary operations
@@ -126,7 +133,7 @@ describe Ugen do
     
   end
   
-  describe 'initialization' do
+  describe 'initialization and inputs' do
     before do
       @ugen = Ugen.new(:audio, 1, 2, 3)
     end
@@ -261,67 +268,65 @@ describe Ugen do
       @ugen.muladd(1, 1).should be_nil
     end
   end
+  
+  describe Ugen, 'encoding' do
+    before do
+      args = [400.0, 0.0]
+      @sin = SinOsc.kr *args
+      @synthdef = mock 'synthdef', :constants => args
+      @sin.stub!( :index ).and_return 1 #as if was the first child of a synthdef
+      @sin.stub!( :synthdef ).and_return @synthdef
 
+      @encoded = [6, 83, 105, 110, 79, 115, 99, 1, 0, 2, 0, 1, 0, 0, -1, -1, 0, 0, -1, -1, 0, 1, 1].pack('C*')
+    end
+
+    it "should stub synthdef" do
+      @sin.send( :synthdef ).should == @synthdef
+    end
+
+    it "should encode have 0 as special index" do
+      @sin.send(:special_index).should == 0
+    end
+
+    it "should encode have 0 as output index" do
+      @sin.send(:output_index).should == 0
+    end
+
+    it "should encode have [1] as output index" do
+      @sin.send(:channels).should == [1]
+    end
+
+    it "should return input_specs" do
+      @sin.send( :input_specs, nil ).should == [1,0]
+    end
+
+    it "should collect input_specs" do
+      @sin.send(:collect_input_specs).should == [[-1, 0], [-1, 1]]
+    end
+
+    # it "should collect input_specs" do
+    #   @sin.send(:collect_input_specs).flatten.collect { |e| e.encode }
+    # end
+
+    it "should encode class name" do
+      @sin.encode[0..6].should == @encoded[0..6]
+    end
+
+    it "should encode classname, rate" do
+      @sin.encode[0..7].should == @encoded[0..7]
+    end
+
+    it "should encode cn, rt, inputs, channels, special_index" do
+      @sin.encode[0..13].should == @encoded[0..13]
+    end
+
+    it "should encode cn, rt, in, out, si, collect_input_specs" do
+      @sin.encode.should == @encoded
+    end
+  end
+  
   
 end
 
-describe Ugen, 'encoding' do
-  
-  before do
-    args = [400.0, 0.0]
-    @sin = SinOsc.kr *args
-    @synthdef = mock 'synthdef', :constants => args
-    @sin.stub!( :index ).and_return 1 #as if was the first child of a synthdef
-    @sin.stub!( :synthdef ).and_return @synthdef
-    
-    @encoded = [6, 83, 105, 110, 79, 115, 99, 1, 0, 2, 0, 1, 0, 0, -1, -1, 0, 0, -1, -1, 0, 1, 1].pack('C*')
-  end
-  
-  it "should stub synthdef" do
-    @sin.send( :synthdef ).should == @synthdef
-  end
-  
-  it "should encode have 0 as special index" do
-    @sin.send(:special_index).should == 0
-  end
-  
-  it "should encode have 0 as output index" do
-    @sin.send(:output_index).should == 0
-  end
-  
-  it "should encode have [1] as output index" do
-    @sin.send(:channels).should == [1]
-  end
-  
-  it "should return input_specs" do
-    @sin.send( :input_specs, nil ).should == [1,0]
-  end
-  
-  it "should collect input_specs" do
-    @sin.send(:collect_input_specs).should == [[-1, 0], [-1, 1]]
-  end
-  
-  # it "should collect input_specs" do
-  #   @sin.send(:collect_input_specs).flatten.collect { |e| e.encode }
-  # end
-  
-  it "should encode class name" do
-    @sin.encode[0..6].should == @encoded[0..6]
-  end
-  
-  it "should encode classname, rate" do
-    @sin.encode[0..7].should == @encoded[0..7]
-  end
-  
-  it "should encode cn, rt, inputs, channels, special_index" do
-    @sin.encode[0..13].should == @encoded[0..13]
-  end
-  
-  it "should encode cn, rt, in, out, si, collect_input_specs" do
-    @sin.encode.should == @encoded
-  end
-    
-  
-end
 
 

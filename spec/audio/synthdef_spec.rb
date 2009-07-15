@@ -1,5 +1,6 @@
 require File.join( File.expand_path(File.dirname(__FILE__)), '..',"helper")
 
+require "scruby/audio/env"
 require "scruby/audio/ugens/ugen"
 require "scruby/audio/ugens/ugen_operations"
 require "scruby/extensions"
@@ -262,9 +263,7 @@ describe "encoding" do
       Server.should_receive(:all).and_return([@server])
       @sdef.send
     end
-
-  end
-  
+  end  
 end
 
 

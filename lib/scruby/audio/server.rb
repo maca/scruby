@@ -4,11 +4,12 @@ module Scruby
   module Audio
     class UDPSender < OSC::UDPServer #:nodoc:
       include Singleton
+      include OSC
 
       alias :udp_send :send 
       def send command, host, port, *args
         args = args.collect{ |arg| arg.kind_of?( Symbol ) ? arg.to_s : arg }
-        udp_send OSC::Message.new( command, type_tag(args), *args ), 0, host, port
+        udp_send Message.new( command, type_tag(args), *args ), 0, host, port
       end
 
       def send_message message, host, port
@@ -17,38 +18,58 @@ module Scruby
 
       def type_tag *args
         args = *args
-        args.collect{ |msg| OSC::Packet.tag msg }.to_s
+        args.collect{ |msg| Packet.tag msg }.to_s
       end
     end
     $UDP_Sender = UDPSender.instance
     
     class Server
-      attr_reader :host, :port
-      @@sc_path = '/Applications/SuperCollider/scsynth'
-      @@servers = []
+      include OSC
+      
+      attr_reader :host, :port, :path, :buffers
 
       # Initializes and registers a new Server instance and sets the host and port for it.
       # The server is a Ruby representation of scsynth which can be a local binary or a remote    
       # server already running.
       # Server class keeps an array with all the instantiated servers
-      def initialize host = 'localhost', port = 57111
-        @host, @port = host, port
-        @@servers << self
+      def initialize host = 'localhost', port = 57111, path = '/Applications/SuperCollider/scsynth'
+        @host    = host
+        @port    = port
+        @path    = path
+        @buffers = []
+        self.class.all << self
       end
       
+      named_arguments_for :initialize
       # Boots the local binary of the scsynth forking a process, it will rise a SCError if the scsynth 
       # binary is not found in /Applications/SuperCollider/scsynth (default Mac OS path) or given path. 
       # The default path can be overriden using Server.scsynt_path=('path')
       def boot
-        raise SCError.new('Scsynth not found in the given path') unless File.exists? @@sc_path
-        Thread.new do
-          path = @@sc_path.scan(/[^\/]+/)
-          @server_pipe = IO.popen( "cd /#{ path[0..-2].join('/') }; ./#{ path.last } -u #{ @port }" )
-          loop { p Special.new(@server_pipe.gets.chomp) }
-        end unless @server_pipe   
-        sleep 2 # TODO: There should be a better way to wait for the server to start
+        raise SCError.new('Scsynth not found in the given path') unless File.exists? @path
+        if running?
+          warn "Server on port #{ @port } allready running"
+          return self 
+        end
+        
+        ready   = false
+        @thread = Thread.new do
+          IO.popen( "cd #{ File.dirname @path }; ./#{ File.basename @path } -u #{ @port }" ) do |pipe|
+            loop do 
+              if response = pipe.gets
+                puts response
+                ready = true if response.match /ready/
+              end
+            end
+          end
+        end
+        sleep 0.1 until ready or !@thread.alive?
+        sleep 0.5 # just to be shure
         send "/g_new", 1  
         self   
+      end
+      
+      def running?
+        @thread and @thread.alive? ? true : false
       end
       
       def stop
@@ -57,12 +78,9 @@ module Scruby
         send "/g_new", 1
       end
       
-      # Sends the /quit OSC signal to the scsynth server and kills the forked process if the scsynth
-      # server is running locally
+      # Sends the /quit OSC signal to the scsynth
       def quit
         send '/quit'
-        Process.kill 'KILL', @server_pipe.pid if @server_pipe
-        @server_pipe = nil
       end
       
       # Sends an OSC command to the scsyth server.
@@ -74,35 +92,32 @@ module Scruby
       
       # Encodes and sends a SynthDef to the scsynth server
       def send_synth_def synth_def
-        *blob = OSC::Blob.new( synth_def.encode ), 0
-        def_message = OSC::Message.new( '/d_recv', $UDP_Sender.type_tag( blob ), *blob )
-        send_message OSC::Bundle.new( nil, def_message )
+        blob        = Blob.new( synth_def.encode ), 0
+        def_message = Message.new '/d_recv', $UDP_Sender.type_tag(blob), *blob
+        send_message  Bundle.new nil, def_message
       end
       
-      private
       def send_message message #:nodoc:
         $UDP_Sender.send_message message, @host, @port
       end
-      
-      public
-      class << self
-        # Specify the scsynth binary path
-        def sc_path= path
-          @@sc_path = path
-        end
 
-        # Get the scsynth path
-        def sc_path
-          @@sc_path
+      def allocate_buffers *buffers
+        buffers.peel!
+        if @buffers.compact.size + buffers.size > 1024 
+          raise SCError, 'No more buffer numbers -- free some buffers before allocation more.'
         end
+        @buffers += buffers
+      end
       
+      @@servers = []
+      class << self
         # Returns an array with all the registered servers
         def all
           @@servers
         end
         
         # Clear the servers array
-        def clear_servers
+        def clear
           @@servers.clear
         end
       
@@ -117,7 +132,6 @@ module Scruby
           @@servers.uniq!
         end
       end
-      
     end
     
     class SCError < StandardError

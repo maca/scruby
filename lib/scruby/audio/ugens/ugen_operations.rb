@@ -17,9 +17,6 @@ module Scruby
         BINARY     = operation_indices['binary']      
         SAFE_NAMES = { :+ => :plus, :- => :minus, :* => :mult, :/ => :div2, :<= => :less_than_or_eql, :>= => :more_than_or_eql }
         
-        # true
-        def valid_ugen_input?; true; end #TODO: Deprecate
-        
         def self.included klass
           klass.send :include, BinaryOperations
           klass.send :include, UnaryOperators if klass.ancestors.include? Ugen

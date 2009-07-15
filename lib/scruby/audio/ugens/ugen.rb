@@ -112,11 +112,17 @@ module Scruby
         end
 
         class << self
+          def valid_input? obj
+            not [Ugen, ControlName, Env, UgenOperations].collect do |m|
+              true if obj.kind_of? m
+            end.compact.empty?
+          end
+          
           #:nodoc:
           def new rate, *inputs 
             raise ArgumentError.new( "#{rate} not a defined rate") unless RATES.include?( rate.to_sym )
 
-            inputs.each{ |i| raise ArgumentError.new( "#{i} is not a valid ugen input") unless i.valid_ugen_input? }
+            inputs.each{ |i| raise ArgumentError.new( "#{i} is not a valid ugen input") unless valid_input?(i) }
             inputs.peel!
 
             size   = inputs.select{ |a| a.kind_of? Array }.map{ |a| a.size }.max || 1 #get the size of the largest array element if present

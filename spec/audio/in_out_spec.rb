@@ -1,5 +1,7 @@
 require File.join( File.expand_path(File.dirname(__FILE__)),"../helper")
 
+require "scruby/audio/control_name"
+require "scruby/audio/env"
 require "scruby/audio/ugens/ugen"
 require "scruby/audio/ugens/ugen_operations"
 require "scruby/extensions"
@@ -31,7 +33,7 @@ describe In do
     @sdef = mock( 'ugen', :children => [] )
     Ugen.should_receive( :synthdef ).at_least( :once ).and_return( @sdef )
     
-    @proxy   = mock('output proxy', :valid_ugen_input? => true )
+    @proxy   = mock('output proxy' )
     @proxies = (1..10).map{ @proxy }
     OutputProxy.stub!(:new).and_return( @proxy )
     

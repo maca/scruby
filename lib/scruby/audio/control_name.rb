@@ -19,10 +19,6 @@ module Scruby
       def non_control?
         @rate == :noncontrol
       end
-      
-      def valid_ugen_input?
-        true
-      end
     end
   end
 end

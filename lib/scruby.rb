@@ -29,8 +29,14 @@ module Scruby
   VERSION = '0.1'
 end
 
-require "scruby/typed_array"
-require "scruby/extensions"
+require "scruby/core_ext/object"
+require "scruby/core_ext/array"
+require "scruby/core_ext/fixnum"
+require "scruby/core_ext/numeric"
+require "scruby/core_ext/proc"
+require "scruby/core_ext/string"
+require "scruby/core_ext/symbol"
+require "scruby/core_ext/typed_array"
 
 require "scruby/audio/ugens/ugen"
 require "scruby/audio/ugens/ugen_operations"
@@ -50,13 +56,13 @@ require "scruby/audio/ugens/env_gen"
 require "scruby/audio/node"
 require "scruby/audio/synth"
 
+require "scruby/audio/buffer"
+
+
 include Scruby
 include Audio
 include Ugens
 
-class Notice < String; end
-class Warning < String; end
-class Special < String; end
 
 
 

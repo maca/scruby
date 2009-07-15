@@ -1,17 +1,14 @@
 require 'tempfile'
-require 'rubygems'
 require 'highline'
-require 'parse_tree'
-require 'ruby2ruby'
 
 module Kernel
   alias :l :lambda
   
   # Calls Kernel#eval with the given args but catches posible errors
-  def resilient_eval( *args )
+  def resilient_eval *args
     begin
       begin
-        eval( *args )
+        eval *args
       rescue SyntaxError => e
         e
       end
@@ -20,7 +17,7 @@ module Kernel
     end
   end
   
-  def p( obj ) #:nodoc:
+  def p obj #:nodoc:
     puts obj.to_live_output
   end
 
@@ -35,11 +32,11 @@ class Object
       "\e[41m\e[33m#{self.inspect}\e[0m"
     when Numeric, Symbol, TrueClass, FalseClass, NilClass
       "\e[35m#{self.inspect}\e[0m"
-    when Notice
+    when Live::Notice
       "\e[42m\e[30m#{self}\e[0m"
-    when Warning
+    when Live::Warning
       "\e[43m\e[30m#{self}\e[0m" 
-    when Special
+    when Live::Special
       "\e[44m\e[37m#{self}\e[0m" 
     when String
       "\e[32m#{self.inspect}\e[0m"
@@ -53,11 +50,12 @@ class Object
   end
 end
 
-class Notice < String; end
-class Warning < String; end
-class Special < String; end
 
 module Live 
+  class Notice  < String; end
+  class Warning < String; end
+  class Special < String; end
+  
   class Pipe < Tempfile 
     def make_tmpname( *args ) 
       "ruby_live.pipe"
@@ -70,8 +68,7 @@ module Live
     # Starts a live session using a named pipe to receive code from a remote source and evaluates it within a context, a bit like an IRB session but evaluates code sent from a text editor
     def initialize 
       return p( Exception.new("Another session sems to be running: #{Dir.tmpdir}/ruby_live.pipe") ) if File.exist?( "#{Dir.tmpdir}/ruby_live.pipe" )
-      
-      p( Notice.new("Live Session") )
+      p Notice.new("Live Session")
       get_binding
       init_pipe
       expect_input
@@ -103,7 +100,7 @@ module Live
     end
     
     # Expects a one char Symbol or String which will bind to a passed block so it can be called later with a keystroke
-    def bind( key, &block ) 
+    def bind key, &block
       @bindings = [] unless @bindings.instance_of?(Array)
       block ||= Proc.new{}
       @bindings[ key.to_s[0] ] = Ruby2Ruby.new.process( [:block, block.to_sexp.last] )
@@ -111,7 +108,7 @@ module Live
     end
     
     # Evaluates a ruby expression within the @context Binding
-    def evaluate( string = nil ) 
+    def evaluate string = nil
       return resilient_eval( string, @context ) if string
     end
     
@@ -123,20 +120,18 @@ module Live
       @context = binding
     end
     
-    def run_updates( code )
+    def run_updates code
       source = ParseTree.new.parse_tree_for_string( code ).first
-      final = []
+      final  = []
       while iter = source.assoc(:iter)
-        source -= [iter]
+        source  -= [iter]
         final << [:block, iter.last] if iter[1].include?(:update)
       end
       evaluate( final.collect{ |exp| Ruby2Ruby.new.process(exp) }.join("\n") )
       Notice.new('Update blocks evaluated')
     end
     
-    def update # Allmost a stub
-      yield
-    end
+    def update; yield end
     
     alias :reaload! :get_binding
   end

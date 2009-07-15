@@ -25,6 +25,10 @@ describe Synth do
     s.servers.should == @servers
   end
   
+  it do
+    lambda { Synth.new 'synth', :hola }.should raise_error(ArgumentError)
+  end
+  
   it "should initialize not passing servers and have default servers" do
     Server.should_receive(:all).and_return(@servers)
     s = Synth.new( 'synth' )
@@ -36,6 +40,7 @@ describe Synth do
     servers.each{ |s| s.should_receive(:send).with( 9, 'synth', 2002, 0, 1, :attack, 10 ) }
     s = Synth.new( :synth, :attack => 10, :servers => servers )
   end
+  
   
   it "should send set message and return self" do
     s = mock('server')

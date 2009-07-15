@@ -1,5 +1,7 @@
 require File.join( File.expand_path(File.dirname(__FILE__)), '..',"helper")
 
+require "scruby/audio/control_name"
+require "scruby/audio/env"
 require "scruby/audio/ugens/ugen"
 require "scruby/audio/ugens/ugen_operations" 
 require "scruby/extensions"
@@ -13,10 +15,10 @@ describe UnaryOpUGen do
   ::RATES = :scalar, :demand, :control, :audio
   
   before do
-    @scalar  = mock 'ugen', :rate => :scalar,  :valid_ugen_input? => true
-    @demand  = mock 'ugen', :rate => :demand,  :valid_ugen_input? => true
-    @control = mock 'ugen', :rate => :control, :valid_ugen_input? => true
-    @audio   = mock 'ugen', :rate => :audio,   :valid_ugen_input? => true
+    @scalar  = mock 'ugen', :rate => :scalar
+    @demand  = mock 'ugen', :rate => :demand
+    @control = mock 'ugen', :rate => :control
+    @audio   = mock 'ugen', :rate => :audio
   end
   
   describe UnaryOpUGen do

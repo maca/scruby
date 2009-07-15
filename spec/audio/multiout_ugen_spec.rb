@@ -1,5 +1,7 @@
 require File.join( File.expand_path(File.dirname(__FILE__)), '..',"helper")
 
+require "scruby/audio/control_name"
+require "scruby/audio/env"
 require "scruby/audio/ugens/ugen" 
 require "scruby/audio/ugens/ugen_operations" 
 require "scruby/extensions"
@@ -47,7 +49,7 @@ describe Control do
     @proxy = mock('proxy', :instance_of_proxy? => true)
     OutputProxy.stub!( :new ).and_return( @proxy )
 
-    @names = Array.new( rand(7) + 3 ){ |i| mock('name', :rate => :audio, :valid_ugen_input? => true)  }
+    @names = Array.new( rand(7) + 3 ){ |i| mock 'name', :rate => :audio  }
     @proxies = Control.new( :audio, *@names )
     @control = sdef.children.first
   end
@@ -84,11 +86,11 @@ describe OutputProxy do
     @sdef = mock( 'sdef', :children => [] )
     Ugen.stub!( :synthdef ).and_return( @sdef )
     
-    @source = mock('source', :index => 0, :valid_ugen_input? => true )
-    @name   = mock('control name', :valid_ugen_input? => true)
-    @output_index = mock('output_idex', :valid_ugen_input? => true)
+    @source = mock('source', :index => 0 )
+    @name   = mock('control name' )
+    @output_index = mock('output_idex' )
     
-    @names = [mock('name', :rate => :audio, :valid_ugen_input? => true)]
+    @names = [mock('name', :rate => :audio )]
     
   end
   

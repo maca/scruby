@@ -66,14 +66,14 @@ module Scruby
     end
 
     def shape_numbers
-      curves.collect do |curve| 
-        curve.valid_ugen_input? ? 5 : SHAPE_NAMES[curve]
+      curves.collect do |curve|
+        Ugen.valid_input?( curve ) ? 5 : SHAPE_NAMES[curve]
       end
     end
 
     def curve_values
-      curves.collect do |curve| 
-        curve.valid_ugen_input? ? curve : 0
+      curves.collect do |curve|
+        Ugen.valid_input?( curve ) ? curve : 0
       end
     end
 
@@ -83,10 +83,6 @@ module Scruby
 
     def loop_node
       @loop_node ||= -99
-    end
-
-    def valid_ugen_input? #returns true
-      true
     end
 
     def collect_constants #:nodoc:
