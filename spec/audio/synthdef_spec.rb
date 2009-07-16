@@ -3,10 +3,9 @@ require File.join( File.expand_path(File.dirname(__FILE__)), '..',"helper")
 require "scruby/audio/env"
 require "scruby/audio/ugens/ugen"
 require "scruby/audio/ugens/ugen_operations"
-require "scruby/extensions"
 require "scruby/audio/synthdef" 
 require "scruby/audio/ugens/multi_out_ugens"
-require "scruby/typed_array"
+require "scruby/core_ext/typed_array"
 
 include Scruby
 include Audio

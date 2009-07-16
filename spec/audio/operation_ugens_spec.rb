@@ -4,7 +4,6 @@ require "scruby/audio/control_name"
 require "scruby/audio/env"
 require "scruby/audio/ugens/ugen"
 require "scruby/audio/ugens/ugen_operations" 
-require "scruby/extensions"
 require "scruby/audio/ugens/operation_ugens"
 
 include Scruby
@@ -15,10 +14,10 @@ describe UnaryOpUGen do
   ::RATES = :scalar, :demand, :control, :audio
   
   before do
-    @scalar  = mock 'ugen', :rate => :scalar
-    @demand  = mock 'ugen', :rate => :demand
-    @control = mock 'ugen', :rate => :control
-    @audio   = mock 'ugen', :rate => :audio
+    @scalar  = Ugen.new :scalar
+    @demand  = Ugen.new :demand
+    @control = Ugen.new :control
+    @audio   = Ugen.new :audio
   end
   
   describe UnaryOpUGen do

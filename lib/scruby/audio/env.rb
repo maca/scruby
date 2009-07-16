@@ -67,13 +67,13 @@ module Scruby
 
     def shape_numbers
       curves.collect do |curve|
-        Ugen.valid_input?( curve ) ? 5 : SHAPE_NAMES[curve]
+        Audio::Ugens::Ugen.valid_input?( curve ) ? 5 : SHAPE_NAMES[curve]
       end
     end
 
     def curve_values
       curves.collect do |curve|
-        Ugen.valid_input?( curve ) ? curve : 0
+        Audio::Ugens::Ugen.valid_input?( curve ) ? curve : 0
       end
     end
 

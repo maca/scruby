@@ -4,7 +4,6 @@ require "scruby/audio/control_name"
 require "scruby/audio/env"
 require "scruby/audio/ugens/ugen" 
 require "scruby/audio/ugens/ugen_operations" 
-require "scruby/extensions"
 require "scruby/audio/ugens/multi_out_ugens"
 
 include Scruby
@@ -43,13 +42,16 @@ end
 
 describe Control do
   before do
-    sdef = mock( 'sdef', :children => [] )
+    sdef = mock( 'SynthDef', :children => [] )
     Ugen.stub!( :synthdef ).and_return( sdef )
 
-    @proxy = mock('proxy', :instance_of_proxy? => true)
+    @proxy = mock(OutputProxy, :instance_of_proxy? => true)
     OutputProxy.stub!( :new ).and_return( @proxy )
 
-    @names = Array.new( rand(7) + 3 ){ |i| mock 'name', :rate => :audio  }
+    @names = Array.new( rand(7) + 3 ) do |i|
+      ControlName.new "control_#{i}", 1, :control, i
+    end
+    
     @proxies = Control.new( :audio, *@names )
     @control = sdef.children.first
   end
@@ -70,7 +72,7 @@ describe Control do
   end
   
   it "should instantiate with #and_proxies_from" do
-    Control.should_receive(:new).with( :audio, *@names )
+    Control.should_receive(:new).with( :control, *@names )
     Control.and_proxies_from( @names )
   end
   
@@ -85,13 +87,9 @@ describe OutputProxy do
   before do
     @sdef = mock( 'sdef', :children => [] )
     Ugen.stub!( :synthdef ).and_return( @sdef )
-    
-    @source = mock('source', :index => 0 )
-    @name   = mock('control name' )
-    @output_index = mock('output_idex' )
-    
-    @names = [mock('name', :rate => :audio )]
-    
+    @name  = ControlName.new( "control", 1, :control, 0)
+    @names = [@name]
+    @output_index = 1
   end
   
   it "should receive index from control" do
@@ -100,15 +98,13 @@ describe OutputProxy do
   end
   
   it "should have empty inputs" do
-    OutputProxy.new( :audio, @source, @output_index, @name ).inputs.should == []
+    OutputProxy.new( :audio, @name, @output_index, @name ).inputs.should == []
   end
-  
   
   it "should not be added to synthdef" do
     Ugen.should_not_receive( :synthdef )
-    OutputProxy.new( :audio, @source, @output_index, @name )
+    OutputProxy.new( :audio, @name, @output_index, @name )
   end
-  
 end
 
 

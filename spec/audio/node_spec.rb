@@ -1,7 +1,6 @@
 require File.join( File.expand_path(File.dirname(__FILE__)), '..',"helper")
 
-require "scruby/extensions" 
-require "scruby/typed_array" 
+require "scruby/core_ext/typed_array" 
 require "scruby/audio/node" 
 
 class Server; end

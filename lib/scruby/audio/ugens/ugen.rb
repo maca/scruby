@@ -48,7 +48,7 @@ module Scruby
       #     
       #   end
       #
-      # For more info and limitations on named arguments check the gem: http://github.com/maca/namedarguments/tree/master
+      # For more info and limitations on named arguments check the gem: http://github.com/maca/arguments
       #
       # Otherwise usage is pretty the same as in SuperCollider
       #
@@ -62,11 +62,9 @@ module Scruby
 
         def initialize rate, *inputs
           @rate, @inputs = rate, inputs.compact
-          
           @special_index ||= 0
           @output_index  ||= 0 
           @channels      ||= [1] 
-          
           @index = add_to_synthdef || 0
         end
         
@@ -74,12 +72,7 @@ module Scruby
         def muladd mul, add
           MulAdd.new self, mul, add
         end
-        
-        # Demodulized class name
-        def to_s
-          "#{self.class.to_s.split('::').last}"
-        end
-        
+
         def encode
           self.class.to_s.split('::').last.encode + [ E_RATES.index(rate) ].pack('w') + 
             [ inputs.size, channels.size, special_index, collect_input_specs ].flatten.pack('n*') + 
@@ -112,12 +105,6 @@ module Scruby
         end
 
         class << self
-          def valid_input? obj
-            not [Ugen, ControlName, Env, UgenOperations].collect do |m|
-              true if obj.kind_of? m
-            end.compact.empty?
-          end
-          
           #:nodoc:
           def new rate, *inputs 
             raise ArgumentError.new( "#{rate} not a defined rate") unless RATES.include?( rate.to_sym )
@@ -135,7 +122,7 @@ module Scruby
           
           #:nodoc:
           def instantiate *args 
-            obj = allocate        
+            obj = allocate
             obj.__send__ :initialize, *args
             obj
           end
@@ -147,6 +134,12 @@ module Scruby
 
           def synthdef= synthdef #:nodoc:
             @@synthdef = synthdef
+          end
+          
+          def valid_input? obj
+            not [Ugen, ControlName, Env, UgenOperations].collect do |m|
+              true if obj.kind_of? m
+            end.compact.empty?
           end
         end
       end

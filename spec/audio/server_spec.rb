@@ -3,6 +3,7 @@ require File.join( File.expand_path(File.dirname(__FILE__)), '..',"helper")
 require 'arguments'
 require 'tempfile'
 require 'osc'
+require 'scruby/core_ext/array'
 require 'scruby/core_ext/typed_array'
 require 'scruby/audio/buffer'
 require "scruby/audio/server"
@@ -55,6 +56,7 @@ describe Server do
   end
 
   describe 'sending OSC' do
+    
     
     before :all do
       @server = Server.new

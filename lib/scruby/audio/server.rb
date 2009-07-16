@@ -2,30 +2,36 @@ require 'singleton'
 
 module Scruby 
   module Audio
+    include OSC
+    
+    class Message < OSC::Message
+      def initialize command, *args
+        args.peel!
+        super command, type_tags(args), *args
+      end
+      
+      def type_tags *args
+        args.peel!
+        args.collect{ |arg| OSC::Packet.tag arg }.join
+      end
+    end
+    
     class UDPSender < OSC::UDPServer #:nodoc:
       include Singleton
-      include OSC
 
       alias :udp_send :send 
       def send command, host, port, *args
         args = args.collect{ |arg| arg.kind_of?( Symbol ) ? arg.to_s : arg }
-        udp_send Message.new( command, type_tag(args), *args ), 0, host, port
+        udp_send Message.new( command, *args ), 0, host, port
       end
 
       def send_message message, host, port
         udp_send message, 0, host, port
       end
-
-      def type_tag *args
-        args = *args
-        args.collect{ |msg| Packet.tag msg }.to_s
-      end
     end
     $UDP_Sender = UDPSender.instance
     
     class Server
-      include OSC
-      
       attr_reader :host, :port, :path, :buffers
 
       # Initializes and registers a new Server instance and sets the host and port for it.
@@ -53,7 +59,7 @@ module Scruby
         
         ready   = false
         @thread = Thread.new do
-          IO.popen( "cd #{ File.dirname @path }; ./#{ File.basename @path } -u #{ @port }" ) do |pipe|
+          IO.popen "cd #{ File.dirname @path }; ./#{ File.basename @path } -u #{ @port }" do |pipe|
             loop do 
               if response = pipe.gets
                 puts response
@@ -92,9 +98,7 @@ module Scruby
       
       # Encodes and sends a SynthDef to the scsynth server
       def send_synth_def synth_def
-        blob        = Blob.new( synth_def.encode ), 0
-        def_message = Message.new '/d_recv', $UDP_Sender.type_tag(blob), *blob
-        send_message  Bundle.new nil, def_message
+        send_message Bundle.new nil, Message.new( '/d_recv', Blob.new(synth_def.encode), 0 )
       end
       
       def send_message message #:nodoc:
@@ -104,7 +108,7 @@ module Scruby
       def allocate_buffers *buffers
         buffers.peel!
         if @buffers.compact.size + buffers.size > 1024 
-          raise SCError, 'No more buffer numbers -- free some buffers before allocation more.'
+          raise SCError, 'No more buffer numbers -- free some buffers before allocating more.'
         end
         @buffers += buffers
       end

@@ -84,12 +84,11 @@ module Scruby
       end
 
       private
-      #:nodoc:
       def collect_control_names function, values, rates
         names = function.arguments
         names.zip( values, rates ).collect_with_index{ |array, index| ControlName.new *(array << index)  }
       end
-      #:nodoc:
+
       def build_controls control_names
         # control_names.select{ |c| c.rate == :noncontrol }.sort_by{ |c| c.control_name.index } + 
         [:scalar, :trigger, :control].collect do |rate| 
@@ -97,17 +96,16 @@ module Scruby
           Control.and_proxies_from( same_rate_array ) unless same_rate_array.empty?
         end.flatten.compact.sort_by{ |proxy| proxy.control_name.index }
       end
-      #:nodoc:
+
       def build_ugen_graph function, control_names
         Ugen.synthdef = self
         function.call *build_controls(control_names)
         Ugen.synthdef = nil
       end
-      #:nodoc:
+
       def collect_constants children
         children.send( :collect_constants ).flatten.compact.uniq
       end
-
     end
   end
 end

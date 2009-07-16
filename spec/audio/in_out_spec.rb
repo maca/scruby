@@ -4,7 +4,6 @@ require "scruby/audio/control_name"
 require "scruby/audio/env"
 require "scruby/audio/ugens/ugen"
 require "scruby/audio/ugens/ugen_operations"
-require "scruby/extensions"
 require "scruby/audio/ugens/multi_out_ugens"
 require "scruby/audio/ugens/in_out"
 

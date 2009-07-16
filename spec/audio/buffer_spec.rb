@@ -3,7 +3,6 @@ require File.join( File.expand_path(File.dirname(__FILE__)), '..',"helper")
 require 'arguments'
 require 'tempfile'
 require 'osc'
-require 'scruby/core_ext/array'
 require "scruby/audio/buffer"
 require "scruby/audio/server"
 
@@ -47,7 +46,7 @@ describe Buffer do
       2.times do # ???
         @server.send "/status"
         sleep 0.2
-        @server.send "/dumpOSC", 1
+        @server.send "/dumpOSC", 3
       end
     end
     
@@ -59,7 +58,7 @@ describe Buffer do
       buffer = Buffer.read @server, "sounds/a11wlk01-44_1.aiff"
       buffer.should be_a(Buffer)
       sleep 0.1
-      @server.output.should =~ %r{\[ "/b_allocRead", 1, "sounds/a11wlk01-44_1.aiff", 0, -1, DATA\[20\] \]}
+      @server.output.should =~ %r{\[ "/b_allocRead", 0, "sounds/a11wlk01-44_1.aiff", 0, -1, DATA\[20\] \]}
     end
 
   end

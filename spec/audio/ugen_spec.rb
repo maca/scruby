@@ -4,8 +4,12 @@ require 'yaml'
 require "scruby/audio/control_name"
 require "scruby/audio/env"
 require "scruby/audio/ugens/ugen"
-require "scruby/audio/ugens/ugen_operations" 
-require "scruby/extensions"
+require "scruby/audio/ugens/ugen_operations"
+require "scruby/core_ext/object"
+require "scruby/core_ext/numeric"
+require "scruby/core_ext/string"
+require "scruby/core_ext/fixnum"
+require "scruby/core_ext/array"
 
 include Scruby
 include Audio
@@ -37,14 +41,14 @@ describe Ugen do
   end
   
   it "should tell if valid input" do
-    Ugen.valid_input?( Ugen.new(:audio) ).should be_true
-    Ugen.valid_input?( Env.asr ).should be_true
-    Ugen.valid_input?( 'string' ).should be_false
+    Ugen.send( :valid_input?, SinOsc.ar ).should be_true
+    Ugen.send( :valid_input?, Env.asr ).should be_true
+    Ugen.send( :valid_input?, 'string' ).should be_false
   end
 
   describe 'attributes' do
     before do
-      @ugen = Ugen.new :audio, 1
+      @ugen = SinOsc.ar
     end
     
     it do
@@ -64,8 +68,8 @@ describe Ugen do
     end
     
     before do
-      @ugen  = Ugen.new :audio, 1, 2
-      @ugen2 = Ugen.new :audio, 1, 2
+      @ugen  = SinOsc.ar
+      @ugen2 = SinOsc.ar
     end
     
     it do #this specs all binary operations

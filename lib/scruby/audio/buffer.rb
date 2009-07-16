@@ -1,9 +1,7 @@
 module Scruby
   class Buffer
 
-
     # allocReadChannel
-
     # allocReadMsg
     # alloc ReadCannelMsg
     # read
@@ -87,7 +85,7 @@ module Scruby
     # :nodoc:
     def allocate_and_read path, start, frames, &completion
       @path = path
-      @server.send "/b_allocRead", bufnum# , path, start, frames, yield(self)
+      @server.send "/b_allocRead", bufnum, path, start, frames, Message.new("/b_query", bufnum)
       self
     end
     

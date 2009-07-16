@@ -6,7 +6,6 @@ require "scruby/audio/env"
 require "scruby/audio/ugens/ugen"
 require "scruby/audio/ugens/operation_ugens"
 require "scruby/audio/ugens/ugen_operations" 
-require "scruby/extensions"
 
 include Scruby
 include Audio

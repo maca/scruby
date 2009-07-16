@@ -1,6 +1,5 @@
 require File.join( File.expand_path(File.dirname(__FILE__)), '..',"helper")
 
-require "scruby/extensions"
 require "scruby/audio/ugens/ugen"
 require "scruby/audio/ugens/ugen_operations" 
 require "scruby/audio/ugens/ugens"
