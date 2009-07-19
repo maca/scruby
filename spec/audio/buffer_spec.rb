@@ -19,26 +19,6 @@ class Scruby::Audio::Server
 end
 
 describe Buffer do
-  describe '#server buffer allocation' do
-    before do
-      @server = Server.new
-    end
-
-    it "should register itself in server" do
-      buffer = Buffer.new @server
-      @server.buffers.should include(buffer)
-    end
-
-    it "should allow less than 1024 buffers" do
-      @server.allocate_buffers( (1..1024).map{ mock(Buffer) } )
-      @server.buffers.size.should == 1024
-    end
-
-    it "should not allow more than 1024 buffers" do
-      lambda { @server.allocate_buffers( (1..1025).map{ mock(Buffer) } ) }.should raise_error(SCError)
-    end
-  end
-
   describe "messaging" do
     before :all do
       @server = Server.new
@@ -99,6 +79,52 @@ describe Buffer do
       
       it "should allow passing a completion message"
     end
+  
+    describe '#free' do
+      before do
+        @buffer  = Buffer.allocate @server, 44100 * 10.0, 2
+        @buffer2 = Buffer.allocate @server, 44100 * 10.0, 2
+        @bnum    = @buffer2.buffnum
+        @buffer2.free
+        sleep 0.1
+      end
+      
+      it "should remove itself from the server @buffers array and send free message" do
+        @buffer2.buffnum.should be_nil
+        @server.output.should =~ %r{\[ "/b_free", #{ @bnum }, 0 \]}
+      end
+      
+      it "should allow passing a completion message"
+      
+    end
+    
+    describe 'Buffer.alloc_consecutive' do
+      before do
+        @buffers = Buffer.alloc_consecutive 8, @server, 4096, 2
+        sleep 0.1
+      end
+      
+      it "should send alloc message for each Buffer and instantiate" do
+        @buffers.should have(8).buffers
+        @buffers.each do |buff|
+          @server.output.should =~ %r{\[ "/b_alloc", #{ buff.buffnum }, 4096, 2, 0 \]}
+        end
+      end
+      
+      it "should allow passing a message"
+    end
+    
+    describe 'Buffer.read_channel' do
+      before do
+        @buffer = Buffer.read_channel @server, "sounds/SinedPink.aiff", :channels => [0]
+        sleep 0.1
+      end
+      
+      it "should allocate and send /b_allocReadChannel message" do
+        @buffer.should be_a(Buffer)
+        @server.output.should =~ %r{\[ "/b_allocReadChannel", #{ @buffer.buffnum }, "sounds/SinedPink.aiff", 0, -1, 0, DATA\[20\] \]}
+        @server.output.should =~ /73 6f 75 6e  64 73 2f 53  69 6e 65 64  50 69 6e 6b/
+      end
+    end
   end
-
 end

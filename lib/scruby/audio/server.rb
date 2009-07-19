@@ -118,12 +118,36 @@ module Scruby
         send Bundle.new( nil, Message.new( '/d_recv', Blob.new(synth_def.encode), 0 ) )
       end
 
+      # This method should not be directly called, it will add passed +buffers+ to the @buffers array, the +Buffer#buffnum+
+      # will be it's index in this array. Max number of buffers is 1024.
+      # It will try to fill first consecutive nil indices of the array and if there are not enough consecutive nil indices for the +buffers+ 
+      # passed and the maximum number is not reached it will push the buffers to the array, otherwise will raise an error.
       def allocate_buffers *buffers
         buffers.peel!
         if @buffers.compact.size + buffers.size > 1024 
           raise SCError, 'No more buffer numbers -- free some buffers before allocating more.'
         end
-        @buffers += buffers
+        
+        return @buffers += buffers unless @buffers.index nil # just concat arrays if no nil item in @buffers
+        
+        indices = []
+        @buffers.each_with_index do |item, index| # find n number of consecutive nil indices
+          break if indices.size >= buffers.size
+          if item.nil?
+            indices << index
+          else
+            indices.clear
+          end
+        end
+        
+        case 
+        when indices.size >= buffers.size
+          @buffers[indices.first, buffers.size] = buffers
+        when @buffers.size + buffers.size <= 1024
+          @buffers += buffers
+        else
+          raise SCError, "No block of #{ buffers.size } consecutive buffer slots is available."
+        end
       end
 
       @@servers = []

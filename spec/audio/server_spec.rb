@@ -25,6 +25,12 @@ class Scruby::Audio::Server
   end
 end
 
+class Scruby::Audio::Buffer
+  def == other
+    self.class == other.class
+  end
+end
+
 describe Message do
   it "should encode array as Message Blob" do
     m = Message.new "/b_allocRead", 1, "path", 1, -1, ["/b_query", 1]
@@ -91,6 +97,49 @@ describe Server do
       @server.output.should =~ %r{\[ "#bundle", 1, \n\s*\[ "/d_recv", DATA\[56\], 0 \]\n\]}
     end
   end
+  
+  describe 'buffers' do
+    before do
+      @server = Server.new
+    end
+    
+    it "should allow less than 1024 buffers" do
+      @server.allocate_buffers( (1..1024).map{ mock(Buffer) } )
+      @server.buffers.size.should == 1024
+    end
 
+    it "should not allow more than 1024 buffers" do
+      lambda { @server.allocate_buffers( (1..1025).map{ Buffer.new } ) }.should raise_error(SCError)
+    end
+    
+    it "should try to allocate lowest nil slot" do
+      @server.buffers.concat([nil, nil, Buffer.new, nil, nil, nil, Buffer.new])
+      @server.allocate_buffers buffer = Buffer.new
+      @server.buffers.index(buffer).should == 0
+    end
+    
+    it "should allocate various buffers in available indices" do
+      @server.buffers.concat([nil, nil, Buffer.new, nil, nil, nil, Buffer.new])
+      @server.allocate_buffers Buffer.new, Buffer.new, Buffer.new
+      @server.buffers.should == [nil, nil, Buffer.new, Buffer.new, Buffer.new, Buffer.new, Buffer.new]
+    end
+    
+    it "should allocate by appending various buffers" do
+      @server.buffers.concat([nil, nil, Buffer.new, nil, nil, nil, Buffer.new])
+      @server.allocate_buffers Buffer.new, Buffer.new, Buffer.new, Buffer.new
+      @server.buffers.should == [nil, nil, Buffer.new, nil, nil, nil, Buffer.new, Buffer.new, Buffer.new, Buffer.new, Buffer.new]
+    end
+    
+    it "should not surpass the max buffer limit" do
+      @server.allocate_buffers( (1..1022).map{ |i| Buffer.new if i % 2 == 0 } )
+      lambda { @server.allocate_buffers Buffer.new, Buffer.new, Buffer.new }.should raise_error
+    end
+    
+    it "should allocate by appending" do
+      @server.allocate_buffers( (1..1021).map{ |i| Buffer.new if i % 2 == 0 } )
+      @server.allocate_buffers Buffer.new, Buffer.new, Buffer.new
+      @server.buffers.size.should == 1024
+    end
+  end
 end 
 
