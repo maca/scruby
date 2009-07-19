@@ -40,7 +40,6 @@ describe Synth do
     s = Synth.new( :synth, :attack => 10, :servers => servers )
   end
   
-  
   it "should send set message and return self" do
     s = mock('server')
     s.should_receive(:send).with( 15, 2002, :attack, 20 )

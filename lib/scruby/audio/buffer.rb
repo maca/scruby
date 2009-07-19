@@ -1,6 +1,5 @@
 module Scruby
   class Buffer
-
     # allocReadChannel
     # allocReadMsg
     # alloc ReadCannelMsg
@@ -50,16 +49,10 @@ module Scruby
     # printOn
     # play
     # duration
-    # asUgenInput
-    # asControlInput
+
+
     # asBufWithValues
-    # readMsg { arg argpath, fileStartFrame = 0, numFrames, 
-    #         bufStartFrame = 0, leaveOpen = false, completionMessage;
-    #   path = argpath;
-    #   ^["/b_read", bufnum, path, fileStartFrame, numFrames ? -1, 
-    #     bufStartFrame, leaveOpen.binaryValue, completionMessage.value(this)]
-    #   // doesn't set my numChannels etc.
-    # }
+
     
     attr_reader   :server
     attr_accessor :path, :frames, :channels, :rate
@@ -69,45 +62,49 @@ module Scruby
       @server.allocate_buffers self
     end
 
-    def read path, file_start = 0, frames = -1, buf_start = 0, leave_open = false
-      message = Message.new "/b_read", bufnum, path, file_start, frames, buf_start, leave_open.to_i# , *Blob.new('/b_query', buf.bufnum)
+    def allocate &message
+      message ||= 0
+      @server.send '/b_alloc', buffnum, frames, channels, message.value(self)
       self
     end
-    
-    def allocate &message
-      @server.send_message Message.new( '/b_alloc', bufnum, frames, channels, *Blob.new( message.call(self) ) )
+
+    def buffnum
+       @server.buffers.index self
     end
-    
-    def bufnum
-      @bufnum ||= @server.buffers.index self
-    end
+    alias :as_ugen_input :buffnum
+    # alias :as_control_input :buffnum
 
     # :nodoc:
-    def allocate_and_read path, start, frames, &completion
-      @path = path
-      @server.send "/b_allocRead", bufnum, path, start, frames, Message.new("/b_query", bufnum)
+    def allocate_and_read path, start, frames, &message
+      message ||= ["/b_query", buffnum]
+      @server.send "/b_allocRead", buffnum, @path = path, start, frames, message.value(self)
       self
     end
     
     class << self
-      def read server, path, start = 0, frames = -1, &action
-        buffer = new server, &action
-        buffer.allocate_and_read( path, start, frames ){ |buf| ["/b_query", buf.bufnum] }
+      # Allocate a buffer and immediately read a soundfile into it.
+      def read server, path, start = 0, frames = -1, &message
+        buffer = new server, &message
+        buffer.allocate_and_read path, start, frames
       end
       
-      def allocate server, frames = -1, channels = 1
+      def cue_sound_file server, path, start, channels = 2, buff_size = 32768, &message
+        allocate server, buff_size, channels do |buffer|
+          message ||= 0
+          ['/b_read', buffer.buffnum, path, start, buff_size, 0, true, message.value(buffer)]
+        end
+      end
+      
+      def allocate server, frames = -1, channels = 1, &message
         buffer = new server, frames, channels
-        # buffer.rate = server.rate
-        buffer.alloc
+        buffer.allocate &message
       end
       
-      named_arguments_for :read
+      named_arguments_for :allocate, :read, :cue_sound_file
      
-      # alloc
       # allocConsecutive
       # readChannel
       # readNoUpdate
-      # cueSoundFile
       # loadCollection
       # sendCollection
       # freeAllinitServerCache

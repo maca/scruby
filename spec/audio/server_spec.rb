@@ -3,6 +3,7 @@ require File.join( File.expand_path(File.dirname(__FILE__)), '..',"helper")
 require 'arguments'
 require 'tempfile'
 require 'osc'
+require 'scruby/audio/node'
 require 'scruby/core_ext/array'
 require 'scruby/core_ext/typed_array'
 require 'scruby/audio/buffer'
@@ -21,6 +22,13 @@ class Scruby::Audio::Server
     @output ||= ""
     @output << string
     string
+  end
+end
+
+describe Message do
+  it "should encode array as Message Blob" do
+    m = Message.new "/b_allocRead", 1, "path", 1, -1, ["/b_query", 1]
+    p m.encode
   end
 end
 
@@ -56,8 +64,6 @@ describe Server do
   end
 
   describe 'sending OSC' do
-    
-    
     before :all do
       @server = Server.new
       @server.boot
@@ -84,7 +90,7 @@ describe Server do
       sleep 0.1
       @server.output.should =~ %r{\[ "#bundle", 1, \n\s*\[ "/d_recv", DATA\[56\], 0 \]\n\]}
     end
-
   end
+
 end 
 

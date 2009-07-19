@@ -7,6 +7,18 @@ module Scruby
     class Message < OSC::Message
       def initialize command, *args
         args.peel!
+        args.collect! do |arg|
+          case arg
+          when Array
+            Blob.new self.class.new(*arg).encode
+          when true
+            1
+          when false
+            0
+          else
+            arg
+          end
+        end
         super command, type_tags(args), *args
       end
       
@@ -39,10 +51,10 @@ module Scruby
       # server already running.
       # Server class keeps an array with all the instantiated servers
       def initialize host = 'localhost', port = 57111, path = '/Applications/SuperCollider/scsynth'
-        @host    = host
-        @port    = port
-        @path    = path
-        @buffers = []
+        @host       = host
+        @port       = port
+        @path       = path
+        @buffers    = []
         self.class.all << self
       end
       
@@ -89,20 +101,21 @@ module Scruby
         send '/quit'
       end
       
-      # Sends an OSC command to the scsyth server.
-      # E.g. <tt>server.send('/dumpOSC', 1)</tt>
-      def send command, *args
-        $UDP_Sender.send command, @host, @port, *args
+      # Sends an OSC command or +Message+ to the scsyth server.
+      # E.g. +server.send('/dumpOSC', 1)+
+      def send message, *args
+        case message
+        when Bundle, Message
+          $UDP_Sender.send_message message, @host, @port
+        else
+          $UDP_Sender.send message, @host, @port, *args
+        end
         self
       end
       
       # Encodes and sends a SynthDef to the scsynth server
       def send_synth_def synth_def
-        send_message Bundle.new nil, Message.new( '/d_recv', Blob.new(synth_def.encode), 0 )
-      end
-      
-      def send_message message #:nodoc:
-        $UDP_Sender.send_message message, @host, @port
+        send Bundle.new( nil, Message.new( '/d_recv', Blob.new(synth_def.encode), 0 ) )
       end
 
       def allocate_buffers *buffers
@@ -112,7 +125,7 @@ module Scruby
         end
         @buffers += buffers
       end
-      
+
       @@servers = []
       class << self
         # Returns an array with all the registered servers

@@ -26,6 +26,10 @@ class SinOsc < Ugen
     end
   end
 end
+
+class Scruby::Audio::Buffer
+  def as_ugen_input; 0; end
+end
     
 
 describe Ugen do
@@ -43,7 +47,12 @@ describe Ugen do
   it "should tell if valid input" do
     Ugen.send( :valid_input?, SinOsc.ar ).should be_true
     Ugen.send( :valid_input?, Env.asr ).should be_true
+    Ugen.send( :valid_input?, Buffer.new ).should be_true
     Ugen.send( :valid_input?, 'string' ).should be_false
+  end
+  
+  it "should use buffnum as input when a buffer is passed" do
+    Ugen.new( :audio, Buffer.new ).inputs.should == [0]
   end
 
   describe 'attributes' do
@@ -182,7 +191,7 @@ describe Ugen do
     
     it "should have empty inputs" do
       Ugen.new( :audio ).inputs.should == []
-      Ugen.new( :audio, [nil] ).inputs.should == []
+      Ugen.new( :audio, [] ).inputs.should == []
     end
   end
   

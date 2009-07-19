@@ -3,6 +3,14 @@ class Object
   def to_array
     [*self]
   end
+  
+  def to_proc
+    Proc.new{ self }
+  end
+
+  def value *args
+    self
+  end
 end
 
 

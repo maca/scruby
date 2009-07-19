@@ -18,6 +18,8 @@ module Scruby
     }
 
     def initialize levels, times, curves = :lin, release_node = nil, loop_node = nil
+      #times should be one less than levels size
+      # raise( ArgumentError, 'levels and times must be array')
       @levels, @times, @curves, @release_node, @loop_node = levels, times, curves.to_array, release_node, loop_node
       raise ArgumentError, "levels and times should be array" unless levels.instance_of?(Array) and times.instance_of?(Array)
     end

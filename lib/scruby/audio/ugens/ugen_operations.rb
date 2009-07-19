@@ -47,7 +47,9 @@ module Scruby
         end
       
         module UnaryOperators
-          UNARY.each_key{ |op| define_method(op){ UnaryOpUGen.new op, self } }
+          UNARY.each_key do |op|
+            define_method(op){ UnaryOpUGen.new op, self }
+          end
         end
       end
       

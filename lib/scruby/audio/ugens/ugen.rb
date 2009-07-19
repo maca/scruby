@@ -108,9 +108,14 @@ module Scruby
           #:nodoc:
           def new rate, *inputs 
             raise ArgumentError.new( "#{rate} not a defined rate") unless RATES.include?( rate.to_sym )
-
-            inputs.each{ |i| raise ArgumentError.new( "#{i} is not a valid ugen input") unless valid_input?(i) }
+            
             inputs.peel!
+            inputs.collect! do |input|
+              input = input.as_ugen_input if input.respond_to?(:as_ugen_input)
+              raise ArgumentError.new( "#{ input.inspect } is not a valid ugen input") unless valid_input? input
+              input
+            end
+            
 
             size   = inputs.select{ |a| a.kind_of? Array }.map{ |a| a.size }.max || 1 #get the size of the largest array element if present
             inputs.flatten! if size == 1 #if there is one or more arrays with just one element flatten the input array
@@ -137,7 +142,7 @@ module Scruby
           end
           
           def valid_input? obj
-            not [Ugen, ControlName, Env, UgenOperations].collect do |m|
+            not [Ugen, ControlName, Env, UgenOperations, Buffer].collect do |m|
               true if obj.kind_of? m
             end.compact.empty?
           end
