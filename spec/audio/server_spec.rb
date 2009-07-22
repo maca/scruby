@@ -6,12 +6,16 @@ require 'osc'
 require 'scruby/audio/node'
 require 'scruby/core_ext/array'
 require 'scruby/core_ext/typed_array'
-require 'scruby/audio/buffer'
+require 'scruby/audio/bus'
 require "scruby/audio/server"
-
 
 include Scruby
 include Audio
+
+module Mocks
+  class Bus; end
+  class Buffer; end
+end
 
 Thread.abort_on_exception = true
 
@@ -23,6 +27,7 @@ class Scruby::Audio::Server
     @output << string
     string
   end
+
 end
 
 class Scruby::Audio::Buffer
@@ -58,6 +63,12 @@ describe Server do
       Thread.should_not_receive(:new)
       @server.boot
     end
+    
+    it "should remove server from server list" do
+      @server.boot
+      @server.quit
+      Server.all.should be_empty
+    end
 
     it "should raise scsynth not found error" do
       lambda{ @server = Server.new(:path => '/not_scsynth'); @server.boot }.should raise_error(Server::SCError)
@@ -73,11 +84,8 @@ describe Server do
     before :all do
       @server = Server.new
       @server.boot
-      2.times do # ???
-        @server.send "/status"
-        sleep 0.2
-        @server.send "/dumpOSC", 1
-      end
+      @server.send "/dumpOSC", 3
+      sleep 0.05
     end
     
     after :all do
@@ -98,48 +106,81 @@ describe Server do
     end
   end
   
-  describe 'buffers' do
-    before do
-      @server = Server.new
-    end
-    
-    it "should allow less than 1024 buffers" do
-      @server.allocate_buffers( (1..1024).map{ mock(Buffer) } )
-      @server.buffers.size.should == 1024
+  shared_examples_for 'allocator' do
+    it "should allow less than @max_size elements" do
+      @server.__send__( :allocate, @kind, (1..@allowed_elements).map{ @class.new } )
+      @server.__send__(@kind).size.should == @max_size
     end
 
-    it "should not allow more than 1024 buffers" do
-      lambda { @server.allocate_buffers( (1..1025).map{ Buffer.new } ) }.should raise_error(SCError)
+    it "should not allow more than @max_size elements" do
+      lambda { @server.__send__( :allocate, @kind, (1..@max_size+1).map{ @class.new } ) }.should raise_error(SCError)
     end
     
     it "should try to allocate lowest nil slot" do
-      @server.buffers.concat([nil, nil, Buffer.new, nil, nil, nil, Buffer.new])
-      @server.allocate_buffers buffer = Buffer.new
-      @server.buffers.index(buffer).should == 0
+      @server.__send__(@kind).concat([nil, nil, @class.new, nil, nil, nil, @class.new])
+      @server.__send__ :allocate, @kind, buffer = @class.new
+      @server.__send__(@kind).index(buffer).should == @index_start
     end
     
-    it "should allocate various buffers in available indices" do
-      @server.buffers.concat([nil, nil, Buffer.new, nil, nil, nil, Buffer.new])
-      @server.allocate_buffers Buffer.new, Buffer.new, Buffer.new
-      @server.buffers.should == [nil, nil, Buffer.new, Buffer.new, Buffer.new, Buffer.new, Buffer.new]
+    it "should allocate various elements in available contiguous indices" do
+      @server.__send__(@kind).concat([nil, nil, @class.new, nil, nil, nil, @class.new])
+      @server.__send__ :allocate, @kind, @class.new, @class.new, @class.new
+      elements = @server.__send__(@kind)[@max_size-@allowed_elements..-1].compact
+      elements.should have(5).elements
     end
     
-    it "should allocate by appending various buffers" do
-      @server.buffers.concat([nil, nil, Buffer.new, nil, nil, nil, Buffer.new])
-      @server.allocate_buffers Buffer.new, Buffer.new, Buffer.new, Buffer.new
-      @server.buffers.should == [nil, nil, Buffer.new, nil, nil, nil, Buffer.new, Buffer.new, Buffer.new, Buffer.new, Buffer.new]
+    it "should allocate by appending various elements" do
+      @server.__send__(@kind).concat([nil, nil, @class.new, nil, nil, nil, @class.new])
+      @server.__send__ :allocate, @kind, @class.new, @class.new, @class.new, @class.new
+      elements = @server.__send__(@kind)[@max_size-@allowed_elements..-1].compact
+      elements.should have(6).elements
     end
     
     it "should not surpass the max buffer limit" do
-      @server.allocate_buffers( (1..1022).map{ |i| Buffer.new if i % 2 == 0 } )
-      lambda { @server.allocate_buffers Buffer.new, Buffer.new, Buffer.new }.should raise_error
+      @server.__send__( :allocate, @kind, (1..@allowed_elements-2).map{ |i| @class.new if i % 2 == 0 } )
+      lambda { @server.__send__ :allocate, @kind, @class.new, @class.new, @class.new }.should raise_error
     end
     
     it "should allocate by appending" do
-      @server.allocate_buffers( (1..1021).map{ |i| Buffer.new if i % 2 == 0 } )
-      @server.allocate_buffers Buffer.new, Buffer.new, Buffer.new
-      @server.buffers.size.should == 1024
+      @server.__send__( :allocate, @kind, (1..@allowed_elements-3).map{ |i| @class.new if i % 2 == 0 } )
+      @server.__send__ :allocate, @kind, @class.new, @class.new, @class.new
+      @server.__send__(@kind).size.should == @max_size
     end
   end
+  
+  describe 'buffers allocation' do
+    before do
+      @server = Server.new
+      @kind   = :buffers
+      @class  = Mocks::Buffer
+      @allowed_elements = @max_size = 1024
+      @index_start = 0
+    end
+    it_should_behave_like 'allocator'
+  end
+  
+  describe 'control_buses allocation' do
+    before do
+      @server = Server.new
+      @kind   = :control_buses
+      @class  = Mocks::Bus
+      @allowed_elements = @max_size = 4096
+      @index_start = 0
+    end
+    it_should_behave_like 'allocator'
+  end
+  
+  describe 'audio_buses allocation' do
+    before do
+      @server = Server.new
+      @kind   = :audio_buses
+      @class  = Mocks::Bus
+      @allowed_elements = 112
+      @max_size = 128
+      @index_start = 16
+    end
+    it_should_behave_like 'allocator'
+  end
+  
 end 
 

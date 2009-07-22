@@ -927,33 +927,6 @@ Dxrand:
     - 1
   - - :list
     - 
-# EnvGen: 
-#   :control: 
-#   - - :envelope
-#     -
-#   - - :gate
-#     - 1
-#   - - :levelScale
-#     - 1
-#   - - :levelBias
-#     - 0
-#   - - :timeScale
-#     - 1
-#   - - :doneAction
-#     - 0
-#   :audio: 
-#   - - :envelope
-#     -
-#   - - :gate
-#     - 1
-#   - - :levelScale
-#     - 1
-#   - - :levelBias
-#     - 0
-#   - - :timeScale
-#     - 1
-#   - - :doneAction
-#     - 0
 ExpRand: 
   :scalar: 
   - - :lo
@@ -2516,9 +2489,7 @@ Phasor:
     - 0
 PinkNoise: 
   :control: []
-
   :audio: []
-
 Pitch: 
   :control: 
   - - :input

@@ -1,16 +1,19 @@
 load File.expand_path( File.dirname( __FILE__ ) + '/../scruby.rb' )
 
+s = Server.new('localhost', 57140)
+s.boot
 
 # Lamonte Young - Just in tone afination
 # Nan Carrow 
+# Stockhausen
 44100
 
-s = Server.new('localhost', 57140)
-s.boot
 
 s.send "/dumpOSC", 0
 
 clear
+
+warn 'hi'
 
 # Síntesis aditiva básica
 SynthDef.new :add do
@@ -43,38 +46,84 @@ test = Synth.new :dos, :dur => 5, :freq => 1.3
 
 s.stop
 
+warn 'hi'
+
+# Construcción de una onda cuadrada
 SynthDef.new :simple do |freq, mul, dur|
   gate = EnvGen.kr( Env.perc(0, 0.2) )
-  env  = EnvGen.kr Env.asr(dur * 0.01, dur * 0.2, dur * 0.1), gate, :doneAction => 2
+  env  = EnvGen.kr Env.asr(dur * 0.1, dur * 0.2, dur * 0.8), gate, :doneAction => 2
   sig  = SinOsc.ar(freq) * env * mul
   Out.ar 0, [sig, sig]
 end.send
 
-Synth.new :simple, :freq => 200, :amp => 1, :dur => 1
+mults  = 1, 3, 5, 7, 9, 11, 13, 15, 17, 19, 21, 23, 25, 27, 29
+durs   = 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 24, 25, 26, 27, 28
+base   = 40
+dur    = 1
+amp    = 0.2
 
-
-freqs = 100, 300, 500, 700, 900, 1100, 1300, 1500, 1700, 1900, 2100, 2300, 2500, 2700, 2900
-amps  = 3, 5, 7, 9, 11, 13, 15, 17, 19, 21, 23, 25, 27, 29, 31
-durs  = 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 24, 25, 26, 27, 28
-
-run = true
-while run
-  freqs.zip amps, durs do |arr|
-    freq, amp, dur = arr
-    Synth.new :simple, :freq => freq * 1.2 * rand, :mul => 1.0/amp * 0.1 * rand, :dur => dur * 1 * rand
-    Synth.new :simple, :freq => freq * 0.9 * rand, :mul => 1.0/amp * 0.2 * rand, :dur => dur * 1 * rand
-    Synth.new :simple, :freq => freq * 0.6 * rand, :mul => 1.0/amp * 0.3 * rand, :dur => dur * 1 * rand
-  end
-  sleep 0.2
+mults.zip durs do |mult, dur|
+  Synth.new :simple, :freq => mult * base, :mul => amp/mult, :dur => dur
 end
 
-run = false
 
-p Node.base_id
+# Amplitud modulada
+# Alteración de la amplitud, fase o frecuencia por otra señal
+SynthDef.new :am do |mod_freq, mod_amp, amp, freq, dur|
+  gate = EnvGen.kr( Env.perc(0, 0.2) )
+  mod  = SinOsc.kr mod_freq, :mul => mod_amp
+  sig  = SinOsc.ar freq, :mul => mod + amp
+  sig  = sig * EnvGen.kr( Env.asr(dur * 0.1, dur * 0.2, dur * 0.8), gate, :doneAction => 2 )
+  Out.ar 0, [sig, sig]
+end.send
 
-s.quit
+si = Synth.new :am, :mod_freq => 100, :mod_amp => 1, :amp => 0.5, :dur => 2, :freq => 60
 
 
-Buffer.read s, "sounds/robot.aiff"
+# Modulación en anillo
+SynthDef.new :ring do |mod_freq, freq, amp, dur|
+  gate  = EnvGen.kr Env.perc(0, 0.2)
+  sig   = SinOsc.ar freq, :mul => SinOsc.ar(mod_freq, :mul => amp)
+  sig  *= EnvGen.kr( Env.asr(dur * 0.1, dur * 0.2, dur * 0.8), gate, :doneAction => 2 )
+  Out.ar 0, [sig, sig]
+end.send
+
+si = Synth.new :ring, :freq => 2000, :amp => 2, :dur => 2, :mod_freq => 4
 
 
+si.to_s
+
+# Sound0.aiff
+# Modulación en anillo con sampleo
+# Modulación en anillo
+buffer  = Buffer.read s, "sounds/huge.aiff"
+
+buffer2 = Buffer.read s, 'sounds/a11wlk01-44_1.aiff'
+buffer2.buffnum
+
+buffer.read 'sounds/a11wlk01-44_1.aiff'
+
+SynthDef.new :ring do |mod_freq, amp, buffnum|
+  gate  = EnvGen.kr Env.perc(0, 0.2)
+  sig   = PlayBuf.ar buffnum, :rate => 1, :mul => SinOsc.ar(mod_freq, :mul => amp), :loop => 1.0
+  Out.ar 0, [sig, sig]
+end.send
+
+s1 = Synth.new :ring, :freq => 90, :amp => 2, :dur => 2, :mod_freq => 4, :buffnum => buffer.buffnum
+s2 = Synth.new :ring, :freq => 90, :amp => 2, :dur => 2, :mod_freq => 4, :buffnum => buffer.buffnum
+
+s1.set :mod_freq => 80
+s2.set :mod_freq => 9000
+
+s1.set :buffnum => buffer2.buffnum
+
+s1.free
+
+s2.free
+# node ids should depend on server
+
+s1
+
+s.stop
+
+In

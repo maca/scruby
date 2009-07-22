@@ -20,7 +20,10 @@ module Kernel
   def p obj #:nodoc:
     puts obj.to_live_output
   end
-
+  
+  def warn string
+    p Live::Warning.new "warning: #{ string }"
+  end
 end
 
 class Object
@@ -43,7 +46,7 @@ class Object
     when Array
       "[#{ self.collect{ |i| i.to_live_output}.join(', ') }]"
     when Hash
-      "{#{ self.collect{ |i| i.collect{|e| e.to_live_output}.join(' => ') } }}"
+      "{#{ self.collect{ |i| i.collect{|e| e.to_live_output}.join(' => ') }.join(', ') }}"
     else
       "\e[36m#{self}\e[0m"
     end

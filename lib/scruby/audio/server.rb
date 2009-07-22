@@ -15,6 +15,8 @@ module Scruby
             1
           when false
             0
+          when Symbol
+            arg.to_s
           else
             arg
           end
@@ -44,21 +46,41 @@ module Scruby
     $UDP_Sender = UDPSender.instance
     
     class Server
-      attr_reader :host, :port, :path, :buffers
-
+      attr_reader :host, :port, :path, :buffers, :control_buses, :audio_buses
+      DEFAULTS = { :buffers => 1024, :control_buses => 4096, :audio_buses => 128, :audio_outputs => 8, :audio_inputs => 8 }.freeze
+      
       # Initializes and registers a new Server instance and sets the host and port for it.
       # The server is a Ruby representation of scsynth which can be a local binary or a remote    
       # server already running.
       # Server class keeps an array with all the instantiated servers
-      def initialize host = 'localhost', port = 57111, path = '/Applications/SuperCollider/scsynth'
-        @host       = host
-        @port       = port
-        @path       = path
-        @buffers    = []
+      #   Options:
+      #     +host+: 
+      #       defaults to 'localhost'
+      #     +port+:
+      #       TCP port defaults to 57111
+      #     +control_buses+
+      #       Number of buses for routing control data defaults to 4096, indices start at 0.
+      #     +audio_buses+
+      #       Number of audio Bus channels for hardware output and input and internal routing, defaults to 128
+      #     +audio_outputs+
+      #       Reserved +buses+ for hardware output, indices available are 0 to +audio_outputs+ - 1 defaults to 8.
+      #     +audio_inputs+
+      #       Reserved +buses+ for hardware input, +audio_outputs+ to (+audio_outputs+ + +audio_inputs+ - 1), defaults to 8.
+      #     +buffers+
+      #       Number of available sample buffers defaults to 1024
+      def initialize opts = {}
+        @host          = opts.delete(:host) || 'localhost'
+        @port          = opts.delete(:port) || 57111
+        @path          = opts.delete(:path) || '/Applications/SuperCollider/scsynth'
+        @opts          = DEFAULTS.dup.merge opts
+        @buffers       = []
+        @control_buses = []
+        @audio_buses   = []
+        Bus.audio self, @opts[:audio_outputs] # register hardware buses
+        Bus.audio self, @opts[:audio_inputs]
         self.class.all << self
       end
       
-      named_arguments_for :initialize
       # Boots the local binary of the scsynth forking a process, it will rise a SCError if the scsynth 
       # binary is not found in /Applications/SuperCollider/scsynth (default Mac OS path) or given path. 
       # The default path can be overriden using Server.scsynt_path=('path')
@@ -80,8 +102,8 @@ module Scruby
             end
           end
         end
-        sleep 0.1 until ready or !@thread.alive?
-        sleep 0.5 # just to be shure
+        sleep 0.01 until ready or !@thread.alive?
+        sleep 0.01 # just to be shure
         send "/g_new", 1  
         self   
       end
@@ -98,6 +120,7 @@ module Scruby
       
       # Sends the /quit OSC signal to the scsynth
       def quit
+        Server.all.delete self
         send '/quit'
       end
       
@@ -113,26 +136,30 @@ module Scruby
         self
       end
       
+      def send_bundle timestamp = nil, *messages
+        send Bundle.new( timestamp, *messages.map{ |message| Message.new *message  } )
+      end
+      
       # Encodes and sends a SynthDef to the scsynth server
       def send_synth_def synth_def
         send Bundle.new( nil, Message.new( '/d_recv', Blob.new(synth_def.encode), 0 ) )
       end
-
-      # This method should not be directly called, it will add passed +buffers+ to the @buffers array, the +Buffer#buffnum+
-      # will be it's index in this array. Max number of buffers is 1024.
-      # It will try to fill first consecutive nil indices of the array and if there are not enough consecutive nil indices for the +buffers+ 
-      # passed and the maximum number is not reached it will push the buffers to the array, otherwise will raise an error.
-      def allocate_buffers *buffers
-        buffers.peel!
-        if @buffers.compact.size + buffers.size > 1024 
-          raise SCError, 'No more buffer numbers -- free some buffers before allocating more.'
+  
+      # Allocates either buffer or bus indices, should be consecutive
+      def allocate kind, *elements
+        collection = instance_variable_get "@#{kind}"
+        elements.flatten!
+        
+        max_size = @opts[kind]
+        if collection.compact.size + elements.size > max_size
+          raise SCError, "No more indices available -- free some #{ kind } before allocating more."
         end
         
-        return @buffers += buffers unless @buffers.index nil # just concat arrays if no nil item in @buffers
+        return collection.concat elements unless collection.index nil # just concat arrays if no nil item
         
         indices = []
-        @buffers.each_with_index do |item, index| # find n number of consecutive nil indices
-          break if indices.size >= buffers.size
+        collection.each_with_index do |item, index| # find n number of consecutive nil indices
+          break if indices.size >= elements.size
           if item.nil?
             indices << index
           else
@@ -141,12 +168,12 @@ module Scruby
         end
         
         case 
-        when indices.size >= buffers.size
-          @buffers[indices.first, buffers.size] = buffers
-        when @buffers.size + buffers.size <= 1024
-          @buffers += buffers
+        when indices.size >= elements.size
+          collection[indices.first, elements.size] = elements
+        when collection.size + elements.size <= max_size
+          collection.concat elements
         else
-          raise SCError, "No block of #{ buffers.size } consecutive buffer slots is available."
+          raise SCError, "No block of #{ elements.size } consecutive #{ kind } indices is available."
         end
       end
 

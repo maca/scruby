@@ -42,9 +42,9 @@ module Scruby
       def self.define_ugen name, rates
         rate_name = {:audio => :ar, :control => :kr, :scalar => :ir, :demand => :new}
         rates.delete_if{ |key, value| key == :demand  } #I don't know what to do with these
-        
+                
         methods = rates.collect do |rate, args|
-          args += [[:mul, 1], [:add, 0]]
+          args.push [:mul, 1], [:add, 0]
           args.uniq!
           assigns = []
           args.each_with_index do |arg, index|
@@ -55,18 +55,23 @@ module Scruby
             }
           end
 
-          args = [":#{rate}"] + args[0...-2].collect{ |a| a.first }
+          args = [":#{ rate }"] + args[0...-2].collect{ |a| a.first }
           <<-RUBY_EVAL
             def #{ rate_name[rate] } *args
               opts = args.last.kind_of?( Hash ) ? args.pop : {}
               #{ assigns.join("\n") }
               new( #{ args.join(', ') } ).muladd( mul, add )
             end
+            
+            def params
+              @params
+            end
           RUBY_EVAL
         end.join("\n")
         
         self.class_eval <<-RUBY_EVAL
         class #{ name } < Ugen
+          @params = #{ rates.inspect }
           class << self
             #{ methods }
           end
@@ -74,6 +79,8 @@ module Scruby
         RUBY_EVAL
         # # TODO: Load from ~/Ugens directory
       end
+      
+      
       
       YAML::load( File.open( File.dirname(__FILE__) + "/ugen_defs.yaml" ) ).each_pair do |key, value| 
         self.define_ugen key, value

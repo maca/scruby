@@ -1,51 +1,66 @@
 require File.join( File.expand_path(File.dirname(__FILE__)), '..',"helper")
 
+require 'osc'
 require "scruby/core_ext/typed_array" 
 require "scruby/audio/node"
+require "scruby/audio/group"
 require "scruby/audio/synth"
+require "scruby/audio/server"
+require File.join( File.expand_path(File.dirname(__FILE__)), "server")
+
 
 include Scruby
+include Audio
 
 describe Synth do
   
   before :all do
-    ::Server = mock('Server')
   end
   
   before do
     Node.reset!
-    @servers = (0..3).map{ s = mock( 'server'); s.stub!(:send); s }
-    @synth = Synth.new :synth, :attack => 10, :servers => @servers
+    @target = Node.new( (0..3).map{ Server.new } )
+    @synth  = Synth.new :synth, {:attack => 10}, @target
   end
 
   it "should initialize" do
-    s = Synth.new 'synth', :attack => 10, :servers => @servers
-    s.name.should    == 'synth'
-    s.servers.should == @servers
+    @synth.name.should    == 'synth'
+    @synth.servers.should == @target.servers
   end
-  
-  it do
-    lambda { Synth.new 'synth', :hola }.should raise_error(ArgumentError)
-  end
-  
+ 
   it "should initialize not passing servers and have default servers" do
-    Server.should_receive(:all).and_return(@servers)
     s = Synth.new( 'synth' )
-    s.servers.should == @servers
+    s.servers.should == Server.all
   end
   
-  it "should send /s_new message" do
-    servers = (0..3).map{ s = mock( 'server') }
-    servers.each{ |s| s.should_receive(:send).with( 9, 'synth', 2002, 0, 1, :attack, 10 ) }
-    s = Synth.new( :synth, :attack => 10, :servers => servers )
-  end
+  describe 'Server interaction' do
+    before :all do
+      Server.clear
+      @server = Server.new
+      @server.boot
+      @server.send "/dumpOSC", 3
+      sleep 0.05
+    end
+    
+    after :all do
+      @server.quit
+    end
+    
+    before do
+      @server.flush
+      @synth = Synth.new :synth, :attack => 10
+    end
   
-  it "should send set message and return self" do
-    s = mock('server')
-    s.should_receive(:send).with( 15, 2002, :attack, 20 )
-    s.should_receive(:send).with( 9, "synth", 2002, 0, 1 )
-    synth = Synth.new( :synth, :servers => s)
-    synth.set( :attack => 20 ).should == synth
+    it "should send /s_new message" do
+      sleep 0.05
+      @server.output.should =~ %r{\[ "/s_new", "#{ @synth.name }", #{ @synth.id }, 0, 1, "attack", 10 \]}
+    end
+  
+    it "should send set message and return self" do
+      @synth.set( :attack => 20 ).should == @synth
+      sleep 0.05
+      @server.output.should =~ %r{\[ "/n_set", #{ @synth.id }, "attack", 20 \]}
+    end
   end
   
 end

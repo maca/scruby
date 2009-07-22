@@ -44,6 +44,11 @@ describe Ugens do
     Gendy1.stub!(:new)
     lambda { Gendy1.ar }.should raise_error(ArgumentError)
   end
+  
+  it "should print description" do
+    p PanAz.params
+    PanAz.params.should be_a(Hash)
+  end
 
   #  it "should work with arrays"
 end

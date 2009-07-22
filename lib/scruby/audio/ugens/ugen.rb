@@ -61,10 +61,10 @@ module Scruby
         @@synthdef = nil
 
         def initialize rate, *inputs
-          @rate, @inputs = rate, inputs.compact
+          @rate, @inputs   = rate, inputs.compact
           @special_index ||= 0
-          @output_index  ||= 0 
-          @channels      ||= [1] 
+          @output_index  ||= 0
+          @channels      ||= [1]
           @index = add_to_synthdef || 0
         end
         
@@ -110,12 +110,10 @@ module Scruby
             raise ArgumentError.new( "#{rate} not a defined rate") unless RATES.include?( rate.to_sym )
             
             inputs.peel!
-            inputs.collect! do |input|
-              input = input.as_ugen_input if input.respond_to?(:as_ugen_input)
+            inputs.each_with_index do |input, index|
+              inputs[index] = input = input.as_ugen_input if input.respond_to?(:as_ugen_input)
               raise ArgumentError.new( "#{ input.inspect } is not a valid ugen input") unless valid_input? input
-              input
             end
-            
 
             size   = inputs.select{ |a| a.kind_of? Array }.map{ |a| a.size }.max || 1 #get the size of the largest array element if present
             inputs.flatten! if size == 1 #if there is one or more arrays with just one element flatten the input array
@@ -125,15 +123,8 @@ module Scruby
             inputs.map{ |new_inputs| new rate, *new_inputs }
           end
           
-          #:nodoc:
-          def instantiate *args 
-            obj = allocate
-            obj.__send__ :initialize, *args
-            obj
-          end
-
-          #:nodoc:
-          def synthdef
+          
+          def synthdef #:nodoc:
             @@synthdef
           end
 
@@ -142,13 +133,23 @@ module Scruby
           end
           
           def valid_input? obj
-            not [Ugen, ControlName, Env, UgenOperations, Buffer].collect do |m|
+            not [Ugen, ControlName, Env, UgenOperations].collect do |m|
               true if obj.kind_of? m
             end.compact.empty?
+          end
+          
+          def params
+            {}
+          end
+          
+          private
+          def instantiate *args 
+            obj = allocate
+            obj.__send__ :initialize, *args
+            obj
           end
         end
       end
     end
   end
-
 end

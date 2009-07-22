@@ -1,33 +1,25 @@
 require File.join( File.expand_path(File.dirname(__FILE__)), '..',"helper")
 
+require 'date'
 require 'arguments'
 require 'tempfile'
 require 'osc'
 require "scruby/audio/buffer"
+require "scruby/audio/bus"
 require "scruby/audio/server"
+require File.join( File.expand_path(File.dirname(__FILE__)), "server")
 
 include Scruby
 include Audio
 
-class Scruby::Audio::Server
-  attr_reader :output
-  def puts string
-    @output ||= ""
-    @output << string
-    string
-  end
-end
 
 describe Buffer do
   describe "messaging" do
     before :all do
       @server = Server.new
       @server.boot
-      2.times do # ???
-        @server.send "/status"
-        sleep 0.2
-        @server.send "/dumpOSC", 3
-      end
+      @server.send "/dumpOSC", 3
+      sleep 0.05
     end
     
     after :all do
@@ -37,13 +29,12 @@ describe Buffer do
     describe 'Buffer.read' do
       before do
         @buffer = Buffer.read @server, "sounds/a11wlk01-44_1.aiff"
-        sleep 0.1
+        sleep 0.005
       end
       
       it "should instantiate and send /b_allocRead message" do
         @buffer.should be_a(Buffer)
-        @server.output.should =~ %r{\[ "/b_allocRead", #{ @buffer.buffnum }, "sounds/a11wlk01-44_1.aiff", 0, -1, DATA\[20\] \]}
-        @server.output.should =~ /00 00 00 14  2f 62 5f 71  75 65 72 79  00 00 00 00/
+        @server.output.should =~ %r{\[ "/b_allocRead", #{ @buffer.buffnum }, "/.+/Scruby/sounds/a11wlk01-44_1.aiff", 0, -1, DATA\[20\] \]}
       end
       
       it "should allow passing a completion message"
@@ -52,7 +43,7 @@ describe Buffer do
     describe 'Buffer.allocate' do
       before do
         @buffer = Buffer.allocate @server, 44100 * 8.0, 2
-        sleep 0.1
+        sleep 0.005
       end
       
       it "should call allocate and send /b_alloc message" do
@@ -66,15 +57,14 @@ describe Buffer do
   
     describe 'Buffer.cueSoundFile' do
       before do
-        @buffer = Buffer.cue_sound_file @server, "sounds/a11wlk01-44_1.aiff", 0, 1
-        sleep 0.1
+        @buffer = Buffer.cue_sound_file @server, "/sounds/a11wlk01-44_1.aiff", 0, 1
+        sleep 0.005
       end
       
       it "should send /b_alloc message and instantiate" do
         @buffer.should be_a(Buffer)
         @server.output.should =~ %r{\[ "/b_alloc", #{ @buffer.buffnum }, 32768, 1, DATA\[72\] \]}
-        @server.output.should =~ /64 73 2f 61  31 31 77 6c  6b 30 31 2d  34 34 5f 31/
-        @server.output.should =~ /2e 61 69 66  66 00 00 00  00 00 00 00  00 00 80 00/
+        @server.output.should =~ /6e 64 73 2f  61 31 31 77  6c 6b 30 31  2d 34 34 5f/
       end
       
       it "should allow passing a completion message"
@@ -86,7 +76,7 @@ describe Buffer do
         @buffer2 = Buffer.allocate @server, 44100 * 10.0, 2
         @bnum    = @buffer2.buffnum
         @buffer2.free
-        sleep 0.1
+        sleep 0.005
       end
       
       it "should remove itself from the server @buffers array and send free message" do
@@ -101,7 +91,7 @@ describe Buffer do
     describe 'Buffer.alloc_consecutive' do
       before do
         @buffers = Buffer.alloc_consecutive 8, @server, 4096, 2
-        sleep 0.1
+        sleep 0.005
       end
       
       it "should send alloc message for each Buffer and instantiate" do
@@ -117,14 +107,92 @@ describe Buffer do
     describe 'Buffer.read_channel' do
       before do
         @buffer = Buffer.read_channel @server, "sounds/SinedPink.aiff", :channels => [0]
-        sleep 0.1
+        sleep 0.005
       end
       
       it "should allocate and send /b_allocReadChannel message" do
         @buffer.should be_a(Buffer)
-        @server.output.should =~ %r{\[ "/b_allocReadChannel", #{ @buffer.buffnum }, "sounds/SinedPink.aiff", 0, -1, 0, DATA\[20\] \]}
-        @server.output.should =~ /73 6f 75 6e  64 73 2f 53  69 6e 65 64  50 69 6e 6b/
+        @server.output.should =~ %r{\[ "/b_allocReadChannel", #{ @buffer.buffnum }, "/.+/Scruby/sounds/SinedPink.aiff", 0, -1, 0, DATA\[20\] \]}
       end
+    end
+  
+    describe '#read' do
+      before do
+        @buffer  = Buffer.allocate( @server, 44100 * 10.0, 2 ).read( "sounds/robot.aiff" )
+        sleep 0.005
+      end
+      
+      it "should send message" do
+        @buffer.should be_a(Buffer)
+        @server.output.should =~ %r{\[ "/b_read", #{ @buffer.buffnum }, "/.+/Scruby/sounds/robot.aiff", 0, -1, 0, 0, DATA\[20\] \]}
+      end
+      
+      it "should allow passing a completion message"
+    end
+    
+    describe '#close' do
+      before do
+        @buffer  = Buffer.read( @server, "sounds/a11wlk01-44_1.aiff" ).close
+        sleep 0.005
+      end
+      
+      it "should send message" do
+        @buffer.should be_a(Buffer)
+        @server.output.should =~ %r{\[ "/b_close", #{ @buffer.buffnum }, 0 \]}
+      end
+      
+      it "should allow passing a completion message"
+    end
+    
+    describe '#zero' do
+      before do
+        @buffer  = Buffer.read( @server, "sounds/a11wlk01-44_1.aiff" ).zero
+        sleep 0.005
+      end
+
+      it "should send message" do
+        @buffer.should be_a(Buffer)
+        @server.output.should =~ %r{\[ "/b_zero", #{ @buffer.buffnum }, 0 \]}
+      end
+
+      it "should allow passing a completion message"
+    end
+
+    describe '#cue_sound_file' do
+      before do
+        @buffer  = Buffer.allocate( @server, 44100, 2 ).cue_sound_file( "sounds/robot.aiff" )
+        sleep 0.005
+      end
+      
+      it "should send message" do
+        @buffer.should be_a(Buffer)
+        @server.output.should =~ %r{\[ "/b_read", #{ @buffer.buffnum }, "/.+/Scruby/sounds/robot.aiff", 0, 44100, 0, 1, 0 \]}
+      end
+      
+      it "should allow passing a completion message"
+    end
+    
+    describe '#write' do
+      before do
+        @buffer  = Buffer.allocate( @server, 44100 * 10.0, 2 ).write(
+          "sounds/test.aiff", "aiff", "int16", 0, 0, true
+        );
+        sleep 0.005
+      end
+      
+      it "should send message" do
+        @buffer.should be_a(Buffer)
+        @server.output.should =~ %r{\[ "/b_write", #{ @buffer.buffnum }, "/.+/Scruby/sounds/test.aiff", "aiff", "int16", 0, 0, 1, 0 \]}
+      end
+      
+      it "should have a default path" do
+        @server.flush
+        buffer  = Buffer.allocate( @server, 44100 * 10.0, 2 ).write( nil, "aiff", "int16", 0, 0, true );
+        sleep 0.005
+        @server.output.should =~ %r{\[ "/b_write", #{ buffer.buffnum }, "/.+/Scruby/\d\d\d\d.+\.aiff", "aiff", "int16", 0, 0, 1, 0 \]}
+      end
+      
+      it "should allow passing a completion message"
     end
   end
 end

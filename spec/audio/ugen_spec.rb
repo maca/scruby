@@ -47,7 +47,6 @@ describe Ugen do
   it "should tell if valid input" do
     Ugen.send( :valid_input?, SinOsc.ar ).should be_true
     Ugen.send( :valid_input?, Env.asr ).should be_true
-    Ugen.send( :valid_input?, Buffer.new ).should be_true
     Ugen.send( :valid_input?, 'string' ).should be_false
   end
   
