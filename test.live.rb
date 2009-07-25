@@ -1,19 +1,11 @@
 load File.expand_path( File.dirname( __FILE__ ) + '/../scruby.rb' )
 
-s = Server.new('localhost', 57140)
+s = Server.new
 s.boot
 
-# Lamonte Young - Just in tone afination
-# Nan Carrow 
-# Stockhausen
-44100
+10.times { |i| print "hola #{i}" }
 
-
-s.send "/dumpOSC", 0
-
-clear
-
-warn 'hi'
+1+1
 
 # Síntesis aditiva básica
 SynthDef.new :add do
@@ -46,7 +38,6 @@ test = Synth.new :dos, :dur => 5, :freq => 1.3
 
 s.stop
 
-warn 'hi'
 
 # Construcción de una onda cuadrada
 SynthDef.new :simple do |freq, mul, dur|
@@ -126,4 +117,100 @@ s1
 
 s.stop
 
-In
+
+
+# Síntesis por FM
+SynthDef.new :campana do |freq, amp, dur|
+  gate     = EnvGen.kr Env.perc(0, 0.2)
+  mod_env  = EnvGen.kr Env.new([600, 200, 100], [0.7,0.3].map{|v|v*dur}), gate
+  mod      = SinOsc.ar freq * 1.4, :mul => mod_env
+  sig      = SinOsc.ar freq + mod
+  env      = EnvGen.kr Env.new( [0, 1, 0.6, 0.2, 0.1, 0 ], [0.001, 0.005, 0.3, 0.5, 0.7].map{|v|v*dur} ), gate, :doneAction => 2
+  sig      = sig * amp * env
+  Out.ar [sig, sig]
+end.send
+
+camp = Synth.new :campana, :freq => 250, :amp => 0.8, :dur => 5
+camp = Synth.new :campana, :freq => 20,  :amp => 0.8, :dur => 6
+
+
+
+
+# Chido
+SynthDef.new :wood_drum do |freq, amp, dur|
+  gate     = EnvGen.kr Env.perc(0, 0.2)
+  mod_env  = EnvGen.kr Env.new([1600, 200, 50, 90, 10], [0.7,0.3,0.4,0.4].map{|v|v*dur}), gate
+  mod      = SinOsc.ar freq * 0.6875, :mul => mod_env
+  sig      = SinOsc.ar freq + mod
+  env      = EnvGen.kr Env.new( [0, 1, 0.6, 0.2, 0.1, 0 ], [0.1, 0.5, 0.5, 0.7, 0.9].map{|v|v*dur} ), gate, :doneAction => 2
+  sig      = sig * amp * env
+  Out.ar [sig, sig]
+end.send
+
+camp = Synth.new :wood_drum, :freq => 184,  :amp => 0.8, :dur => 10
+camp = Synth.new :wood_drum, :freq => 180,  :amp => 0.8, :dur => 10
+
+
+
+
+
+# Síntesis por FM
+SynthDef.new :"metales" do |freq, amp, dur|
+  mod_freq = freq * 5
+  gate     = EnvGen.kr Env.perc(0, 0.2)
+  mod_env  = EnvGen.kr Env.new([0, 1, 0], [0.1,0.3].map{|v|v*dur}), gate
+  mod      = SinOsc.ar mod_freq, :mul => mod_env
+  sig      = SinOsc.ar freq + mod
+  env      = EnvGen.kr Env.new( [0, 1, 0.6, 0.2, 0.1, 0 ], [0.1, 0.5, 0.3, 0.5, 0.7].map{|v|v*dur} ), gate, :doneAction => 2
+  sig      = sig * amp * env
+  Out.ar [sig, sig]
+end.send
+
+
+camp = Synth.new :"metales", :freq => 200, :amp => 0.8, :dur => 100
+
+s.stop
+
+
+
+camp.free
+
+[0.001, 0.005, 0.3, 0.5, 0.6].inject{ |sum, val| sum + val * 10 }
+
+
+
+# Convolución
+# Artículo Rhodes tutorial
+# Multiplicación de dos señales, el resultado es todo lo que coincide en las dos señales
+
+
+buffer = Buffer.read s, "sounds/Sound0.aiff", :frames => 10460
+
+
+
+
+SynthDef.new :convo do |dur, buffnum|
+  sig  = WhiteNoise.ar
+  sig *= EnvGen.kr Env.perc(0, 0.5), :doneAction => 2
+  buff = PlayBuf.ar buffnum, :rate => 0.6, :loop => 1.0
+  sig  = Convolution.ar buff, sig, 1024, 0.5 
+  Out.ar 0, [sig, sig]
+end.send
+
+
+Synth.new :convo, :dur => 1, :buffnum => buffer.buffnum
+
+
+
+
+
+
+
+
+# Radios que funcionan para
+
+
+
+# Lamonte Young - Just in tone afination
+# Nan Carrow 
+# Stockhausen

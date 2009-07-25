@@ -155,7 +155,7 @@ module Scruby
           raise SCError, "No more indices available -- free some #{ kind } before allocating more."
         end
         
-        return collection.concat elements unless collection.index nil # just concat arrays if no nil item
+        return collection.concat(elements) unless collection.index nil # just concat arrays if no nil item
         
         indices = []
         collection.each_with_index do |item, index| # find n number of consecutive nil indices

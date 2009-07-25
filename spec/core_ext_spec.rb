@@ -3,10 +3,10 @@ require File.join( File.expand_path(File.dirname(__FILE__)),"helper")
 
 describe Numeric do
   before :all do
-      @bin_op = mock 'binop'
+      @bin_op        = mock 'binop'
       ::BinaryOpUGen = mock 'BinaryOpUGen', :new => @bin_on
-      @ugen   = mock 'ugen'
-      ::Ugen  = mock 'Ugen', :new => @ugen
+      @ugen          = mock 'ugen'
+      ::Ugen         = mock 'Ugen', :new => @ugen
     end
   
   it "shoud have an scalar rate" do
@@ -114,5 +114,6 @@ describe String do
   end
   
 end
+
 
 
