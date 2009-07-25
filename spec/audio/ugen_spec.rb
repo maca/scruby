@@ -10,6 +10,8 @@ require "scruby/core_ext/numeric"
 require "scruby/core_ext/string"
 require "scruby/core_ext/fixnum"
 require "scruby/core_ext/array"
+require "scruby/core_ext/delegator_array"
+
 
 include Scruby
 include Audio
@@ -208,7 +210,7 @@ describe Ugen do
     end
     
     it "should return an array of Ugens if an array as one arg is passed on instantiation" do
-      Ugen.new( :audio, 1, [2, 3] ).should be_instance_of(Array)
+      Ugen.new( :audio, 1, [2, 3] ).should be_instance_of(DelegatorArray)
     end
     
     it do
@@ -252,7 +254,7 @@ describe Ugen do
       ugens.should have(4).ugens
     end
     
-    it "should return an array of ugens with correct inputs" do
+    it "should return an delegator array of ugens with correct inputs" do
       ugens = Ugen.new( :audio, 100, [210, 220, 230, 240] )
       ugens.zip( [@i_1, @i_2, @i_3, @i_4] ).each do |e|
         e.first.inputs.should eql( e.last )

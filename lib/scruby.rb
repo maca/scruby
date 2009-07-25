@@ -38,6 +38,7 @@ require "scruby/core_ext/proc"
 require "scruby/core_ext/string"
 require "scruby/core_ext/symbol"
 require "scruby/core_ext/typed_array"
+require "scruby/core_ext/delegator_array"
 
 require "scruby/audio/ugens/ugen"
 require "scruby/audio/ugens/ugen_operations"

@@ -120,7 +120,7 @@ module Scruby
             return instantiate( rate, *inputs ) unless size > 1 #return an Ugen if no array was passed as an input
 
             inputs = inputs.map{ |input| input.instance_of?( Array ) ? input.wrap_to( size ) : Array.new( size, input ) }.transpose
-            inputs.map{ |new_inputs| new rate, *new_inputs }
+            DelegatorArray.new inputs.map{ |new_inputs| new rate, *new_inputs }
           end
           
           
@@ -142,7 +142,6 @@ module Scruby
             {}
           end
           
-          private
           def instantiate *args 
             obj = allocate
             obj.__send__ :initialize, *args
