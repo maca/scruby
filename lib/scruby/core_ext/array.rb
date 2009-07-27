@@ -28,10 +28,6 @@ class Array
   def encode_floats #:nodoc:
     [self.size].pack('n') + self.pack('g*') #TODO: Deprecate
   end
-
-  def muladd mul, add #:nodoc:
-    self.collect{ |u| MulAdd.new( u, mul, add ) }
-  end
   
   def peel!
     self.replace self.first if self.first.kind_of? Array if self.size == 1

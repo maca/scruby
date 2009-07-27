@@ -1,7 +1,36 @@
 require File.join( File.expand_path(File.dirname(__FILE__)), "helper")
+
 require "scruby/core_ext/array"
 require "scruby/core_ext/delegator_array"
+require "scruby/audio/env"
+require "scruby/audio/control_name"
+require "scruby/audio/ugens/ugen"
+require "scruby/audio/ugens/ugens"
+require "scruby/audio/ugens/ugen_operations"
+require "scruby/audio/ugens/operation_ugens"
 
+
+
+
+include Scruby
+include Audio
+include Ugens
+# 
+class SinOsc < Ugen
+  class << self
+    def ar freq = 440.0, phase = 0.0 #not interested in muladd by now
+      new :audio, freq, phase
+    end
+    
+    def kr freq = 440.0, phase = 0.0
+      new :control, freq, phase
+    end
+  end
+end
+
+# Mocks
+class ControlName; end
+class Env; end
 
 describe DelegatorArray do
   
@@ -13,6 +42,30 @@ describe DelegatorArray do
   
   it "should allow nil" do
     d(nil)
+  end
+  
+  it "should return DelegatorArray" do
+    sig = SinOsc.ar([100, [100, 100]])
+    sig.should be_a(DelegatorArray)
+  end
+  
+  it "should convet to_da" do
+    [].to_da.should be_a(DelegatorArray)
+  end
+  
+  it "should pass missing method" do
+    d(1,2).to_f.should == d(1.0,2.0)
+  end
+  
+  it "should return a DelegatorArray for muladd" do
+    SinOsc.ar(100).muladd(1, 0.5).should be_a(BinaryOpUGen)
+    SinOsc.ar([100, [100, 100]]).muladd(0.5, 0.5).should be_a(DelegatorArray)
+    # SinOsc.ar([100, [100, 100]]).muladd(1, 0.5).should be_a(DelegatorArray)
+  end
+
+  
+  it "should pass method missing" do
+    d(1,2,3).to_i.should == [1.0, 2.0, 3.0]
   end
   
   shared_examples_for 'aritmetic operand' do
@@ -37,8 +90,18 @@ describe DelegatorArray do
       @asim_array_op1.should be_a(DelegatorArray)
     end
     
+    it "should blow passing nil" do
+      lambda { d(1,2,3,nil) + 1 }.should raise_error(NoMethodError)
+    end
+    
     it "should blow pass nil" do
-      lambda { d(nil,2,3) + 1 }.should raise_error(NoMethodError)
+      actual   = eval %{ d(1,2,3) #{ @op } Ugen.new(:audio, 2)}
+      expected = BinaryOpUGen.new(@op.to_sym, [1,2,3], Ugen.new(:audio, 2) )
+      actual.should == expected
+    end
+
+    it "should allow passing an Ugen Array" do
+      eval %{ SinOsc.ar([100, [100, 100]]) #{@op} SinOsc.ar }
     end
   end
   
@@ -76,4 +139,5 @@ describe DelegatorArray do
     end
     it_should_behave_like 'aritmetic operand'
   end
+
 end

@@ -14,46 +14,44 @@ module Scruby
       module UgenOperations
         operation_indices = YAML::load File.open( File.dirname(__FILE__) + "/operation_indices.yaml" )
         UNARY      = operation_indices['unary']
-        BINARY     = operation_indices['binary']      
+        BINARY     = operation_indices['binary']
         SAFE_NAMES = { :+ => :plus, :- => :minus, :* => :mult, :/ => :div2, :<= => :less_than_or_eql, :>= => :more_than_or_eql }
-        
+
         def self.included klass
-          klass.send :include, BinaryOperations
-          klass.send :include, UnaryOperators if klass.ancestors.include? Ugen
-        end
-      
-        module BinaryOperations
-          BINARY.each_key do |op|
-            method_name = SAFE_NAMES[op] || op
-            define_method "__ugen_#{ method_name }" do |input|
-              case input
-              when Ugen
-                BinaryOpUGen.new op, self, input
-              when UgenOperations
-                kind_of?( Ugen ) ? BinaryOpUGen.new( op, self, input ) : __send__( "__original_#{ method_name }", input )
-              else
-                raise ArgumentError.new( "Expected `#{ input.inspect }` to be a valid Ugen input" )
+          # Define unary operations
+          UNARY.each_key do |op| 
+            define_method(op){ UnaryOpUGen.new op, self } unless klass.instance_methods.include? op
+          end
+
+          # Define binary operations
+          ugen_subclass = klass.ancestors.include? Ugen
+          meth_def =
+          if ugen_subclass
+            proc do |safe, op|
+              proc{ |input| BinaryOpUGen.new op, self, input }
+            end
+          else
+            proc do |safe, op|
+              proc do |input|
+                if input.kind_of? Ugen
+                  BinaryOpUGen.new op, self, input
+                else
+                  __send__ "__original_#{ safe }", input
+                end
               end
             end
           end
-          
-          def self.included klass
-            BINARY.each_key do |operator|
-              safe_name = SAFE_NAMES[operator] || operator 
-              klass.send( :alias_method, "__original_#{ safe_name }", operator ) rescue nil
-              klass.send( :alias_method, operator, "__ugen_#{ safe_name }" )
-            end
-          end
-        end
-      
-        module UnaryOperators
-          UNARY.each_key do |op|
-            define_method(op){ UnaryOpUGen.new op, self }
+
+          BINARY.each_key do |op|
+            safe = SAFE_NAMES[op]
+            define_method "__ugenop_#{ safe || op }", &meth_def.call(safe || op, op)
+            klass.send :alias_method, "__original_#{ safe || op }", op if safe unless ugen_subclass
+            klass.send :alias_method, op, "__ugenop_#{ safe || op }"
           end
         end
       end
-      
-      [Ugen, ::Fixnum, ::Float, ::Array].each{ |k| k.send :include, UgenOperations }
+
+      [Ugen, Fixnum, Float].each{ |k| k.send :include, UgenOperations }
     end
   end
 end

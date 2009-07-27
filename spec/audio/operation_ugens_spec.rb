@@ -1,10 +1,12 @@
 require File.join( File.expand_path(File.dirname(__FILE__)), '..',"helper")
 
+
 require "scruby/audio/control_name"
 require "scruby/audio/env"
 require "scruby/audio/ugens/ugen"
 require "scruby/audio/ugens/ugen_operations" 
 require "scruby/audio/ugens/operation_ugens"
+require "scruby/core_ext/delegator_array"
 
 include Scruby
 include Audio
@@ -82,13 +84,13 @@ describe UnaryOpUGen do
 
     it "should have correct inputs and operator when two inputs" do
       arr = BinaryOpUGen.new( :+, @audio, @demand )
-      arr.inputs.should == [@audio, @demand]
+      arr.inputs.should   == [@audio, @demand]
       arr.operator.should == :+
-      arr.rate.should == :audio
+      arr.rate.should     == :audio
     end
   
     it "should accept array as input" do
-      BinaryOpUGen.new(:+, @audio, [@audio, @scalar] ).should be_instance_of(Array)
+      BinaryOpUGen.new(:+, @audio, [@audio, @scalar] ).should be_instance_of(DelegatorArray)
     end
   
     it "should return an array of UnaryOpUGens" do
@@ -156,7 +158,7 @@ describe UnaryOpUGen do
     it do
       MulAdd.new( @audio, 0.5, 0.5 ).inputs.should == [@audio, 0.5, 0.5]
     end
-    
+ 
     it "should not be instance of MulAdd" do
       unary_op = mock 'neg'
       mult     = mock 'mult'

@@ -39,6 +39,8 @@ require "scruby/core_ext/string"
 require "scruby/core_ext/symbol"
 require "scruby/core_ext/typed_array"
 require "scruby/core_ext/delegator_array"
+require "scruby/audio/env"
+require "scruby/audio/control_name"
 
 require "scruby/audio/ugens/ugen"
 require "scruby/audio/ugens/ugen_operations"
@@ -48,11 +50,9 @@ require "scruby/audio/ugens/in_out"
 require "scruby/audio/ugens/operation_ugens"
 
 require "scruby/audio/ugens/ugens"
-require "scruby/audio/control_name"
 require "scruby/audio/synthdef"
 
 require "scruby/audio/server"
-require "scruby/audio/env"
 require "scruby/audio/ugens/env_gen"
 
 require "scruby/audio/node"

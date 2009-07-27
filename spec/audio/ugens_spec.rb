@@ -1,5 +1,7 @@
 require File.join( File.expand_path(File.dirname(__FILE__)), '..',"helper")
 
+require "scruby/audio/control_name"
+require "scruby/audio/env"
 require "scruby/audio/ugens/ugen"
 require "scruby/audio/ugens/ugen_operations" 
 require "scruby/audio/ugens/ugens"
@@ -46,8 +48,23 @@ describe Ugens do
   end
   
   it "should print description" do
-    p PanAz.params
-    PanAz.params.should be_a(Hash)
+    PanAz.params.should == {
+      :audio => [
+        [:input, nil], 
+        [:pos, 0], 
+        [:level, 1], 
+        [:width, 2], 
+        [:orientation, 0.5], 
+        [:mul, 1], 
+        [:add, 0] ], 
+      :control => [
+        [:input, nil], 
+        [:pos, 0], 
+        [:level, 1], 
+        [:width, 2], 
+        [:orientation, 0.5], 
+        [:mul, 1], 
+        [:add, 0] ]}
   end
 
   #  it "should work with arrays"

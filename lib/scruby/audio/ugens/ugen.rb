@@ -53,12 +53,15 @@ module Scruby
       # Otherwise usage is pretty the same as in SuperCollider
       #
       # TODO: Provide a way of getting the argument names and default values
+      
       class Ugen
         attr_reader :inputs, :rate, :index, :special_index, :output_index, :channels
         
-        RATES   = [ :scalar, :trigger, :demand, :control, :audio ]
-        E_RATES = [ :scalar, :control, :audio, :demand ]
-        @@synthdef = nil
+        RATES        = :scalar, :trigger, :demand, :control, :audio
+        E_RATES      = :scalar, :control, :audio, :demand
+        VALID_INPUTS = Numeric, Array, Ugen, Env, ControlName
+        @@synthdef   = nil
+
 
         def initialize rate, *inputs
           @rate, @inputs   = rate, inputs.compact
@@ -103,24 +106,47 @@ module Scruby
         def output_specs #:nodoc:
           [E_RATES.index(rate)]
         end
+        
+        public
+        def == other
+          self.class    == other.class    and
+          self.rate     == other.rate     and
+          self.inputs   == other.inputs   and
+          self.channels == other.channels 
+        end
 
         class << self
           #:nodoc:
-          def new rate, *inputs 
-            raise ArgumentError.new( "#{rate} not a defined rate") unless RATES.include?( rate.to_sym )
+          def new rate, *inputs
             
-            inputs.peel!
-            inputs.each_with_index do |input, index|
-              inputs[index] = input = input.as_ugen_input if input.respond_to?(:as_ugen_input)
+            if rate.kind_of? Array
+              rate   = RATES.slice rate.collect { |rate| # get the highest rate, raise error if rate is not defined
+                rate = rate.to_sym
+                raise ArgumentError.new( "#{rate} not a defined rate") unless RATES.include? rate
+                RATES.index rate
+              }.max
+            else
+              raise ArgumentError.new( "#{rate} not a defined rate") unless RATES.include? rate.to_sym
+            end
+          
+            size = 1 # Size of the largest multichannel input (Array)
+            inputs.peel! # First input if input is Array and size is 1
+            inputs.map! do |input|
+              input = input.as_ugen_input if input.respond_to?(:as_ugen_input) # Convert input to prefered form
               raise ArgumentError.new( "#{ input.inspect } is not a valid ugen input") unless valid_input? input
+              size  = input.size if input.size > size if input.kind_of? Array
+              input
             end
 
-            size   = inputs.select{ |a| a.kind_of? Array }.map{ |a| a.size }.max || 1 #get the size of the largest array element if present
-            inputs.flatten! if size == 1 #if there is one or more arrays with just one element flatten the input array
-            return instantiate( rate, *inputs ) unless size > 1 #return an Ugen if no array was passed as an input
+            return instantiate( rate, *inputs.flatten ) unless size > 1 #return an Ugen if no array was passed as an input
 
-            inputs = inputs.map{ |input| input.instance_of?( Array ) ? input.wrap_to( size ) : Array.new( size, input ) }.transpose
-            DelegatorArray.new inputs.map{ |new_inputs| new rate, *new_inputs }
+            inputs.map! do |input|
+              Array === input ? input.wrap_to!(size) : input = Array.new(size, input)
+              input
+            end
+            output = inputs.transpose
+            output.map! do |new_inputs| new rate, *new_inputs end
+            output.to_da
           end
           
           
@@ -133,9 +159,10 @@ module Scruby
           end
           
           def valid_input? obj
-            not [Ugen, ControlName, Env, UgenOperations].collect do |m|
-              true if obj.kind_of? m
-            end.compact.empty?
+            case obj
+            when *VALID_INPUTS then true
+            else false
+            end
           end
           
           def params

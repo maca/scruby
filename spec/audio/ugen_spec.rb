@@ -5,6 +5,7 @@ require "scruby/audio/control_name"
 require "scruby/audio/env"
 require "scruby/audio/ugens/ugen"
 require "scruby/audio/ugens/ugen_operations"
+require "scruby/audio/ugens/operation_ugens"
 require "scruby/core_ext/object"
 require "scruby/core_ext/numeric"
 require "scruby/core_ext/string"
@@ -47,9 +48,15 @@ describe Ugen do
   end
   
   it "should tell if valid input" do
-    Ugen.send( :valid_input?, SinOsc.ar ).should be_true
-    Ugen.send( :valid_input?, Env.asr ).should be_true
-    Ugen.send( :valid_input?, 'string' ).should be_false
+    cn = ControlName.new 'cn', 1, :audio, 0
+    Ugen.valid_input?( 440 ).should       be_true
+    Ugen.valid_input?( 440.0 ).should     be_true
+    Ugen.valid_input?( [4,4] ).should     be_true
+    Ugen.valid_input?( SinOsc.ar ).should be_true
+    Ugen.valid_input?( SinOsc.ar ).should be_true
+    Ugen.valid_input?( Env.asr ).should   be_true
+    Ugen.valid_input?( cn ).should        be_true
+    Ugen.valid_input?( 'string' ).should  be_false
   end
   
   it "should use buffnum as input when a buffer is passed" do
@@ -72,9 +79,8 @@ describe Ugen do
 
   describe 'operations' do
     before :all do
-      @op_ugen = mock( 'op_ugen' )
-      ::BinaryOpUGen = mock 'bynary_op_ugen', :new => @op_ugen
-      UnaryOpUGen    = mock 'unary_op_ugen',  :new => @op_ugen
+      @op_ugen    = mock( 'op_ugen' )
+      UnaryOpUGen = mock 'unary_op_ugen',  :new => @op_ugen
     end
     
     before do
@@ -87,8 +93,7 @@ describe Ugen do
     end
     
     it "should sum" do
-      ::BinaryOpUGen.should_receive( :new ).with( :+, @ugen, @ugen2)
-      @ugen + @ugen2
+      (@ugen + @ugen2).should be_a(BinaryOpUGen)
     end
   end
   
@@ -162,6 +167,14 @@ describe Ugen do
     
     it "should be a defined rate as the first argument" do
       lambda { Ugen.new( :not_a_rate, 1 ) }.should raise_error( ArgumentError )
+    end
+    
+    it "should use the highest rate when passing an array" do
+      Ugen.new([:audio, :control], 1).rate.should == :audio
+    end
+    
+    it "should be a defined rate as array" do
+      lambda { Ugen.new( [:not_a_rate, :audio], 1 ) }.should raise_error( ArgumentError )
     end
     
     it "should accept an empty array for inputs and inputs should be an empty array" do
@@ -240,9 +253,16 @@ describe Ugen do
       ugen.inputs.should == [1, 2]
     end
     
-    it "should instantiate when passing array" do
-      Ugen.should_receive(:instantiate).twice
-      ugen = Ugen.new( :audio, 100, [210, 220] )
+    it "should make multichannel array (DelegatorArray)" do
+      multichannel = Ugen.new( :audio, 100, [210, 220] )
+      multichannel.should be_a(DelegatorArray)
+      multichannel.should == d(Ugen.new(:audio, 100, 210), Ugen.new(:audio, 100, 220))
+    end
+    
+    it "should accept DelegatorArray as inputs" do
+      multichannel = Ugen.new( :audio, 100, d(210, 220) )
+      multichannel.should be_a(DelegatorArray)
+      multichannel.should == d(Ugen.new(:audio, 100, 210), Ugen.new(:audio, 100, 220))
     end
     
     it "should instantiate with correct arguments" do
@@ -276,10 +296,13 @@ describe Ugen do
     end
   
     it "should return muladd" do
-      ::MulAdd = mock( 'MulAdd', :new => nil )
       @ugen = Ugen.new(:audio, 100, 100)
-      ::MulAdd.should_receive( :new ).with( @ugen, 1, 1)
-      @ugen.muladd(1, 1).should be_nil
+      @ugen.muladd(0.5, 0.5).should be_a(MulAdd)
+    end
+    
+    it "should return an arrayed muladd" do
+      @ugen = Ugen.new(:audio, [100,100], 100)
+      @ugen.muladd(0.5, 0.5).should be_a(DelegatorArray)
     end
   end
   
@@ -318,10 +341,6 @@ describe Ugen do
       @sin.send(:collect_input_specs).should == [[-1, 0], [-1, 1]]
     end
 
-    # it "should collect input_specs" do
-    #   @sin.send(:collect_input_specs).flatten.collect { |e| e.encode }
-    # end
-
     it "should encode class name" do
       @sin.encode[0..6].should == @encoded[0..6]
     end
@@ -337,9 +356,11 @@ describe Ugen do
     it "should encode cn, rt, in, out, si, collect_input_specs" do
       @sin.encode.should == @encoded
     end
+    
+    it "should equal to a similar" do
+      Ugen.new(:audio, 1, 2).should == Ugen.new(:audio, 1, 2)
+    end
   end
-  
-  
 end
 
 

@@ -202,6 +202,9 @@ Synth.new :convo, :dur => 1, :buffnum => buffer.buffnum
 
 
 
+require 'yaml'
+
+puts SinOsc.ar(100, [200,[100, 100]]).to_yaml
 
 
 

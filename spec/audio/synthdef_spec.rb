@@ -1,5 +1,6 @@
 require File.join( File.expand_path(File.dirname(__FILE__)), '..',"helper")
 
+require "scruby/audio/control_name"
 require "scruby/audio/env"
 require "scruby/audio/ugens/ugen"
 require "scruby/audio/ugens/ugen_operations"
@@ -11,11 +12,6 @@ include Scruby
 include Audio
 include Ugens
 
-class ControlName
-  def self.new *args
-    args.flatten
-  end
-end
 
 describe SynthDef, 'instantiation' do
   
@@ -101,23 +97,20 @@ describe SynthDef, 'instantiation' do
     end
     
     it "should pass the argument value, the argument index and the rate(if provided) to the ControlName at instantiation" do
-      @sdef.send_msg( :collect_control_names, @function, [:a,:b,:c], [] ).should == [[:arg1, :a, nil, 0], [:arg2, :b, nil, 1], [:arg3, :c, nil, 2]]
-      @sdef.send_msg( :collect_control_names, @function, [:a,:b,:c], [:ir, :tr, :ir] ).should == [[:arg1, :a, :ir, 0], [:arg2, :b, :tr, 1], [:arg3, :c, :ir, 2]]
+      cns = @sdef.send_msg :collect_control_names, @function, [1, 2, 3], []
+      cns.should == [1.0, 2.0, 3.0].map{ |val| ControlName.new("arg#{ val.to_i }", val, :control, val.to_i - 1 )}
+      cns = @sdef.send_msg :collect_control_names, @function, [1, 2, 3], [:ir, :tr, :ir]
+      cns.should == [[1.0, :ir], [2.0, :tr], [3.0, :ir]].map{ |val, rate| ControlName.new("arg#{ val.to_i }", val, rate, val.to_i - 1 )}
     end
     
     it "should not return more elements than the function argument number" do
-      c_name = mock :control_name
-      ControlName.should_receive( :new ).at_most(3).times.and_return c_name
-      @sdef.send_msg( :collect_control_names, @function, [:a, :b, :c, :d, :e], [] ).should have( 3 ).elements
+      @sdef.send_msg( :collect_control_names, @function, [1, 2, 3, 4, 5], [] ).should have( 3 ).elements
     end
   end
 
   describe '#build_controls' do
-    
     before :all do
-      Object.send :remove_const, 'ControlName'
-      ::RATES = [:scalar, :trigger, :control]
-      require "scruby/audio/control_name"
+      RATES = [:scalar, :trigger, :control]
     end
     
     before do

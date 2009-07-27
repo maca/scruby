@@ -7,7 +7,7 @@ module Scruby
 
         class << self
           def new operator, *inputs 
-            obj = super get_rate(inputs), *inputs
+            obj = super get_rate(inputs), inputs
             set_operator_for obj, operator
             obj
           end
@@ -15,7 +15,7 @@ module Scruby
           private
           #:nodoc:
           def set_operator_for input, operator 
-            input.kind_of?(Array) ? input.map{ |element| set_operator_for element, operator  } : input.operator = operator
+            input.kind_of?(Array) ? input.each{ |element| set_operator_for element, operator  } : input.operator = operator
           end
 
           #:nodoc:

@@ -19,6 +19,13 @@ module Scruby
       def non_control?
         @rate == :noncontrol
       end
+      
+      def == other
+        @name  == other.name  and
+        @value == other.value and
+        @rate  == other.rate  and
+        @index == other.index
+      end
     end
   end
 end

@@ -1,9 +1,9 @@
 require File.join( File.expand_path(File.dirname(__FILE__)), '..', "helper")
 
 require "scruby/audio/control_name"
+require "scruby/audio/env"
 require "scruby/audio/ugens/ugen"
 require "scruby/audio/ugens/ugen_operations"
-require "scruby/audio/env"
 require "scruby/audio/ugens/env_gen"
 
 include Scruby

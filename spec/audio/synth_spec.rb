@@ -3,6 +3,7 @@ require File.join( File.expand_path(File.dirname(__FILE__)), '..',"helper")
 require 'osc'
 require "scruby/core_ext/typed_array" 
 require "scruby/audio/node"
+require "scruby/audio/bus"
 require "scruby/audio/group"
 require "scruby/audio/synth"
 require "scruby/audio/server"
