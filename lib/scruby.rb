@@ -39,29 +39,28 @@ require "scruby/core_ext/string"
 require "scruby/core_ext/symbol"
 require "scruby/core_ext/typed_array"
 require "scruby/core_ext/delegator_array"
-require "scruby/audio/env"
-require "scruby/audio/control_name"
+require "scruby/env"
+require "scruby/control_name"
 
-require "scruby/audio/ugens/ugen"
-require "scruby/audio/ugens/ugen_operations"
-require "scruby/audio/ugens/multi_out_ugens"
-require "scruby/audio/ugens/in_out"
+require "scruby/ugens/ugen"
+require "scruby/ugens/ugen_operations"
+require "scruby/ugens/multi_out_ugens"
+require "scruby/ugens/in_out"
 
-require "scruby/audio/ugens/operation_ugens"
+require "scruby/ugens/operation_ugens"
 
-require "scruby/audio/ugens/ugens"
-require "scruby/audio/synthdef"
+require "scruby/ugens/ugens"
+require "scruby/synthdef"
 
-require "scruby/audio/server"
-require "scruby/audio/ugens/env_gen"
+require "scruby/server"
+require "scruby/ugens/env_gen"
 
-require "scruby/audio/node"
-require "scruby/audio/synth"
-require "scruby/audio/bus"
-require "scruby/audio/buffer"
+require "scruby/node"
+require "scruby/synth"
+require "scruby/bus"
+require "scruby/buffer"
 
 
 include Scruby
-include Audio
 include Ugens
 

@@ -1,9 +1,9 @@
-require File.join( File.expand_path(File.dirname(__FILE__)),"helper")
+require File.expand_path(File.dirname(__FILE__)) + "/helper"
 
-require "scruby/audio/env"
-require "scruby/audio/control_name"
-require "scruby/audio/ugens/ugen"
-require "scruby/audio/ugens/ugen_operations"
+require "scruby/env"
+require "scruby/control_name"
+require "scruby/ugens/ugen"
+require "scruby/ugens/ugen_operations"
 
 class ControlName; end
 
