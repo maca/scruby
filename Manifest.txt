@@ -39,7 +39,6 @@ lib/scruby/ugens/multi_out_ugens.rb
 lib/scruby/ugens/operation_indices.yaml
 lib/scruby/ugens/operation_ugens.rb
 lib/scruby/ugens/ugen.rb
-lib/scruby/ugens/ugen_defs 2.yaml
 lib/scruby/ugens/ugen_defs.yaml
 lib/scruby/ugens/ugen_operations.rb
 lib/scruby/ugens/ugens.rb
