@@ -46,7 +46,7 @@ describe Ugens do
     lambda { Gendy1.ar }.should raise_error(ArgumentError)
   end
   
-  it "should print description" do
+  it "should print params" do
     PanAz.params.should == {
       :audio => [
         [:input, nil], 

@@ -151,7 +151,7 @@ describe Server do
     before do
       @server = Server.new
       @kind   = :buffers
-      @class  = Mocks::Buffer
+      @class  = ::Mocks::Buffer
       @allowed_elements = @max_size = 1024
       @index_start = 0
     end
@@ -162,7 +162,7 @@ describe Server do
     before do
       @server = Server.new
       @kind   = :control_buses
-      @class  = Mocks::Bus
+      @class  = ::Mocks::Bus
       @allowed_elements = @max_size = 4096
       @index_start = 0
     end
@@ -173,7 +173,7 @@ describe Server do
     before do
       @server = Server.new
       @kind   = :audio_buses
-      @class  = Mocks::Bus
+      @class  = ::Mocks::Bus
       @allowed_elements = 112
       @max_size = 128
       @index_start = 16

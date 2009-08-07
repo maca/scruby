@@ -21,13 +21,10 @@ require 'arguments'
 require 'rosc'
 require 'yaml'
 
-# require 'methopara' if RUBY_VERSION.to_f >= 1.9
-
-
 $:.unshift(File.dirname(__FILE__)) unless $:.include?(File.dirname(__FILE__)) || $:.include?(File.expand_path(File.dirname(__FILE__)))
 
 module Scruby
-  VERSION = '0.1'
+  VERSION = '0.2'
 end
 
 require "scruby/core_ext/object"
@@ -60,7 +57,5 @@ require "scruby/synth"
 require "scruby/bus"
 require "scruby/buffer"
 
-
 include Scruby
 include Ugens
-

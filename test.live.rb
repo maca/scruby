@@ -79,6 +79,7 @@ SynthDef.new :ring do |mod_freq, freq, amp, dur|
   Out.ar 0, [sig, sig]
 end.send
 
+
 si = Synth.new :ring, :freq => 2000, :amp => 2, :dur => 2, :mod_freq => 4
 
 
@@ -130,8 +131,7 @@ SynthDef.new :campana do |freq, amp, dur|
   Out.ar [sig, sig]
 end.send
 
-camp = Synth.new :campana, :freq => 250, :amp => 0.8, :dur => 5
-camp = Synth.new :campana, :freq => 20,  :amp => 0.8, :dur => 6
+camp = Synth.new :campana, :freq => 200, :amp => 0.8, :dur => 5
 
 
 
@@ -139,7 +139,7 @@ camp = Synth.new :campana, :freq => 20,  :amp => 0.8, :dur => 6
 # Chido
 SynthDef.new :wood_drum do |freq, amp, dur|
   gate     = EnvGen.kr Env.perc(0, 0.2)
-  mod_env  = EnvGen.kr Env.new([1600, 200, 50, 90, 10], [0.7,0.3,0.4,0.4].map{|v|v*dur}), gate
+  mod_env  = EnvGen.kr Env.new([1600, 200, 50, 90, 10], d(0.7,0.3,0.4,0.4)*dur ), gate
   mod      = SinOsc.ar freq * 0.6875, :mul => mod_env
   sig      = SinOsc.ar freq + mod
   env      = EnvGen.kr Env.new( [0, 1, 0.6, 0.2, 0.1, 0 ], [0.1, 0.5, 0.5, 0.7, 0.9].map{|v|v*dur} ), gate, :doneAction => 2
@@ -150,27 +150,27 @@ end.send
 camp = Synth.new :wood_drum, :freq => 184,  :amp => 0.8, :dur => 10
 camp = Synth.new :wood_drum, :freq => 180,  :amp => 0.8, :dur => 10
 
-
+s.stop
 
 
 
 # Síntesis por FM
-SynthDef.new :"metales" do |freq, amp, dur|
-  mod_freq = freq * 5
+SynthDef.new :wood_drum do |freq, amp, dur|
   gate     = EnvGen.kr Env.perc(0, 0.2)
-  mod_env  = EnvGen.kr Env.new([0, 1, 0], [0.1,0.3].map{|v|v*dur}), gate
-  mod      = SinOsc.ar mod_freq, :mul => mod_env
+  mod_env  = EnvGen.kr Env.new([1600, 200, 50, 90, 10]*2, d(0.7,0.3,0.4,0.4)*dur ), gate
+  mod      = SinOsc.ar freq * 0.6875, :mul => mod_env
   sig      = SinOsc.ar freq + mod
-  env      = EnvGen.kr Env.new( [0, 1, 0.6, 0.2, 0.1, 0 ], [0.1, 0.5, 0.3, 0.5, 0.7].map{|v|v*dur} ), gate, :doneAction => 2
+  env      = EnvGen.kr Env.new( [0, 1, 0.6, 0.2, 0.1, 0 ], [0.1, 0.5, 0.5, 0.7, 0.9].map{|v|v*dur} ), gate, :doneAction => 2
   sig      = sig * amp * env
   Out.ar [sig, sig]
 end.send
 
+camp = Synth.new :wood_drum, :freq => 184,  :amp => 0.8, :dur => 100
+camp = Synth.new :wood_drum, :freq => 180,  :amp => 0.8, :dur => 10
+camp = Synth.new :wood_drum, :freq => 180,  :amp => 0.8, :dur => 1
 
-camp = Synth.new :"metales", :freq => 200, :amp => 0.8, :dur => 100
 
 s.stop
-
 
 
 camp.free
@@ -194,7 +194,7 @@ SynthDef.new :convo do |dur, buffnum|
   sig *= EnvGen.kr Env.perc(0, 0.5), :doneAction => 2
   buff = PlayBuf.ar buffnum, :rate => 0.6, :loop => 1.0
   sig  = Convolution.ar buff, sig, 1024, 0.5 
-  Out.ar 0, [sig, sig]
+  Out.ar 0, [sig]*2
 end.send
 
 
@@ -202,9 +202,6 @@ Synth.new :convo, :dur => 1, :buffnum => buffer.buffnum
 
 
 
-require 'yaml'
-
-puts SinOsc.ar(100, [200,[100, 100]]).to_yaml
 
 
 

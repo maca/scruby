@@ -238,10 +238,11 @@ Blip:
     - 440
   - - :numharm
     - 200
+  :desc: 
 BrownNoise: 
   :control: []
-
   :audio: []
+  
 
 BufAllpassC: 
   :audio: 

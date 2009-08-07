@@ -43,6 +43,7 @@ module Scruby
       rates.delete_if{ |key, value| key == :demand  } #I don't know what to do with these
 
       methods = rates.collect do |rate, args|
+        args ||= []
         args.push [:mul, 1], [:add, 0]
         args.uniq!
         assigns = []
