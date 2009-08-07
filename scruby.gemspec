@@ -2,7 +2,7 @@
 
 Gem::Specification.new do |s|
   s.name = %q{scruby}
-  s.version = "0.2.1"
+  s.version = "0.2.2"
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["Macario Ortega"]
@@ -27,16 +27,16 @@ Gem::Specification.new do |s|
 
     if Gem::Version.new(Gem::RubyGemsVersion) >= Gem::Version.new('1.2.0') then
       s.add_runtime_dependency(%q<maca-arguments>, [">= 0.6"])
-      s.add_runtime_dependency(%q<maca-rosc>, [">= 0.4.2"])
+      s.add_runtime_dependency(%q<maca-rosc>, [">= 0.0.1"])
       s.add_development_dependency(%q<hoe>, [">= 2.3.2"])
     else
       s.add_dependency(%q<maca-arguments>, [">= 0.6"])
-      s.add_dependency(%q<maca-rosc>, [">= 0.4.2"])
+      s.add_dependency(%q<maca-rosc>, [">= 0.0.1"])
       s.add_dependency(%q<hoe>, [">= 2.3.2"])
     end
   else
     s.add_dependency(%q<maca-arguments>, [">= 0.6"])
-    s.add_dependency(%q<maca-rosc>, [">= 0.4.2"])
+    s.add_dependency(%q<maca-rosc>, [">= 0.0.1"])
     s.add_dependency(%q<hoe>, [">= 2.3.2"])
   end
 end
