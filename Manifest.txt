@@ -1,3 +1,4 @@
+
 History.txt
 Manifest.txt
 README.rdoc
@@ -42,6 +43,11 @@ lib/scruby/ugens/ugen.rb
 lib/scruby/ugens/ugen_defs.yaml
 lib/scruby/ugens/ugen_operations.rb
 lib/scruby/ugens/ugens.rb
+notas.markdown
+script/console
+script/destroy
+script/generate
+scruby.gemspec
 spec/buffer_spec.rb
 spec/bus_spec.rb
 spec/core_ext/core_ext_spec.rb
@@ -64,5 +70,3 @@ spec/ugen_operations_spec.rb
 spec/ugen_spec.rb
 spec/ugens_spec.rb
 test.live.rb
-test/test_helper.rb
-test/test_scruby.rb
