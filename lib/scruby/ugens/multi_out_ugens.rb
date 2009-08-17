@@ -8,9 +8,7 @@ module Scruby
         @source, @control_name, @output_index = source, name, output_index
       end
 
-      def index 
-        @source.index
-      end
+      def index; @source.index; end
 
       def add_to_synthdef; end
     end
@@ -22,7 +20,7 @@ module Scruby
       end
 
       def self.new rate, *args
-        super.channels #returns the channels but gets instantiated
+        super.channels #returns the channels but gets instantiated, TODO: Maybe not a good idea
       end
 
       private     

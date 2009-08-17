@@ -66,7 +66,7 @@ module Scruby
         @special_index ||= 0
         @output_index  ||= 0
         @channels      ||= [1]
-        @index = add_to_synthdef || 0
+        @index           = add_to_synthdef || 0
       end
       
       # Instantiate a new MulAdd passing self and the multiplication and addition arguments
@@ -167,7 +167,7 @@ module Scruby
           {}
         end
         
-        def instantiate *args 
+        def instantiate *args
           obj = allocate
           obj.__send__ :initialize, *args
           obj
