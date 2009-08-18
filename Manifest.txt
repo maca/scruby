@@ -45,7 +45,6 @@ lib/scruby/ugens/ugen.rb
 lib/scruby/ugens/ugen_defs.yaml
 lib/scruby/ugens/ugen_operations.rb
 lib/scruby/ugens/ugens.rb
-notas.markdown
 script/console
 script/destroy
 script/generate
