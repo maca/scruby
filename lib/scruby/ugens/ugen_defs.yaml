@@ -339,25 +339,6 @@ BufRateScale:
   :control: 
   - - :bufnum
     - 
-BufRd: 
-  :control: 
-  - - :bufnum
-    - 0
-  - - :phase
-    - 0
-  - - :loop
-    - 1
-  - - :interpolation
-    - 2
-  :audio: 
-  - - :bufnum
-    - 0
-  - - :phase
-    - 0
-  - - :loop
-    - 1
-  - - :interpolation
-    - 2
 BufSampleRate: 
   :scalar: 
   - - :bufnum
@@ -372,25 +353,6 @@ BufSamples:
   :control: 
   - - :bufnum
     - 
-BufWr: 
-  :control: 
-  - - :bufnum
-    - 0
-  - - :phase
-    - 0
-  - - :loop
-    - 1
-  - - :inputArray
-    - "[]"
-  :audio: 
-  - - :bufnum
-    - 0
-  - - :phase
-    - 0
-  - - :loop
-    - 1
-  - - :inputArray
-    - "[]"
 COsc: 
   :control: 
   - - :bufnum
@@ -2362,18 +2324,6 @@ PitchShift:
     - 0
   - - :timeDispersion
     - 0
-PlayBuf: 
-  :audio: 
-  - - :bufnum
-    - 0
-  - - :rate
-    - 1
-  - - :trigger
-    - 1
-  - - :startPos
-    - 0
-  - - :loop
-    - 0
 Pulse: 
   :audio: 
   - - :freq
@@ -2870,24 +2820,6 @@ TExpRand:
     - 1
   - - :trig
     - 0
-TGrains: 
-  :audio: 
-  - - :trigger
-    - 0
-  - - :bufnum
-    - 0
-  - - :rate
-    - 1
-  - - :centerPos
-    - 0
-  - - :dur
-    - 0.1
-  - - :pan
-    - 0
-  - - :amp
-    - 0.1
-  - - :interp
-    - 4
 TIRand: 
   :control: 
   - - :lo

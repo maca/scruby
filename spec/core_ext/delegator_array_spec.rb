@@ -12,6 +12,10 @@ require "scruby/ugens/operation_ugens"
 include Scruby
 include Ugens
 
+class MockUgen < Ugen
+  class << self; public :new; end
+end
+
 
 class SinOsc < Ugen
   class << self
@@ -92,12 +96,12 @@ describe DelegatorArray do
     end
     
     it "should blow pass nil" do
-      actual   = eval %{ d(1,2,3) #{ @op } Ugen.new(:audio, 2)}
-      expected = BinaryOpUGen.new(@op.to_sym, [1,2,3], Ugen.new(:audio, 2) )
+      actual   = eval %{ d(1,2,3) #{ @op } MockUgen.new(:audio, 2)}
+      expected = BinaryOpUGen.new(@op.to_sym, [1,2,3], MockUgen.new(:audio, 2) )
       actual.should == expected
     end
 
-    it "should allow passing an Ugen Array" do
+    it "should allow passing an MockUgen Array" do
       eval %{ SinOsc.ar([100, [100, 100]]) #{@op} SinOsc.ar }
     end
   end

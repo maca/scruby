@@ -12,11 +12,15 @@ require "scruby/ugens/ugen_operations"
 include Scruby
 include Ugens
 
+class MockUgen < Ugen
+  class << self; public :new; end
+end
+
 describe UgenOperations do
   
   before do
-    @ugen  = Ugen.new :audio
-    @ugen2 = Ugen.new :audio
+    @ugen  = MockUgen.new :audio
+    @ugen2 = MockUgen.new :audio
   end
 
   describe 'binary operations' do
@@ -71,7 +75,7 @@ describe UgenOperations do
   
   describe DelegatorArray do
     before do
-      @ugen  = Ugen.new :audio
+      @ugen  = MockUgen.new :audio
     end
     
     it "do binary operation" do

@@ -11,6 +11,10 @@ require "scruby/core_ext/typed_array"
 include Scruby
 include Ugens
 
+class MockUgen < Ugen
+  class << self; public :new; end
+end
+
 
 describe SynthDef, 'instantiation' do
   
@@ -159,12 +163,12 @@ describe SynthDef, 'instantiation' do
     end
     
     it "should collect constants for simple children array" do
-      children = [Ugen.new(:audio, 100), Ugen.new(:audio, 200), Ugen.new(:audio, 100, 300)]
+      children = [MockUgen.new(:audio, 100), MockUgen.new(:audio, 200), MockUgen.new(:audio, 100, 300)]
       @sdef.send_msg( :collect_constants, children).should == [100.0, 200.0, 300.0]
     end
     
     it "should collect constants for children arrays" do
-      children = [ Ugen.new(:audio, 100), [ Ugen.new(:audio, 400), [ Ugen.new(:audio, 200), Ugen.new(:audio, 100, 300) ] ] ]
+      children = [ MockUgen.new(:audio, 100), [ MockUgen.new(:audio, 400), [ MockUgen.new(:audio, 200), MockUgen.new(:audio, 100, 300) ] ] ]
       @sdef.send_msg( :collect_constants, children).should == [100.0, 400.0, 200.0, 300.0]
     end
     

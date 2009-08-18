@@ -1,6 +1,7 @@
 require File.expand_path(File.dirname(__FILE__)) + "/../helper"
 
 
+
 describe Numeric do
   before :all do
       @bin_op        = mock 'binop'

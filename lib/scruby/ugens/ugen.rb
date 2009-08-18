@@ -115,8 +115,8 @@ module Scruby
 
       class << self
         #:nodoc:
+        private
         def new rate, *inputs
-          
           if rate.kind_of? Array
             rate   = RATES.slice rate.collect { |rate| # get the highest rate, raise error if rate is not defined
               rate = rate.to_sym
@@ -147,6 +147,19 @@ module Scruby
           output.to_da
         end
         
+        def instantiate *args
+          obj = allocate
+          obj.__send__ :initialize, *args
+          obj
+        end
+
+        public
+        def valid_input? obj
+          case obj
+          when *VALID_INPUTS then true
+          else false
+          end
+        end
         
         def synthdef #:nodoc:
           @@synthdef
@@ -155,23 +168,11 @@ module Scruby
         def synthdef= synthdef #:nodoc:
           @@synthdef = synthdef
         end
-        
-        def valid_input? obj
-          case obj
-          when *VALID_INPUTS then true
-          else false
-          end
-        end
-        
+
         def params
           {}
         end
-        
-        def instantiate *args
-          obj = allocate
-          obj.__send__ :initialize, *args
-          obj
-        end
+
       end
     end
   end

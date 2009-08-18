@@ -17,12 +17,8 @@ class SinOsc < Ugen
   end
 end
 
-describe In, Out, 'instantiation' do
-  
-  it "should not instantiate with #new" do
-    lambda { In.new :audio, 1, 2 }.should raise_error
-    lambda { Out.new :audio, 1, 2 }.should raise_error
-  end
+class MockUgen < Ugen
+  class << self; public :new; end
 end
 
 describe In do
@@ -71,7 +67,7 @@ describe Out do
   end               
   
   it "should accept one ugen" do
-    @ugen1 = Ugen.new :audio
+    @ugen1 = MockUgen.new :audio
     
     Out.kr( 1, @ugen1 ).should == 0.0
     
@@ -84,9 +80,9 @@ describe Out do
   end
   
   it "should accept several inputs from array" do
-    @ugen1 = Ugen.new :audio
-    @ugen2 = Ugen.new :audio
-    @ugen3 = Ugen.new :audio
+    @ugen1 = MockUgen.new :audio
+    @ugen2 = MockUgen.new :audio
+    @ugen3 = MockUgen.new :audio
     
     Out.kr 1, [@ugen1, @ugen2, @ugen3]
     @sdef.children.should have(4).ugens
@@ -96,9 +92,9 @@ describe Out do
   end
   
   it "should accept several inputs" do
-    @ugen1 = Ugen.new :audio
-    @ugen2 = Ugen.new :audio
-    @ugen3 = Ugen.new :audio
+    @ugen1 = MockUgen.new :audio
+    @ugen2 = MockUgenMockUgen.new :audio
+    @ugen3 = MockUgenMockUgen.new :audio
     
     Out.kr 1, @ugen1, @ugen2, @ugen3
     @sdef.children.should have(4).ugens

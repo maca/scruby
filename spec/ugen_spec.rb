@@ -17,6 +17,10 @@ require "scruby/core_ext/delegator_array"
 include Scruby
 include Ugens
 
+class MockUgen < Ugen
+  class << self; public :new; end
+end
+
 class SinOsc < Ugen
   class << self
     def ar freq = 440.0, phase = 0.0 #not interested in muladd by now
@@ -59,7 +63,7 @@ describe Ugen do
   end
   
   it "should use buffnum as input when a buffer is passed" do
-    Ugen.new( :audio, Buffer.new ).inputs.should == [0]
+    MockUgen.new( :audio, Buffer.new ).inputs.should == [0]
   end
 
   describe 'attributes' do
@@ -99,16 +103,16 @@ describe Ugen do
   describe 'ugen graph in synth def' do
     before do
       Ugen.synthdef = nil
-      @ugen  = Ugen.new( :audio, 1, 2 )
-      @ugen2 = Ugen.new( :audio, 1, 2 )
+      @ugen  = MockUgen.new( :audio, 1, 2 )
+      @ugen2 = MockUgen.new( :audio, 1, 2 )
     end
         
     it "should not have synthdef" do
-      Ugen.new( :audio, 1, 2 ).send( :synthdef ).should be_nil
+      MockUgen.new( :audio, 1, 2 ).send( :synthdef ).should be_nil
     end
     
     it "should have 0 as index if not belonging to ugen" do
-      Ugen.new( :audio, 1, 2 ).index.should be_zero
+      MockUgen.new( :audio, 1, 2 ).index.should be_zero
     end
     
     it "should have synthdef" do
@@ -122,14 +126,14 @@ describe Ugen do
     
     it "should add to synth def on instantiation" do
       Ugen.synthdef = @sdef
-      ugen = Ugen.new( :audio, 1, 2)
+      ugen = MockUgen.new( :audio, 1, 2)
       ugen.send( :synthdef ).should == @sdef
       @sdef.children.should == [ugen]
     end
     
     it "should add to synthdef and return synthdef.children size" do
       Ugen.synthdef = @sdef
-      ugen, ugen2 = Ugen.new(:audio, 1, 2), Ugen.new(:audio, 1, 2)
+      ugen, ugen2 = MockUgen.new(:audio, 1, 2), MockUgen.new(:audio, 1, 2)
       @sdef.children.should eql( [ugen, ugen2] )
       ugen.index.should == 0
       ugen2.index.should == 1
@@ -138,60 +142,60 @@ describe Ugen do
     it "should not add to synthdef" do
       Ugen.synthdef = nil
       @sdef.children.should_not_receive( :<< )
-      Ugen.new( :audio, 1, 2 ).send( :add_to_synthdef ).should eql( nil )
+      MockUgen.new( :audio, 1, 2 ).send( :add_to_synthdef ).should eql( nil )
     end
     
     it "should collect constants" do
-      Ugen.new( :audio, 100, @ugen, 200 ).send( :collect_constants ).flatten.sort.should == [1, 2, 100, 200]
+      MockUgen.new( :audio, 100, @ugen, 200 ).send( :collect_constants ).flatten.sort.should == [1, 2, 100, 200]
     end
     
     it "should collect constants on arrayed inputs" do
-      Ugen.new( :audio, 100, [@ugen, [200, @ugen2, 100] ] ).send( :collect_constants ).flatten.uniq.sort.should == [1, 2, 100, 200]
+      MockUgen.new( :audio, 100, [@ugen, [200, @ugen2, 100] ] ).send( :collect_constants ).flatten.uniq.sort.should == [1, 2, 100, 200]
     end
     
   end
   
   describe 'initialization and inputs' do
     before do
-      @ugen = Ugen.new(:audio, 1, 2, 3)
+      @ugen = MockUgen.new(:audio, 1, 2, 3)
     end
     
     it "should not accept non valid inputs" do
-      lambda{ @ugen = Ugen.new(:audio, "hola") }.should raise_error( ArgumentError )
+      lambda{ @ugen = MockUgen.new(:audio, "hola") }.should raise_error( ArgumentError )
     end
     
     it "should require at least one argument" do
-      lambda { Ugen.new }.should raise_error( ArgumentError )
+      lambda { MockUgen.new }.should raise_error( ArgumentError )
     end
     
     it "should be a defined rate as the first argument" do
-      lambda { Ugen.new( :not_a_rate, 1 ) }.should raise_error( ArgumentError )
+      lambda { MockUgen.new( :not_a_rate, 1 ) }.should raise_error( ArgumentError )
     end
     
     it "should use the highest rate when passing an array" do
-      Ugen.new([:audio, :control], 1).rate.should == :audio
+      MockUgen.new([:audio, :control], 1).rate.should == :audio
     end
     
     it "should be a defined rate as array" do
-      lambda { Ugen.new( [:not_a_rate, :audio], 1 ) }.should raise_error( ArgumentError )
+      lambda { MockUgen.new( [:not_a_rate, :audio], 1 ) }.should raise_error( ArgumentError )
     end
     
     it "should accept an empty array for inputs and inputs should be an empty array" do
-      Ugen.new( :audio, [] ).inputs.should eql([])
+      MockUgen.new( :audio, [] ).inputs.should eql([])
     end
     
     it "should instantiate" do
-      Ugen.new( :audio, 1, 2 ).should be_instance_of( Ugen )
+      MockUgen.new( :audio, 1, 2 ).should be_instance_of( MockUgen )
     end
     
     it "should accept any number of args" do
-      Ugen.new( :audio, 1, 2 )
-      Ugen.new( :audio, 1, 2, 3, 4 )
+      MockUgen.new( :audio, 1, 2 )
+      MockUgen.new( :audio, 1, 2, 3, 4 )
     end
     
     it "should description" do
-      Ugen.should_receive( :instantiate ).with( :audio, 1, 2 )
-      Ugen.new( :audio, 1, 2 )
+      MockUgen.should_receive( :instantiate ).with( :audio, 1, 2 )
+      MockUgen.new( :audio, 1, 2 )
     end
     
     it "should set inputs" do
@@ -203,8 +207,8 @@ describe Ugen do
     end
     
     it "should have empty inputs" do
-      Ugen.new( :audio ).inputs.should == []
-      Ugen.new( :audio, [] ).inputs.should == []
+      MockUgen.new( :audio ).inputs.should == []
+      MockUgen.new( :audio, [] ).inputs.should == []
     end
   end
   
@@ -218,63 +222,63 @@ describe Ugen do
     end
     
     it "should not care if an array was passed" do
-      Ugen.new( :audio, [1, 2, 3] ).should be_instance_of(Ugen)
+      MockUgen.new( :audio, [1, 2, 3] ).should be_instance_of(MockUgen)
     end
     
     it "should return an array of Ugens if an array as one arg is passed on instantiation" do
-      Ugen.new( :audio, 1, [2, 3] ).should be_instance_of(DelegatorArray)
+      MockUgen.new( :audio, 1, [2, 3] ).should be_instance_of(DelegatorArray)
     end
     
     it do
-      Ugen.new( :audio, 1, [2,3], [4,5] ).should have( 2 ).items
+      MockUgen.new( :audio, 1, [2,3], [4,5] ).should have( 2 ).items
     end
     
     it do
-      Ugen.new( :audio, 1, [2,3, 3], [4,5] ).should have( 3 ).items
+      MockUgen.new( :audio, 1, [2,3, 3], [4,5] ).should have( 3 ).items
     end
     
     it "should return an array of ugens" do
-      ugens = Ugen.new( :audio, 100, [210, 220, 230, 240] )
+      ugens = MockUgen.new( :audio, 100, [210, 220, 230, 240] )
       ugens.each do |u|
-        u.should be_instance_of(Ugen)
+        u.should be_instance_of(MockUgen)
       end
     end
     
     it "should return ugen" do
-      ugen = Ugen.new( :audio, [1], [2] )
-      ugen.should be_instance_of( Ugen )
+      ugen = MockUgen.new( :audio, [1], [2] )
+      ugen.should be_instance_of( MockUgen )
       ugen.inputs.should == [1, 2]
     end
     
     it "should return ugen" do
-      ugen = Ugen.new( :audio, [1, 2] )
-      ugen.should be_instance_of( Ugen )
+      ugen = MockUgen.new( :audio, [1, 2] )
+      ugen.should be_instance_of( MockUgen )
       ugen.inputs.should == [1, 2]
     end
     
     it "should make multichannel array (DelegatorArray)" do
-      multichannel = Ugen.new( :audio, 100, [210, 220] )
+      multichannel = MockUgen.new( :audio, 100, [210, 220] )
       multichannel.should be_a(DelegatorArray)
-      multichannel.should == d(Ugen.new(:audio, 100, 210), Ugen.new(:audio, 100, 220))
+      multichannel.should == d(MockUgen.new(:audio, 100, 210), MockUgen.new(:audio, 100, 220))
     end
     
     it "should accept DelegatorArray as inputs" do
-      multichannel = Ugen.new( :audio, 100, d(210, 220) )
+      multichannel = MockUgen.new( :audio, 100, d(210, 220) )
       multichannel.should be_a(DelegatorArray)
-      multichannel.should == d(Ugen.new(:audio, 100, 210), Ugen.new(:audio, 100, 220))
+      multichannel.should == d(MockUgen.new(:audio, 100, 210), MockUgen.new(:audio, 100, 220))
     end
     
     it "should instantiate with correct arguments" do
-      Ugen.should_receive(:instantiate).with( :audio, *@i_1 )
-      Ugen.should_receive(:instantiate).with( :audio, *@i_2 )
-      Ugen.should_receive(:instantiate).with( :audio, *@i_3 )
-      Ugen.should_receive(:instantiate).with( :audio, *@i_4 )
-      ugens = Ugen.new( :audio, 100, [210, 220, 230, 240] )
+      MockUgen.should_receive(:instantiate).with( :audio, *@i_1 )
+      MockUgen.should_receive(:instantiate).with( :audio, *@i_2 )
+      MockUgen.should_receive(:instantiate).with( :audio, *@i_3 )
+      MockUgen.should_receive(:instantiate).with( :audio, *@i_4 )
+      ugens = MockUgen.new( :audio, 100, [210, 220, 230, 240] )
       ugens.should have(4).ugens
     end
     
     it "should return an delegator array of ugens with correct inputs" do
-      ugens = Ugen.new( :audio, 100, [210, 220, 230, 240] )
+      ugens = MockUgen.new( :audio, 100, [210, 220, 230, 240] )
       ugens.zip( [@i_1, @i_2, @i_3, @i_4] ).each do |e|
         e.first.inputs.should eql( e.last )
       end
@@ -282,9 +286,9 @@ describe Ugen do
     
     it "should match the structure of the inputs array(s)" do
       array = [ 200, [210, [220, 230] ] ]
-      ugens = Ugen.new( :audio, 100, array )
+      ugens = MockUgen.new( :audio, 100, array )
       last = lambda do |i| 
-        if i.instance_of?(Ugen) 
+        if i.instance_of?(MockUgen) 
           i.inputs.first.should == 100
           i.inputs.last 
         else 
@@ -295,12 +299,12 @@ describe Ugen do
     end
   
     it "should return muladd" do
-      @ugen = Ugen.new(:audio, 100, 100)
+      @ugen = MockUgen.new(:audio, 100, 100)
       @ugen.muladd(0.5, 0.5).should be_a(MulAdd)
     end
     
     it "should return an arrayed muladd" do
-      @ugen = Ugen.new(:audio, [100,100], 100)
+      @ugen = MockUgen.new(:audio, [100,100], 100)
       @ugen.muladd(0.5, 0.5).should be_a(DelegatorArray)
     end
   end
@@ -357,7 +361,7 @@ describe Ugen do
     end
     
     it "should equal to a similar" do
-      Ugen.new(:audio, 1, 2).should == Ugen.new(:audio, 1, 2)
+      MockUgen.new(:audio, 1, 2).should == MockUgen.new(:audio, 1, 2)
     end
   end
 end

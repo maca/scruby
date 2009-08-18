@@ -11,14 +11,18 @@ require "scruby/core_ext/delegator_array"
 include Scruby
 include Ugens
 
+class MockUgen < Ugen
+  class << self; public :new; end
+end
+
 describe UnaryOpUGen do
   ::RATES = :scalar, :demand, :control, :audio
   
   before do
-    @scalar  = Ugen.new :scalar
-    @demand  = Ugen.new :demand
-    @control = Ugen.new :control
-    @audio   = Ugen.new :audio
+    @scalar  = MockUgen.new :scalar
+    @demand  = MockUgenMockUgen.new :demand
+    @control = MockUgenMockUgen.new :control
+    @audio   = MockUgenMockUgen.new :audio
   end
   
   describe UnaryOpUGen do

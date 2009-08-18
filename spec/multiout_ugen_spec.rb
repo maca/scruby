@@ -9,35 +9,35 @@ require "scruby/ugens/multi_out_ugens"
 include Scruby
 include Ugens
 
-describe MultiOutUgen do
-  before do
-    sdef = mock( 'sdef', :children => [] )
-    Ugen.should_receive( :synthdef ).and_return( sdef )
-    @proxies = MultiOutUgen.new( :audio, 1, 2, 3 )
-    @multi   = sdef.children.first
-  end
-
-  it "should return an array of channels" do
-    @proxies.should be_instance_of( Array )
-    @proxies.should == [1,2,3]
-  end
-
-  it "should be instace of Control" do
-    @multi.should be_instance_of( MultiOutUgen )
-  end
-
-  it do
-    @multi.rate.should == :audio
-  end
-
-  it do
-    @multi.channels.should == [1,2,3]
-  end
-  
-  it do
-    @multi.inputs.should == []
-  end
-end
+# describe MultiOut do
+#   before do
+#     sdef = mock( 'sdef', :children => [] )
+#     Ugen.should_receive( :synthdef ).and_return( sdef )
+#     @proxies = MultiOutUgen.new( :audio, 1, 2, 3 )
+#     @multi   = sdef.children.first
+#   end
+# 
+#   it "should return an array of channels" do
+#     @proxies.should be_instance_of( Array )
+#     @proxies.should == [1,2,3]
+#   end
+# 
+#   it "should be instace of Control" do
+#     @multi.should be_instance_of( MultiOutUgen )
+#   end
+# 
+#   it do
+#     @multi.rate.should == :audio
+#   end
+# 
+#   it do
+#     @multi.channels.should == [1,2,3]
+#   end
+#   
+#   it do
+#     @multi.inputs.should == []
+#   end
+# end
 
 describe Control do
   before do

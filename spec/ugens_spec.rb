@@ -46,26 +46,26 @@ describe Ugens do
     lambda { Gendy1.ar }.should raise_error(ArgumentError)
   end
   
-  it "should print params" do
-    PanAz.params.should == {
-      :audio => [
-        [:input, nil], 
-        [:pos, 0], 
-        [:level, 1], 
-        [:width, 2], 
-        [:orientation, 0.5], 
-        [:mul, 1], 
-        [:add, 0] ], 
-      :control => [
-        [:input, nil], 
-        [:pos, 0], 
-        [:level, 1], 
-        [:width, 2], 
-        [:orientation, 0.5], 
-        [:mul, 1], 
-        [:add, 0] ]}
-  end
-
+  # it "should print params" do
+  #     PanAz.params.should == {
+  #       :audio => [
+  #         [:input, nil], 
+  #         [:pos, 0], 
+  #         [:level, 1], 
+  #         [:width, 2], 
+  #         [:orientation, 0.5], 
+  #         [:mul, 1], 
+  #         [:add, 0] ], 
+  #       :control => [
+  #         [:input, nil], 
+  #         [:pos, 0], 
+  #         [:level, 1], 
+  #         [:width, 2], 
+  #         [:orientation, 0.5], 
+  #         [:mul, 1], 
+  #         [:add, 0] ]}
+  #   end
+  
   #  it "should work with arrays"
 end
 
