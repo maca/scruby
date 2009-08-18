@@ -1,11 +1,29 @@
 load File.expand_path( File.dirname( __FILE__ ) + '/../scruby.rb' )
-
 s = Server.new
 s.boot
 
-10.times { |i| print "hola #{i}" }
 
-1+1
+t = Scheduler.new 120, 2
+t.at 0 do
+  p t.index
+end
+
+t.run
+
+t.stop
+
+
+# t2 = Ticker.new 120 do |i|
+#   p "2: #{i}"
+#   t2.reset if i % 4 == 0
+# end
+# t2.run
+
+t.stop
+t2.stop
+
+
+
 
 # Síntesis aditiva básica
 SynthDef.new :add do
@@ -184,21 +202,20 @@ camp.free
 # Multiplicación de dos señales, el resultado es todo lo que coincide en las dos señales
 
 
-buffer = Buffer.read s, "sounds/Sound0.aiff", :frames => 10460
+buffer = Buffer.read s, "azteca/clave.wav", :frames => 5000, :start => 25050
 
 
+Synth.new :convo, :dur => 1, :buffnum => buffer.buffnum
 
 
 SynthDef.new :convo do |dur, buffnum|
   sig  = WhiteNoise.ar
-  sig *= EnvGen.kr Env.perc(0, 0.5), :doneAction => 2
-  buff = PlayBuf.ar buffnum, :rate => 0.6, :loop => 1.0
-  sig  = Convolution.ar buff, sig, 1024, 0.5 
+  EnvGen.kr Env.perc(0, 1), :doneAction => 2
+  sig  = PlayBuf.ar buffnum, :rate => 0.6, :loop => 0
   Out.ar 0, [sig]*2
 end.send
 
 
-Synth.new :convo, :dur => 1, :buffnum => buffer.buffnum
 
 
 

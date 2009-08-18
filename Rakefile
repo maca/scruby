@@ -12,12 +12,12 @@ Hoe.plugin :newgem
 # Run 'rake -T' to see list of generated tasks (from gem root directory)
 $hoe = Hoe.spec 'scruby' do
   self.developer 'Macario Ortega', 'macarui@gmail.com'
+  self.summary            = %q{SuperCollider client for Ruby}
   self.rubyforge_name     = self.name
   self.extra_deps         = [
     ['maca-arguments','>= 0.6'],
     ['maca-rosc',     '>= 0.0.1']
   ]
-
 end
 
 require 'newgem/tasks'
@@ -25,4 +25,4 @@ Dir['tasks/**/*.rake'].each { |t| load t }
 
 # TODO - want other tests/tasks run by default? Add them to the list
 # remove_task :default
-# task :default => [:spec, :features]
+task :default => [:spec]

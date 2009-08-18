@@ -88,8 +88,7 @@ module Scruby
     class Tap < Ugen
       class << self
         def ar bufnum = 0, num_channels = 1, delay_time = 0.2
-          n = SampleRate.ir.neg * 3
-          PlayBuf.ar num_channels, bufnum, 1, 0, n, 1
+          PlayBuf.ar num_channels, bufnum, 1, 0, SampleRate.ir.neg * 3, 1
         end
         named_args_for :ar
       end
