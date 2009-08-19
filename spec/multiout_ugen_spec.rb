@@ -1,43 +1,20 @@
 require File.expand_path(File.dirname(__FILE__)) + "/helper"
 
+require "scruby/core_ext/delegator_array"
 require "scruby/control_name"
 require "scruby/env"
 require "scruby/ugens/ugen" 
 require "scruby/ugens/ugen_operations" 
-require "scruby/ugens/multi_out_ugens"
+require "scruby/ugens/multi_out"
 
 include Scruby
 include Ugens
 
-# describe MultiOut do
-#   before do
-#     sdef = mock( 'sdef', :children => [] )
-#     Ugen.should_receive( :synthdef ).and_return( sdef )
-#     @proxies = MultiOutUgen.new( :audio, 1, 2, 3 )
-#     @multi   = sdef.children.first
-#   end
-# 
-#   it "should return an array of channels" do
-#     @proxies.should be_instance_of( Array )
-#     @proxies.should == [1,2,3]
-#   end
-# 
-#   it "should be instace of Control" do
-#     @multi.should be_instance_of( MultiOutUgen )
-#   end
-# 
-#   it do
-#     @multi.rate.should == :audio
-#   end
-# 
-#   it do
-#     @multi.channels.should == [1,2,3]
-#   end
-#   
-#   it do
-#     @multi.inputs.should == []
-#   end
-# end
+class Control
+  class << self
+    public :new
+  end
+end
 
 describe Control do
   before do
@@ -56,7 +33,7 @@ describe Control do
   end
 
   it "should return an array of proxies" do
-    @proxies.should be_instance_of( Array )
+    @proxies.should be_a( DelegatorArray )
     @proxies.should have( @names.size ).proxies
   end
 

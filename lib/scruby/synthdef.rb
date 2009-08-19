@@ -46,9 +46,9 @@ module Scruby
     # For complex synthdefs the encoded synthdef can vary a little bit from what SClang would generate
     # but the results will be interpreted in the same way
     def encode
-      controls = @control_names.reject { |cn| cn.non_control? }
+      controls         = @control_names.reject { |cn| cn.non_control? }
       encoded_controls = [controls.size].pack('n') + controls.collect{ |c| c.name.encode + [c.index].pack('n') }.join
-
+      
       init_stream + name.encode + constants.encode_floats + values.flatten.encode_floats + encoded_controls +
       [children.size].pack('n') + children.collect{ |u| u.encode }.join('') +
       [@variants.size].pack('n') #stub!!!

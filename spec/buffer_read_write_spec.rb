@@ -1,11 +1,12 @@
 require File.expand_path(File.dirname(__FILE__)) + "/helper"
 
+require "scruby/core_ext/delegator_array"
 require "scruby/control_name"
 require "scruby/env"
 require "scruby/ugens/ugen" 
 require "scruby/ugens/ugen_operations"
 require "scruby/ugens/operation_ugens" 
-require "scruby/ugens/multi_out_ugens"
+require "scruby/ugens/multi_out"
 require "scruby/ugens/ugens" 
 require "scruby/ugens/buffer_read_write"
 
@@ -24,7 +25,11 @@ describe 'Buffer Read Ugens' do
       @inputs ||= @params
       @instance = @proxies.first.source
     end
-
+    
+    it "should output a DelegatorArray" do
+      @proxies.should be_a(DelegatorArray)
+    end
+    
     it "should have correct rate" do
       @instance.rate.should == @rate
     end
@@ -99,7 +104,7 @@ describe 'Buffer Read Ugens' do
     it_should_behave_like 'Buffer reader Ugen with audio rate'
 
     it "should require at least two channels" do
-      lambda { @class.new :audio, 1, *@params[1..-1] }.should raise_error(ArgumentError)
+      lambda { @class.ar 1, *@params[1..-1] }.should raise_error(ArgumentError)
     end
   end
 
@@ -114,7 +119,7 @@ describe 'Buffer Read Ugens' do
     it_should_behave_like 'Buffer reader Ugen with audio rate'
 
     it "should require at least two channels" do
-      lambda { @class.new :audio, 1, *@params[1..-1] }.should raise_error(ArgumentError)
+      lambda { @class.ar 1, *@params[1..-1] }.should raise_error(ArgumentError)
     end
   end
 

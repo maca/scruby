@@ -1,11 +1,12 @@
 require File.expand_path(File.dirname(__FILE__)) + "/helper"
 
 require "scruby/control_name"
+require "scruby/core_ext/delegator_array"
 require "scruby/env"
 require "scruby/ugens/ugen"
 require "scruby/ugens/ugen_operations"
 require "scruby/synthdef" 
-require "scruby/ugens/multi_out_ugens"
+require "scruby/ugens/multi_out"
 require "scruby/core_ext/typed_array"
 
 include Scruby

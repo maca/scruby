@@ -37,7 +37,7 @@ lib/scruby/ticker.rb
 lib/scruby/ugens/buffer_read_write.rb
 lib/scruby/ugens/env_gen.rb
 lib/scruby/ugens/in_out.rb
-lib/scruby/ugens/multi_out_ugens.rb
+lib/scruby/ugens/multi_out.rb
 lib/scruby/ugens/operation_indices.yaml
 lib/scruby/ugens/operation_ugens.rb
 lib/scruby/ugens/panner.rb

@@ -20,9 +20,9 @@ describe UnaryOpUGen do
   
   before do
     @scalar  = MockUgen.new :scalar
-    @demand  = MockUgenMockUgen.new :demand
-    @control = MockUgenMockUgen.new :control
-    @audio   = MockUgenMockUgen.new :audio
+    @demand  = MockUgen.new :demand
+    @control = MockUgen.new :control
+    @audio   = MockUgen.new :audio
   end
   
   describe UnaryOpUGen do

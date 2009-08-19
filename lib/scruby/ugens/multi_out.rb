@@ -12,7 +12,7 @@ module Scruby
       end
       
       def output_specs
-        channels.output_specs
+        channels.output_specs.flatten
       end
       
       module ClassMethods

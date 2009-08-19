@@ -1,10 +1,11 @@
 require File.expand_path(File.dirname(__FILE__)) + "/helper"
 
+require "scruby/core_ext/delegator_array"
 require "scruby/control_name"
 require "scruby/env"
 require "scruby/ugens/ugen"
 require "scruby/ugens/ugen_operations"
-require "scruby/ugens/multi_out_ugens"
+require "scruby/ugens/multi_out"
 require "scruby/ugens/in_out"
 
 include Scruby
@@ -40,7 +41,7 @@ describe In do
   end
   
   it "should spec #ar" do    
-    @ar.should be_instance_of( Array )
+    @ar.should be_instance_of( DelegatorArray )
     @ar.should have(1).proxy
     @ar.first.should == @proxy
   end
@@ -93,8 +94,8 @@ describe Out do
   
   it "should accept several inputs" do
     @ugen1 = MockUgen.new :audio
-    @ugen2 = MockUgenMockUgen.new :audio
-    @ugen3 = MockUgenMockUgen.new :audio
+    @ugen2 = MockUgen.new :audio
+    @ugen3 = MockUgen.new :audio
     
     Out.kr 1, @ugen1, @ugen2, @ugen3
     @sdef.children.should have(4).ugens
