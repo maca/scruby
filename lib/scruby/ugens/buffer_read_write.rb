@@ -24,8 +24,8 @@ module Scruby
       end
 
       class << self
-        def ar channels, trigger = 0, bufnum = 0, rate = 1, centerPos = 0
-          new :audio, channels, trigger, bufnum, rate, centerPos
+        def ar channels, trigger = 0, bufnum = 0, rate = 1, center_pos = 0, dur = 0.1, pan = 0, amp = 0.1, interp = 4
+          new :audio, channels, trigger, bufnum, rate, center_pos, dur, pan, amp, interp
         end
         named_args_for :ar
       end

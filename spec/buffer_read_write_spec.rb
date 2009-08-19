@@ -97,7 +97,7 @@ describe 'Buffer Read Ugens' do
     before do
       @class    = TGrains
       @channels = 2
-      @inputs   = 1.0, 1.0, 1.0, 1.0
+      @inputs   = 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0
       @params   = @channels, *@inputs
     end
 
@@ -112,7 +112,7 @@ describe 'Buffer Read Ugens' do
     before do
       @class    = TGrains
       @channels = 4
-      @inputs   = 1.0, 1.0, 1.0, 1.0
+      @inputs   = 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0
       @params   = @channels, *@inputs
     end
 
