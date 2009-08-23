@@ -1,17 +1,17 @@
 module Scruby
   class Node
-    @@base_id = 2000
+    @@base_id = 999
     attr_reader :servers, :group, :id
-    alias :node_id :id
     
     ACTIONS = [:head, :tail, :before, :after, :replace]
 
     def initialize *args
       args.flatten!
       args.compact!
-      @id = args.pop if args.last.is_a? Integer
-      @servers = args.empty? ? Server.all : TypedArray.new( Server, args )
-      @id ||= @@base_id += 1
+      args.each{ |s| raise TypeError.new("#{s} should be instance of Server") unless Server === s }
+      @id      = args.pop if args.last.is_a? Integer
+      @servers = args.empty? ? Server.all : args
+      @id    ||= @@base_id += 1
     end
     
     def set args = {}
@@ -78,14 +78,9 @@ module Scruby
     #   @server.each{ |s| s.send '/n_after', self.id, node.id }
     # end
 
-    # def playing?
-    #   @playing || false
-    # end
-    # 
-    # def running?
-    #   @running || false
-    # end
-    
+    def playing?; @playing || false; end
+    alias :running? :playing?
+
     # Reset the node count
     def self.reset!
       @@base_id = 2000
@@ -101,6 +96,7 @@ module Scruby
     def send command, *args
       message = Message.new command, *args
       @servers.each{ |s| s.send message }
+      self
     end
   end
 end

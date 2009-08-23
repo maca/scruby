@@ -16,5 +16,9 @@ module Scruby
       self
     end
     
+    class << self
+      
+    end
+    
   end
 end

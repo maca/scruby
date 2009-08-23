@@ -136,7 +136,7 @@ module Scruby
             input
           end
 
-          return instantiate( rate, *inputs.flatten ) unless size > 1 #return an Ugen if no array was passed as an input
+          return super( rate, *inputs.flatten ) unless size > 1 #return an Ugen if no array was passed as an input
 
           inputs.map! do |input|
             Array === input ? input.wrap_to!(size) : input = Array.new(size, input)
@@ -145,12 +145,6 @@ module Scruby
           output = inputs.transpose
           output.map! do |new_inputs| new rate, *new_inputs end
           output.to_da
-        end
-        
-        def instantiate *args
-          obj = allocate
-          obj.__send__ :initialize, *args
-          obj
         end
 
         public

@@ -1,6 +1,5 @@
 require File.expand_path(File.dirname(__FILE__)) + "/helper"
 
-
 require "scruby/core_ext/typed_array" 
 require "scruby/node"
 require "scruby/bus"
@@ -10,10 +9,9 @@ require File.join( File.expand_path(File.dirname(__FILE__)), "server")
 
 include Scruby
 
-
 describe Node do  
   before :all do
-    @server  = mock('server')
+    @server  = Server.new
   end
   
   before do
@@ -32,14 +30,12 @@ describe Node do
   end
   
   describe 'instantiation' do
-
     it "should not accept non servers" do
       lambda{ Node.new(1,2) }.should   raise_error(TypeError)
       lambda{ Node.new([1,2]) }.should raise_error(TypeError)
     end
     
     it "should accept a server and have a TypedArray of Servers" do
-      @server.should_receive(:instance_of?).exactly(:once).and_return(true)
       n = Node.new @server
       n.servers.should == [@server]
     end
@@ -48,7 +44,6 @@ describe Node do
       n = Node.new
       n.servers.should == [@server]
     end
-    
   end
   
   describe 'Server interaction' do
@@ -69,11 +64,20 @@ describe Node do
     
     it "should send free" do
       @node.free
-      @node.should_not     be_running
-      @node.group.should   be_nil
-      @node.should_not     be_playing
+      @node.should_not   be_running
+      @node.group.should be_nil
+      @node.should_not   be_playing
       sleep 0.05
       @server.output.should =~ %r{\[ "/n_free", #{ @node.id } \]}
+    end
+    
+    it "should send run" do
+      @node.run
+      sleep 0.05
+      @server.output.should =~ %r{\[ "/n_run", #{ @node.id }, 1 \]}
+      @node.run false
+      sleep 0.05
+      @server.output.should =~ %r{\[ "/n_run", #{ @node.id }, 0 \]}
     end
     
     it "should send run" do

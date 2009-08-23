@@ -193,11 +193,6 @@ describe Ugen do
       MockUgen.new( :audio, 1, 2, 3, 4 )
     end
     
-    it "should description" do
-      MockUgen.should_receive( :instantiate ).with( :audio, 1, 2 )
-      MockUgen.new( :audio, 1, 2 )
-    end
-    
     it "should set inputs" do
       @ugen.inputs.should == [1, 2, 3]
     end
@@ -266,15 +261,6 @@ describe Ugen do
       multichannel = MockUgen.new( :audio, 100, d(210, 220) )
       multichannel.should be_a(DelegatorArray)
       multichannel.should == d(MockUgen.new(:audio, 100, 210), MockUgen.new(:audio, 100, 220))
-    end
-    
-    it "should instantiate with correct arguments" do
-      MockUgen.should_receive(:instantiate).with( :audio, *@i_1 )
-      MockUgen.should_receive(:instantiate).with( :audio, *@i_2 )
-      MockUgen.should_receive(:instantiate).with( :audio, *@i_3 )
-      MockUgen.should_receive(:instantiate).with( :audio, *@i_4 )
-      ugens = MockUgen.new( :audio, 100, [210, 220, 230, 240] )
-      ugens.should have(4).ugens
     end
     
     it "should return an delegator array of ugens with correct inputs" do
