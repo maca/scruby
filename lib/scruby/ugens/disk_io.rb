@@ -22,10 +22,12 @@ module Scruby
 
     class VDiskIn < Ugen
       include MultiOut
-      def self.ar channels, bufnum, rate = 1, loop = 0, send_id = 0
-        new :audio, channels, bufnum, rate, loop, send_id
+      class << self
+        def ar channels, bufnum, rate = 1, loop = 0, send_id = 0
+          new :audio, channels, bufnum, rate, loop, send_id
+        end
+        named_args_for :ar
       end
-      named_args_for 'self.ar'
     end
   end
 end

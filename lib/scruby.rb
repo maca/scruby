@@ -25,7 +25,7 @@ require 'yaml'
 $:.unshift(File.dirname(__FILE__)) unless $:.include?(File.dirname(__FILE__)) || $:.include?(File.expand_path(File.dirname(__FILE__)))
 
 module Scruby
-  VERSION = '0.2.6.3'
+  VERSION = '0.2.6.4'
 end
 
 require "scruby/core_ext/object"
@@ -45,6 +45,7 @@ require "scruby/ugens/ugen_operations"
 require "scruby/ugens/multi_out"
 require "scruby/ugens/panner"
 require "scruby/ugens/buffer_read_write"
+require "scruby/ugens/disk_io"
 require "scruby/ugens/in_out"
 
 require "scruby/ugens/operation_ugens"
