@@ -50,7 +50,7 @@ module Scruby
       encoded_controls = [controls.size].pack('n') + controls.collect{ |c| c.name.encode + [c.index].pack('n') }.join
       
       init_stream + name.encode + constants.encode_floats + values.flatten.encode_floats + encoded_controls +
-      [children.size].pack('n') + children.collect{ |u| u.encode }.join('') +
+      [children.size].pack('n') + children.collect{ |u| u.encode }.join + 
       [@variants.size].pack('n') #stub!!!
     end
 

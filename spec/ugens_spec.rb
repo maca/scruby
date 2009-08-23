@@ -4,6 +4,7 @@ require "scruby/control_name"
 require "scruby/env"
 require "scruby/ugens/ugen"
 require "scruby/ugens/ugen_operations" 
+require "scruby/ugens/operation_ugens" 
 require "scruby/ugens/ugens"
 
 
@@ -46,27 +47,15 @@ describe Ugens do
     lambda { Gendy1.ar }.should raise_error(ArgumentError)
   end
   
-  # it "should print params" do
-  #     PanAz.params.should == {
-  #       :audio => [
-  #         [:input, nil], 
-  #         [:pos, 0], 
-  #         [:level, 1], 
-  #         [:width, 2], 
-  #         [:orientation, 0.5], 
-  #         [:mul, 1], 
-  #         [:add, 0] ], 
-  #       :control => [
-  #         [:input, nil], 
-  #         [:pos, 0], 
-  #         [:level, 1], 
-  #         [:width, 2], 
-  #         [:orientation, 0.5], 
-  #         [:mul, 1], 
-  #         [:add, 0] ]}
-  #   end
+  it "should not accept more than the required arguments" do
+    lambda { SinOsc.ar(1,2,3,4,5,6) }.should raise_error(ArgumentError)
+  end
   
-  #  it "should work with arrays"
+  it "should initialize using demand" do
+    Dbrown.new(1,2,3,4).inputs.should == [1,2,3,4]
+  end
+  
+  it "should output params"
 end
 
 

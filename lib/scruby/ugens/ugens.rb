@@ -40,33 +40,41 @@ module Scruby
     #
     def self.define_ugen name, rates
       rate_name = {:audio => :ar, :control => :kr, :scalar => :ir, :demand => :new}
-      rates.delete_if{ |key, value| key == :demand  } #I don't know what to do with these
 
       methods = rates.collect do |rate, args|
-        args ||= []
-        args.push [:mul, 1], [:add, 0]
-        args.uniq!
-        assigns = []
-        args.each_with_index do |arg, index|
-          key, val = arg
-          assigns << %{  
-            #{ key } = opts[:#{ key }] || args[#{ index }] || #{ val }
-            raise( ArgumentError.new("`#{ key }` value must be provided") ) unless #{ key }
-          }
-        end
+        if rate == :demand
+          <<-RUBY_EVAL
+            def new #{ args.collect{ |a, v| "#{ a } = #{ v.inspect }"  }.join(', ') }
+              super :demand, #{ args.collect{ |a| a.first }.join(', ') }
+            end
+          RUBY_EVAL
+        else
+          args ||= []
+          args.push [:mul, 1], [:add, 0]
+          args.uniq!
+          assigns = []
+          args.each_with_index do |arg, index|
+            key, val = arg
+            assigns << %{  
+              #{ key } = opts[:#{ key }] || args[#{ index }] || #{ val }
+              raise( ArgumentError.new("`#{ key }` value must be provided") ) unless #{ key }
+            }
+          end
 
-        args = [":#{ rate }"] + args[0...-2].collect{ |a| a.first }
-        <<-RUBY_EVAL
-        def #{ rate_name[rate] } *args
-          opts = args.last.kind_of?( Hash ) ? args.pop : {}
-          #{ assigns.join("\n") }
-          new( #{ args.join(', ') } ).muladd( mul, add )
-        end
+          new_args = [":#{ rate }"] + args[0...-2].collect{ |a| a.first }
+          <<-RUBY_EVAL
+          def #{ rate_name[rate] } *args
+            raise ArgumentError.new("wrong number of arguments (\#{ args } for #{ args.size })") if args.size > #{args.size}
+            opts = args.last.kind_of?( Hash ) ? args.pop : {}
+            #{ assigns.join("\n") }
+            new( #{ new_args.join(', ') } ).muladd( mul, add )
+          end
 
-        def params
-          @params
+          def params
+            @params
+          end
+          RUBY_EVAL
         end
-        RUBY_EVAL
       end.join("\n")
 
       self.class_eval <<-RUBY_EVAL

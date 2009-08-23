@@ -732,16 +732,6 @@ Dibrown:
     - 
   - - :length
     - 0
-DiskIn: 
-  :audio: 
-  - - :bufnum
-    - 
-DiskOut: 
-  :audio: 
-  - - :bufnum
-    - 
-  - - :channelsArray
-    - 
 Diwhite: 
   :demand: 
   - - :lo

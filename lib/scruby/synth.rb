@@ -1,5 +1,4 @@
 module Scruby
-  
   class Synth < Node
     attr_reader :name
     
