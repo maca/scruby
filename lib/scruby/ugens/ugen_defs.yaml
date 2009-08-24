@@ -2468,17 +2468,6 @@ RecordBuf:
     - 1
   - - :inputArray
     - "[]"
-ReplaceOut: 
-  :control: 
-  - - :bus
-    - 
-  - - :channelsArray
-    - 
-  :audio: 
-  - - :bus
-    - 
-  - - :channelsArray
-    - 
 Resonz: 
   :control: 
   - - :input

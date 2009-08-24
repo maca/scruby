@@ -39,5 +39,8 @@ module Scruby
         end
       end
     end
+  
+    class ReplaceOut < Out
+    end
   end
 end
