@@ -3,7 +3,7 @@ require File.expand_path(File.dirname(__FILE__)) + "/helper"
 require 'date'
 require 'arguments'
 require 'tempfile'
-require 'osc'
+require 'osc-ruby'
 require "scruby/buffer"
 require "scruby/bus"
 require "scruby/server"

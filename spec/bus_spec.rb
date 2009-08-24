@@ -1,7 +1,7 @@
 require File.expand_path(File.dirname(__FILE__)) + "/helper"
 
 require 'tempfile'
-require 'osc'
+require 'osc-ruby'
 require "scruby/core_ext/numeric"
 require "scruby/bus"
 require "scruby/server"

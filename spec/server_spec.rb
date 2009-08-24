@@ -2,7 +2,7 @@ require File.expand_path(File.dirname(__FILE__)) + "/helper"
 
 require 'arguments'
 require 'tempfile'
-require 'osc'
+require 'osc-ruby'
 require 'scruby/node'
 require 'scruby/core_ext/array'
 require 'scruby/core_ext/typed_array'
@@ -38,7 +38,7 @@ end
 describe Message do
   it "should encode array as Message Blob" do
     m = Message.new "/b_allocRead", 1, "path", 1, -1, ["/b_query", 1]
-    p m.encode
+    m.encode.should == "/b_allocRead\000\000\000\000,isiib\000\000\000\000\000\001path\000\000\000\000\000\000\000\001\377\377\377\377\000\000\000\024/b_query\000\000\000\000,i\000\000\000\000\000\001"
   end
 end
 

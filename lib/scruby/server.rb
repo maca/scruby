@@ -3,50 +3,31 @@ require 'singleton'
 module Scruby 
   include OSC
 
-  class Message < OSC::Message
-    def initialize command, *args
+  class ::OSC::Message
+    def initialize address, *args
       args.peel!
-      args.collect! do |arg|
+      @address = address
+      @args    = args.collect do |arg|
         case arg
-        when Array
-          Blob.new self.class.new(*arg).encode
-        when true
-          1
-        when false
-          0
-        when Symbol
-          arg.to_s
+        when Integer        then OSCInt32.new   arg
+        when Float          then OSCFloat32.new arg
+        when String, Symbol then OSCString.new  arg.to_s
+        when true           then OSCInt32.new   1
+        when false          then OSCInt32.new   0
+        when Array          then OSCBlob.new    self.class.new(*arg).encode
+        when OSCArgument    then arg
         else
-          arg
+          raise TypeError.new("#{ arg } is not a valid Message argument.")
         end
       end
-      super command, type_tags(args), *args
-    end
-
-    def type_tags *args
-      args.peel!
-      args.collect{ |arg| OSC::Packet.tag arg }.join
     end
   end
-
-  class UDPSender < OSC::UDPServer #:nodoc:
-    include Singleton
-
-    alias :udp_send :send 
-    def send command, host, port, *args
-      args = args.collect{ |arg| arg.kind_of?( Symbol ) ? arg.to_s : arg }
-      udp_send Message.new( command, *args ), 0, host, port
-    end
-
-    def send_message message, host, port
-      udp_send message, 0, host, port
-    end
-  end
-  $UDP_Sender = UDPSender.instance
 
   class Server
     attr_reader :host, :port, :path, :buffers, :control_buses, :audio_buses
-    DEFAULTS = { :buffers => 1024, :control_buses => 4096, :audio_buses => 128, :audio_outputs => 8, :audio_inputs => 8 }.freeze
+    DEFAULTS = { :buffers => 1024, :control_buses => 4096, :audio_buses => 128, :audio_outputs => 8, :audio_inputs => 8, 
+      :host => 'localhost', :port => 57111, :path => '/Applications/SuperCollider/scsynth'
+      }
 
     # Initializes and registers a new Server instance and sets the host and port for it.
     # The server is a Ruby representation of scsynth which can be a local binary or a remote    
@@ -68,31 +49,34 @@ module Scruby
     #     +buffers+
     #       Number of available sample buffers defaults to 1024
     def initialize opts = {}
-      @host          = opts.delete(:host) || 'localhost'
-      @port          = opts.delete(:port) || 57111
-      @path          = opts.delete(:path) || '/Applications/SuperCollider/scsynth'
       @opts          = DEFAULTS.dup.merge opts
       @buffers       = []
       @control_buses = []
       @audio_buses   = []
+      @client        = SimpleClient.new host, port
       Bus.audio self, @opts[:audio_outputs] # register hardware buses
       Bus.audio self, @opts[:audio_inputs]
       self.class.all << self
     end
+    
+    def host; @opts[:host]; end
+    def port; @opts[:port]; end
+    def path; @opts[:path]; end
 
     # Boots the local binary of the scsynth forking a process, it will rise a SCError if the scsynth 
     # binary is not found in /Applications/SuperCollider/scsynth (default Mac OS path) or given path. 
     # The default path can be overriden using Server.scsynt_path=('path')
     def boot
-      raise SCError.new('Scsynth not found in the given path') unless File.exists? @path
+      raise SCError.new('Scsynth not found in the given path') unless File.exists? path
       if running?
-        warn "Server on port #{ @port } allready running"
+        warn "Server on port #{ port } allready running"
         return self 
       end
 
       ready   = false
+      timeout = Time.now + 2
       @thread = Thread.new do
-        IO.popen "cd #{ File.dirname @path }; ./#{ File.basename @path } -u #{ @port }" do |pipe|
+        IO.popen "cd #{ File.dirname path }; ./#{ File.basename path } -u #{ port }" do |pipe|
           loop do 
             if response = pipe.gets
               puts response
@@ -101,9 +85,9 @@ module Scruby
           end
         end
       end
-      sleep 0.01 until ready or !@thread.alive?
-      sleep 0.01 # just to be shure
-      send "/g_new", 1  
+      sleep 0.01 until ready or !@thread.alive? or Time.now > timeout
+      sleep 0.01        # just to be shure
+      send "/g_new", 1  # default group
       self   
     end
 
@@ -116,6 +100,7 @@ module Scruby
       send "/clearSched"
       send "/g_new", 1
     end
+    alias :panic :stop
 
     # Sends the /quit OSC signal to the scsynth
     def quit
@@ -126,13 +111,8 @@ module Scruby
     # Sends an OSC command or +Message+ to the scsyth server.
     # E.g. +server.send('/dumpOSC', 1)+
     def send message, *args
-      case message
-      when Bundle, Message
-        $UDP_Sender.send_message message, @host, @port
-      else
-        $UDP_Sender.send message, @host, @port, *args
-      end
-      self
+      message = Message.new message, *args unless Packet === message 
+      @client.send message
     end
 
     def send_bundle timestamp = nil, *messages
@@ -141,7 +121,7 @@ module Scruby
 
     # Encodes and sends a SynthDef to the scsynth server
     def send_synth_def synth_def
-      send Bundle.new( nil, Message.new( '/d_recv', Blob.new(synth_def.encode), 0 ) )
+      send Bundle.new( nil, Message.new( '/d_recv', OSCBlob.new(synth_def.encode), 0 ) )
     end
 
     # Allocates either buffer or bus indices, should be consecutive
