@@ -3,7 +3,8 @@ Manifest.txt
 README.rdoc
 Rakefile
 TODO.markdown
-bin/livecode.rb
+bin/livecode
+bin/livesession
 examples/example.live.rb
 extras/Ruby Live.tmbundle/Commands/Run selection:line in session.tmCommand
 extras/Ruby Live.tmbundle/Commands/Run selection:scope in session.tmCommand
@@ -35,6 +36,8 @@ lib/scruby/synth.rb
 lib/scruby/synthdef.rb
 lib/scruby/ticker.rb
 lib/scruby/ugens/buffer_read_write.rb
+lib/scruby/ugens/demand.rb
+lib/scruby/ugens/disk_in_out.rb
 lib/scruby/ugens/env_gen.rb
 lib/scruby/ugens/in_out.rb
 lib/scruby/ugens/multi_out.rb
@@ -45,6 +48,7 @@ lib/scruby/ugens/ugen.rb
 lib/scruby/ugens/ugen_defs.yaml
 lib/scruby/ugens/ugen_operations.rb
 lib/scruby/ugens/ugens.rb
+notas.markdown
 script/console
 script/destroy
 script/generate
@@ -55,6 +59,8 @@ spec/bus_spec.rb
 spec/core_ext/core_ext_spec.rb
 spec/core_ext/delegator_array_spec.rb
 spec/core_ext/typed_array_spec.rb
+spec/demand_spec.rb
+spec/disk_in_out_spec.rb
 spec/env_gen_spec.rb
 spec/env_spec.rb
 spec/group_spec.rb
