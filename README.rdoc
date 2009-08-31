@@ -27,6 +27,20 @@ thrugh *nix pipes. Similar functionality shouldn't be too dificult to implement 
     end.send
     
     Synth.new :fm, :freq => 200, :amp => 0.8, :dur => 5
+    
+
+To start a live coding session:
+
+    $ livecode
+
+The gem includes a TextMate bundle for interacting with the live coding session, currently there is no cli installation but
+is located in the extras folder, if a file has .live.rb extension the bundle is loaded.
+
+Text can be sent from textmate to the live session pressing enter, either a selection or a bunch of code.
+
+Sending text from another editor or the shell:
+
+    $ echo '...some ruby code...' | tr '\n' '∂' > `ruby -e "require 'tempfile'; puts Dir.tmpdir"`/ruby_live.pipe
 
 == TODO
 
