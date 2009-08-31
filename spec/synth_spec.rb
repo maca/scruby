@@ -1,6 +1,6 @@
 require File.expand_path(File.dirname(__FILE__)) + "/helper"
 
-require 'osc-ruby'
+
 require "scruby/core_ext/typed_array" 
 require "scruby/node"
 require "scruby/bus"

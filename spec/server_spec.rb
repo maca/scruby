@@ -2,7 +2,6 @@ require File.expand_path(File.dirname(__FILE__)) + "/helper"
 
 require 'arguments'
 require 'tempfile'
-require 'osc-ruby'
 require 'scruby/node'
 require 'scruby/core_ext/array'
 require 'scruby/core_ext/typed_array'
@@ -26,7 +25,10 @@ class Scruby::Server
     @output << string
     string
   end
-
+  
+  def flush
+    @output = ''
+  end
 end
 
 class Scruby::Buffer
@@ -91,6 +93,10 @@ describe Server do
       @server.quit
     end
     
+    before do
+      @server.flush
+    end
+    
     it "should send dump" do
       @server.send "/dumpOSC", 1
       sleep 0.1
@@ -102,6 +108,13 @@ describe Server do
       @server.send_synth_def sdef
       sleep 0.1
       @server.output.should =~ %r{\[ "#bundle", 1, \n\s*\[ "/d_recv", DATA\[56\], 0 \]\n\]}
+    end
+    
+    it "should send synthdef2" do
+      sdef = mock 'sdef', :encode => [83, 67, 103, 102, 0, 0, 0, 1, 0, 1, 3, 114, 101, 99, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1, 6, 98, 117, 102, 110, 117, 109, 0, 0, 0, 3, 7, 67, 111, 110, 116, 114, 111, 108, 1, 0, 0, 0, 1, 0, 0, 1, 2, 73, 110, 2, 0, 1, 0, 2, 0, 0, 255, 255, 0, 0, 2, 2, 7, 68, 105, 115, 107, 79, 117, 116, 2, 0, 3, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0, 0].pack('C*')
+      @server.send_synth_def sdef
+      sleep 0.1
+      @server.output.should =~ %r{\[ "#bundle", 1, \n\s*\[ "/d_recv", DATA\[100\], 0 \]\n\]}
     end
   end
   

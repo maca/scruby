@@ -1,13 +1,12 @@
 module Scruby
-  Thread.new do
-    EventMachine.run do
-      EM.set_quantum 5
-
-      EM.error_handler do |e|
-        puts e
-      end
-    end
-  end
+  # Thread.new do
+  #   EventMachine.run do
+  #     EM.set_quantum 5
+  #     EM.error_handler do |e|
+  #       puts e
+  #     end
+  #   end
+  # end
   
   # A timer will call a given block periodically. The period is specified in beats per minute.
   class Ticker

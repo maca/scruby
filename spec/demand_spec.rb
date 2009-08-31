@@ -24,10 +24,8 @@ describe Demand do
     end
     
     it "should output proxies or single proxie" do
-      @splatted ? @prox.each{ |prox| prox.should be_a(OutputProxy) } : @prox.should be_a(OutputProxy)
+      @splatted ? @prox.each{ |prox| prox.should be_a(OutputProxy) } : @prox.should( be_a(OutputProxy) )
     end
-
-
   end
   
   shared_examples_for 'Demand with ar' do

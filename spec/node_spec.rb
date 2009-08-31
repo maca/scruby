@@ -3,7 +3,7 @@ require File.expand_path(File.dirname(__FILE__)) + "/helper"
 require "scruby/core_ext/typed_array" 
 require "scruby/node"
 require "scruby/bus"
-require 'osc-ruby'
+
 require 'scruby/server'
 require File.join( File.expand_path(File.dirname(__FILE__)), "server")
 

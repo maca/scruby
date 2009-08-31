@@ -2,25 +2,21 @@ require 'singleton'
 
 module Scruby 
   include OSC
+  
+  TrueClass.send :include, OSC::OSCArgument
+  TrueClass.send(:define_method, :to_osc_type){ 1 }
+  
+  FalseClass.send :include, OSC::OSCArgument
+  FalseClass.send(:define_method, :to_osc_type){ 0 }
+  
+  Hash.send :include, OSC::OSCArgument
+  Hash.send :define_method, :to_osc_type do 
+    self.to_a.collect{ |pair| pair.collect{ |a| OSC.coerce_argument a } }
+  end
 
-  class ::OSC::Message
-    def initialize address, *args
-      args.peel!
-      @address = address
-      @args    = args.collect do |arg|
-        case arg
-        when Integer        then OSCInt32.new   arg
-        when Float          then OSCFloat32.new arg
-        when String, Symbol then OSCString.new  arg.to_s
-        when true           then OSCInt32.new   1
-        when false          then OSCInt32.new   0
-        when Array          then OSCBlob.new    self.class.new(*arg).encode
-        when OSCArgument    then arg
-        else
-          raise TypeError.new("#{ arg } is not a valid Message argument.")
-        end
-      end
-    end
+  Array.send(:include, OSC::OSCArgument)
+  Array.send( :define_method, :to_osc_type) do
+    Blob.new Message.new(*self).encode
   end
 
   class Server
@@ -53,7 +49,7 @@ module Scruby
       @buffers       = []
       @control_buses = []
       @audio_buses   = []
-      @client        = SimpleClient.new host, port
+      @client        = Client.new port, host
       Bus.audio self, @opts[:audio_outputs] # register hardware buses
       Bus.audio self, @opts[:audio_inputs]
       self.class.all << self
@@ -111,7 +107,7 @@ module Scruby
     # Sends an OSC command or +Message+ to the scsyth server.
     # E.g. +server.send('/dumpOSC', 1)+
     def send message, *args
-      message = Message.new message, *args unless Packet === message 
+      message = Message.new message, *args unless Message === message or Bundle === message
       @client.send message
     end
 
@@ -121,7 +117,7 @@ module Scruby
 
     # Encodes and sends a SynthDef to the scsynth server
     def send_synth_def synth_def
-      send Bundle.new( nil, Message.new( '/d_recv', OSCBlob.new(synth_def.encode), 0 ) )
+      send Bundle.new( nil, Message.new('/d_recv', Blob.new(synth_def.encode), 0) )
     end
 
     # Allocates either buffer or bus indices, should be consecutive

@@ -2,6 +2,10 @@ require "rubygems"
 require "spec" 
 require 'arguments'
 require 'yaml'
+# require 'ruby-osc'
+# require 'osc-ruby'
+require "#{ File.dirname __FILE__ }/../../ruby-osc/lib/ruby-osc"
+
 
 $:.unshift( File.dirname(__FILE__) + '/../lib' ) 
 

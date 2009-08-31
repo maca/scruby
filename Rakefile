@@ -16,7 +16,7 @@ $hoe = Hoe.spec 'scruby' do
   self.rubyforge_name     = self.name
   self.extra_deps         = [
     ['maca-arguments',  '>= 0.6'],
-    ['aberant-osc-ruby','>= 0.1.5']
+    ['maca-ruby-osc',   '>= 0.3.1']
   ]
 end
 

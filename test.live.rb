@@ -115,7 +115,7 @@ buffer.read 'sounds/a11wlk01-44_1.aiff'
 
 SynthDef.new :ring do |mod_freq, amp, buffnum|
   gate  = EnvGen.kr Env.perc(0, 0.2)
-  sig   = PlayBuf.ar buffnum, :rate => 1, :mul => SinOsc.ar(mod_freq, :mul => amp), :loop => 1.0
+  sig   = PlayBuf.ar(buffnum, :rate => 1, :loop => 1.0) * SinOsc.ar(mod_freq, :mul => amp)
   Out.ar 0, [sig, sig]
 end.send
 
@@ -140,33 +140,47 @@ s.stop
 
 # Síntesis por FM
 SynthDef.new :campana do |freq, amp, dur|
-  gate     = EnvGen.kr Env.perc(0, 0.2)
-  mod_env  = EnvGen.kr Env.new([600, 200, 100], [0.7,0.3].map{|v|v*dur}), gate
+  gate     = EnvGen.kr Env.perc(0, 0.1)
+  mod_env  = EnvGen.kr Env.new( d(600, 200, 100), d(0.7,0.3)*dur ), gate
   mod      = SinOsc.ar freq * 1.4, :mul => mod_env
   sig      = SinOsc.ar freq + mod
-  env      = EnvGen.kr Env.new( [0, 1, 0.6, 0.2, 0.1, 0 ], [0.001, 0.005, 0.3, 0.5, 0.7].map{|v|v*dur} ), gate, :doneAction => 2
+  # sig     += SinOsc.ar(freq*0.5) + SinOsc.ar(freq)
+  env      = EnvGen.kr Env.new( d(0, 1, 0.6, 0.2, 0.1, 0), d(0.001, 0.005, 0.3, 0.5, 0.7)*dur ), gate, :doneAction => 2
   sig      = sig * amp * env
-  Out.ar [sig, sig]
+  Out.ar 0, [sig, sig]
 end.send
 
-camp = Synth.new :campana, :freq => 200, :amp => 0.8, :dur => 5
+camp   = Synth.new :campana, :freq => 220, :amp => 0.4, :dur => 5
+
+ticker = Ticker.new :tempo => 120*2
+
+ar = [200,400,600,1200,1100]
+
+ar = [2400,2600]
+
+ticker.block do |i|
+  Synth.new :campana, :freq => ar[rand(ar.size)], :amp => rand*0.1, :dur => 1
+end
+
+ticker.run
+
+ticker.stop
+
+s.stop
 
 
-
-
-# Chido
-SynthDef.new :wood_drum do |freq, amp, dur|
+SynthDef.new :scifi do |freq, amp, dur|
   gate     = EnvGen.kr Env.perc(0, 0.2)
   mod_env  = EnvGen.kr Env.new([1600, 200, 50, 90, 10], d(0.7,0.3,0.4,0.4)*dur ), gate
   mod      = SinOsc.ar freq * 0.6875, :mul => mod_env
   sig      = SinOsc.ar freq + mod
-  env      = EnvGen.kr Env.new( [0, 1, 0.6, 0.2, 0.1, 0 ], [0.1, 0.5, 0.5, 0.7, 0.9].map{|v|v*dur} ), gate, :doneAction => 2
+  env      = EnvGen.kr Env.new( [0, 1, 0.6, 0.2, 0.1, 0 ], d(0.1, 0.5, 0.5, 0.7, 0.9)*dur ), gate, :doneAction => 2
   sig      = sig * amp * env
-  Out.ar [sig, sig]
+  Out.ar 0, [sig, sig]
 end.send
 
-camp = Synth.new :wood_drum, :freq => 184,  :amp => 0.8, :dur => 10
-camp = Synth.new :wood_drum, :freq => 180,  :amp => 0.8, :dur => 10
+camp = Synth.new :scifi, :freq => 1000,  :amp => 0.1, :dur => 10
+camp = Synth.new :scifi, :freq => 200,   :amp => 0.1, :dur => 10
 
 s.stop
 
@@ -180,12 +194,12 @@ SynthDef.new :wood_drum do |freq, amp, dur|
   sig      = SinOsc.ar freq + mod
   env      = EnvGen.kr Env.new( [0, 1, 0.6, 0.2, 0.1, 0 ], [0.1, 0.5, 0.5, 0.7, 0.9].map{|v|v*dur} ), gate, :doneAction => 2
   sig      = sig * amp * env
-  Out.ar [sig, sig]
+  Out.ar 0, [sig, sig]
 end.send
 
-camp = Synth.new :wood_drum, :freq => 184,  :amp => 0.8, :dur => 100
-camp = Synth.new :wood_drum, :freq => 180,  :amp => 0.8, :dur => 10
-camp = Synth.new :wood_drum, :freq => 180,  :amp => 0.8, :dur => 1
+camp = Synth.new :wood_drum, :freq => 184,  :amp => 0.2, :dur => 15
+camp = Synth.new :wood_drum, :freq => 180,  :amp => 0.2, :dur => 9
+camp = Synth.new :wood_drum, :freq => 180,  :amp => 0.2, :dur => 8
 
 
 s.stop
@@ -218,6 +232,22 @@ end.send
 
 
 
+buffer  = Buffer.read_channel s, "azteca/Olla percutiva, sampleos.wav", :channels => [0]
+
+SynthDef.new :granular do |bufnum|
+  trate = MouseY.kr 8, 1200, 1
+  clk   = Impulse.ar trate
+  dur   = 12 / trate
+  pos   = MouseX.kr(0, BufDur.kr(bufnum)) + TRand.kr(0, 0.1, clk)
+  pan   = WhiteNoise.kr 2, -1.0
+  sig   = TGrains.ar 2, clk, bufnum, 1, pos, dur, pan, 0.1, 4
+  sig  *= 15
+  Out.ar 0, sig
+end.send s
+
+g = Synth.new :granular, :bufnum => buffer.buffnum
+
+g.free
 
 
 
