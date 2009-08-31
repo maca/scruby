@@ -10,7 +10,7 @@ require "scruby/ugens/ugen_operations"
 require "scruby/ugens/operation_ugens" 
 require "scruby/ugens/multi_out"
 require "scruby/ugens/ugens" 
-require "scruby/ugens/disk_io"
+require "scruby/ugens/disk_in_out"
 
 include Scruby
 include Ugens

@@ -21,7 +21,7 @@ module Scruby
         end
 
         synth = super name, servers
-        synth.send '/s_new', synth.name, synth.id, Node::ACTIONS.index(action), target_id, *args.to_a.flatten
+        synth.send '/s_new', synth.name, synth.id, Node::ACTIONS.index(action), target_id, args
         synth
       end
 

@@ -139,18 +139,16 @@ s.stop
 
 
 # Síntesis por FM
-SynthDef.new :campana do |freq, amp, dur|
-  gate     = EnvGen.kr Env.perc(0, 0.1)
-  mod_env  = EnvGen.kr Env.new( d(600, 200, 100), d(0.7,0.3)*dur ), gate
-  mod      = SinOsc.ar freq * 1.4, :mul => mod_env
-  sig      = SinOsc.ar freq + mod
-  # sig     += SinOsc.ar(freq*0.5) + SinOsc.ar(freq)
-  env      = EnvGen.kr Env.new( d(0, 1, 0.6, 0.2, 0.1, 0), d(0.001, 0.005, 0.3, 0.5, 0.7)*dur ), gate, :doneAction => 2
-  sig      = sig * amp * env
-  Out.ar 0, [sig, sig]
+SynthDef.new :fm do |freq, amp, dur|
+  mod_env = EnvGen.kr Env.new( d(600, 200, 100), d(0.7,0.3) ), 1, :timeScale => dur
+  mod     = SinOsc.ar freq * 1.4, :mul => mod_env
+  sig     = SinOsc.ar freq + mod
+  env     = EnvGen.kr Env.new( d(0, 1, 0.6, 0.2, 0.1, 0), d(0.001, 0.005, 0.3, 0.5, 0.7) ), 1, :timeScale => dur, :doneAction => 2
+  sig     = sig * amp * env
+  Out.ar  0, [sig, sig]
 end.send
 
-camp   = Synth.new :campana, :freq => 220, :amp => 0.4, :dur => 5
+camp = Synth.new :fm, :freq => 220, :amp => 0.4, :dur => 1
 
 ticker = Ticker.new :tempo => 120*2
 

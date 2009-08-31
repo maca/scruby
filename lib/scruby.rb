@@ -45,7 +45,7 @@ require "scruby/ugens/ugen_operations"
 require "scruby/ugens/multi_out"
 require "scruby/ugens/panner"
 require "scruby/ugens/buffer_read_write"
-require "scruby/ugens/disk_io"
+require "scruby/ugens/disk_in_out"
 require "scruby/ugens/in_out"
 
 require "scruby/ugens/operation_ugens"
