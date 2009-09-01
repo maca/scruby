@@ -42,10 +42,10 @@ module Scruby
       rate_name = {:audio => :ar, :control => :kr, :scalar => :ir, :demand => :new}
 
       methods = rates.collect do |rate, args|
-        if rate == :demand
+        if rate == :demand or rate == :scalar
           <<-RUBY_EVAL
             def new #{ args.collect{ |a, v| "#{ a } = #{ v.inspect }"  }.join(', ') }
-              super :demand, #{ args.collect{ |a| a.first }.join(', ') }
+              super #{ args.unshift([rate.inspect]).collect{ |a| a.first }.join(', ') }
             end
           RUBY_EVAL
         else
@@ -87,8 +87,6 @@ module Scruby
       RUBY_EVAL
       # # TODO: Load from ~/Ugens directory
     end
-
-
 
     YAML::load( File.open( File.dirname(__FILE__) + "/ugen_defs.yaml" ) ).each_pair do |key, value| 
       self.define_ugen key, value

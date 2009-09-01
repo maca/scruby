@@ -55,6 +55,10 @@ describe Ugens do
     Dbrown.new(1,2,3,4).inputs.should == [1,2,3,4]
   end
   
+  it "should have public new method for scalar" do
+    ExpRand.new(1,2)
+  end
+  
   it "should output params"
 end
 
