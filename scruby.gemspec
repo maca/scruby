@@ -15,6 +15,7 @@ Gem::Specification.new do |s|
   s.rubyforge_project = "scruby"
 
   s.add_development_dependency 'rspec'
+  s.add_development_dependency 'bundler'
   s.add_dependency 'ruby-osc', '~> 0.3'
   s.add_dependency 'arguments', '~> 0.6'
   s.add_dependency 'live', '~> 0.1'
