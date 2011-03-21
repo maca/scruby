@@ -1,5 +1,5 @@
-.DS_Store
-pkg
-doc
-Manifest
-notas.markdown
+pkg/*
+*.gem
+.bundle
+*.swp
+*.swo
