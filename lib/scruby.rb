@@ -51,6 +51,7 @@ require "scruby/ugens/operation_ugens"
 require "scruby/ugens/ugens"
 require "scruby/synthdef"
 
+require "scruby/group"
 require "scruby/server"
 require "scruby/ugens/env_gen"
 

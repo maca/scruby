@@ -34,6 +34,7 @@ module Scruby
     #   $ man scsynth
     # 
     # @param [Hash] opts the options to create a message with.
+    # @option opts [String] :path ('scsynt' on Linux, '/Applications/SuperCollider/scsynth' on Mac) scsynth binary path
     # @option opts [String] :host ('localhost') SuperCollider Server address
     # @option opts [Fixnum] :port (57111) TCP port
     # @option opts [Fixnum] :control_buses (4096) Number of buses for routing control data, indices start at 0
@@ -58,7 +59,7 @@ module Scruby
     def path; @opts[:path]; end
 
     # Boots the local binary of the scsynth forking a process, it will rise a SCError if the scsynth 
-    # binary is not found in /Applications/SuperCollider/scsynth (default Mac OS path) or given path. 
+    # binary is not found in path. 
     # The default path can be overriden using Server.scsynt_path=('path')
     def boot
       raise SCError.new('Scsynth not found in the given path') unless File.exists? path

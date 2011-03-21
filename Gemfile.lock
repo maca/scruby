@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    scruby (0.2.7)
+    scruby (0.2.7.1)
       arguments (~> 0.6)
       live (~> 0.1)
       ruby-osc (~> 0.3)

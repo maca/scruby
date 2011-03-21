@@ -1,6 +1,5 @@
 module Scruby
   class Group < Node
-    
     def free_all
       send '/g_freeAll', self.id
       self
@@ -15,10 +14,5 @@ module Scruby
       send '/g_dumpTree', self.id, post
       self
     end
-    
-    class << self
-      
-    end
-    
   end
 end
