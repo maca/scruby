@@ -8,12 +8,14 @@ SynthDef creation and sending is robust but some features are not implemented su
 livecode.rb executable is located in the bin directory and a TextMate bundle included in extras permits livecoding from TextMate, comunication is 
 thrugh *nix pipes. Similar functionality shouldn't be too dificult to implement from Emacs or Vim.
 
-== INSTALL
+== Install
 
     $ [sudo] gem install scruby
 
+Scruby is just a SuperCollider client so SuperCollider must be installed on the system. There's a PPA for installing SC under Ubuntu: https://launchpad.net/~supercollider/+archive/ppa.
 
-== USAGE
+
+== Usage
 
     require 'scruby'
     
@@ -39,11 +41,11 @@ To start a live coding session:
 See http://github.com/maca/live
 
 
-== TODO
+== Todo
 
 Receive OSC messages from SuperCollider
 
-== LICENSE:
+== License:
 
 Copyright (c) 2008 Macario Ortega
 
@@ -59,7 +61,3 @@ GNU General Public License for more details.
 
 You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
-
-
-
-
