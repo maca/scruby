@@ -29,21 +29,22 @@ module Scruby
     # The server is a Ruby representation of scsynth which can be a local binary or a remote    
     # server already running.
     # Server class keeps an array with all the instantiated servers
-    #   Options:
-    #     +host+: 
-    #       defaults to 'localhost'
-    #     +port+:
-    #       TCP port defaults to 57111
-    #     +control_buses+
-    #       Number of buses for routing control data defaults to 4096, indices start at 0.
-    #     +audio_buses+
-    #       Number of audio Bus channels for hardware output and input and internal routing, defaults to 128
-    #     +audio_outputs+
-    #       Reserved +buses+ for hardware output, indices available are 0 to +audio_outputs+ - 1 defaults to 8.
-    #     +audio_inputs+
-    #       Reserved +buses+ for hardware input, +audio_outputs+ to (+audio_outputs+ + +audio_inputs+ - 1), defaults to 8.
-    #     +buffers+
-    #       Number of available sample buffers defaults to 1024
+    #
+    # Options:
+    #   +host+: 
+    #     defaults to 'localhost'
+    #   +port+:
+    #     TCP port defaults to 57111
+    #   +control_buses+
+    #     Number of buses for routing control data defaults to 4096, indices start at 0.
+    #   +audio_buses+
+    #     Number of audio Bus channels for hardware output and input and internal routing, defaults to 128
+    #   +audio_outputs+
+    #     Reserved +buses+ for hardware output, indices available are 0 to +audio_outputs+ - 1 defaults to 8.
+    #   +audio_inputs+
+    #     Reserved +buses+ for hardware input, +audio_outputs+ to (+audio_outputs+ + +audio_inputs+ - 1), defaults to 8.
+    #   +buffers+
+    #     Number of available sample buffers defaults to 1024
     def initialize opts = {}
       @opts          = DEFAULTS.dup.merge opts
       @buffers       = []

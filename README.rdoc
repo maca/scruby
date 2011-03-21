@@ -12,7 +12,7 @@ thrugh *nix pipes. Similar functionality shouldn't be too dificult to implement 
 
     $ [sudo] gem install scruby
 
-Scruby is just a SuperCollider client so SuperCollider must be installed on the system. There's a PPA for installing SC under Ubuntu: https://launchpad.net/~supercollider/+archive/ppa.
+Scruby is just a SuperCollider client so SC must be installed on the system. There's a PPA for installing SC under Ubuntu: https://launchpad.net/~supercollider/+archive/ppa.
 
 
 == Usage
