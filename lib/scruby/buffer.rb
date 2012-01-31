@@ -3,7 +3,7 @@ module Scruby
     path = "~/Scruby/#{ path }" unless path.match %r{^(?:/|~)}
     File.expand_path path
   end
-  
+
   class Buffer
     # readNoUpdate
     # loadCollection
@@ -32,45 +32,45 @@ module Scruby
 
     attr_reader   :server
     attr_accessor :path, :frames, :channels, :rate
-    
+
     def read path, file_start = 0, frames = -1, buff_start = 0, leave_open = false, &message
       # @on_info  = message
       message ||= ["/b_query", buffnum]
       @server.send "/b_read", buffnum, expand_path(path), file_start, frames, buff_start, leave_open, message.value(self)
       self
     end
-    
+
     def read_channel path, file_start = 0, frames = -1, buff_start = 0, leave_open = false, channels = [], &message
       message ||= 0
       @server.send *(["/b_ReadChannel", buffnum, expand_path(path), start, frames, buff_start, leave_open] + channels << message.value(self))
       self
     end
-    
+
     def close &message
       message ||= 0
       @server.send '/b_close', buffnum, message.value(self)
       self
     end
-    
+
     def zero &message
       message ||= 0
       @server.send '/b_zero', buffnum, message.value(self)
       self
     end
-    
+
     def cue_sound_file path, start = 0, &message
       message ||= 0
       @server.send "/b_read", buffnum, expand_path(path), start, @frames, 0, 1, message.value(self)
       self
     end
-    
+
     def write path = nil, format = 'aiff', sample_format = 'int24', frames = -1, start = 0, leave_open = false, &message
       message ||= 0
       path    ||= "#{ DateTime.now }.#{ format }"
       @server.send "/b_write", buffnum, expand_path(path), format, sample_format, frames, start, leave_open, message.value(self)
       self
     end
-    
+
     def initialize server, frames = -1, channels = 1
       @server, @frames, @channels = server, frames, channels
     end
@@ -88,7 +88,7 @@ module Scruby
     alias :as_ugen_input :buffnum
     alias :index         :buffnum
     # alias :as_control_input :buffnum
-    
+
     def free &message
       message ||= 0
       @server.send "/b_free", buffnum, message.value(self)
@@ -102,7 +102,7 @@ module Scruby
       @server.send "/b_allocRead", buffnum, @path = expand_path(path), start, frames, message.value(self)
       self
     end
-    
+
     def allocate_read_channel path, start, frames, channels, &message
       @server.allocate :buffers, self
       message ||= ["/b_query", buffnum]
@@ -114,24 +114,24 @@ module Scruby
       def allocate server, frames = -1, channels = 1, &message
         new(server, frames, channels).allocate &message
       end
-      
+
       def cue_sound_file server, path, start, channels = 2, buff_size = 32768, &message
         allocate server, buff_size, channels do |buffer|
           message ||= 0
           ['/b_read', buffer.buffnum, expand_path(path), start, buff_size, 0, true, message.value(buffer)]
         end
       end
-      
+
       # Allocate a buffer and immediately read a soundfile into it.
       def read server, path, start = 0, frames = -1, &message
         buffer = new server, &message
         buffer.allocate_and_read expand_path(path), start, frames
       end
-      
+
       def read_channel server, path, start = 0, frames = -1, channels = [], &message
         new(server, frames, channels).allocate_read_channel expand_path(path), start, frames, channels, &message
       end
-      
+
       def alloc_consecutive buffers, server, frames = -1, channels = 1, &message
         buffers = Array.new(buffers){ new server, frames, channels }
         server.allocate :buffers, buffers
@@ -150,4 +150,3 @@ module Scruby
     end
   end
 end
-    

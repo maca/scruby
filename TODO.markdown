@@ -1,3 +1,3 @@
 **Array workarrounds**
 
-* Buffer as Ugen input 
+* Buffer as Ugen input

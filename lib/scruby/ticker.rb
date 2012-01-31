@@ -7,21 +7,21 @@ module Scruby
   #     end
   #   end
   # end
-  
+
   # A timer will call a given block periodically. The period is specified in beats per minute.
   class Ticker
     attr_reader :start, :tick, :interval
     attr_accessor :tempo, :resolution, :size, :loop
-    
+
     def initialize tempo = 120, size = 16, resolution = 1, loop = true, &block
       @tempo , @resolution, @size, @loop = tempo , resolution, size, loop
       @interval   = 60.0 / @tempo
       @tick       = 0
       @block      = block
     end
-    
+
     named_args_for :initialize
-    
+
     def block &block
       @block = block
     end
@@ -88,5 +88,5 @@ module Scruby
       @queue[tick].push proc
     end
   end
-  
+
 end

@@ -2,21 +2,21 @@ module Scruby
   module Ugens
     class Pan2 < Ugen
       include MultiOut
-      
+
       class << self
         def ar input, pos = 0.0, level = 1.0
           new :audio, 2, input, pos, level
         end
-      
+
         def kr input, pos = 0.0, level = 1.0
           new :control, 2, input, pos, level
         end
         named_args_for :ar, :kr
       end
     end
-    
+
     class LinPan2 < Pan2; end
-    
+
     class Pan4 < Ugen
       include MultiOut
 
@@ -24,14 +24,14 @@ module Scruby
         def ar input, xpos = 0.0, ypos = 0.0, level = 1.0
           new :audio, 4, input, xpos, ypos, level
         end
-      
+
         def kr input, xpos = 0.0, ypos = 0.0, level = 1.0
           new :control, 4, input, xpos, ypos, level
         end
         named_args_for :ar, :kr
       end
     end
-  
+
     class Balance2 < Ugen
       include MultiOut
 
@@ -39,28 +39,28 @@ module Scruby
         def ar left, right, pos = 0.0, level = 1.0
           new :audio, 2, left, right, pos, level
         end
-      
+
         def kr left, right, pos = 0.0, level = 1.0
           new :control, 2, left, right, pos, level
         end
         named_args_for :ar, :kr
       end
     end
-  
+
     class Rotate2 < Ugen
       include MultiOut
-      
+
       class << self
         def ar x, y, pos = 0.0
           new :audio, 2, x, y, pos
         end
-      
+
         def kr x, y, pos = 0.0
           new :control, 2, x, y, pos
         end
       end
     end
- 
+
     class PanB < Ugen
       include MultiOut
 
@@ -75,7 +75,7 @@ module Scruby
         named_args_for :ar, :kr
       end
     end
-    
+
     class PanB2 < Ugen
       include MultiOut
 
@@ -90,7 +90,7 @@ module Scruby
         named_args_for :ar, :kr
       end
     end
-    
+
     class BiPanB2 < Ugen
       include MultiOut
 
@@ -104,7 +104,7 @@ module Scruby
         end
       end
     end
-    
+
     class DecodeB2 < Ugen
       include MultiOut
 
@@ -118,7 +118,7 @@ module Scruby
         end
       end
     end
-  
+
     class PanAz < Ugen
       include MultiOut
 

@@ -28,15 +28,15 @@ class Array
   def encode_floats #:nodoc:
     [self.size].pack('n') + self.pack('g*') #TODO: Deprecate
   end
-  
+
   def peel!
     self.replace self.first if self.first.kind_of? Array if self.size == 1
   end
-  
+
   def peel
     self.dup.peel! || self
   end
-  
+
   private
   def collect_constants #:nodoc:
     self.collect{ |e| e.send( :collect_constants )  }

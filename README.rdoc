@@ -1,11 +1,11 @@
-== Scruby 
+== Scruby
 
 Is a bare-bones SuperCollider livecoding library for Ruby, it provides comunication with a remote or local scsynth server and SynthDef creation with a
 in a similar way to Sclang.
 
 SynthDef creation and sending is robust but some features are not implemented such as SynthDef variations and others I may not be aware of.
 
-livecode.rb executable is located in the bin directory and a TextMate bundle included in extras permits livecoding from TextMate, comunication is 
+livecode.rb executable is located in the bin directory and a TextMate bundle included in extras permits livecoding from TextMate, comunication is
 thrugh *nix pipes. Similar functionality shouldn't be too dificult to implement from Emacs or Vim.
 
 == Install
@@ -18,10 +18,10 @@ Scruby is just a SuperCollider client so SC must be installed on the system. The
 == Usage
 
     require 'scruby'
-    
+
     s = Server.new
     s.boot
-    
+
     SynthDef.new :fm do |freq, amp, dur|
       mod_env = EnvGen.kr Env.new( d(600, 200, 100), d(0.7,0.3) ), 1, :timeScale => dur
       mod     = SinOsc.ar freq * 1.4, :mul => mod_env
@@ -32,12 +32,12 @@ Scruby is just a SuperCollider client so SC must be installed on the system. The
     end.send
 
     Synth.new :fm, :freq => 220, :amp => 0.4, :dur => 1
-    
+
 
 To start a live coding session:
 
     $ live
-    
+
 See http://github.com/maca/live
 
 

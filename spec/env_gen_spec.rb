@@ -7,14 +7,14 @@ require "scruby/ugens/ugen_operations"
 require "scruby/ugens/env_gen"
 
 include Scruby
-include Ugens 
+include Ugens
 
 describe EnvGen do
-  
+
   it "should not instantiate with #new" do
     lambda { EnvGen.new :audio, 1, 2 }.should raise_error
   end
-  
+
   it "should have correct inputs" do
     envgen = EnvGen.kr Env.adsr
     envgen.rate.should   == :control

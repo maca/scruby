@@ -1,7 +1,7 @@
 require File.expand_path(File.dirname(__FILE__)) + "/helper"
 
 
-require "scruby/core_ext/typed_array" 
+require "scruby/core_ext/typed_array"
 require "scruby/node"
 require "scruby/bus"
 require "scruby/group"
@@ -29,7 +29,7 @@ describe Synth do
   before do
     @server.flush
   end
-  
+
   describe 'instantiation with node target' do
     before do
       Node.reset!

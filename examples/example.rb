@@ -24,7 +24,7 @@ test = Synth.new :melo, :freq => 220, :amp => 0.5
 s.stop
 
 
-sdef  = SynthDef.new :perc, :values => [456, 0.34, 0.45] do |freq, amp, a, b| 
+sdef  = SynthDef.new :perc, :values => [456, 0.34, 0.45] do |freq, amp, a, b|
   dur = a
   amp = amp * 0.25
   freq = freq * 0.05
@@ -40,7 +40,7 @@ sdef.send
 sleep 0.05
 test = Synth.new :perc, :freq => 1000, :amp => 0.5, :dur => rand
 
-sdef  = SynthDef.new :perc, :values => [456, 0.34, 0.45] do |freq, amp, a, b| 
+sdef  = SynthDef.new :perc, :values => [456, 0.34, 0.45] do |freq, amp, a, b|
   dur = a
   amp = amp
   freq = freq * 0.1
@@ -53,7 +53,7 @@ sdef.send
 sleep 0.05
 test = Synth.new :perc, :freq => 1000, :amp => 0.5, :dur => rand
 
-sdef  = SynthDef.new :perc, :values => [456, 0.34, 0.45] do |freq, amp, a, b| 
+sdef  = SynthDef.new :perc, :values => [456, 0.34, 0.45] do |freq, amp, a, b|
   gate = EnvGen.kr Env.perc(0,0.1)
   env = EnvGen.kr Env.asr( 0.1, 4, 1 ), gate, :doneAction => 2
   sig = DelayC.ar( SinOsc.ar(freq), 4, SinOsc.ar( SinOsc.ar( SinOsc.ar( 2 ) ) ) )

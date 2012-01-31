@@ -31,13 +31,13 @@ describe "synthdef examples" do
   it "should encode with out" do
     sdef = SynthDef.new(:out){ Out.ar(0, SinOsc.ar) }
     sdef.children.should have(2).children
-    
+
     sdef.children[0].should be_instance_of( SinOsc )
-    sdef.children[1].should be_instance_of( Out ) 
-    
+    sdef.children[1].should be_instance_of( Out )
+
     sdef.constants.should == [ 440, 0 ]
     sdef.children[1].channels.should == []
-    
+
     expected = [ 83, 67, 103, 102, 0, 0, 0, 1, 0, 1, 3, 111, 117, 116, 0, 2, 67, -36, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 6, 83, 105, 110, 79, 115, 99, 2, 0, 2, 0, 1, 0, 0, -1, -1, 0, 0, -1, -1, 0, 1, 2, 3, 79, 117, 116, 2, 0, 2, 0, 0, 0, 0, -1, -1, 0, 1, 0, 0, 0, 0, 0, 0 ].pack('C*')
     sdef.encode.should == expected
   end
@@ -46,18 +46,18 @@ describe "synthdef examples" do
     sdef = SynthDef.new(:out){ sig = SinOsc.ar(100, 200) * SinOsc.ar(200); Out.ar(0, sig) }
     sdef.encode.should == [ 83, 67, 103, 102, 0, 0, 0, 1, 0, 1, 3, 111, 117, 116, 0, 3, 66, -56, 0, 0, 67, 72, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 4, 6, 83, 105, 110, 79, 115, 99, 2, 0, 2, 0, 1, 0, 0, -1, -1, 0, 0, -1, -1, 0, 1, 2, 6, 83, 105, 110, 79, 115, 99, 2, 0, 2, 0, 1, 0, 0, -1, -1, 0, 1, -1, -1, 0, 2, 2, 12, 66, 105, 110, 97, 114, 121, 79, 112, 85, 71, 101, 110, 2, 0, 2, 0, 1, 0, 2, 0, 0, 0, 0, 0, 1, 0, 0, 2, 3, 79, 117, 116, 2, 0, 2, 0, 0, 0, 0, -1, -1, 0, 2, 0, 2, 0, 0, 0, 0 ].pack('C*')
   end
-  
+
   it "should encode out with two channels" do
     sdef = SynthDef.new( :out ){ sig = SinOsc.ar(100, [200, 200]) * SinOsc.ar(200); Out.ar(0, sig) }
     expected = [ 83, 67, 103, 102, 0, 0, 0, 1, 0, 1, 3, 111, 117, 116, 0, 3, 66, -56, 0, 0, 67, 72, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 6, 6, 83, 105, 110, 79, 115, 99, 2, 0, 2, 0, 1, 0, 0, -1, -1, 0, 0, -1, -1, 0, 1, 2, 6, 83, 105, 110, 79, 115, 99, 2, 0, 2, 0, 1, 0, 0, -1, -1, 0, 0, -1, -1, 0, 1, 2, 6, 83, 105, 110, 79, 115, 99, 2, 0, 2, 0, 1, 0, 0, -1, -1, 0, 1, -1, -1, 0, 2, 2, 12, 66, 105, 110, 97, 114, 121, 79, 112, 85, 71, 101, 110, 2, 0, 2, 0, 1, 0, 2, 0, 0, 0, 0, 0, 2, 0, 0, 2, 12, 66, 105, 110, 97, 114, 121, 79, 112, 85, 71, 101, 110, 2, 0, 2, 0, 1, 0, 2, 0, 1, 0, 0, 0, 2, 0, 0, 2, 3, 79, 117, 116, 2, 0, 3, 0, 0, 0, 0, -1, -1, 0, 2, 0, 3, 0, 0, 0, 4, 0, 0, 0, 0 ].pack('C*')
     sdef.encode.should == expected
   end
-  
+
   it "should instantiate and encode" do
     expected = [ 83, 67, 103, 102, 0, 0, 0, 1, 0, 1, 4, 104, 101, 108, 112, 0, 2, 67, -36, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 5, 6, 83, 105, 110, 79, 115, 99, 2, 0, 2, 0, 1, 0, 0, -1, -1, 0, 0, -1, -1, 0, 1, 2, 6, 83, 105, 110, 79, 115, 99, 2, 0, 2, 0, 1, 0, 0, -1, -1, 0, 0, -1, -1, 0, 1, 2, 12, 66, 105, 110, 97, 114, 121, 79, 112, 85, 71, 101, 110, 2, 0, 2, 0, 1, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 2, 6, 83, 105, 110, 79, 115, 99, 2, 0, 2, 0, 1, 0, 0, -1, -1, 0, 0, -1, -1, 0, 1, 2, 12, 66, 105, 110, 97, 114, 121, 79, 112, 85, 71, 101, 110, 2, 0, 2, 0, 1, 0, 2, 0, 2, 0, 0, 0, 3, 0, 0, 2, 0, 0 ].pack('C*')
     SynthDef.new( :help ){ (SinOsc.ar() + SinOsc.ar()) * SinOsc.ar() }.encode.should == expected
   end
-  
+
   it "should encode out with multidimensional array" do
     sdef  = SynthDef.new( :out ){ sig = SinOsc.ar(100, [200,[100, 100]]) * SinOsc.ar(200); Out.ar(0, sig) }
     children = sdef.children
@@ -70,7 +70,7 @@ describe "synthdef examples" do
     #the order of the elements is different than in supercollider, but at least has the encoded string is the same size so i guess its fine
     sdef.encode.should have(261).chars
   end
-  
+
   it "should encode 'complex' sdef" do
     sdef  = SynthDef.new :am do |gate, portadora, moduladora, amp|
       mod = SinOsc.kr moduladora, 0, 0.5, 0.5

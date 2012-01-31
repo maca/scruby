@@ -5,7 +5,7 @@ module Scruby
       attr_accessor :operator
 
       class << self
-        def new operator, *inputs 
+        def new operator, *inputs
           obj = super get_rate(inputs), inputs
           set_operator_for obj, operator
           obj
@@ -13,7 +13,7 @@ module Scruby
 
         private
         #:nodoc:
-        def set_operator_for input, operator 
+        def set_operator_for input, operator
           input.kind_of?(Array) ? input.each{ |element| set_operator_for element, operator  } : input.operator = operator
         end
 
@@ -25,7 +25,7 @@ module Scruby
       end
     end
 
-    class UnaryOpUGen < BasicOpUgen 
+    class UnaryOpUGen < BasicOpUgen
       def self.new operator, input
         super
       end
@@ -59,5 +59,5 @@ module Scruby
       end
     end
   end
-  
+
 end

@@ -19,7 +19,7 @@ module Scruby
       include MultiOut
 
       def initialize rate, channels, *inputs
-        raise ArgumentError.new("#{ self.class } instance needs at least two channels.") unless channels > 1 
+        raise ArgumentError.new("#{ self.class } instance needs at least two channels.") unless channels > 1
         super
       end
 
@@ -84,7 +84,7 @@ module Scruby
         named_args_for :kr, :ar
       end
     end
-    
+
     class Tap < Ugen
       class << self
         def ar bufnum = 0, num_channels = 1, delay_time = 0.2

@@ -16,8 +16,8 @@ class Numeric
   #:nodoc:
   def collect_constants
     self
-  end  
-  
+  end
+
   #:nodoc:
   def input_specs synthdef
     [-1, synthdef.constants.index(self)]

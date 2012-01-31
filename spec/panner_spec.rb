@@ -3,10 +3,10 @@ require File.expand_path(File.dirname(__FILE__)) + "/helper"
 require "scruby/core_ext/delegator_array"
 require "scruby/control_name"
 require "scruby/env"
-require "scruby/ugens/ugen" 
-require "scruby/ugens/ugen_operations" 
+require "scruby/ugens/ugen"
+require "scruby/ugens/ugen_operations"
 require "scruby/ugens/multi_out"
-require "scruby/ugens/ugens" 
+require "scruby/ugens/ugens"
 require "scruby/ugens/panner"
 
 include Scruby
@@ -23,11 +23,11 @@ describe 'Panner' do
       @inputs ||= @params
       @instance = @pan.first.source
     end
-    
+
     it "should output a DelegatorArray" do
       @pan.should be_a(DelegatorArray)
     end
-    
+
     it "should have correct rate" do
       @instance.rate.should == @rate
     end
@@ -48,7 +48,7 @@ describe 'Panner' do
 
     it "should accept control rate inputs unless rate is audio"
   end
-  
+
   shared_examples_for 'Panner with control rate' do
     before do
       @method = :kr
@@ -56,33 +56,33 @@ describe 'Panner' do
     end
     it_should_behave_like 'Panner'
   end
-  
+
   shared_examples_for 'Panner with audio rate' do
     before do
       @method = :ar
       @rate   = :audio
     end
     it_should_behave_like 'Panner'
-    
+
     it "should just accept audio inputs if rate is audio" # do
      #      lambda { @class.new( :audio, MockUgen.new(:control) ) }.should raise_error(ArgumentError)
      #    end
   end
-  
+
   shared_examples_for 'Panner with array as input' do
     it "should have n channels" do
       @arrayed.should have(@ugens.size).proxies
     end
-    
+
     it "should have array as channel" do
       @arrayed.each { |a| a.should have(@channels).proxies }
     end
-    
+
     it "should have the same source class" do
       @arrayed.flatten.source.uniq.should have(@ugens.size).elements
     end
   end
-  
+
   shared_examples_for  'Multi input panner' do
     describe "two ugens as input" do
       before do
@@ -91,7 +91,7 @@ describe 'Panner' do
       end
       it_should_behave_like 'Panner with array as input'
     end
-    
+
     describe "four ugens as input" do
       before do
         @params[0] = @ugens = [@ugen] * 4
@@ -101,7 +101,7 @@ describe 'Panner' do
       it_should_behave_like 'Panner with array as input'
     end
   end
-  
+
   describe Pan2 do
     before do
       @class    = Pan2
@@ -112,7 +112,7 @@ describe 'Panner' do
     it_should_behave_like 'Panner with audio rate'
     it_should_behave_like 'Panner with control rate'
     it_should_behave_like 'Multi input panner'
-    
+
 
     it "should have keyword args" do
       @class.ar( @ugen, :level => 2.0 ).first.source.inputs.should == [@ugen, 0.0, 2.0]
@@ -144,7 +144,7 @@ describe 'Panner' do
     end
     it_should_behave_like 'Panner with audio rate'
     it_should_behave_like 'Panner with control rate'
-    it_should_behave_like 'Multi input panner'    
+    it_should_behave_like 'Multi input panner'
 
     it "should have keyword args" do
       @class.ar( @ugen, :level => 2.0 ).first.source.inputs.should == [@ugen, 0.0, 0.0, 2.0]
@@ -179,7 +179,7 @@ describe 'Panner' do
     it_should_behave_like 'Panner with audio rate'
     it_should_behave_like 'Panner with control rate'
     it_should_behave_like 'Multi input panner'
-    
+
     # it "should have keyword args" do
     #   @class.ar( @ugen, @ugen2 , :level => 2.0 ).first.source.inputs.should == [@ugen, @ugen2 , 0.0, 2.0]
     # end
@@ -195,7 +195,7 @@ describe 'Panner' do
     it_should_behave_like 'Panner with audio rate'
     it_should_behave_like 'Panner with control rate'
     it_should_behave_like 'Multi input panner'
-    
+
     # it "should have keyword args" do
     #   @class.ar( @ugen, @ugen2 , :level => 2.0 ).first.source.inputs.should == [@ugen, @ugen2 , 0.0, 2.0]
     # end
@@ -228,12 +228,12 @@ describe 'Panner' do
     it_should_behave_like 'Panner with audio rate'
     it_should_behave_like 'Panner with control rate'
     it_should_behave_like 'Multi input panner'
-    
+
     # it "should have keyword args" do
     #   @class.ar( @ugen, @ugen2 , :level => 2.0 ).first.source.inputs.should == [@ugen, @ugen2 , 0.0, 2.0]
     # end
   end
-  
+
   describe DecodeB2, 'five channels' do
     before do
       @class    = DecodeB2
@@ -243,9 +243,9 @@ describe 'Panner' do
     end
     it_should_behave_like 'Panner with audio rate'
     it_should_behave_like 'Panner with control rate'
-    
+
   end
-  
+
   describe DecodeB2, 'seven channels' do
     before do
       @class    = DecodeB2

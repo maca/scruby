@@ -4,7 +4,7 @@ module Scruby
       #
       # == Creation
       #
-      # Ugens are usually instantiated inside an "ugen graph" or the block passed when creating a SynthDef 
+      # Ugens are usually instantiated inside an "ugen graph" or the block passed when creating a SynthDef
       # using either the ar, kr, ir or new methods wich will determine the rate.
       #   * ar: audio rate
       #   * kr: control rate
@@ -13,7 +13,7 @@ module Scruby
       #
       # Not all the ugens provide all the rates
       #
-      # Two ugens inside an ugen graph: 
+      # Two ugens inside an ugen graph:
       #   SynthDef.new('simple'){ Out.ar(0, SinOsc.ar) }
       #   # Out and SinOsc are both ugens
       #
@@ -23,7 +23,7 @@ module Scruby
       # Usually when instantiating an ugen the arguments can be passed in order:
       #   Pitch.kr(0, 220, 80, ...)
       #
-      # Or using a hash where the keys are symbols corresponding to the argument name. 
+      # Or using a hash where the keys are symbols corresponding to the argument name.
       #   Pitch.kr( :initFreq => 220, :execFreq => 300 )
       #
       # Or a combination of both ways:
@@ -44,7 +44,7 @@ module Scruby
       #       end
       #       named_arguments_for :ar
       #     end
-      #     
+      #
       #   end
       #
       # For more info and limitations on named arguments check the gem: http://github.com/maca/arguments
@@ -54,7 +54,7 @@ module Scruby
       # TODO: Provide a way of getting the argument names and default values
     class Ugen
       attr_reader :inputs, :rate, :index, :special_index, :output_index, :channels
-      
+
       RATES        = :scalar, :trigger, :demand, :control, :audio
       E_RATES      = :scalar, :control, :audio, :demand
       VALID_INPUTS = Numeric, Array, Ugen, Env, ControlName
@@ -68,18 +68,18 @@ module Scruby
         @channels      ||= [1]
         @index           = add_to_synthdef || 0
       end
-      
+
       # Instantiate a new MulAdd passing self and the multiplication and addition arguments
       def muladd mul, add
         MulAdd.new self, mul, add
       end
 
       def encode
-        self.class.to_s.split('::').last.encode + [ E_RATES.index(rate) ].pack('w') + 
-          [ inputs.size, channels.size, special_index, collect_input_specs ].flatten.pack('n*') + 
+        self.class.to_s.split('::').last.encode + [ E_RATES.index(rate) ].pack('w') +
+          [ inputs.size, channels.size, special_index, collect_input_specs ].flatten.pack('n*') +
           output_specs.pack('w*')
       end
-      
+
       private
       def synthdef #:nodoc:
         @synthdef ||= Ugen.synthdef
@@ -88,29 +88,29 @@ module Scruby
       def add_to_synthdef #:nodoc:
         (synthdef.children << self).size - 1 if synthdef
       end
-      
+
       def collect_constants #:nodoc:
         @inputs.send( :collect_constants )
       end
-      
+
       def input_specs synthdef #:nodoc:
         [index, output_index]
       end
-      
+
       def collect_input_specs #:nodoc:
         @inputs.collect{ |i| i.send :input_specs, synthdef  }
       end
-      
+
       def output_specs #:nodoc:
         [E_RATES.index(rate)]
       end
-      
+
       public
       def == other
         self.class    == other.class    and
         self.rate     == other.rate     and
         self.inputs   == other.inputs   and
-        self.channels == other.channels 
+        self.channels == other.channels
       end
 
       class << self
@@ -126,7 +126,7 @@ module Scruby
           else
             raise ArgumentError.new( "#{rate} not a defined rate") unless RATES.include? rate.to_sym
           end
-        
+
           size = 1 # Size of the largest multichannel input (Array)
           inputs.peel! # First input if input is Array and size is 1
           inputs.map! do |input|
@@ -154,7 +154,7 @@ module Scruby
           else false
           end
         end
-        
+
         def synthdef #:nodoc:
           @@synthdef
         end
