@@ -1,5 +1,9 @@
-pkg/*
-*.gem
-.bundle
-*.swp
-*.swo
+/.bundle/
+/.yardoc
+/_yardoc/
+/coverage/
+/doc/
+/pkg/
+/spec/reports/
+/tmp/
+.rspec_status

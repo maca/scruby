@@ -5,7 +5,7 @@ module Scruby
       def channels; []; end
 
       class << self
-        def ar bufnum, *inputs
+        def ar(bufnum, *inputs)
           inputs.peel!
           new :audio, bufnum, *inputs
           0.0
@@ -15,18 +15,19 @@ module Scruby
 
     class DiskIn < Ugen
       include MultiOut
-      def self.ar channels, bufnum, loop = 0
+
+      def self.ar(channels, bufnum, loop: 0)
         new :audio, channels, bufnum, loop
       end
     end
 
     class VDiskIn < Ugen
       include MultiOut
+
       class << self
-        def ar channels, bufnum, rate = 1, loop = 0, send_id = 0
+        def ar(channels, bufnum, rate: 1, loop: 0, send_id: 0)
           new :audio, channels, bufnum, rate, loop, send_id
         end
-        named_args_for :ar
       end
     end
   end

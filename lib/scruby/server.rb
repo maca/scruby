@@ -1,17 +1,17 @@
-require 'singleton'
+require "singleton"
 
-module Scruby 
+module Scruby
   include OSC
-  
+
   TrueClass.send :include, OSC::OSCArgument
   TrueClass.send(:define_method, :to_osc_type){ 1 }
-  
+
   FalseClass.send :include, OSC::OSCArgument
   FalseClass.send(:define_method, :to_osc_type){ 0 }
-  
+
   Hash.send :include, OSC::OSCArgument
-  Hash.send :define_method, :to_osc_type do 
-    self.to_a.collect{ |pair| pair.collect{ |a| OSC.coerce_argument a } }
+  Hash.send :define_method, :to_osc_type do
+    to_a.collect{ |pair| pair.collect{ |a| OSC.coerce_argument a } }
   end
 
   Array.send(:include, OSC::OSCArgument)
@@ -21,18 +21,18 @@ module Scruby
 
   class Server
     attr_reader :host, :port, :path, :buffers, :control_buses, :audio_buses
-    DEFAULTS = { :buffers => 1024, :control_buses => 4096, :audio_buses => 128, :audio_outputs => 8, :audio_inputs => 8, 
-      :host => 'localhost', :port => 57111, :path => '/Applications/SuperCollider/scsynth'
+    DEFAULTS = { buffers: 1024, control_buses: 4096, audio_buses: 128, audio_outputs: 8, audio_inputs: 8,
+      host: "localhost", port: 57_111, path: "/Applications/SuperCollider/scsynth"
       }
 
     # Initializes and registers a new Server instance and sets the host and port for it.
-    # The server is a Ruby representation of scsynth which can be a local binary or a remote    
+    # The server is a Ruby representation of scsynth which can be a local binary or a remote
     # server already running.
     # Server class keeps an array with all the instantiated servers
-    # 
-    # For more info 
+    #
+    # For more info
     #   $ man scsynth
-    # 
+    #
     # @param [Hash] opts the options to create a message with.
     # @option opts [String] :path ('scsynt' on Linux, '/Applications/SuperCollider/scsynth' on Mac) scsynth binary path
     # @option opts [String] :host ('localhost') SuperCollider Server address
@@ -42,8 +42,8 @@ module Scruby
     # @option opts [Fixnum] :audio_outputs (8) Reserved buses for hardware output, indices start at 0
     # @option opts [Fixnum] :audio_inputs (8) Reserved buses for hardware input, indices starting from the number of audio outputs
     # @option opts [Fixnum] :buffers (1024) Number of available sample buffers
-    # 
-    def initialize opts = {}
+    #
+    def initialize(opts = {})
       @opts          = DEFAULTS.dup.merge opts
       @buffers       = []
       @control_buses = []
@@ -53,26 +53,26 @@ module Scruby
       Bus.audio self, @opts[:audio_inputs]
       self.class.all << self
     end
-    
+
     def host; @opts[:host]; end
     def port; @opts[:port]; end
     def path; @opts[:path]; end
 
-    # Boots the local binary of the scsynth forking a process, it will rise a SCError if the scsynth 
-    # binary is not found in path. 
+    # Boots the local binary of the scsynth forking a process, it will rise a SCError if the scsynth
+    # binary is not found in path.
     # The default path can be overriden using Server.scsynt_path=('path')
     def boot
-      raise SCError.new('Scsynth not found in the given path') unless File.exists? path
+      raise SCError, "Scsynth not found in the given path" unless File.exist? path
       if running?
         warn "Server on port #{ port } allready running"
-        return self 
+        return self
       end
 
       ready   = false
       timeout = Time.now + 2
       @thread = Thread.new do
         IO.popen "cd #{ File.dirname path }; ./#{ File.basename path } -u #{ port }" do |pipe|
-          loop do 
+          loop do
             if response = pipe.gets
               puts response
               ready = true if response.match /ready/
@@ -83,7 +83,7 @@ module Scruby
       sleep 0.01 until ready or !@thread.alive? or Time.now > timeout
       sleep 0.01        # just to be shure
       send "/g_new", 1  # default group
-      self   
+      self
     end
 
     def running?
@@ -95,32 +95,32 @@ module Scruby
       send "/clearSched"
       send "/g_new", 1
     end
-    alias :panic :stop
+    alias panic stop
 
     # Sends the /quit OSC signal to the scsynth
     def quit
       Server.all.delete self
-      send '/quit'
+      send "/quit"
     end
 
     # Sends an OSC command or +Message+ to the scsyth server.
     # E.g. +server.send('/dumpOSC', 1)+
-    def send message, *args
+    def send(message, *args)
       message = Message.new message, *args unless Message === message or Bundle === message
       @client.send message
     end
 
-    def send_bundle timestamp = nil, *messages
+    def send_bundle(timestamp = nil, *messages)
       send Bundle.new( timestamp, *messages.map{ |message| Message.new *message  } )
     end
 
     # Encodes and sends a SynthDef to the scsynth server
-    def send_synth_def synth_def
-      send Bundle.new( nil, Message.new('/d_recv', Blob.new(synth_def.encode), 0) )
+    def send_synth_def(synth_def)
+      send Bundle.new( nil, Message.new("/d_recv", Blob.new(synth_def.encode), 0) )
     end
 
     # Allocates either buffer or bus indices, should be consecutive
-    def allocate kind, *elements
+    def allocate(kind, *elements)
       collection = instance_variable_get "@#{kind}"
       elements.flatten!
 
@@ -141,7 +141,7 @@ module Scruby
         end
       end
 
-      case 
+      case
       when indices.size >= elements.size
         collection[indices.first, elements.size] = elements
       when collection.size + elements.size <= max_size
@@ -164,12 +164,12 @@ module Scruby
       end
 
       # Return a server corresponding to the specified index of the registered servers array
-      def [] index
+      def [](index)
         @@servers[index]
       end
 
       # Set a server to the specified index of the registered servers array
-      def []= index
+      def []=(index)
         @@servers[index]
         @@servers.uniq!
       end

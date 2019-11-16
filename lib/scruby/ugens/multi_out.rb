@@ -1,34 +1,35 @@
 module Scruby
-  module Ugens 
+  module Ugens
     module MultiOut #:nodoc:
-      def self.included base
+      def self.included(base)
         base.extend ClassMethods
       end
-      
-      def initialize rate, channels, *inputs
+
+      def initialize(rate, channels, *inputs)
         super rate, *inputs
         @channels = Array === channels ? channels : (0...channels).map{ |i| OutputProxy.new rate, self, i }
         @channels = @channels.to_da
       end
-      
+
       def output_specs
         channels.output_specs.flatten
       end
-      
+
       module ClassMethods
         private
-        def new rate, channels, *inputs
+
+        def new(rate, channels, *inputs)
           instantiated = super
           Array === instantiated ? instantiated : instantiated.channels
         end
       end
     end
-    
+
     class OutputProxy < Ugen #:nodoc:
       attr_reader :source, :control_name, :output_index
       class << self; public :new; end
 
-      def initialize rate, source, output_index, name = nil
+      def initialize(rate, source, output_index, name = nil)
         super rate
         @source, @control_name, @output_index = source, name, output_index
       end
@@ -40,12 +41,12 @@ module Scruby
 
     class Control < Ugen #:nodoc:
       include MultiOut
-      
-      def initialize rate, *names
+
+      def initialize(rate, *names)
         super rate, names.collect_with_index{ |n, i| OutputProxy.new rate, self, i, n }
       end
-      
-      def self.and_proxies_from names
+
+      def self.and_proxies_from(names)
         new names.first.rate, *names
       end
     end

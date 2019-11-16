@@ -1,7 +1,7 @@
 module Scruby
   class SynthDef
     attr_reader :name, :children, :constants, :control_names
-    # Creates a new SynthDef instance 
+    # Creates a new SynthDef instance
     # An "ugen graph" block should be passed:
     #
     #   SynthDef.new('simple') do |rate|
@@ -26,9 +26,9 @@ module Scruby
     #       Out.ar(0, sig*env*amp);
     #   }).send(s)
     #
-    def initialize name, options = {}, &block
+    def initialize(name, options = {}, &block)
       @name, @children = name.to_s, []
-      raise( ArgumentError.new('An UGen graph (block) must be passed') ) unless block_given?
+      raise ArgumentError, "An UGen graph (block) must be passed" unless block_given?
 
       values = options.delete( :values ) || []
       rates  = options.delete( :rates )  || []
@@ -37,7 +37,7 @@ module Scruby
       build_ugen_graph block, @control_names
       @constants = collect_constants @children
 
-      @variants  = [] #stub!!!
+      @variants = [] # stub!!!
     end
 
     # Returns a string representing the encoded SynthDef in a way scsynth can interpret and generate.
@@ -46,23 +46,23 @@ module Scruby
     # For complex synthdefs the encoded synthdef can vary a little bit from what SClang would generate
     # but the results will be interpreted in the same way
     def encode
-      controls         = @control_names.reject { |cn| cn.non_control? }
-      encoded_controls = [controls.size].pack('n') + controls.collect{ |c| c.name.encode + [c.index].pack('n') }.join
-      
+      controls         = @control_names.reject(&:non_control?)
+      encoded_controls = [controls.size].pack("n") + controls.collect{ |c| c.name.encode + [c.index].pack("n") }.join
+
       init_stream + name.encode + constants.encode_floats + values.flatten.encode_floats + encoded_controls +
-      [children.size].pack('n') + children.collect{ |u| u.encode }.join + 
-      [@variants.size].pack('n') #stub!!!
+        [children.size].pack("n") + children.collect(&:encode).join +
+        [@variants.size].pack("n") # stub!!!
     end
 
-    def init_stream file_version = 1, number_of_synths = 1 #:nodoc:
-      'SCgf' + [file_version].pack('N') + [number_of_synths].pack('n')
+    def init_stream(file_version = 1, number_of_synths = 1) #:nodoc:
+      "SCgf" + [file_version].pack("N") + [number_of_synths].pack("n")
     end
 
     def values #:nodoc:
-      @control_names.collect{ |control| control.value }
+      @control_names.collect(&:value)
     end
 
-    alias :send_msg :send
+    alias send_msg send
     # Sends itself to the given servers. One or more servers or an array of servers can be passed.
     # If no arguments are given the synthdef gets sent to all instantiated servers
     # E.g.
@@ -76,33 +76,34 @@ module Scruby
     #   SynthDef.new('sdef2'){ Out.ar(1, SinOsc.ar(222)) }.send
     #   # this synthdef is sent to both s and r
     #
-    def send *servers
+    def send(*servers)
       servers.peel!
-      (servers.empty? ? Server.all : servers).each{ |s| s.send_synth_def( self ) } 
+      (servers.empty? ? Server.all : servers).each{ |s| s.send_synth_def( self ) }
       self
     end
 
     private
-    def collect_control_names function, values, rates
+
+    def collect_control_names(function, values, rates)
       names = function.arguments
       names.zip( values, rates ).collect_with_index{ |array, index| ControlName.new *(array << index)  }
     end
 
-    def build_controls control_names
-      # control_names.select{ |c| c.rate == :noncontrol }.sort_by{ |c| c.control_name.index } + 
-      [:scalar, :trigger, :control].collect do |rate| 
+    def build_controls(control_names)
+      # control_names.select{ |c| c.rate == :noncontrol }.sort_by{ |c| c.control_name.index } +
+      [:scalar, :trigger, :control].collect do |rate|
         same_rate_array = control_names.select{ |control| control.rate == rate }
         Control.and_proxies_from( same_rate_array ) unless same_rate_array.empty?
       end.flatten.compact.sort_by{ |proxy| proxy.control_name.index }
     end
 
-    def build_ugen_graph function, control_names
+    def build_ugen_graph(function, control_names)
       Ugen.synthdef = self
       function.call *build_controls(control_names)
       Ugen.synthdef = nil
     end
 
-    def collect_constants children
+    def collect_constants(children)
       children.send( :collect_constants ).flatten.compact.uniq
     end
   end

@@ -5,11 +5,11 @@ module Scruby
 
       class << self
         # New In with :audio rate, inputs should be valid Ugen inputs or Ugens, arguments can be passed as an options hash or in the given order
-        def ar bus, channels = 1
+        def ar(bus, channels = 1)
           new :audio, channels, bus
         end
         # New In with :control rate, inputs should be valid Ugen inputs or Ugens, arguments can be passed as an options hash or in the given order
-        def kr bus, channels = 1
+        def kr(bus, channels = 1)
           new :control, channels, bus
         end
       end
@@ -17,7 +17,7 @@ module Scruby
 
     class Out < Ugen
       # ar and kr should be use for instantiation
-      def initialize *args
+      def initialize(*args)
         super
         @channels = []
       end
@@ -27,19 +27,19 @@ module Scruby
 
       class << self
         # New Out with :audio rate, inputs should be valid Ugen inputs or Ugens, arguments can be passed as an options hash or in the given order
-        def ar bus, *inputs
+        def ar(bus, *inputs)
           inputs.peel!
-          new :audio, bus, *inputs; 0.0 #Out has no output
+          new :audio, bus, *inputs; 0.0 # Out has no output
         end
 
         # New Out with :control rate, inputs should be valid Ugen inputs or Ugens, arguments can be passed as an options hash or in the given order
-        def kr bus, *inputs
+        def kr(bus, *inputs)
           inputs.peel!
-          new :control, bus, *inputs; 0.0 #Out has no output
+          new :control, bus, *inputs; 0.0 # Out has no output
         end
       end
     end
-  
+
     class ReplaceOut < Out
     end
   end

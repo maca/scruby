@@ -1,12 +1,13 @@
 class Scruby::Server
   attr_reader :output
-  def puts string
+
+  def puts(string)
     @output ||= ""
     @output << string
     string
   end
-  
+
   def flush
-    @output = ''
+    @output = ""
   end
 end

@@ -1,3 +1,3 @@
 module Scruby
-  VERSION = "0.2.7.2"
+  VERSION = "0.3"
 end
