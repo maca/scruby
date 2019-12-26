@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Scruby
   module Ugens
     module MultiOut #:nodoc:
@@ -43,7 +45,7 @@ module Scruby
       include MultiOut
 
       def initialize(rate, *names)
-        super rate, names.collect_with_index{ |n, i| OutputProxy.new rate, self, i, n }
+        super rate, names.each_with_index.map { |n, i| OutputProxy.new rate, self, i, n }
       end
 
       def self.and_proxies_from(names)

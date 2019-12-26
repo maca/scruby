@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Scruby
   # Thread.new do
   #   EventMachine.run do
@@ -26,6 +28,7 @@ module Scruby
 
     def run
       return self if @timer
+
       @start = Time.now
       @timer = EventMachine::PeriodicTimer.new @interval * 0.01 do
         if @next.nil? or Time.now >= @next
@@ -39,6 +42,7 @@ module Scruby
 
     def index
       return @tick unless @size
+
       tick = @tick % @size
       if tick == 0 and @tick > 0 and !@loop
         stop
@@ -53,7 +57,7 @@ module Scruby
     end
 
     def stop
-      @timer.cancel if @timer
+      @timer&.cancel
       @timer = nil
       @next  = nil
       @tick = 0
@@ -65,7 +69,7 @@ module Scruby
     end
 
     def dispatch
-      @block.call index if @block
+      @block&.call index
     end
   end
 

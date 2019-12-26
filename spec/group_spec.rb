@@ -1,4 +1,6 @@
-require File.join( File.expand_path(File.dirname(__FILE__)), "server")
+# frozen_string_literal: true
+
+require File.join(__dir__, "server")
 
 
 include Scruby
@@ -10,7 +12,7 @@ RSpec.describe Group do
 
   before do
     Node.reset!
-    allow(Server).to receive(:all).and_return([@server])
+    allow(Server).to receive(:all).and_return([ @server ])
   end
 
   describe "Server interaction" do

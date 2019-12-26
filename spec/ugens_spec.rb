@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module UgenTest
 end
 
@@ -10,7 +12,7 @@ include Ugens
 
 RSpec.describe Ugens do
   before do
-    @udefs = YAML.load( File.open( "#{__dir__}/../lib/scruby/ugens/ugen_defs.yaml" ) )
+    @udefs = YAML.load(File.open("#{__dir__}/../lib/scruby/ugens/ugen_defs.yaml"))
   end
 
   it "should define Ugen classes" do
@@ -18,7 +20,7 @@ RSpec.describe Ugens do
   end
 
   it "each ugen should be Ugen subclass" do
-    @udefs.each_pair { |key, _val| expect(eval(key).superclass).to eql( Scruby::Ugens::Ugen )  }
+    @udefs.each_pair { |key, _val| expect(eval(key).superclass).to eql(Scruby::Ugens::Ugen)  }
   end
 
   it "should resond to :ar and :kr" do
@@ -27,7 +29,7 @@ RSpec.describe Ugens do
   end
 
   it "should use default values and passed values" do
-    expect(Gendy1).to receive(:new).with( :audio, 10, 20, 1, 1, 550, 660, 0.5, 0.5, 12, 1 ).and_return( double("ugen", muladd: nil) )
+    expect(Gendy1).to receive(:new).with(:audio, 10, 20, 1, 1, 550, 660, 0.5, 0.5, 12, 1).and_return(double("ugen", muladd: nil))
     Gendy1.ar 10, 20, knum: 1, minfreq: 550
   end
 
@@ -41,7 +43,7 @@ RSpec.describe Ugens do
   end
 
   it "should initialize using demand" do
-    expect(Dbrown.new(1, 2, 3, 4).inputs).to eq([1, 2, 3, 4])
+    expect(Dbrown.new(1, 2, 3, 4).inputs).to eq([ 1, 2, 3, 4 ])
   end
 
   it "should have public new method for scalar" do

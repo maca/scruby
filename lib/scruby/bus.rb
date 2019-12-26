@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Scruby
   class Bus
     attr_reader :server, :rate, :channels, :main_bus
@@ -17,6 +19,7 @@ module Scruby
 
     def to_map
       raise SCError, "Audio buses cannot be mapped" if rate == :audio
+
       "c#{ index }"
     end
 
@@ -48,14 +51,14 @@ module Scruby
       private :new
 
       def control(server, channels = 1)
-        buses = [new(server, :control, channels)]
+        buses = [ new(server, :control, channels) ]
         buses.push new(server, :control, channels, buses.first) while buses.size < channels
         server.allocate :control_buses, buses
         buses.first
       end
 
       def audio(server, channels = 1)
-        buses = [new(server, :audio, channels)]
+        buses = [ new(server, :audio, channels) ]
         buses.push new(server, :audio, channels, buses.first) while buses.size < channels
         server.allocate :audio_buses, buses
         buses.first

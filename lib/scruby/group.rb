@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Scruby
   class Group < Node
     def free_all

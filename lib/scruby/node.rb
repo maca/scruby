@@ -1,9 +1,11 @@
+# frozen_string_literal: true
+
 module Scruby
   class Node
     @@base_id = 999
     attr_reader :servers, :group, :id
 
-    ACTIONS = [:head, :tail, :before, :after, :replace]
+    ACTIONS = %i(head tail before after replace).freeze
 
     def initialize(*args)
       args.flatten!
@@ -37,12 +39,13 @@ module Scruby
     # rather than a single message. Integer bus indices are assumed to refer to control buses. To map a control to an audio bus, you
     # must use a Bus object.
     def map(args)
-      control, audio, content = ["/n_mapn", id], ["/n_mapan", id], []
+      control, audio, content = [ "/n_mapn", id ], [ "/n_mapan", id ], []
       args = args.to_a.each do |param, bus|
         raise ArgumentError, "`#{ control }` is not a Bus" unless bus.is_a? Bus
+
         array = audio   if bus.rate == :audio
         array = control if bus.rate == :control
-        array.push param, bus.index, bus.channels if array
+        array&.push param, bus.index, bus.channels
       end
       content << control unless control.empty?
       content << audio   unless audio.empty?
@@ -88,7 +91,7 @@ module Scruby
 
     # Sends a bundle to all registered +servers+ for this node
     def send_bundle(timestamp, *messages)
-      bundle = Bundle.new( timestamp, *messages.map{ |message| Message.new *message } )
+      bundle = Bundle.new(timestamp, *messages.map{ |message| Message.new *message })
       @servers.each{ |s| s.send bundle  }
     end
 

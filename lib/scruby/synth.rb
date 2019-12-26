@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Scruby
   class Synth < Node
     attr_reader :name

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Scruby
   module Ugens
     # This module enables Ugen operations for Ugens, Numeric and
@@ -35,46 +37,47 @@ module Scruby
         '/': :div2,
         '<=': :less_than_or_eql,
         '>=': :more_than_or_eql
-      }
+      }.freeze
 
       def self.included(base)
-        # Define unary operations
-        UNARY.each_key do |op|
-          next if base.instance_methods.include?(op)
-          define_method(op){ UnaryOpUGen.new(op, self) }
-        end
+        # # Define unary operations
+        # UNARY.each_key do |op|
+        #   next if base.instance_methods.include?(op)
 
-        # Define binary operations
-        ugen_subclass = base.ancestors.include? Ugen
+        #   define_method(op){ UnaryOpUGen.new(op, self) }
+        # end
 
-        meth_def =
-        if ugen_subclass
-          proc do |_safe, op|
-            proc{ |input| BinaryOpUGen.new(op, self, input) }
-          end
-        else
-          proc do |safe, op|
-            proc do |input|
-              if input.is_a? Ugen
-                BinaryOpUGen.new op, self, input
-              else
-                __send__ "__original_#{ safe }", input
-              end
-            end
-          end
-        end
+        # # Define binary operations
+        # ugen_subclass = base.ancestors.include? Ugen
 
-        BINARY.each_key do |op|
-          safe = SAFE_NAMES[op]
+        # meth_def =
+        #   if ugen_subclass
+        #     proc do |_safe, op|
+        #       proc{ |input| BinaryOpUGen.new(op, self, input) }
+        #     end
+        #   else
+        #     proc do |safe, op|
+        #       proc do |input|
+        #         if input.is_a? Ugen
+        #           BinaryOpUGen.new op, self, input
+        #         else
+        #           __send__ "__original_#{ safe }", input
+        #         end
+        #       end
+        #     end
+        #   end
 
-          define_method "__ugenop_#{ safe || op }", &meth_def.call(safe || op, op)
+        # BINARY.each_key do |op|
+        #   safe = SAFE_NAMES[op]
 
-          base.send :alias_method, "__original_#{ safe || op }", op if safe unless ugen_subclass
-          base.send :alias_method, op, "__ugenop_#{ safe || op }"
-        end
+        #   define_method "__ugenop_#{ safe || op }", &meth_def.call(safe || op, op)
+
+        #   base.send :alias_method, "__original_#{ safe || op }", op unless ugen_subclass || !safe
+        #   base.send :alias_method, op, "__ugenop_#{ safe || op }"
+        # end
       end
     end
 
-    [Ugen, Fixnum, Float].each{ |k| k.send :include, UgenOperations }
+    [ Ugen, Integer, Float ].each{ |k| k.send :include, UgenOperations }
   end
 end

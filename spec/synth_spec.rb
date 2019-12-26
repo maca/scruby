@@ -1,4 +1,6 @@
-require File.join( File.expand_path(File.dirname(__FILE__)), "server")
+# frozen_string_literal: true
+
+require File.join(__dir__, "server")
 
 include Scruby
 
@@ -24,7 +26,7 @@ RSpec.describe Synth do
   describe "instantiation with node target" do
     before do
       Node.reset!
-      @target = Node.new( (0..3).map{ Server.new } )
+      @target = Node.new((0..3).map{ Server.new })
       @synth  = Synth.new :synth, { attack: 10 }, @target
     end
 
@@ -34,7 +36,7 @@ RSpec.describe Synth do
     end
 
     it "should initialize not passing servers and have default servers" do
-      s = Synth.new( "synth" )
+      s = Synth.new("synth")
       expect(s.servers).to eq(Server.all)
     end
   end
@@ -48,7 +50,7 @@ RSpec.describe Synth do
 
     it "should send set message and return self" do
       synth = Synth.new :synth, attack: 10
-      expect(synth.set( attack: 20 )).to be_a(Synth)
+      expect(synth.set(attack: 20)).to be_a(Synth)
       sleep 0.05
       expect(@server.output).to match(%r{\[ "/n_set", #{ synth.id }, "attack", 20 \]})
     end

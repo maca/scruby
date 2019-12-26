@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 include Scruby
 include Ugens
 
@@ -75,7 +77,7 @@ RSpec.describe "Panner" do
   shared_examples_for "Multi input panner" do
     describe "two ugens as input" do
       before do
-        @params[0] = @ugens = [@ugen] * 2
+        @params[0] = @ugens = [ @ugen ] * 2
         @arrayed   = @class.ar *@params
       end
       it_should_behave_like "Panner with array as input"
@@ -83,7 +85,7 @@ RSpec.describe "Panner" do
 
     describe "four ugens as input" do
       before do
-        @params[0] = @ugens = [@ugen] * 4
+        @params[0] = @ugens = [ @ugen ] * 4
         @arrayed   = @class.ar *@params
         # p @arrayed.first.first.source.output_specs
       end
@@ -104,7 +106,7 @@ RSpec.describe "Panner" do
 
 
     it "should have keyword args" do
-      expect(@class.ar( @ugen, level: 2.0 ).first.source.inputs).to eq([@ugen, 0.0, 2.0])
+      expect(@class.ar(@ugen, level: 2.0).first.source.inputs).to eq([ @ugen, 0.0, 2.0 ])
     end
   end
 
@@ -120,7 +122,7 @@ RSpec.describe "Panner" do
     it_should_behave_like "Multi input panner"
 
     it "should have keyword args" do
-      expect(@class.ar( @ugen, level: 2.0 ).first.source.inputs).to eq([@ugen, 0.0, 2.0])
+      expect(@class.ar(@ugen, level: 2.0).first.source.inputs).to eq([ @ugen, 0.0, 2.0 ])
     end
   end
 
@@ -136,7 +138,7 @@ RSpec.describe "Panner" do
     it_should_behave_like "Multi input panner"
 
     it "should have keyword args" do
-      expect(@class.ar( @ugen, level: 2.0 ).first.source.inputs).to eq([@ugen, 0.0, 0.0, 2.0])
+      expect(@class.ar(@ugen, level: 2.0).first.source.inputs).to eq([ @ugen, 0.0, 0.0, 2.0 ])
     end
   end
 
@@ -153,7 +155,7 @@ RSpec.describe "Panner" do
     it_should_behave_like "Multi input panner"
 
     it "should have keyword args" do
-      expect(@class.ar( @ugen, @ugen2, level: 2.0 ).first.source.inputs).to eq([@ugen, @ugen2, 0.0, 2.0])
+      expect(@class.ar(@ugen, @ugen2, level: 2.0).first.source.inputs).to eq([ @ugen, @ugen2, 0.0, 2.0 ])
     end
   end
 

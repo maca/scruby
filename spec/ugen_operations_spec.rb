@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 include Scruby
 include Ugens
 
@@ -32,7 +34,7 @@ RSpec.describe UgenOperations do
     it "should do unary op" do
       op = @ugen.distort
       expect(op).to be_instance_of(UnaryOpUGen)
-      expect(op.inputs).to eq([@ugen])
+      expect(op.inputs).to eq([ @ugen ])
     end
   end
 

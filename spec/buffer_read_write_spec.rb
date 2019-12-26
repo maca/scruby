@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 include Scruby
 include Ugens
 
@@ -174,7 +176,7 @@ RSpec.describe "Buffer write Ugens" do
   describe BufWr, "array input" do
     before do
       @class  = BufWr
-      @array  = [MockUgen.new(:audio, 1, 2)] * 4
+      @array  = [ MockUgen.new(:audio, 1, 2) ] * 4
       @inputs = 1, 2, 3, *@array
       @params = @array, 1, 2, 3
     end
@@ -200,7 +202,7 @@ RSpec.describe "Buffer write Ugens" do
   describe RecordBuf, "array input" do
     before do
       @class  = RecordBuf
-      @array  = [MockUgen.new(:audio, 1, 2)] * 4
+      @array  = [ MockUgen.new(:audio, 1, 2) ] * 4
       @inputs = 1, 2, 3, 4, 5, 6, 7, 8, *@array
       @params = @array, 1, 2, 3, 4, 5, 6, 7, 8
     end
@@ -226,7 +228,7 @@ RSpec.describe "Buffer write Ugens" do
   describe ScopeOut, "array input" do
     before do
       @class  = ScopeOut
-      @array  = [MockUgen.new(:audio, 1, 2)] * 4
+      @array  = [ MockUgen.new(:audio, 1, 2) ] * 4
       @inputs = 1, *@array
       @params = @array, 1
     end
@@ -252,7 +254,7 @@ RSpec.describe "Buffer write Ugens" do
   describe Tap, "single input" do
     before do
       @inputs    = 5, 1, 0, SampleRate.ir.neg * 3, 1, 0
-      @buff_ugen = Tap.ar( 5, 2, 3 ).first.source
+      @buff_ugen = Tap.ar(5, 2, 3).first.source
     end
 
     it "should be instance of PlayBuf" do
@@ -272,7 +274,7 @@ RSpec.describe "Buffer write Ugens" do
     before do
       @inputs    = 5, 1, 0, SampleRate.ir.neg * 3, 1, 0
       @channels  = 1
-      @proxies   = Tap.ar( 5, @channels, 3 )
+      @proxies   = Tap.ar(5, @channels, 3)
     end
 
     it "should have one proxy" do
@@ -296,7 +298,7 @@ RSpec.describe "Buffer write Ugens" do
     before do
       @inputs    = 5, 1, 0, SampleRate.ir.neg * 3, 1, 0
       @channels  = 4
-      @proxies   = Tap.ar( 5, @channels, 3 )
+      @proxies   = Tap.ar(5, @channels, 3)
     end
 
     it "should have one proxy" do

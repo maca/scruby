@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 include Scruby
 
 
@@ -129,7 +131,7 @@ RSpec.describe Bus do
       end
 
       it "should accept an array and send set with them" do
-        @bus.set [101, 202]
+        @bus.set [ 101, 202 ]
         sleep 0.01
         expect(@server.output).to match(%r{\[ "/c_set", #{ @bus.index }, 101, #{ @bus.index + 1}, 202 \]})
       end

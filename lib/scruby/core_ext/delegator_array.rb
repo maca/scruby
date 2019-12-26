@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class DelegatorArray < Array
   def method_missing(meth, *args, &block)
     map! { |item| item.send meth, *args, &block }
@@ -6,7 +8,7 @@ class DelegatorArray < Array
   def to_da; self; end
   def to_a;  Array.new self; end
 
-  [:*, :+, :-, :/].each do |meth|
+  %i(* + - /).each do |meth|
     define_method meth do |args|
       binary_op meth, args
     end
@@ -18,12 +20,15 @@ class DelegatorArray < Array
     return method_missing(op, inputs) unless inputs.is_a? Array
 
     results = self.class.new
-    zip(inputs).collect_with_index do |pair, index|
+
+    zip(inputs).each_with_index.map do |pair, index|
       left, right = pair
       next results.push(right) if index + 1 > size
       next results.push(left)  if index + 1 > inputs.size
+
       results.push left.send(op, right)
     end
+
     results
   end
 end

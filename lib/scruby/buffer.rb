@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Scruby
   def expand_path(path)
     File.expand_path path
@@ -36,7 +38,7 @@ module Scruby
              leave_open: false, &message)
 
       # @on_info  = message
-      message ||= ["/b_query", buffnum]
+      message ||= [ "/b_query", buffnum ]
 
       @server.send "/b_read", buffnum, expand_path(path), file_start,
                    frames, buff_start, leave_open, message.value(self)
@@ -48,7 +50,7 @@ module Scruby
 
       message ||= 0
 
-      @server.send *(["/b_ReadChannel", buffnum, expand_path(path), start, frames, buff_start, leave_open] + channels << message.value(self))
+      @server.send *([ "/b_ReadChannel", buffnum, expand_path(path), start, frames, buff_start, leave_open ] + channels << message.value(self))
       self
     end
 
@@ -80,7 +82,7 @@ module Scruby
       self
     end
 
-    def initialize(server, frames: -1, channels: 1)
+    def initialize(server: nil, frames: -1, channels: 1)
       @server, @frames, @channels = server, frames, channels
     end
 
@@ -94,7 +96,6 @@ module Scruby
     def buffnum
       @server.buffers.index self
     end
-    alias as_ugen_input buffnum
     alias index         buffnum
     # alias :as_control_input :buffnum
 
@@ -107,15 +108,15 @@ module Scruby
     # :nodoc:
     def allocate_and_read(path, start, frames, &message)
       @server.allocate :buffers, self
-      message ||= ["/b_query", buffnum]
+      message ||= [ "/b_query", buffnum ]
       @server.send "/b_allocRead", buffnum, @path = expand_path(path), start, frames, message.value(self)
       self
     end
 
     def allocate_read_channel(path, start, frames, channels, &message)
       @server.allocate :buffers, self
-      message ||= ["/b_query", buffnum]
-      @server.send *(["/b_allocReadChannel", buffnum, expand_path(path), start, frames] + channels << message.value(self))
+      message ||= [ "/b_query", buffnum ]
+      @server.send *([ "/b_allocReadChannel", buffnum, expand_path(path), start, frames ] + channels << message.value(self))
       self
     end
 
@@ -127,7 +128,7 @@ module Scruby
       def cue_sound_file(server, path, start, channels: 2, buff_size: 32_768, &message)
         allocate server, buff_size, channels do |buffer|
           message ||= 0
-          ["/b_read", buffer.buffnum, expand_path(path), start, buff_size, 0, true, message.value(buffer)]
+          [ "/b_read", buffer.buffnum, expand_path(path), start, buff_size, 0, true, message.value(buffer) ]
         end
       end
 

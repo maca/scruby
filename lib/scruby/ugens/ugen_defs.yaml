@@ -810,9 +810,9 @@ Duty:
 Dwhite:
   :demand:
   - - :lo
-    - 
+    -
   - - :hi
-    - 
+    -
   - - :length
     - 0
 Dxrand:
@@ -820,7 +820,7 @@ Dxrand:
   - - :repeats
     - 1
   - - :list
-    - 
+    -
 ExpRand:
   :scalar:
   - - :lo
@@ -878,7 +878,7 @@ FBSineN:
 FFT:
   :control:
   - - :buffer
-    - 
+    -
   - - :input
     - 0
 FOS:
@@ -947,17 +947,17 @@ Formlet:
 Free:
   :control:
   - - :trig
-    - 
+    -
   - - :id
-    - 
+    -
 FreeSelf:
   :control:
   - - :input
-    - 
+    -
 FreeSelfWhenDone:
   :control:
   - - :src
-    - 
+    -
 Gate:
   :control:
   - - :input
@@ -1193,7 +1193,7 @@ HenonN:
 IFFT:
   :audio:
   - - :buffer
-    - 
+    -
 IRand:
   :scalar:
   - - :lo
@@ -1271,12 +1271,12 @@ InTrig:
 Index:
   :control:
   - - :bufnum
-    - 
+    -
   - - :input
     - 0
   :audio:
   - - :bufnum
-    - 
+    -
   - - :input
     - 0
 Integrator:
@@ -1315,7 +1315,7 @@ Klang:
 Klank:
   :audio:
   - - :input
-    - 
+    -
   - - :freqscale
     - 1
   - - :freqoffset
@@ -1528,22 +1528,22 @@ Latch:
 Latoocarfian:
   :control:
   - - :a
-    - 
+    -
   - - :b
-    - 
+    -
   - - :c
-    - 
+    -
   - - :d
-    - 
+    -
   :audio:
   - - :a
-    - 
+    -
   - - :b
-    - 
+    -
   - - :c
-    - 
+    -
   - - :d
-    - 
+    -
 LatoocarfianC:
   :audio:
   - - :freq
@@ -1617,7 +1617,7 @@ LeastChange:
 Limiter:
   :audio:
   - - :input
-    - 
+    -
   - - :level
     - 1
   - - :dur
@@ -1715,14 +1715,14 @@ LinRand:
 LinXFade2:
   :control:
   - - :inA
-    - 
+    -
   - - :inB
     - 0
   - - :pan
     - 0
   :audio:
   - - :inA
-    - 
+    -
   - - :inB
     - 0
   - - :pan
@@ -1766,10 +1766,10 @@ LocalIn:
 LocalOut:
   :control:
   - - :channelsArray
-    - 
+    -
   :audio:
   - - :channelsArray
-    - 
+    -
 Logistic:
   :control:
   - - :chaosParam
@@ -1895,7 +1895,7 @@ NoahNoise:
 Normalizer:
   :audio:
   - - :input
-    - 
+    -
   - - :level
     - 1
   - - :dur
@@ -1921,14 +1921,14 @@ NumRunningSynths:
 OffsetOut:
   :control:
   - - :bus
-    - 
+    -
   - - :channelsArray
-    - 
+    -
   :audio:
   - - :bus
-    - 
+    -
   - - :channelsArray
-    - 
+    -
 OnePole:
   :control:
   - - :input
@@ -1954,14 +1954,14 @@ OneZero:
 Osc:
   :control:
   - - :bufnum
-    - 
+    -
   - - :freq
     - 440
   - - :phase
     - 0
   :audio:
   - - :bufnum
-    - 
+    -
   - - :freq
     - 440
   - - :phase
@@ -1969,14 +1969,14 @@ Osc:
 OscN:
   :control:
   - - :bufnum
-    - 
+    -
   - - :freq
     - 440
   - - :phase
     - 0
   :audio:
   - - :bufnum
-    - 
+    -
   - - :freq
     - 440
   - - :phase
@@ -1984,14 +1984,14 @@ OscN:
 # Out:
 #   :control:
 #   - - :bus
-#     - 
+#     -
 #   - - :channelsArray
-#     - 
+#     -
 #   :audio:
 #   - - :bus
-#     - 
+#     -
 #   - - :channelsArray
-#     - 
+#     -
 PSinGrain:
   :audio:
   - - :freq
@@ -2003,13 +2003,13 @@ PSinGrain:
 PV_Add:
   :control:
   - - :bufferA
-    - 
+    -
   - - :bufferB
-    - 
+    -
 PV_BinScramble:
   :control:
   - - :buffer
-    - 
+    -
   - - :wipe
     - 0
   - - :width
@@ -2019,7 +2019,7 @@ PV_BinScramble:
 PV_BinShift:
   :control:
   - - :buffer
-    - 
+    -
   - - :stretch
     - 1
   - - :shift
@@ -2027,21 +2027,21 @@ PV_BinShift:
 PV_BinWipe:
   :control:
   - - :bufferA
-    - 
+    -
   - - :bufferB
-    - 
+    -
   - - :wipe
     - 0
 PV_BrickWall:
   :control:
   - - :buffer
-    - 
+    -
   - - :wipe
     - 0
 PV_ConformalMap:
   :control:
   - - :buffer
-    - 
+    -
   - - :areal
     - 0
   - - :aimag
@@ -2049,19 +2049,19 @@ PV_ConformalMap:
 PV_CopyPhase:
   :control:
   - - :bufferA
-    - 
+    -
   - - :bufferB
-    - 
+    -
 PV_Diffuser:
   :control:
   - - :buffer
-    - 
+    -
   - - :trig
     - 0
 PV_HainsworthFoote:
   :audio:
   - - :buffer
-    - 
+    -
   - - :proph
     - 0
   - - :propf
@@ -2073,7 +2073,7 @@ PV_HainsworthFoote:
 PV_JensenAndersen:
   :audio:
   - - :buffer
-    - 
+    -
   - - :propsc
     - 0.25
   - - :prophfe
@@ -2089,47 +2089,47 @@ PV_JensenAndersen:
 PV_LocalMax:
   :control:
   - - :buffer
-    - 
+    -
   - - :threshold
     - 0
 PV_MagAbove:
   :control:
   - - :buffer
-    - 
+    -
   - - :threshold
     - 0
 PV_MagBelow:
   :control:
   - - :buffer
-    - 
+    -
   - - :threshold
     - 0
 PV_MagClip:
   :control:
   - - :buffer
-    - 
+    -
   - - :threshold
     - 0
 PV_MagFreeze:
   :control:
   - - :buffer
-    - 
+    -
   - - :freeze
     - 0
 PV_MagMul:
   :control:
   - - :bufferA
-    - 
+    -
   - - :bufferB
-    - 
+    -
 PV_MagNoise:
   :control:
   - - :buffer
-    - 
+    -
 PV_MagShift:
   :control:
   - - :buffer
-    - 
+    -
   - - :stretch
     - 1
   - - :shift
@@ -2137,49 +2137,49 @@ PV_MagShift:
 PV_MagSmear:
   :control:
   - - :buffer
-    - 
+    -
   - - :bins
     - 0
 PV_MagSquared:
   :control:
   - - :buffer
-    - 
+    -
 PV_Max:
   :control:
   - - :bufferA
-    - 
+    -
   - - :bufferB
-    - 
+    -
 PV_Min:
   :control:
   - - :bufferA
-    - 
+    -
   - - :bufferB
-    - 
+    -
 PV_Mul:
   :control:
   - - :bufferA
-    - 
+    -
   - - :bufferB
-    - 
+    -
 PV_PhaseShift270:
   :control:
   - - :buffer
-    - 
+    -
 PV_PhaseShift90:
   :control:
   - - :buffer
-    - 
+    -
 PV_PhaseShift:
   :control:
   - - :buffer
-    - 
+    -
   - - :shift
-    - 
+    -
 PV_RandComb:
   :control:
   - - :buffer
-    - 
+    -
   - - :wipe
     - 0
   - - :trig
@@ -2187,9 +2187,9 @@ PV_RandComb:
 PV_RandWipe:
   :control:
   - - :bufferA
-    - 
+    -
   - - :bufferB
-    - 
+    -
   - - :wipe
     - 0
   - - :trig
@@ -2197,9 +2197,9 @@ PV_RandWipe:
 PV_RectComb2:
   :control:
   - - :bufferA
-    - 
+    -
   - - :bufferB
-    - 
+    -
   - - :numTeeth
     - 0
   - - :phase
@@ -2209,7 +2209,7 @@ PV_RectComb2:
 PV_RectComb:
   :control:
   - - :buffer
-    - 
+    -
   - - :numTeeth
     - 0
   - - :phase
@@ -2219,17 +2219,17 @@ PV_RectComb:
 Pause:
   :control:
   - - :gate
-    - 
+    -
   - - :id
-    - 
+    -
 PauseSelf:
   :control:
   - - :input
-    - 
+    -
 PauseSelfWhenDone:
   :control:
   - - :src
-    - 
+    -
 Peak:
   :control:
   - - :trig
@@ -2499,12 +2499,12 @@ Ringz:
 RunningSum:
   :control:
   - - :input
-    - 
+    -
   - - :numsamp
     - 40
   :audio:
   - - :input
-    - 
+    -
   - - :numsamp
     - 40
 SOS:
@@ -2560,14 +2560,14 @@ ScopeOut:
 Select:
   :control:
   - - :which
-    - 
+    -
   - - :array
-    - 
+    -
   :audio:
   - - :which
-    - 
+    -
   - - :array
-    - 
+    -
 SendTrig:
   :control:
   - - :input
@@ -2597,12 +2597,12 @@ SetResetFF:
 Shaper:
   :control:
   - - :bufnum
-    - 
+    -
   - - :input
     - 0
   :audio:
   - - :bufnum
-    - 
+    -
   - - :input
     - 0
 SharedIn:
@@ -2612,9 +2612,9 @@ SharedIn:
 SharedOut:
   :control:
   - - :bus
-    - 
+    -
   - - :channelsArray
-    - 
+    -
 Silent:
   :audio: []
 
@@ -2845,14 +2845,14 @@ TRand:
 TWindex:
   :control:
   - - :input
-    - 
+    -
   - - :normalize
     - 0
   - - :array
     - "[]"
   :audio:
   - - :input
-    - 
+    -
   - - :normalize
     - 0
   - - :array
@@ -2949,7 +2949,7 @@ TwoZero:
 VOsc3:
   :control:
   - - :bufpos
-    - 
+    -
   - - :freq1
     - 110
   - - :freq2
@@ -2958,7 +2958,7 @@ VOsc3:
     - 440
   :audio:
   - - :bufpos
-    - 
+    -
   - - :freq1
     - 110
   - - :freq2
@@ -2968,14 +2968,14 @@ VOsc3:
 VOsc:
   :control:
   - - :bufpos
-    - 
+    -
   - - :freq
     - 440
   - - :phase
     - 0
   :audio:
   - - :bufpos
-    - 
+    -
   - - :freq
     - 440
   - - :phase
@@ -3056,13 +3056,13 @@ WrapIndex:
     - 0
   :audio:
   - - :bufnum
-    - 
+    -
   - - :input
     - 0
 XFade2:
   :control:
   - - :inA
-    - 
+    -
   - - :inB
     - 0
   - - :pan
@@ -3071,7 +3071,7 @@ XFade2:
     - 1
   :audio:
   - - :inA
-    - 
+    -
   - - :inB
     - 0
   - - :pan
@@ -3100,18 +3100,18 @@ XLine:
 XOut:
   :control:
   - - :bus
-    - 
+    -
   - - :xfade
-    - 
+    -
   - - :channelsArray
-    - 
+    -
   :audio:
   - - :bus
-    - 
+    -
   - - :xfade
-    - 
+    -
   - - :channelsArray
-    - 
+    -
 ZeroCrossing:
   :control:
   - - :input

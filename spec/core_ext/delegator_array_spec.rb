@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 include Scruby
 include Ugens
 
@@ -25,9 +27,9 @@ class Env; end
 RSpec.describe DelegatorArray do
 
   it "should have 'literal' notation" do
-    expect(d(1, 2)).to eq([1, 2])
+    expect(d(1, 2)).to eq([ 1, 2 ])
     expect(d(1, 2)).to be_instance_of(DelegatorArray)
-    expect(d([1, 2])).to eq(d(1, 2))
+    expect(d([ 1, 2 ])).to eq(d(1, 2))
   end
 
   it "should allow nil" do
@@ -35,7 +37,7 @@ RSpec.describe DelegatorArray do
   end
 
   it "should return DelegatorArray" do
-    sig = SinOsc.ar([100, [100, 100]])
+    sig = SinOsc.ar([ 100, [ 100, 100 ]])
     expect(sig).to be_a(DelegatorArray)
   end
 
@@ -49,13 +51,13 @@ RSpec.describe DelegatorArray do
 
   it "should return a DelegatorArray for muladd" do
     expect(SinOsc.ar(100).muladd(1, 0.5)).to be_a(BinaryOpUGen)
-    expect(SinOsc.ar([100, [100, 100]]).muladd(0.5, 0.5)).to be_a(DelegatorArray)
+    expect(SinOsc.ar([ 100, [ 100, 100 ]]).muladd(0.5, 0.5)).to be_a(DelegatorArray)
     # SinOsc.ar([100, [100, 100]]).muladd(1, 0.5).should be_a(DelegatorArray)
   end
 
 
   it "should pass method missing" do
-    expect(d(1, 2, 3).to_i).to eq([1.0, 2.0, 3.0])
+    expect(d(1, 2, 3).to_i).to eq([ 1.0, 2.0, 3.0 ])
   end
 
   shared_examples_for "aritmetic operand" do
@@ -86,7 +88,7 @@ RSpec.describe DelegatorArray do
 
     it "should blow pass nil" do
       actual   = eval %{ d(1,2,3) #{ @op } MockUgen.new(:audio, 2)}
-      expected = BinaryOpUGen.new(@op.to_sym, [1, 2, 3], MockUgen.new(:audio, 2) )
+      expected = BinaryOpUGen.new(@op.to_sym, [ 1, 2, 3 ], MockUgen.new(:audio, 2))
       expect(actual).to eq(expected)
     end
 

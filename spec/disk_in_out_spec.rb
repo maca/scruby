@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 include Scruby
 include Ugens
 
@@ -26,7 +28,7 @@ RSpec.describe "IO ugens" do
   describe DiskOut, "two channel" do
     before do
       @sdef = SynthDef.new :out do |bufnum|
-        @out = DiskOut.ar bufnum, [WhiteNoise.ar, WhiteNoise.ar]
+        @out = DiskOut.ar bufnum, [ WhiteNoise.ar, WhiteNoise.ar ]
       end
       @sdef2 = SynthDef.new :out do |bufnum|
         @out2 = DiskOut.ar bufnum, WhiteNoise.ar, WhiteNoise.ar

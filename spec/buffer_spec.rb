@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 include Scruby
 
 
@@ -94,7 +96,7 @@ RSpec.describe Buffer do
 
     describe "Buffer.read_channel" do
       before do
-        @buffer = Buffer.read_channel @server, "sounds/SinedPink.aiff", channels: [0]
+        @buffer = Buffer.read_channel @server, "sounds/SinedPink.aiff", channels: [ 0 ]
         sleep 0.005
       end
 
@@ -106,7 +108,7 @@ RSpec.describe Buffer do
 
     describe "#read" do
       before do
-        @buffer = Buffer.allocate( @server, 44_100 * 10.0, 2 ).read( "sounds/robot.aiff" )
+        @buffer = Buffer.allocate(@server, 44_100 * 10.0, 2).read("sounds/robot.aiff")
         sleep 0.005
       end
 
@@ -120,7 +122,7 @@ RSpec.describe Buffer do
 
     describe "#close" do
       before do
-        @buffer = Buffer.read( @server, "sounds/a11wlk01-44_1.aiff" ).close
+        @buffer = Buffer.read(@server, "sounds/a11wlk01-44_1.aiff").close
         sleep 0.005
       end
 
@@ -134,7 +136,7 @@ RSpec.describe Buffer do
 
     describe "#zero" do
       before do
-        @buffer = Buffer.read( @server, "sounds/a11wlk01-44_1.aiff" ).zero
+        @buffer = Buffer.read(@server, "sounds/a11wlk01-44_1.aiff").zero
         sleep 0.005
       end
 
@@ -148,7 +150,7 @@ RSpec.describe Buffer do
 
     describe "#cue_sound_file" do
       before do
-        @buffer = Buffer.allocate( @server, 44_100, 2 ).cue_sound_file( "sounds/robot.aiff" )
+        @buffer = Buffer.allocate(@server, 44_100, 2).cue_sound_file("sounds/robot.aiff")
         sleep 0.005
       end
 
@@ -162,7 +164,7 @@ RSpec.describe Buffer do
 
     describe "#write" do
       before do
-        @buffer = Buffer.allocate( @server, 44_100 * 10.0, 2 ).write(
+        @buffer = Buffer.allocate(@server, 44_100 * 10.0, 2).write(
           "sounds/test.aiff", "aiff", "int16", 0, 0, true
         )
         sleep 0.005
@@ -175,7 +177,7 @@ RSpec.describe Buffer do
 
       it "should have a default path" do
         @server.flush
-        buffer = Buffer.allocate( @server, 44_100 * 10.0, 2 ).write( nil, "aiff", "int16", 0, 0, true )
+        buffer = Buffer.allocate(@server, 44_100 * 10.0, 2).write(nil, "aiff", "int16", 0, 0, true)
         sleep 0.005
         expect(@server.output).to match(%r{\[ "/b_write", #{ buffer.buffnum }, "/.+/Scruby/\d\d\d\d.+\.aiff", "aiff", "int16", 0, 0, 1, 0 \]})
       end

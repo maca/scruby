@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 include Scruby
 
 RSpec.describe Node do
@@ -7,7 +9,7 @@ RSpec.describe Node do
 
   before do
     Node.reset!
-    allow(Server).to receive(:all).and_return([@server])
+    allow(Server).to receive(:all).and_return([ @server ])
   end
 
   it "should have incremental uniq id" do
@@ -22,18 +24,18 @@ RSpec.describe Node do
 
   describe "instantiation" do
     it "should not accept non servers" do
-      expect{ Node.new(1, 2) }.to   raise_error(TypeError)
-      expect{ Node.new([1, 2]) }.to raise_error(TypeError)
+      expect{ Node.new(1, 2) }.to raise_error(TypeError)
+      expect{ Node.new([ 1, 2 ]) }.to raise_error(TypeError)
     end
 
     it "should accept a server and have a TypedArray of Servers" do
       n = Node.new @server
-      expect(n.servers).to eq([@server])
+      expect(n.servers).to eq([ @server ])
     end
 
     it "should have default servers if no server is passed" do
       n = Node.new
-      expect(n.servers).to eq([@server])
+      expect(n.servers).to eq([ @server ])
     end
   end
 
@@ -92,7 +94,7 @@ RSpec.describe Node do
         expect(b1).to receive(:kind_of?).and_return(true)
         b2 = double "Bus", index: 2, channels: 2, rate: :audio
         expect(b2).to receive(:kind_of?).and_return(true)
-        expect(@node.map( freq1: b1, freq2: b2 )).to be_instance_of(Node)
+        expect(@node.map(freq1: b1, freq2: b2)).to be_instance_of(Node)
         sleep 0.05
         expect(@server.output).to match(%r{\[ \"#bundle\", 1, \n    \[ \"/n_mapn\", #{ @node.id }, \"freq1\", #{ b1.index }, 1 \],\n    \[ \"/n_mapan\", #{ @node.id }, \"freq2\", #{ b2.index }, 2 \]\n\]})
       end

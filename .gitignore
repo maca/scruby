@@ -7,3 +7,4 @@
 /spec/reports/
 /tmp/
 .rspec_status
+.byebug_history

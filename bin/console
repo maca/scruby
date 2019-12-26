@@ -1,14 +1,18 @@
 #!/usr/bin/env ruby
 
 require "bundler/setup"
-require "scruby"
+require "byebug"
+require "zeitwerk"
+require "listen"
 
-# You can add fixtures and/or initialization code here to make experimenting
-# with your gem easier. You can also use a different console, if you like.
 
-# (If you use this, don't forget to add pry to your Gemfile!)
-# require "pry"
-# Pry.start
+$loader = Zeitwerk::Loader.new
+$loader.push_dir File.join(__dir__, "..", "lib")
+$loader.enable_reloading
+$loader.setup
+Listen.to(*$loader.root_dirs.keys) { $loader.reload }.start
+
+include Scruby
 
 require "irb"
 IRB.start(__FILE__)

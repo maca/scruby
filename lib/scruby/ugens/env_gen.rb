@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Scruby
   module Ugens
     # Done Actions:

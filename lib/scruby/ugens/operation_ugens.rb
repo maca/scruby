@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Scruby
   module Ugens
     class BasicOpUgen < Ugen #:nodoc:
@@ -19,7 +21,7 @@ module Scruby
 
         #:nodoc:
         def get_rate(*inputs)
-          max_index = inputs.flatten.collect{ |ugen| Ugen::RATES.index ugen.rate }.max
+          max_index = inputs.flatten.map{ |ugen| Ugen::RATES.index ugen.rate }.max
           Ugen::RATES[max_index]
         end
       end
@@ -55,6 +57,7 @@ module Scruby
         return input * mul if add == 0
         return add - input if minus
         return input + add if no_mul
+
         super input.rate, input, mul, add
       end
     end

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 include Scruby
 include Ugens
 
@@ -8,12 +10,12 @@ end
 RSpec.describe Demand do
   shared_examples_for "Demand Ugen" do
     before do
-      @prox     = @splatted ? Demand.send( @method, *@ugens) : Demand.send( @method, @ugens)
+      @prox     = @splatted ? Demand.send(@method, *@ugens) : Demand.send(@method, @ugens)
       @instance = @splatted ? @prox.source : @prox.first.source
     end
 
     it "should output proxies or single proxie" do
-      @splatted ? @prox.each{ |prox| expect(prox).to be_a(OutputProxy) } : expect(@prox).to( be_a(OutputProxy) )
+      @splatted ? @prox.each{ |prox| expect(prox).to be_a(OutputProxy) } : expect(@prox).to(be_a(OutputProxy))
     end
   end
 
@@ -36,7 +38,7 @@ RSpec.describe Demand do
   describe "Single channel splatted input" do
     before do
       @channels = 1
-      @ugens    = [MockUgen.new(:audio, 1, 2)] * 4
+      @ugens    = [ MockUgen.new(:audio, 1, 2) ] * 4
       @splatted = true
     end
 
@@ -45,7 +47,7 @@ RSpec.describe Demand do
   describe "Single channel array input" do
     before do
       @channels = 1
-      @ugens    = [MockUgen.new(:audio, 1, 2)] * 4
+      @ugens    = [ MockUgen.new(:audio, 1, 2) ] * 4
       @splatted = false
     end
 

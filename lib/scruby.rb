@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 #--
 # Copyright (c) 2008 Macario Ortega
 #
@@ -20,34 +22,45 @@ require "ruby-osc"
 require "eventmachine"
 require "yaml"
 
-
-require "scruby/core_ext/object"
-require "scruby/core_ext/array"
-require "scruby/core_ext/fixnum"
-require "scruby/core_ext/numeric"
-require "scruby/core_ext/proc"
-require "scruby/core_ext/string"
-require "scruby/core_ext/typed_array"
 require "scruby/core_ext/delegator_array"
 
+
+module Scruby
+  module Encode
+    def encode_floats_array(array)
+      [ array.size ].pack("n") + array.pack("g*")
+    end
+
+    def encode_string(string)
+      [ string.size & 255 ].pack("C*") + string[0..255]
+    end
+  end
+end
+
+
+require "extensions/attributes"
 
 require "scruby/version"
 require "scruby/env"
 require "scruby/control_name"
 
-require "scruby/ugens/ugen"
+require "scruby/ugen"
+require "scruby/ugen/input"
 require "scruby/ugens/ugen_operations"
 require "scruby/ugens/multi_out"
 require "scruby/ugens/panner"
 require "scruby/ugens/buffer_read_write"
 require "scruby/ugens/disk_in_out"
 require "scruby/ugens/in_out"
-
 require "scruby/ugens/operation_ugens"
-require "scruby/ugens/ugens"
+require "scruby/ugens/demand"
+
 require "scruby/synthdef"
 
 require "scruby/server"
+require "scruby/server/options"
+require "scruby/server/executable"
+
 require "scruby/ugens/env_gen"
 
 require "scruby/node"
@@ -59,8 +72,6 @@ require "scruby/group"
 require "scruby/ticker"
 
 
-module Scruby
-end
 
 
 include Scruby

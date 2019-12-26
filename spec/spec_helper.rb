@@ -1,4 +1,7 @@
+# frozen_string_literal: true
+
 require "bundler/setup"
+require "byebug"
 require "scruby"
 
 RSpec.configure do |config|
@@ -12,3 +15,5 @@ RSpec.configure do |config|
     c.syntax = :expect
   end
 end
+
+Thread.abort_on_exception = true
