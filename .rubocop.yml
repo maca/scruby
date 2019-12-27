@@ -975,6 +975,7 @@ Style/SymbolLiteral:
 
 Style/FrozenStringLiteralComment:
   Enabled: true
+  EnforcedStyle: never
 
 Style/SymbolProc:
   Description: 'Use symbols as procs instead of blocks when possible.'

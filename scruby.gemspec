@@ -41,4 +41,5 @@ Gem::Specification.new do |spec|
   spec.add_dependency "tty-which", "~> 0.4"
   spec.add_dependency "concurrent-ruby", "~> 1.1"
   spec.add_dependency "concurrent-ruby-edge", "~> 0.5.0"
+  spec.add_dependency "facets", "~> 3.1"
 end

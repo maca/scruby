@@ -1,9 +1,8 @@
-# frozen_string_literal: true
-
 module Scruby
   module Ugen
-    class Demand < Ugen::Base
-      include MultiOut
+    class Demand < Base
+      rates :control, :audio
+      inputs trig: nil, reset: nil, demand_u_gens: nil
     end
   end
 end

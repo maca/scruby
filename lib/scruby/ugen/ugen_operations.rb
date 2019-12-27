@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 module Scruby
   module Ugens
     # This module enables Ugen operations for Ugens, Numeric and

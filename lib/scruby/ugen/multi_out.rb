@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 module Scruby
   module Ugen
     module MultiOut #:nodoc:

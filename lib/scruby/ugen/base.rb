@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 module Scruby
   module Ugen
     class Base
@@ -49,17 +47,21 @@ module Scruby
 
       class << self
         def rates(*rates)
-          return [*@rates] if rates.empty?
+          return [ *@rates ] if rates.empty?
           @rates = rates
         end
 
-        def inputs(specs)
+        def inputs(**specs)
+          return @specs || {} if specs.empty?
+
           define_initialize(specs)
           specs.each { |input_name, _| define_accessor(input_name) }
 
           define_method :inputs do
             specs.map { |name, _| instance_variable_get("@#{name}") }
           end
+
+          @specs = specs
         end
 
         def ar(**params)
@@ -80,7 +82,8 @@ module Scruby
         private
 
         def define_initialize(specs)
-          args = [ "rate: :audio", *specs.map { |k, v| "#{k}: #{v}" } ]
+          args = [ "rate: :audio",
+                   *specs.map { |k, v| "#{k}: #{v.inspect}" } ]
 
           assigns = *specs.map do |k, v|
             next "self.#{k} = #{k}[rate]" if v.is_a?(Hash)
@@ -88,7 +91,7 @@ module Scruby
           end
 
           class_eval <<-RUBY
-            def initialize(#{args.join(", ")})
+            def initialize(#{args.join(', ')})
               #{assigns.join("\n")}
               super(rate: rate)
             end
