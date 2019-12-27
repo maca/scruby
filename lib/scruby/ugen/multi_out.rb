@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 module Scruby
-  module Ugens
+  module Ugen
     module MultiOut #:nodoc:
       def self.included(base)
         base.extend ClassMethods
@@ -27,7 +27,7 @@ module Scruby
       end
     end
 
-    class OutputProxy < Ugen #:nodoc:
+    class OutputProxy < Ugen::Base #:nodoc:
       attr_reader :source, :control_name, :output_index
       class << self; public :new; end
 
@@ -37,11 +37,9 @@ module Scruby
       end
 
       def index; @source.index; end
-
-      def add_to_synthdef; end
     end
 
-    class Control < Ugen #:nodoc:
+    class Control < Ugen::Base #:nodoc:
       include MultiOut
 
       def initialize(rate, *names)

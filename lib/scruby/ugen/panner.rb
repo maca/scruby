@@ -1,8 +1,8 @@
 # frozen_string_literal: true
 
 module Scruby
-  module Ugens
-    class Pan2 < Ugen
+  module Ugen
+    class Pan2 < Ugen::Base
       include MultiOut
 
       class << self
@@ -18,7 +18,7 @@ module Scruby
 
     class LinPan2 < Pan2; end
 
-    class Pan4 < Ugen
+    class Pan4 < Ugen::Base
       include MultiOut
 
       class << self
@@ -32,7 +32,7 @@ module Scruby
       end
     end
 
-    class Balance2 < Ugen
+    class Balance2 < Ugen::Base
       include MultiOut
 
       class << self
@@ -46,7 +46,7 @@ module Scruby
       end
     end
 
-    class Rotate2 < Ugen
+    class Rotate2 < Ugen::Base
       include MultiOut
 
       class << self
@@ -60,7 +60,7 @@ module Scruby
       end
     end
 
-    class PanB < Ugen
+    class PanB < Ugen::Base
       include MultiOut
 
       class << self
@@ -74,7 +74,7 @@ module Scruby
       end
     end
 
-    class PanB2 < Ugen
+    class PanB2 < Ugen::Base
       include MultiOut
 
       class << self
@@ -88,7 +88,7 @@ module Scruby
       end
     end
 
-    class BiPanB2 < Ugen
+    class BiPanB2 < Ugen::Base
       include MultiOut
 
       class << self
@@ -102,7 +102,7 @@ module Scruby
       end
     end
 
-    class DecodeB2 < Ugen
+    class DecodeB2 < Ugen::Base
       include MultiOut
 
       class << self
@@ -116,7 +116,7 @@ module Scruby
       end
     end
 
-    class PanAz < Ugen
+    class PanAz < Ugen::Base
       include MultiOut
 
       class << self

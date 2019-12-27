@@ -1,8 +1,8 @@
 # frozen_string_literal: true
 
 module Scruby
-  module Ugens
-    class BasicOpUgen < Ugen #:nodoc:
+  module Ugen
+    class BasicOpUgen < Ugen::Base #:nodoc:
       attr_accessor :operator
 
       class << self
@@ -47,7 +47,7 @@ module Scruby
       end
     end
 
-    class MulAdd < Ugen
+    class MulAdd < Ugen::Base
       def self.new(input, mul, add)
         no_mul = mul == 1.0
         minus  = mul == -1.0

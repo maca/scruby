@@ -1,8 +1,8 @@
 # frozen_string_literal: true
 
 module Scruby
-  module Ugens
-    class PlayBuf < Ugen
+  module Ugen
+    class PlayBuf < Ugen::Base
       include MultiOut
 
       class << self
@@ -22,7 +22,7 @@ module Scruby
       end
     end
 
-    class TGrains < Ugen
+    class TGrains < Ugen::Base
       include MultiOut
 
       def initialize(rate, channels, *inputs)
@@ -42,7 +42,7 @@ module Scruby
       end
     end
 
-    class BufRd < Ugen
+    class BufRd < Ugen::Base
       include MultiOut
 
       class << self
@@ -60,7 +60,7 @@ module Scruby
       end
     end
 
-    class BufWr < Ugen
+    class BufWr < Ugen::Base
       class << self
         def kr(input, bufnum: 0, phase: 0.0, loop: 1.0)
           new :control, bufnum, phase, loop, *input.to_array
@@ -72,7 +72,7 @@ module Scruby
       end
     end
 
-    class RecordBuf < Ugen
+    class RecordBuf < Ugen::Base
       class << self
         def kr(input, bufnum: 0, offset: 0.0, rec_level: 1.0,
                pre_level: 0.0, run: 1.0, loop: 1.0, trigger: 1.0,
@@ -92,7 +92,7 @@ module Scruby
       end
     end
 
-    class ScopeOut < Ugen
+    class ScopeOut < Ugen::Base
       class << self
         def kr(input, bufnum: 0)
           new :control, bufnum, *input.to_array
@@ -104,7 +104,7 @@ module Scruby
       end
     end
 
-    class Tap < Ugen
+    class Tap < Ugen::Base
       class << self
         def ar(bufnum: 0, num_channels: 1, _delay_time: 0.2)
           PlayBuf.ar num_channels, bufnum, 1, 0, SampleRate.ir.neg * 3,

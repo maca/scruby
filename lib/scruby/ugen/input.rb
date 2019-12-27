@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 module Scruby
-  class Ugen
+  module Ugen
     class Input
       def initialize(value)
         @value = value
@@ -16,7 +16,7 @@ module Scruby
           case input
           when ::Numeric
             Input::Numeric.new(input)
-          when Ugen, Env, ControlName, Array
+          when Ugen::Base, Env, ControlName, Array
             Input::Ugen.new(input)
           else
             raise ArgumentError, "Invalid Ugen input"
@@ -36,8 +36,8 @@ module Scruby
           self
         end
 
-        def input_specs(synthdef)
-          [ -1, synthdef.constants.index(value) ]
+        def input_specs(graph)
+          [ -1, graph.constants.index(value) ]
         end
       end
     end

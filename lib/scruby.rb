@@ -25,43 +25,33 @@ require "yaml"
 require "scruby/core_ext/delegator_array"
 
 
-module Scruby
-  module Encode
-    def encode_floats_array(array)
-      [ array.size ].pack("n") + array.pack("g*")
-    end
-
-    def encode_string(string)
-      [ string.size & 255 ].pack("C*") + string[0..255]
-    end
-  end
-end
-
-
-require "extensions/attributes"
-
 require "scruby/version"
+require "scruby/attributes"
+require "scruby/encode"
 require "scruby/env"
 require "scruby/control_name"
 
-require "scruby/ugen"
-require "scruby/ugen/input"
-require "scruby/ugens/ugen_operations"
-require "scruby/ugens/multi_out"
-require "scruby/ugens/panner"
-require "scruby/ugens/buffer_read_write"
-require "scruby/ugens/disk_in_out"
-require "scruby/ugens/in_out"
-require "scruby/ugens/operation_ugens"
-require "scruby/ugens/demand"
 
-require "scruby/synthdef"
+require "scruby/ugen"
+require "scruby/ugen/base"
+require "scruby/ugen/input"
+require "scruby/ugen/graph"
+require "scruby/ugen/graph/node"
+require "scruby/ugen/ugen_operations"
+require "scruby/ugen/multi_out"
+require "scruby/ugen/panner"
+require "scruby/ugen/buffer_read_write"
+require "scruby/ugen/disk_in_out"
+require "scruby/ugen/in_out"
+require "scruby/ugen/operation_ugens"
+require "scruby/ugen/demand"
+require "scruby/ugen/env_gen"
+
+require "scruby/synth_def"
 
 require "scruby/server"
-require "scruby/server/options"
+require "scruby/server/executable/options"
 require "scruby/server/executable"
-
-require "scruby/ugens/env_gen"
 
 require "scruby/node"
 require "scruby/synth"

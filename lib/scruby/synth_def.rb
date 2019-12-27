@@ -20,14 +20,7 @@ module Scruby
       @variants = [] # stub!!!
     end
 
-    # Returns a string representing the encoded SynthDef in a way
-    # scsynth can interpret and generate.  This method is called by a
-    # server instance when sending the synthdef via OSC.
-    #
-    # For complex synthdefs the encoded synthdef can vary a little bit
-    # from what SClang would generate but the results will be
-    # interpreted in the same way.
-    #
+
     def encode
       controls = control_names.reject(&:non_control?)
       encoded_controls =
@@ -79,21 +72,32 @@ module Scruby
 
     def collect_control_names(function, values, rates)
       names = function.arguments
-      names.zip(values, rates).each_with_index.map { |array, index| ControlName.new *(array << index)  }
+
+      names.zip(values, rates).each_with_index.map do |array, index|
+        ControlName.new(*(array << index))
+      end
     end
 
     def build_controls(control_names)
-      # control_names.select{ |c| c.rate == :noncontrol }.sort_by{ |c| c.control_name.index } +
+      # control_names.select{ |c| c.rate == :noncontrol }
+      # .sort_by{ |c| c.control_name.index } +
+
       %i(scalar trigger control).map do |rate|
-        same_rate_array = control_names.select{ |control| control.rate == rate }
-        Control.and_proxies_from(same_rate_array) unless same_rate_array.empty?
+        same_rate_array =
+          control_names.select{ |control| control.rate == rate }
+
+        unless same_rate_array.empty?
+          Control.and_proxies_from(same_rate_array)
+        end
       end.flatten.compact.sort_by{ |proxy| proxy.control_name.index }
     end
 
     def build_ugen_graph(function, control_names)
-      Ugen.synthdef = self
+      Thread.current[:synth_def] = self
       function.call *build_controls(control_names)
-      Ugen.synthdef = nil
+
+    ensure
+      Thread.current[:synth_def] = nil
     end
 
     def collect_constants(children)

@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-require "singleton"
-require "forwardable"
 require "ruby-osc"
 require "concurrent-edge"
 
@@ -9,8 +7,6 @@ require "concurrent-edge"
 module Scruby
   class Server
     include OSC
-
-    extend Forwardable
 
     attr_reader :host, :port, :executable, :client, :message_queue
 

@@ -1,8 +1,8 @@
 # frozen_string_literal: true
 
 module Scruby
-  module Ugens
-    class DiskOut < Ugen
+  module Ugen
+    class DiskOut < Ugen::Base
       def output_specs; []; end
       def channels; []; end
 
@@ -15,7 +15,7 @@ module Scruby
       end
     end
 
-    class DiskIn < Ugen
+    class DiskIn < Ugen::Base
       include MultiOut
 
       def self.ar(channels, bufnum, loop: 0)
@@ -23,7 +23,7 @@ module Scruby
       end
     end
 
-    class VDiskIn < Ugen
+    class VDiskIn < Ugen::Base
       include MultiOut
 
       class << self

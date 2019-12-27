@@ -1,8 +1,8 @@
 # frozen_string_literal: true
 
 module Scruby
-  module Ugens
-    class Demand < Ugen
+  module Ugen
+    class Demand < Ugen::Base
       include MultiOut
     end
   end

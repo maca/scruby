@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 module Scruby
-  module Ugens
+  module Ugen
     # Done Actions:
     #
     # * 0   do nothing when the UGen is finished
@@ -25,7 +25,7 @@ module Scruby
     #       (before and after)
     # * 14  free the enclosing group and all nodes within it
     #       (including this synth)
-    class EnvGen < Ugen
+    class EnvGen < Ugen::Base
       class << self
         # New EnvGen with :audio rate, inputs should be valid Ugen
         # inputs or Ugens, arguments can be passed as an options hash

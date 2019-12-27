@@ -237,10 +237,10 @@ BufAllpassN:
 BufChannels:
   :scalar:
   - - :bufnum
-    - 
+    -
   :control:
   - - :bufnum
-    - 
+    -
 BufCombC:
   :audio:
   - - :buf
@@ -319,49 +319,49 @@ BufDelayN:
 BufDur:
   :scalar:
   - - :bufnum
-    - 
+    -
   :control:
   - - :bufnum
-    - 
+    -
 BufFrames:
   :scalar:
   - - :bufnum
-    - 
+    -
   :control:
   - - :bufnum
-    - 
+    -
 BufRateScale:
   :scalar:
   - - :bufnum
-    - 
+    -
   :control:
   - - :bufnum
-    - 
+    -
 BufSampleRate:
   :scalar:
   - - :bufnum
-    - 
+    -
   :control:
   - - :bufnum
-    - 
+    -
 BufSamples:
   :scalar:
   - - :bufnum
-    - 
+    -
   :control:
   - - :bufnum
-    - 
+    -
 COsc:
   :control:
   - - :bufnum
-    - 
+    -
   - - :freq
     - 440
   - - :beats
     - 0.5
   :audio:
   - - :bufnum
-    - 
+    -
   - - :freq
     - 440
   - - :beats
@@ -389,14 +389,14 @@ ClipNoise:
 CoinGate:
   :control:
   - - :prob
-    - 
+    -
   - - :input
-    - 
+    -
   :audio:
   - - :prob
-    - 
+    -
   - - :input
-    - 
+    -
 CombC:
   :control:
   - - :input
@@ -476,19 +476,19 @@ ControlRate:
 Convolution2:
   :audio:
   - - :input
-    - 
+    -
   - - :bufnum
-    - 
+    -
   - - :trigger
-    - 
+    -
   - - :framesize
     - 512
 Convolution:
   :audio:
   - - :input
-    - 
+    -
   - - :kernel
-    - 
+    -
   - - :framesize
     - 512
 Crackle:
@@ -521,18 +521,18 @@ CuspN:
 DC:
   :control:
   - - :input
-    - 
+    -
   :audio:
   - - :input
-    - 
+    -
 Dbrown:
   :demand:
   - - :lo
-    - 
+    -
   - - :hi
-    - 
+    -
   - - :step
-    - 
+    -
   - - :length
     - 0
 Decay2:
@@ -564,14 +564,14 @@ Decay:
 DegreeToKey:
   :control:
   - - :bufnum
-    - 
+    -
   - - :input
     - 0
   - - :octave
     - 12
   :audio:
   - - :bufnum
-    - 
+    -
   - - :input
     - 0
   - - :octave
@@ -638,24 +638,24 @@ DelayN:
 Demand:
   :control:
   - - :trig
-    - 
+    -
   - - :reset
-    - 
+    -
   - - :demandUgens
-    - 
+    -
   :audio:
   - - :trig
-    - 
+    -
   - - :reset
-    - 
+    -
   - - :demandUgens
-    - 
+    -
 DemandEnvGen:
   :control:
   - - :level
-    - 
+    -
   - - :dur
-    - 
+    -
   - - :shape
     - 1
   - - :curve
@@ -674,9 +674,9 @@ DemandEnvGen:
     - 0
   :audio:
   - - :level
-    - 
+    -
   - - :dur
-    - 
+    -
   - - :shape
     - 1
   - - :curve
@@ -723,11 +723,11 @@ Dgeom:
 Dibrown:
   :demand:
   - - :lo
-    - 
+    -
   - - :hi
-    - 
+    -
   - - :step
-    - 
+    -
   - - :length
     - 0
 Diwhite:
