@@ -16,15 +16,12 @@ module Scruby
           case input
           when ::Numeric
             Input::Numeric.new(input)
-          when Ugen::Base, Env, ControlName, Array
-            Input::Ugen.new(input)
+          when Base, Env, ControlName, Array
+            input
           else
             raise ArgumentError, "Invalid Ugen input"
           end
         end
-      end
-
-      class Ugen < Input
       end
 
       class Numeric < Input

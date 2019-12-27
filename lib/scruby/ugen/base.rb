@@ -81,11 +81,15 @@ module Scruby
 
         def define_initialize(specs)
           args = [ "rate: :audio", *specs.map { |k, v| "#{k}: #{v}" } ]
-          assigns = *specs.map { |k, _| "self.#{k} = #{k}" }
+
+          assigns = *specs.map do |k, v|
+            next "self.#{k} = #{k}[rate]" if v.is_a?(Hash)
+            "self.#{k} = #{k}"
+          end
 
           class_eval <<-RUBY
-            def initialize(#{args.join(', ')})
-              #{assigns.join(';')}
+            def initialize(#{args.join(", ")})
+              #{assigns.join("\n")}
               super(rate: rate)
             end
           RUBY

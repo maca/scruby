@@ -68,13 +68,6 @@ RSpec.describe Ugen::Base do
 
 
   describe "#input" do
-    let(:subclass) do
-      Class.new(Ugen::Base) do
-        rates :audio
-        inputs freq: 440, phase: 0
-      end
-    end
-
     shared_examples_for "defines setter methods" do
       context "change freq" do
         let(:copy) { instance.freq(220) }
@@ -97,6 +90,13 @@ RSpec.describe Ugen::Base do
     end
 
     context "initialize with defaults" do
+      let(:subclass) do
+        Class.new(Ugen::Base) do
+          rates :audio
+          inputs freq: 440, phase: 0
+        end
+      end
+
       subject(:instance) { subclass.new(rate: :audio) }
 
       describe "defines getter methods" do
@@ -108,6 +108,13 @@ RSpec.describe Ugen::Base do
     end
 
     context "initialize with named params" do
+      let(:subclass) do
+        Class.new(Ugen::Base) do
+          rates :audio, :control
+          inputs freq: 440, phase: 0
+        end
+      end
+
       subject(:instance) do
         subclass.new(rate: :audio, phase: 1, freq: 880)
       end
@@ -118,6 +125,37 @@ RSpec.describe Ugen::Base do
       end
 
       it_behaves_like "defines setter methods"
+    end
+
+    context "different defaults for audio and control" do
+      let(:subclass) do
+        Class.new(Ugen::Base) do
+          rates :audio, :control
+          inputs freq: { audio: 440, control: 10 }, phase: 0
+        end
+      end
+
+      context "audio rate" do
+        subject(:instance) { subclass.new(rate: :audio) }
+
+        describe "defines getter methods" do
+          it { expect(instance.freq).to be 440 }
+          it { expect(instance.phase).to be 0 }
+        end
+
+        it_behaves_like "defines setter methods"
+      end
+
+      context "control rate" do
+        subject(:instance) { subclass.new(rate: :control) }
+
+        describe "defines getter methods" do
+          it { expect(instance.freq).to be 10 }
+          it { expect(instance.phase).to be 0 }
+        end
+
+        it_behaves_like "defines setter methods"
+      end
     end
   end
 
