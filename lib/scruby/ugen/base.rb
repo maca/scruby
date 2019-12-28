@@ -19,15 +19,22 @@ module Scruby
       end
 
       def name
-        self.class.name.split("::").last
-      end
-
-      def inputs_count #:nodoc:
-        inputs.size
+        (self.class.name || "Ugen").split("::").last
       end
 
       def ==(other)
-        self.class == other.class && state == other.state
+        self.class == other.class &&
+          rate == other.rate &&
+          inputs == other.inputs
+      end
+
+      def inspect
+        "%s(%s, %s)" %
+          [ name, rate, inputs.map { |k, v| "#{k}: #{v}" }.join(", ") ]
+      end
+
+      def input_values
+        inputs.values.flatten
       end
 
       protected
@@ -39,10 +46,6 @@ module Scruby
         end
 
         @rate = rate
-      end
-
-      def state
-        instance_variables.map { |var| instance_variable_get var }
       end
 
       class << self
@@ -58,53 +61,55 @@ module Scruby
           specs.each { |input_name, _| define_accessor(input_name) }
 
           define_method :inputs do
-            specs.map { |name, _| instance_variable_get("@#{name}") }
+            specs.map do |name, _|
+              [ name, instance_variable_get("@#{name}") ]
+            end.to_h
           end
 
           @specs = specs
         end
 
-        def ar(**params)
-          new(**params, rate: :audio)
+        def ar(*args, **kwargs)
+          new(*args, rate: :audio, **kwargs)
         end
         alias audio ar
 
-        def kr(**params)
-          new(**params, rate: :control)
+        def kr(*args, **kwargs)
+          new(*args, rate: :control, **kwargs)
         end
         alias control kr
 
-        def ir(**params)
-          new(**params, rate: :scalar)
+        def ir(*args, **kwargs)
+          new(*args, rate: :scalar, **kwargs)
         end
         alias scalar ir
 
         private
 
         def define_initialize(specs)
-          args = [ "rate: :audio",
-                   *specs.map { |k, v| "#{k}: #{v.inspect}" } ]
+          define_method :initialize do |*args, rate: :audio, **kwargs|
+            input_names = self.class.inputs.keys
 
-          assigns = *specs.map do |k, v|
-            next "self.#{k} = #{k}[rate]" if v.is_a?(Hash)
-            "self.#{k} = #{k}"
-          end
+            assigns =
+              self.class.inputs.to_a +
+                input_names[0...args.size].zip(args) +
+                kwargs.to_a
 
-          class_eval <<-RUBY
-            def initialize(#{args.join(', ')})
-              #{assigns.join("\n")}
-              super(rate: rate)
+            assigns.map do |name, val|
+              self.send("#{name}=", val.is_a?(Hash) ? val[rate] : val)
             end
-          RUBY
+
+            super(rate: rate)
+          end
         end
 
         def define_accessor(name)
           define_method "#{name}=" do |input|
-            instance_variable_set("@#{name}", Input.wrap(input))
+            instance_variable_set("@#{name}", input)
           end
 
           define_method name do |input = nil|
-            break instance_variable_get("@#{name}")&.value if input.nil?
+            break instance_variable_get("@#{name}") if input.nil?
             dup.tap { |copy| copy.send("#{name}=", input) }
           end
 

@@ -127,6 +127,48 @@ RSpec.describe Ugen::Base do
       it_behaves_like "defines setter methods"
     end
 
+    context "initialize with positional arguments" do
+      let(:subclass) do
+        Class.new(Ugen::Base) do
+          rates :audio, :control
+          inputs freq: 440, phase: 0
+        end
+      end
+
+      context "one argument is passed" do
+        subject(:instance) do
+          subclass.new(220, rate: :audio)
+        end
+
+        describe "sets values" do
+          it { expect(instance.freq).to be 220 }
+          it { expect(instance.phase).to be 0 }
+        end
+      end
+
+      context "all arguments are passed" do
+        subject(:instance) do
+          subclass.new(220, 1, rate: :audio)
+        end
+
+        describe "sets values" do
+          it { expect(instance.freq).to be 220 }
+          it { expect(instance.phase).to be 1 }
+        end
+      end
+
+      context "argument is overriden" do
+        subject(:instance) do
+          subclass.new(220, 1, freq: 300, rate: :audio)
+        end
+
+        describe "sets values" do
+          it { expect(instance.freq).to be 300 }
+          it { expect(instance.phase).to be 1 }
+        end
+      end
+    end
+
     context "different defaults for audio and control" do
       let(:subclass) do
         Class.new(Ugen::Base) do
