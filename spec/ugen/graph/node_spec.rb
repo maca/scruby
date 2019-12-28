@@ -1,45 +1,43 @@
 RSpec.describe Ugen::Graph::Node do
   include Scruby
 
-  describe ".encode_ugen" do
-    context "single ugen" do
-      let(:sin_osc) do
-        Class.new(Ugen::Base) do
-          rates :control
-          inputs freq: 440, phase: 0
-        end.new(rate: :control)
-      end
+  describe ".encode" do
+    context "control rate" do
+      let(:sin_osc) { Ugen::SinOsc.kr }
+      let(:graph) { instance_double("Scruby::Ugen::Graph") }
 
       let(:expected) do
-        [ 0x06, 0x53, 0x69, 0x6e, 0x4f, 0x73, 0x63, 0x01, 0x00, 0x02,
-          0x00, 0x01, 0x00, 0x00, -0x01, -0x01, 0x00, 0x00, -0x01,
-          -0x01, 0x00, 0x01, 0x01 ].pack("C*")
+        [ 6, 83, 105, 110, 79, 115, 99, 1, 0, 0, 0, 2, 0, 0, 0, 1, 0,
+          0, -1, -1, -1, -1, 0, 0, 0, 0, -1, -1, -1, -1, 0, 0, 0, 1, 1
+        ].pack("C*")
       end
-
-      let(:graph) { Ugen::Graph.new }
-      let(:encoded_ugen) { node.encode }
 
       subject(:node) { described_class.new(sin_osc, graph) }
 
       before do
-        allow(sin_osc).to receive(:name) { "SinOsc" }
-        allow(graph).to receive(:constants) { [ 440, 0 ] }
+        allow(graph).to receive(:add_constant)
+        allow(graph).to receive(:add)
+
+        allow(node).to receive(:constants) do
+          [ instance_double("Constant", input_specs: [ -1, 0 ]),
+            instance_double("Constant", input_specs: [ -1, 1 ]) ]
+        end
       end
 
       it "should encode class name" do
-        expect(encoded_ugen[0..6]).to eq(expected[0..6])
+        expect(node.encode[0..6]).to eq(expected[0..6])
       end
 
       it "should encode classname, rate" do
-        expect(encoded_ugen[0..7]).to eq(expected[0..7])
+        expect(node.encode[0..7]).to eq(expected[0..7])
       end
 
       it "should encode cn, rt, inputs, channels, special index" do
-        expect(encoded_ugen[0..13]).to eq(expected[0..13])
+        expect(node.encode[0..13]).to eq(expected[0..13])
       end
 
       it "should encode cn, rt, ins, chans, si, input specs" do
-        expect(encoded_ugen).to eq(expected)
+        expect(node.encode).to eq(expected)
       end
     end
   end

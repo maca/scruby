@@ -1,44 +1,35 @@
 RSpec.describe Ugen::Graph do
   include Scruby
 
-  describe ".encode_ugen" do
-    context "single ugen" do
-      let(:sin_osc) do
-        Class.new(Ugen::Base) do
-          rates :control
-          inputs freq: 440, phase: 0
-        end.new(rate: :control)
-      end
+  describe "building a graph" do
+    context "with two ugens" do
+      let(:sin_osc) { Ugen::SinOsc.ar }
+      let(:ugen) { Ugen::Out.ar(1, sin_osc) }
 
       let(:expected) do
-        [ 0x06, 0x53, 0x69, 0x6e, 0x4f, 0x73, 0x63, 0x01, 0x00, 0x02,
-          0x00, 0x01, 0x00, 0x00, -0x01, -0x01, 0x00, 0x00, -0x01,
-          -0x01, 0x00, 0x01, 0x01 ].pack("C*")
+        %w(
+        00 00 00 03  43
+        dc 00 00 00  00 00 00 3f  80 00 00 00  00 00 00 00
+        00 00 00 00  00 00 02 06  53 69 6e 4f  73 63 02 00
+        00 00 02 00  00 00 01 00  00 ff ff ff  ff 00 00 00
+        00 ff ff ff  ff 00 00 00  01 02 03 4f  75 74 02 00
+        00 00 02 00  00 00 00 00  00 ff ff ff  ff 00 00 00
+        02 00 00 00  00 00 00 00  00 00 00 00  00 00 00 00
+        )
       end
 
-      let(:encoded_ugen) { graph.encode }
+      subject(:graph) { described_class.new(ugen) }
 
-      subject(:graph) { described_class.new }
-
-      before do
-        allow(sin_osc).to receive(:name) { "SinOsc" }
-        allow(graph).to receive(:constants) { [ 440, 0 ] }
+      let(:encoded) do
+        graph.encode.unpack("C*")
+          .map { |num| num.to_s(16).rjust(2, "0") }
       end
 
-      it "should encode class name" do
-        expect(encoded_ugen[0..6]).to eq(expected[0..6])
-      end
+      it { expect(graph.constants.map(&:value)).to eq [ 440, 0, 1 ] }
+      it { expect(graph.nodes.map(&:value)).to eq [ sin_osc, ugen ] }
 
-      it "should encode classname, rate" do
-        expect(encoded_ugen[0..7]).to eq(expected[0..7])
-      end
-
-      it "should encode cn, rt, inputs, channels, special index" do
-        expect(encoded_ugen[0..13]).to eq(expected[0..13])
-      end
-
-      it "should encode cn, rt, ins, chans, si, input specs" do
-        expect(encoded_ugen).to eq(expected)
+      it "should encode graph" do
+        expect(encoded).to eq(expected)
       end
     end
   end

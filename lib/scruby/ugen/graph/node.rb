@@ -6,33 +6,51 @@ module Scruby
     class Graph
       class Node
         include Scruby::Encode
-        extend Forwardable
 
-        def_delegators :object, :inputs, :inputs_count, :rate
+        attr_reader :constants, :nodes, :value, :graph
 
-        attr_reader :object, :graph
+        def initialize(value, graph)
+          ugens, values =
+            value.input_values.partition { |v| v.is_a?(Ugen::Base) }
 
-        def initialize(object, graph)
-          @object = object
+          @value = value
           @graph = graph
+          @nodes = ugens.map { |ugen| Node.new(ugen, graph) }
+          @constants = values.map { |val| Constant.new(val, graph) }
 
           graph.add(self)
         end
 
         def encode
           [
-            encode_string(object.name),
+            encode_string(value.name),
+            encode_int8(rate_index),
+            encode_int32(inputs.count),
+            encode_int32(channels_count),
+            encode_int16(special_index),
+            collect_input_specs.flatten.pack("N*"),
+            output_specs.map { |i| encode_int8(i) }.join
+          ].join
+        end
 
-            [ rate_index, inputs_count,
-              channels_count, special_index
-            ].pack("wn*"),
-
-            collect_input_specs.flatten.pack("n*"),
-            output_specs.pack("w*")
-          ].join("")
+        def input_specs
+          [ graph.nodes.index(self), output_index ]
         end
 
         private
+
+        def output_index
+          # Is it an output?
+          0
+        end
+
+        def inputs
+          constants + nodes
+        end
+
+        def rate
+          value.rate
+        end
 
         def special_index
           0
@@ -51,12 +69,12 @@ module Scruby
         end
 
         def collect_input_specs #:nodoc:
-          inputs.map { |i| i.input_specs(graph) }
+          inputs.map(&:input_specs)
         end
 
-        # def input_specs(_synthdef) #:nodoc:
-        #   [ index, output_index ]
-        # end
+        def inspect
+          "#{self.class.name}(#{value})"
+        end
       end
     end
   end

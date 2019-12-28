@@ -1,6 +1,6 @@
 module Scruby
   module Ugen
-    class ReplaceOut < Base
+    class ReplaceOut < Out
       rates :control, :audio
       inputs bus: nil, channels_array: nil
     end
