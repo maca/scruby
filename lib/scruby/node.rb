@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 module Scruby
   class Node
     @@base_id = 999

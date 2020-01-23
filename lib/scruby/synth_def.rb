@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 module Scruby
   class SynthDef
     attr_reader :name, :children, :constants, :variants, :control_names

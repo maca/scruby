@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 module Scruby
   class Bus
     attr_reader :server, :rate, :channels, :main_bus

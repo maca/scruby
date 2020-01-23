@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 scruby = File.expand_path(File.join(File.dirname(__FILE__), "..", "scruby")).to_s
 require scruby
 s = Server.new("localhost", 57_140)

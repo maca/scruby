@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 module Scruby
   class ControlName #:nodoc:
     attr_accessor :name, :value, :rate, :index

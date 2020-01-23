@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 module Scruby
   # Thread.new do
   #   EventMachine.run do

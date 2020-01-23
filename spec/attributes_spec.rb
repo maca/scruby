@@ -26,7 +26,7 @@ RSpec.describe Attributes do
         foo: false,
         bar: false,
         baz: false,
-        qux: false,
+        qux: false
       )
     end
 

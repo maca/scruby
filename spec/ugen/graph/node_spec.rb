@@ -24,21 +24,7 @@ RSpec.describe Ugen::Graph::Node do
         end
       end
 
-      it "should encode class name" do
-        expect(node.encode[0..6]).to eq(expected[0..6])
-      end
-
-      it "should encode classname, rate" do
-        expect(node.encode[0..7]).to eq(expected[0..7])
-      end
-
-      it "should encode cn, rt, inputs, channels, special index" do
-        expect(node.encode[0..13]).to eq(expected[0..13])
-      end
-
-      it "should encode cn, rt, ins, chans, si, input specs" do
-        expect(node.encode).to eq(expected)
-      end
+      it { expect(node.encode).to eq(expected) }
     end
   end
 end

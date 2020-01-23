@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 module Scruby
   class Env
     attr_accessor :levels, :times, :curves, :release_node, :array

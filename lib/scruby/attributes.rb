@@ -9,7 +9,7 @@ module Scruby
       end
 
       def attribute(name, value = nil)
-        attributes.merge!({ name.to_s => value })
+        attributes.merge!(name.to_s => value)
       end
     end
 

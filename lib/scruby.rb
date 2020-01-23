@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 #--
 # Copyright (c) 2008 Macario Ortega
 #

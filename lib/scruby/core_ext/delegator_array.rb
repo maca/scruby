@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 class DelegatorArray < Array
   def method_missing(meth, *args, &block)
     map! { |item| item.send meth, *args, &block }

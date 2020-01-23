@@ -1,4 +1,3 @@
-# frozen_string_literal: true
 require "tty-which"
 require "concurrent"
 require "forwardable"

@@ -86,17 +86,17 @@ module Scruby
 
         private
 
-        def define_initialize(specs)
+        def define_initialize(_specs)
           define_method :initialize do |*args, rate: :audio, **kwargs|
             input_names = self.class.inputs.keys
 
             assigns =
               self.class.inputs.to_a +
-                input_names[0...args.size].zip(args) +
-                kwargs.to_a
+              input_names[0...args.size].zip(args) +
+              kwargs.to_a
 
             assigns.map do |name, val|
-              self.send("#{name}=", val.is_a?(Hash) ? val[rate] : val)
+              send("#{name}=", val.is_a?(Hash) ? val[rate] : val)
             end
 
             super(rate: rate)

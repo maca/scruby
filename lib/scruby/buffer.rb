@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 module Scruby
   def expand_path(path)
     File.expand_path path
