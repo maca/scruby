@@ -37,6 +37,21 @@ module Scruby
         inputs.values.flatten
       end
 
+      # TODO: no specs
+      def rate_index
+        E_RATES.index(rate)
+      end
+
+      # TODO: no specs
+      def output_specs #:nodoc:
+        [ E_RATES.index(rate) ]
+      end
+
+      # TODO: no specs
+      def channels_count
+        1
+      end
+
       protected
 
       def rate=(rate)

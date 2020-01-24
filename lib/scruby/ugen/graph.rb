@@ -23,18 +23,23 @@ module Scruby
         [ encode_constants,
           encode_controls,
           encode_control_names,
-          encode_nodes
+          encode_nodes,
+          encode_variants
         ].join
       end
 
       private
 
       def encode_controls
-        [ 0 ].pack("N")
+        encode_int32(0)
       end
 
       def encode_control_names
-        [ 0 ].pack("N")
+        encode_int32(0)
+      end
+
+      def encode_variants
+        encode_int16(0)
       end
 
       def encode_constants
@@ -42,7 +47,7 @@ module Scruby
       end
 
       def encode_nodes
-        [ nodes.size ].pack("N") + nodes.map(&:encode).join
+        encode_int32(nodes.size) + nodes.map(&:encode).join
       end
     end
   end

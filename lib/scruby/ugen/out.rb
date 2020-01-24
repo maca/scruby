@@ -4,8 +4,15 @@ module Scruby
       rates :control, :audio
       inputs bus: nil, channels_array: nil
 
-      # @channels = []
-      # def output_specs; []; end
+      # TODO: no specs
+      def output_specs
+        []
+      end
+
+      # TODO: no specs
+      def channels_count
+        0
+      end
 
       class << self
         def ar(bus, *inputs)

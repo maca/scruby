@@ -24,12 +24,12 @@ module Scruby
         def encode
           [
             encode_string(value.name),
-            encode_int8(rate_index),
+            encode_int8(value.rate_index),
             encode_int32(inputs.count),
-            encode_int32(channels_count),
+            encode_int32(value.channels_count),
             encode_int16(special_index),
             collect_input_specs.flatten.pack("N*"),
-            output_specs.map { |i| encode_int8(i) }.join
+            value.output_specs.map { |i| encode_int8(i) }.join
           ].join
         end
 
@@ -54,18 +54,6 @@ module Scruby
 
         def special_index
           0
-        end
-
-        def channels_count
-          1
-        end
-
-        def rate_index
-          E_RATES.index(rate)
-        end
-
-        def output_specs #:nodoc:
-          [ E_RATES.index(rate) ]
         end
 
         def collect_input_specs #:nodoc:
