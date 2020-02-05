@@ -2,19 +2,16 @@ module Scruby
   module Ugen
     class Graph
       class Constant
-        include Scruby::Equatable
-        include Scruby::PrettyInspectable
+        include Equatable
+        include PrettyInspectable
 
-        attr_reader :value, :graph
+        attr_reader :value
 
-        def initialize(value, graph)
+        def initialize(value)
           @value = value
-          @graph = graph
-
-          graph.add_constant(self)
         end
 
-        def input_specs
+        def input_specs(graph)
           [ -1, graph.constants.index(self) ]
         end
 

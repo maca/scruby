@@ -21,10 +21,25 @@ RSpec.describe Ugen::Graph::Node do
     include_context "with graph"
 
     let(:constants) { [ 440, -1 ] }
+    let(:control_names) { %i(k_1 k_2) }
     let(:ugens) { [ Ugen::SinOsc.ar, Ugen::SinOsc.kr ] }
+    let(:root_ugen) do
+      instance_double("Ugen::Base", input_values: inputs)
+    end
+
+    subject(:node) { described_class.new(root_ugen, graph) }
+
+    before do
+      allow(graph).to receive(:controls) do
+        { k_1: Ugen::Graph::Control.new(1, :control),
+          k_2: Ugen::Graph::Control.new(2, :control),
+          k_3: Ugen::Graph::Control.new(3, :control)
+        }
+      end
+    end
 
     let(:inputs) do
-      all = [ constants.dup, ugens.dup ]
+      all = [ constants.dup, control_names.dup, ugens.dup ]
 
       [].tap do |collection|
         while all.any?(&:any?)
@@ -34,20 +49,21 @@ RSpec.describe Ugen::Graph::Node do
       end
     end
 
-    let(:root_ugen) do
-      instance_double("Ugen::Base", input_values: inputs)
-    end
-
-    subject(:node) { described_class.new(root_ugen, graph) }
-
     it "sets constants" do
       expect(node.constants)
-        .to eq constants.map { |c| Ugen::Graph::Constant.new(c, graph) }
+        .to eq constants.map { |c| Ugen::Graph::Constant.new(c) }
     end
 
     it "sets nodes" do
       expect(node.nodes)
         .to eq ugens.map { |u| Ugen::Graph::Node.new(u, graph) }
+    end
+
+    it "sets controls" do
+      expect(node.controls)
+        .to eq [ Ugen::Graph::Control.new(1, :control),
+                 Ugen::Graph::Control.new(2, :control)
+               ]
     end
   end
 

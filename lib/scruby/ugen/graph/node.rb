@@ -5,21 +5,19 @@ module Scruby
   module Ugen
     class Graph
       class Node
-        include Scruby::Encode
-        include Scruby::Equatable
-        include Scruby::PrettyInspectable
+        include Encode
+        include Equatable
+        include PrettyInspectable
 
-        attr_reader :constants, :nodes, :value, :graph
+        attr_reader :value, :inputs, :graph
 
         def initialize(value, graph)
-          grouped = map_inputs(value.input_values)
-
-          init_block = ->(init) { init.call(graph) }
-
           @value = value
           @graph = graph
-          @nodes = grouped[:ugens].map(&init_block)
-          @constants = grouped[:values].map(&init_block)
+          @inputs = value.input_values
+                      .map(&method(:map_node))
+                      .map(&method(:map_constant))
+                      .map(&method(:map_control))
 
           graph.add(self)
         end
@@ -31,29 +29,49 @@ module Scruby
             encode_int32(inputs.count),
             encode_int32(value.channels_count),
             encode_int16(special_index),
-            collect_input_specs.flatten.pack("N*"),
+            inputs.map { |i| i.input_specs(graph).pack("N*") },
             value.output_specs.map { |i| encode_int8(i) }.join
           ].join
         end
 
-        def input_specs
+        def nodes
+          inputs.select { |i| i.is_a?(Node) }
+        end
+
+        def constants
+          inputs.select { |i| i.is_a?(Constant) }
+        end
+
+        def controls
+          inputs.select { |i| i.is_a?(Control) }
+        end
+
+        def input_specs(_)
           [ graph.nodes.index(self), output_index ]
+        end
+
+        def inspect
+          super(value: value)
         end
 
         private
 
-        def map_inputs(inputs)
-          hash = Hash.new{ |h, k| h.key?(k) ? h[k] : h[k] = [] }
+        def map_node(value)
+          return value unless value.is_a?(Ugen::Base)
+          Node.new(value, graph)
+        end
 
-          inputs.inject(hash) do |acc, input|
-            case input
-            when Ugen::Base
-              acc[:ugens] << Node.method(:new).curry(2).call(input)
-            else
-              acc[:values] << Constant.method(:new).curry(2).call(input)
-            end
+        def map_constant(value)
+          return value unless value.is_a?(Numeric)
+          Constant.new(value).tap { |const| graph.add_constant(const) }
+        end
 
-            acc
+        def map_control(value)
+          case value
+          when Symbol, String
+            graph.controls.fetch(value)
+          else
+            value
           end
         end
 
@@ -62,24 +80,8 @@ module Scruby
           0
         end
 
-        def inputs
-          constants + nodes
-        end
-
-        def rate
-          value.rate
-        end
-
         def special_index
           0
-        end
-
-        def collect_input_specs #:nodoc:
-          inputs.map(&:input_specs)
-        end
-
-        def inspect
-          super(value: value)
         end
       end
     end
