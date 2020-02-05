@@ -2,6 +2,9 @@ require "bundler/setup"
 require "byebug"
 require "scruby"
 
+Dir.glob(File.join(__dir__, "support/**/*.rb")).each { |f| load f }
+
+
 RSpec.configure do |config|
   # Enable flags like --only-failures and --next-failure
   config.example_status_persistence_file_path = ".rspec_status"

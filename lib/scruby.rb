@@ -25,6 +25,7 @@ require "yaml"
 
 require_relative "scruby/version"
 require_relative "scruby/attributes"
+require_relative "scruby/ext/equatable"
 require_relative "scruby/encode"
 require_relative "scruby/env"
 require_relative "scruby/control_name"

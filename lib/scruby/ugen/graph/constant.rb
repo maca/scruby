@@ -2,6 +2,8 @@ module Scruby
   module Ugen
     class Graph
       class Constant
+        include Scruby::Ext::Equatable
+
         attr_reader :value, :graph
 
         def initialize(value, graph)
