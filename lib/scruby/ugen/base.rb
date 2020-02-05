@@ -1,6 +1,8 @@
 module Scruby
   module Ugen
     class Base
+      include PrettyInspectable
+
       attr_reader :inputs, :rate, :channels
 
       def initialize(rate: :audio)
@@ -29,8 +31,7 @@ module Scruby
       end
 
       def inspect
-        "%s(%s, %s)" %
-          [ name, rate, inputs.map { |k, v| "#{k}: #{v}" }.join(", ") ]
+        super(rate: rate, **inputs)
       end
 
       def input_values

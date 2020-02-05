@@ -8,6 +8,7 @@ module Scruby
   class Server
     class Executable
       extend Forwardable
+      include PrettyInspectable
 
       attr_reader :options, :binary, :pid, :read
 
@@ -44,7 +45,7 @@ module Scruby
       end
 
       def inspect
-        "#<#{self.class.name} binary: #{binary}, port: #{options.port}>"
+        super(binary: binary, port: port)
       end
 
       def to_s

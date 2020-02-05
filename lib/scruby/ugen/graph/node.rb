@@ -6,17 +6,20 @@ module Scruby
     class Graph
       class Node
         include Scruby::Encode
-        include Scruby::Ext::Equatable
+        include Scruby::Equatable
+        include Scruby::PrettyInspectable
 
         attr_reader :constants, :nodes, :value, :graph
 
         def initialize(value, graph)
           grouped = map_inputs(value.input_values)
 
+          init_block = ->(init) { init.call(graph) }
+
           @value = value
           @graph = graph
-          @nodes = grouped[:ugens].map(&:call)
-          @constants = grouped[:values].map(&:call)
+          @nodes = grouped[:ugens].map(&init_block)
+          @constants = grouped[:values].map(&init_block)
 
           graph.add(self)
         end
@@ -45,9 +48,9 @@ module Scruby
           inputs.inject(hash) do |acc, input|
             case input
             when Ugen::Base
-              acc[:ugens] << ->(){ Node.new(input, graph) }
+              acc[:ugens] << Node.method(:new).curry(2).call(input)
             else
-              acc[:values] << ->(){ Constant.new(input, graph) }
+              acc[:values] << Constant.method(:new).curry(2).call(input)
             end
 
             acc
@@ -76,7 +79,7 @@ module Scruby
         end
 
         def inspect
-          "#{self.class.name}(#{value})"
+          super(value: value)
         end
       end
     end

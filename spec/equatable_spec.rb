@@ -1,9 +1,9 @@
-RSpec.describe Ext::Equatable do
+RSpec.describe Equatable do
   include Scruby
 
   let(:equatable_class) do
     Class.new do
-      include Ext::Equatable
+      include Equatable
 
       def initialize(value)
         @value = value

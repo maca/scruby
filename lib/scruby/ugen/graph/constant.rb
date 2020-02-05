@@ -2,7 +2,8 @@ module Scruby
   module Ugen
     class Graph
       class Constant
-        include Scruby::Ext::Equatable
+        include Scruby::Equatable
+        include Scruby::PrettyInspectable
 
         attr_reader :value, :graph
 
@@ -18,7 +19,7 @@ module Scruby
         end
 
         def inspect
-          "#{self.class.name}(#{value})"
+          super(value: value)
         end
       end
     end
