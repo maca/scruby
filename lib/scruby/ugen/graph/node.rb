@@ -6,6 +6,7 @@ module Scruby
     class Graph
       class Node
         include Scruby::Encode
+        include Scruby::Ext::Equatable
 
         attr_reader :constants, :nodes, :value, :graph
 
