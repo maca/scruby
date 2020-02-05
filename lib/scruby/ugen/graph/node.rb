@@ -11,13 +11,12 @@ module Scruby
         attr_reader :constants, :nodes, :value, :graph
 
         def initialize(value, graph)
-          ugens, values =
-            value.input_values.partition { |v| v.is_a?(Ugen::Base) }
+          grouped = map_inputs(value.input_values)
 
           @value = value
           @graph = graph
-          @nodes = ugens.map { |ugen| Node.new(ugen, graph) }
-          @constants = values.map { |val| Constant.new(val, graph) }
+          @nodes = grouped[:ugens].map(&:call)
+          @constants = grouped[:values].map(&:call)
 
           graph.add(self)
         end
@@ -39,6 +38,21 @@ module Scruby
         end
 
         private
+
+        def map_inputs(inputs)
+          hash = Hash.new{ |h, k| h.key?(k) ? h[k] : h[k] = [] }
+
+          inputs.inject(hash) do |acc, input|
+            case input
+            when Ugen::Base
+              acc[:ugens] << ->(){ Node.new(input, graph) }
+            else
+              acc[:values] << ->(){ Constant.new(input, graph) }
+            end
+
+            acc
+          end
+        end
 
         def output_index
           # Is it an output?
