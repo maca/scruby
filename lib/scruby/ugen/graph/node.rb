@@ -5,9 +5,15 @@ module Scruby
   module Ugen
     class Graph
       class Node
+        extend Forwardable
+
         include Encode
         include Equatable
         include PrettyInspectable
+
+        def_delegators :value, :name, :rate_index, :channels_count,
+                       :output_specs
+
 
         attr_reader :value, :inputs, :graph
 
@@ -24,13 +30,13 @@ module Scruby
 
         def encode
           [
-            encode_string(value.name),
-            encode_int8(value.rate_index),
+            encode_string(name),
+            encode_int8(rate_index),
             encode_int32(inputs.count),
-            encode_int32(value.channels_count),
+            encode_int32(channels_count),
             encode_int16(special_index),
             inputs.map { |i| i.input_specs(graph).pack("N*") },
-            value.output_specs.map { |i| encode_int8(i) }.join
+            output_specs.map { |i| encode_int8(i) }.join
           ].join
         end
 
