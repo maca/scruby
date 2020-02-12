@@ -12,8 +12,6 @@ Gem::Specification.new do |s|
   s.summary     = %q{SuperCollider client for Ruby}
   s.description = %q{SuperCollider client for Ruby}
 
-  s.rubyforge_project = "scruby"
-
   s.add_development_dependency 'rspec'
   s.add_development_dependency 'bundler'
   s.add_dependency 'ruby-osc', '~> 0.3'
