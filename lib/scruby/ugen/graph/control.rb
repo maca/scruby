@@ -19,8 +19,7 @@ module Scruby
         end
 
         def input_specs(graph)
-          [ 0, 0 ]
-          # [ graph.nodes.index(self), 0 ]
+          [ 0, graph.controls.values.index(self) ]
         end
 
         def inspect

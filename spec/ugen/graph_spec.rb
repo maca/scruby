@@ -36,9 +36,6 @@ RSpec.describe Ugen::Graph do
 
       subject(:graph) { described_class.new(ugen, name: :basic) }
 
-      it { expect(graph.constants.map(&:value)).to eq [ 440, 0, 1 ] }
-      it { expect(graph.nodes.map(&:value)).to eq [ sin_osc, ugen ] }
-
       it "should encode graph" do
         expect(graph.encode).to eq(expected)
       end
@@ -64,9 +61,6 @@ RSpec.describe Ugen::Graph do
         described_class.new(ugen, name: :basic,
                             controls: { buf: 1, rate: 220 })
       end
-
-      it { expect(graph.constants.map(&:value)).to eq [ 440, 0, 1 ] }
-      it { expect(graph.nodes.map(&:value)).to eq [ sin_osc, ugen ] }
 
       it "should encode graph" do
         expect(graph.encode).to eq(expected)

@@ -13,7 +13,7 @@ RSpec.describe Ugen::Graph::Node do
 
   shared_context "with graph constants" do
     before do
-      allow(node).to receive(:constants) { constants }
+      allow(graph).to receive(:constants) { constants }
     end
   end
 
@@ -74,8 +74,9 @@ RSpec.describe Ugen::Graph::Node do
       include_context "with graph"
       include_context "with graph constants" do
         let(:constants) do
-          [ instance_double("Constant", input_specs: [ -1, 0 ]),
-            instance_double("Constant", input_specs: [ -1, 1 ]) ]
+          [ Ugen::Graph::Constant.new(440),
+            Ugen::Graph::Constant.new(0)
+          ]
         end
       end
 
