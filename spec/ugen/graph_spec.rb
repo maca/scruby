@@ -1,7 +1,4 @@
-RSpec.describe Ugen::Graph do
-  include Scruby
-
-
+RSpec.describe Graph do
   describe "controls" do
     context "initialize with controls" do
       let(:root_ugen) { instance_double("Ugen::Base", input_values: []) }

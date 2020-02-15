@@ -32,10 +32,10 @@ require_relative "scruby/env"
 
 require_relative "scruby/ugen"
 require_relative "scruby/ugen/base"
-require_relative "scruby/ugen/graph"
-require_relative "scruby/ugen/graph/node"
-require_relative "scruby/ugen/graph/constant"
-require_relative "scruby/ugen/graph/control_name"
+require_relative "scruby/graph"
+require_relative "scruby/graph/node"
+require_relative "scruby/graph/constant"
+require_relative "scruby/graph/control_name"
 require_relative "scruby/ugen/ugen_operations"
 require_relative "scruby/ugen/multi_out"
 require_relative "scruby/ugen/operation_ugens"
@@ -437,14 +437,14 @@ include Ugens
 
 module Scruby
   def kr(val)
-    Ugen::Graph::ControlName.new(val, :control)
+    Graph::ControlName.new(val, :control)
   end
 
   def ir(val)
-    Ugen::Graph::ControlName.new(val, :scalar)
+    Graph::ControlName.new(val, :scalar)
   end
 
   def tr(val)
-    Ugen::Graph::ControlName.new(val, :trigger)
+    Graph::ControlName.new(val, :trigger)
   end
 end
