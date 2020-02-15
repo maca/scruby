@@ -1,5 +1,4 @@
 include Scruby
-include Ugens
 
 # class MockUgen < Ugen
 #   class << self; public :new; end

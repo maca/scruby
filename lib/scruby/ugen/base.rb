@@ -2,6 +2,7 @@ module Scruby
   module Ugen
     class Base
       include PrettyInspectable
+      include Operations
 
       attr_reader :inputs, :rate, :channels
 
@@ -12,12 +13,6 @@ module Scruby
       def rate(rate = nil)
         return @rate if rate.nil?
         dup.tap { |copy| copy.rate = rate }
-      end
-
-      # Instantiate a new MulAdd passing self and the multiplication
-      # and addition arguments
-      def muladd(mul, add)
-        MulAdd.new(self, mul, add)
       end
 
       def name
@@ -67,7 +62,7 @@ module Scruby
       class << self
         def rates(*rates)
           return [ *@rates ] if rates.empty?
-          @rates = rates
+          @rates = rates.flatten
         end
 
         def inputs(**specs)

@@ -30,15 +30,19 @@ require_relative "scruby/pretty_inspectable"
 require_relative "scruby/encode"
 require_relative "scruby/env"
 
-require_relative "scruby/ugen"
-require_relative "scruby/ugen/base"
+
 require_relative "scruby/graph"
 require_relative "scruby/graph/node"
 require_relative "scruby/graph/constant"
 require_relative "scruby/graph/control_name"
-require_relative "scruby/ugen/ugen_operations"
+
+require_relative "scruby/ugen"
+require_relative "scruby/ugen/operations"
+require_relative "scruby/ugen/base"
+require_relative "scruby/ugen/binary_op_ugen"
+require_relative "scruby/ugen/unary_op_ugen"
+
 require_relative "scruby/ugen/multi_out"
-require_relative "scruby/ugen/operation_ugens"
 
 require_relative "scruby/ugen/in"
 require_relative "scruby/ugen/out"
@@ -429,22 +433,6 @@ require_relative "scruby/group"
 
 require_relative "scruby/ticker"
 
+require_relative "scruby/helpers"
 
 include Scruby
-include Ugen
-include Ugens
-
-
-module Scruby
-  def kr(val)
-    Graph::ControlName.new(val, :control)
-  end
-
-  def ir(val)
-    Graph::ControlName.new(val, :scalar)
-  end
-
-  def tr(val)
-    Graph::ControlName.new(val, :trigger)
-  end
-end

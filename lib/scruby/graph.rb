@@ -9,7 +9,7 @@ module Scruby
       @controls = controls.map &method(:build_control_with_name)
       @nodes = []
       @constants = []
-      @root = Graph::Node.new(root, self)
+      @root = Node.new(root, self)
     end
 
     def add_node(node)
@@ -25,7 +25,7 @@ module Scruby
       return node unless node.nil?
 
       control = Control.new(rate: :control, control_names: controls)
-      Graph::Node.new(control, self)
+      Node.new(control, self)
     end
 
     def control_index(control)

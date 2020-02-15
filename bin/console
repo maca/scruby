@@ -13,7 +13,7 @@ $loader.enable_reloading
 $loader.setup
 Listen.to(*$loader.root_dirs.keys) { $loader.reload }.start
 
-include Scruby
+include Scruby::Helpers
 
 require "irb"
 IRB.start(__FILE__)
