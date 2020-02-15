@@ -23,6 +23,7 @@ module Scruby
           @inputs = value.input_values
                       .map(&method(:map_node))
                       .map(&method(:map_constant))
+                      .map(&method(:map_control_name))
                       .map(&method(:map_control))
 
           graph.add(self)
@@ -72,13 +73,14 @@ module Scruby
           Constant.new(value).tap { |const| graph.add_constant(const) }
         end
 
+        def map_control_name(name)
+          return name unless [ String, Symbol ].any? { |t| name.is_a?(t) }
+          graph.get_control(name)
+        end
+
         def map_control(value)
-          case value
-          when Symbol, String
-            graph.controls.fetch(value)
-          else
-            value
-          end
+          return value unless value.is_a?(Control)
+          value
         end
 
         def output_index

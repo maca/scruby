@@ -7,7 +7,7 @@ module Scruby
 
       def initialize(root, name: nil, controls: {})
         @name = name
-        @controls = controls.transform_values &method(:build_control)
+        @controls = controls.map(&method(:build_control))
         @nodes = [
           (ControlNode.new(controls) unless controls.size.zero?)
         ].compact
@@ -17,11 +17,20 @@ module Scruby
       end
 
       def add(node)
-        @nodes.push node
+        @nodes.push(node)
       end
 
       def add_constant(const)
-        @constants.push const
+        @constants.push(const)
+      end
+
+      # def add_control(name)
+      #   return default if default.is_a?(Control)
+      #   Control.new(default || 0)
+      # end
+
+      def control_index(control)
+        controls.index(control)
       end
 
       def encode
@@ -37,11 +46,19 @@ module Scruby
         ].join
       end
 
+      def get_control(name)
+        controls.find { |control| control.name.to_s == name.to_s } ||
+          raise(KeyError, "control not found (#{name})")
+      end
+
       private
 
-      def build_control(val)
-        return val if val.is_a?(Control)
-        Control.new(val)
+      def build_control(name, default)
+        control =
+          default.is_a?(Control) ? default : Control.new(default || 0)
+
+        control.name = name
+        control
       end
 
       def encode_constants
@@ -49,18 +66,12 @@ module Scruby
       end
 
       def encode_control_defaults
-        encode_floats_array controls.values.map(&:default)
+        encode_floats_array controls.map(&:default)
       end
 
       def encode_control_names
         encode_int32(controls.size) +
-          controls.each_with_index
-            .map(&method(:encode_control_name))
-            .flatten.join
-      end
-
-      def encode_control_name((name, control), index)
-        [ encode_string(name), encode_int32(index) ]
+          controls.map { |control| control.encode_name(self) }.join
       end
 
       def encode_nodes

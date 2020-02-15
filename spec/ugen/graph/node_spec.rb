@@ -30,11 +30,12 @@ RSpec.describe Ugen::Graph::Node do
     subject(:node) { described_class.new(root_ugen, graph) }
 
     before do
-      allow(graph).to receive(:controls) do
-        { k_1: Ugen::Graph::Control.new(1, :control),
-          k_2: Ugen::Graph::Control.new(2, :control),
-          k_3: Ugen::Graph::Control.new(3, :control)
-        }
+      allow(graph).to receive(:get_control).with(:k_1) do
+        Ugen::Graph::Control.new(1, :control)
+      end
+
+      allow(graph).to receive(:get_control).with(:k_2) do
+        Ugen::Graph::Control.new(2, :control)
       end
     end
 

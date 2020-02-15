@@ -4,26 +4,39 @@ module Scruby
       class Control
         include Equatable
         include PrettyInspectable
+        include Encode
 
         RATES = %i(scalar control trigger)
 
+        attr_accessor :name
         attr_reader :rate, :default
 
-        def initialize(default, rate = :control)
+        def initialize(default, rate = :control, name = nil)
           RATES.include?(rate) ||
             raise(ArgumentError,
                   "rate `#{rate}` is not one of `#{RATES}`")
 
           @rate = rate
           @default = default
+          @name = name
+        end
+
+        def encode_name(graph)
+          [ encode_string(name), encode_int32(index(graph)) ]
         end
 
         def input_specs(graph)
-          [ 0, graph.controls.values.index(self) ]
+          [ 0, index(graph) ]
         end
 
         def inspect
-          super(default: default, rate: rate)
+          super(name: name, default: default, rate: rate)
+        end
+
+        private
+
+        def index(graph)
+          graph.control_index(self)
         end
       end
     end
