@@ -28,14 +28,6 @@ module Scruby
       Graph::Node.new(control, self)
     end
 
-    def build_control_node(control_name)
-      node = nodes.find { |c| c.value.is_a?(Control) }
-      return node unless node.nil?
-
-      control = Control.new(rate: :control, control_names: controls)
-      Graph::Node.new(control, self)
-    end
-
     def control_index(control)
       controls.index(control)
     end
