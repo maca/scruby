@@ -31,9 +31,6 @@ RSpec.describe Graph do
         it_behaves_like "has controls"
       end
     end
-
-    context "build control" do
-    end
   end
 
   describe "building a graph" do

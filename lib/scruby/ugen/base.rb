@@ -6,7 +6,20 @@ module Scruby
 
       attr_reader :inputs, :rate, :channels
 
-      def initialize(rate: :audio)
+      def initialize(*args, rate: :audio, **kwargs)
+        attribute_names = self.class.attributes.keys
+        input_names = self.class.inputs.keys
+
+        assigns =
+          self.class.attributes.to_a +
+          self.class.inputs.to_a +
+          (attribute_names + input_names)[0...args.size].zip(args) +
+          kwargs.to_a
+
+        assigns.map do |name, val|
+          send("#{name}=", val.is_a?(Hash) ? val.fetch(rate) : val)
+        end
+
         self.rate = rate
       end
 
@@ -16,7 +29,7 @@ module Scruby
       end
 
       def name
-        (self.class.name || "Ugen").split("::").last
+        (self.class.name || "UGen").split("::").last.sub("Ugen", "UGen")
       end
 
       def ==(other)
@@ -26,7 +39,7 @@ module Scruby
       end
 
       def inspect
-        super(rate: rate, **inputs)
+        super(rate: rate, **attributes, **inputs)
       end
 
       def input_values
@@ -48,6 +61,14 @@ module Scruby
         1
       end
 
+      def inputs
+        {}
+      end
+
+      def attributes
+        {}
+      end
+
       protected
 
       def rate=(rate)
@@ -65,19 +86,19 @@ module Scruby
           @rates = rates.flatten
         end
 
-        def inputs(**specs)
-          return @specs || {} if specs.empty?
+        def inputs(**inputs)
+          return @inputs || {} if inputs.empty?
+          define_accessors(:inputs, inputs)
 
-          define_initialize(specs)
-          specs.each { |input_name, _| define_accessor(input_name) }
+          @inputs = inputs
+        end
 
-          define_method :inputs do
-            specs.map do |name, _|
-              [ name, instance_variable_get("@#{name}") ]
-            end.to_h
-          end
+        # TODO: no specs
+        def attributes(**attributes)
+          return @attributes || {} if attributes.empty?
+          define_accessors(:attributes, attributes)
 
-          @specs = specs
+          @attributes = attributes
         end
 
         def ar(*args, **kwargs)
@@ -97,20 +118,13 @@ module Scruby
 
         private
 
-        def define_initialize(_specs)
-          define_method :initialize do |*args, rate: :audio, **kwargs|
-            input_names = self.class.inputs.keys
+        def define_accessors(kind, spec)
+          spec.each { |name, _| define_accessor(name) }
 
-            assigns =
-              self.class.inputs.to_a +
-              input_names[0...args.size].zip(args) +
-              kwargs.to_a
-
-            assigns.map do |name, val|
-              send("#{name}=", val.is_a?(Hash) ? val[rate] : val)
-            end
-
-            super(rate: rate)
+          define_method kind do
+            spec.map do |name, _|
+              [ name, instance_variable_get("@#{name}") ]
+            end.to_h
           end
         end
 
