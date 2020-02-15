@@ -1,7 +1,7 @@
 module Scruby
   module Ugen
     class Graph
-      class ControlNode < Ugen::Base
+      class ControlNode
         include Encode
 
         attr_reader :controls
@@ -14,9 +14,35 @@ module Scruby
           "Control"
         end
 
+        def rate
+          :control
+        end
+
+        def rate_index
+          E_RATES.index(rate)
+        end
+
+        def inputs
+          []
+        end
+
+        def special_index
+          0
+        end
+
+        def output_specs
+          controls.map { |c| E_RATES.index(c.rate) }
+        end
+
         def encode
-          [ 7, 67, 111, 110, 116, 114,
-            111, 108, 1, 0, 0, 0, 0, 0, 0, 0, 2, 0, 0, 1, 1 ].pack("C*")
+          [
+            encode_string(name),
+            encode_int8(rate_index),
+            encode_int32(inputs.count),
+            encode_int32(controls.count),
+            encode_int16(special_index),
+            output_specs.map { |i| encode_int8(i) }.join
+          ].join
         end
       end
     end

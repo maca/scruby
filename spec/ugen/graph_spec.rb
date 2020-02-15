@@ -16,16 +16,16 @@ RSpec.describe Ugen::Graph do
 
       shared_examples_for "has controls" do
         it { expect(graph.controls)
-               .to include(Ugen::Graph::Control.new(1, :control, :k_1)) }
+               .to include(Graph::ControlName.new(1, :control, :k_1)) }
 
         it { expect(graph.controls)
-               .to include(Ugen::Graph::Control.new(2, :scalar, :k_2)) }
+               .to include(Graph::ControlName.new(2, :scalar, :k_2)) }
 
         it { expect(graph.controls)
-               .to include(Ugen::Graph::Control.new(3, :trigger, :k_3)) }
+               .to include(Graph::ControlName.new(3, :trigger, :k_3)) }
 
         it { expect(graph.controls)
-               .to include(Ugen::Graph::Control.new(4, :control, :k_4)) }
+               .to include(Graph::ControlName.new(4, :control, :k_4)) }
       end
 
       it_behaves_like "has controls"

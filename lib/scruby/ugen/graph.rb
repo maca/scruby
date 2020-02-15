@@ -13,7 +13,7 @@ module Scruby
         @root = Node.new(root, self)
       end
 
-      def add(node)
+      def add_node(node)
         @nodes.push(node)
       end
 
@@ -23,7 +23,7 @@ module Scruby
 
       def add_control(control)
         if nodes.none? { |c| c.is_a?(ControlNode) }
-          add ControlNode.new(controls)
+          add_node ControlNode.new(controls)
         end
 
         control
@@ -58,8 +58,8 @@ module Scruby
       end
 
       def build_control(default)
-        return default if default.is_a?(Control)
-        Control.new(default)
+        return default if default.is_a?(ControlName)
+        ControlName.new(default)
       end
 
       def encode_constants

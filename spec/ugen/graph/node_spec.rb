@@ -6,7 +6,7 @@ RSpec.describe Ugen::Graph::Node do
     let(:graph) { instance_double("Scruby::Ugen::Graph") }
 
     before do
-      allow(graph).to receive(:add)
+      allow(graph).to receive(:add_node)
       allow(graph).to receive(:add_constant)
     end
   end
@@ -28,8 +28,8 @@ RSpec.describe Ugen::Graph::Node do
     end
 
     let(:controls) do
-      [ Ugen::Graph::Control.new(1, :control),
-        Ugen::Graph::Control.new(2, :control)
+      [ Ugen::Graph::ControlName.new(1, :control),
+        Ugen::Graph::ControlName.new(2, :control)
       ]
     end
 

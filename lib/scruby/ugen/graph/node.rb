@@ -26,7 +26,7 @@ module Scruby
                       .map(&method(:map_control_name))
                       .map(&method(:map_control))
 
-          graph.add(self)
+          graph.add_node(self)
         end
 
         def encode
@@ -50,7 +50,7 @@ module Scruby
         end
 
         def controls
-          inputs.select { |i| i.is_a?(Control) }
+          inputs.select { |i| i.is_a?(ControlName) }
         end
 
         def input_specs(_)
@@ -81,7 +81,7 @@ module Scruby
         end
 
         def map_control(value)
-          return value unless value.is_a?(Control)
+          return value unless value.is_a?(ControlName)
           graph.add_control(value)
         end
 

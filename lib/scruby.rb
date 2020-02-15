@@ -29,7 +29,6 @@ require_relative "scruby/equatable"
 require_relative "scruby/pretty_inspectable"
 require_relative "scruby/encode"
 require_relative "scruby/env"
-require_relative "scruby/control_name"
 
 require_relative "scruby/ugen"
 require_relative "scruby/ugen/base"
@@ -37,7 +36,7 @@ require_relative "scruby/ugen/graph"
 require_relative "scruby/ugen/graph/node"
 require_relative "scruby/ugen/graph/control_node"
 require_relative "scruby/ugen/graph/constant"
-require_relative "scruby/ugen/graph/control"
+require_relative "scruby/ugen/graph/control_name"
 require_relative "scruby/ugen/ugen_operations"
 require_relative "scruby/ugen/multi_out"
 require_relative "scruby/ugen/operation_ugens"
@@ -416,12 +415,12 @@ require_relative "scruby/ugen/x_out"
 require_relative "scruby/ugen/zero_crossing"
 require_relative "scruby/ugen/replace_out"
 
-require_relative "scruby/synth_def"
-
 require_relative "scruby/server"
 require_relative "scruby/server/executable/options"
 require_relative "scruby/server/executable"
 
+
+require_relative "scruby/synth_def"
 require_relative "scruby/node"
 require_relative "scruby/synth"
 require_relative "scruby/bus"
@@ -432,19 +431,20 @@ require_relative "scruby/ticker"
 
 
 include Scruby
+include Ugen
 include Ugens
 
 
 module Scruby
   def kr(val)
-    Ugen::Graph::Control.new(val, :control)
+    Ugen::Graph::ControlName.new(val, :control)
   end
 
   def ir(val)
-    Ugen::Graph::Control.new(val, :scalar)
+    Ugen::Graph::ControlName.new(val, :scalar)
   end
 
   def tr(val)
-    Ugen::Graph::Control.new(val, :trigger)
+    Ugen::Graph::ControlName.new(val, :trigger)
   end
 end
