@@ -7,12 +7,9 @@ module Scruby
 
       def initialize(root, name: nil, controls: {})
         @name = name
-        @controls = controls.map(&method(:build_control))
-        @nodes = [
-          (ControlNode.new(controls) unless controls.size.zero?)
-        ].compact
+        @controls = controls.map &method(:build_control_with_name)
+        @nodes = []
         @constants = []
-
         @root = Node.new(root, self)
       end
 
@@ -24,10 +21,13 @@ module Scruby
         @constants.push(const)
       end
 
-      # def add_control(name)
-      #   return default if default.is_a?(Control)
-      #   Control.new(default || 0)
-      # end
+      def add_control(control)
+        if nodes.none? { |c| c.is_a?(ControlNode) }
+          add ControlNode.new(controls)
+        end
+
+        control
+      end
 
       def control_index(control)
         controls.index(control)
@@ -47,18 +47,19 @@ module Scruby
       end
 
       def get_control(name)
-        controls.find { |control| control.name.to_s == name.to_s } ||
+        controls.find { |control| control.name == name.to_sym } ||
           raise(KeyError, "control not found (#{name})")
       end
 
       private
 
-      def build_control(name, default)
-        control =
-          default.is_a?(Control) ? default : Control.new(default || 0)
+      def build_control_with_name(name, default)
+        build_control(default).tap { |control| control.name = name }
+      end
 
-        control.name = name
-        control
+      def build_control(default)
+        return default if default.is_a?(Control)
+        Control.new(default)
       end
 
       def encode_constants

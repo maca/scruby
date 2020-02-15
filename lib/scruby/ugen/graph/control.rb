@@ -8,8 +8,7 @@ module Scruby
 
         RATES = %i(scalar control trigger)
 
-        attr_accessor :name
-        attr_reader :rate, :default
+        attr_reader :rate, :default, :name
 
         def initialize(default, rate = :control, name = nil)
           RATES.include?(rate) ||
@@ -17,8 +16,12 @@ module Scruby
                   "rate `#{rate}` is not one of `#{RATES}`")
 
           @rate = rate
-          @default = default
+          @default = default || 0
           @name = name
+        end
+
+        def name=(name)
+          @name = name.to_sym
         end
 
         def encode_name(graph)

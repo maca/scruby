@@ -27,16 +27,26 @@ RSpec.describe Ugen::Graph::Node do
       instance_double("Ugen::Base", input_values: inputs)
     end
 
+    let(:controls) do
+      [ Ugen::Graph::Control.new(1, :control),
+        Ugen::Graph::Control.new(2, :control)
+      ]
+    end
+
     subject(:node) { described_class.new(root_ugen, graph) }
 
     before do
-      allow(graph).to receive(:get_control).with(:k_1) do
-        Ugen::Graph::Control.new(1, :control)
-      end
+      allow(graph).to receive(:get_control)
+                        .with(:k_1) { controls.first }
 
-      allow(graph).to receive(:get_control).with(:k_2) do
-        Ugen::Graph::Control.new(2, :control)
-      end
+      allow(graph).to receive(:get_control)
+                        .with(:k_2) { controls.last }
+
+      allow(graph).to receive(:add_control)
+                        .with(controls.first) { controls.first}
+
+      allow(graph).to receive(:add_control)
+                        .with(controls.last) { controls.last}
     end
 
     let(:inputs) do
@@ -61,10 +71,7 @@ RSpec.describe Ugen::Graph::Node do
     end
 
     it "sets controls" do
-      expect(node.controls)
-        .to eq [ Ugen::Graph::Control.new(1, :control),
-                 Ugen::Graph::Control.new(2, :control)
-               ]
+      expect(node.controls).to eq controls
     end
   end
 
