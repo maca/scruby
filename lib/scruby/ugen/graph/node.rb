@@ -77,12 +77,12 @@ module Scruby
           return name unless [ String, Symbol ]
                                .any? { |t| name.is_a?(t) }
 
-          graph.get_control(name)
+          graph.get_control_name(name)
         end
 
         def map_control(value)
           return value unless value.is_a?(ControlName)
-          graph.add_control(value)
+          graph.add_control(value) && value
         end
 
         def output_index

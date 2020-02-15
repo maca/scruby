@@ -36,17 +36,5 @@ module Scruby
 
       def index; @source.index; end
     end
-
-    class Control < Ugen::Base #:nodoc:
-      include MultiOut
-
-      def initialize(rate, *names)
-        super rate, names.each_with_index.map { |n, i| OutputProxy.new rate, self, i, n }
-      end
-
-      def self.and_proxies_from(names)
-        new names.first.rate, *names
-      end
-    end
   end
 end

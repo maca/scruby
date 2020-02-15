@@ -6,14 +6,12 @@ module Scruby
         include PrettyInspectable
         include Encode
 
-        RATES = %i(scalar control trigger)
-
-        attr_reader :rate, :default, :name
+        attr_reader :default, :rate, :name
 
         def initialize(default, rate = :control, name = nil)
-          RATES.include?(rate) ||
+          rates.include?(rate) ||
             raise(ArgumentError,
-                  "rate `#{rate}` is not one of `#{RATES}`")
+                  "rate `#{rate}` is not one of `#{rates}`")
 
           @rate = rate
           @default = default || 0
@@ -22,6 +20,14 @@ module Scruby
 
         def name=(name)
           @name = name.to_sym
+        end
+
+        def rates
+          Ugen::Control.rates
+        end
+
+        def rate_index
+          E_RATES.index(rate)
         end
 
         def encode_name(graph)

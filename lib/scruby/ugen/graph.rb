@@ -22,11 +22,19 @@ module Scruby
       end
 
       def add_control(control)
-        if nodes.none? { |c| c.is_a?(ControlNode) }
-          add_node ControlNode.new(controls)
-        end
+        node = nodes.find { |c| c.value.is_a?(Control) }
+        return node unless node.nil?
 
-        control
+        control = Control.new(rate: :control, control_names: controls)
+        Node.new(control, self)
+      end
+
+      def build_control_node(control_name)
+        node = nodes.find { |c| c.value.is_a?(Control) }
+        return node unless node.nil?
+
+        control = Control.new(rate: :control, control_names: controls)
+        Node.new(control, self)
       end
 
       def control_index(control)
@@ -46,7 +54,7 @@ module Scruby
         ].join
       end
 
-      def get_control(name)
+      def get_control_name(name)
         controls.find { |control| control.name == name.to_sym } ||
           raise(KeyError, "control not found (#{name})")
       end
