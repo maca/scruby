@@ -13,11 +13,12 @@ module Scruby
     end
 
     def add_node(node)
-      @nodes.push(node)
+      nodes.push(node)
     end
 
     def add_constant(const)
-      @constants.push(const)
+      return constants if constants.include?(const)
+      constants.push(const)
     end
 
     def add_control(control)
