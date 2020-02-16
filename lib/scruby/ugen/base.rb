@@ -33,12 +33,8 @@ module Scruby
         (self.class.name || "UGen").split("::").last.sub("Ugen", "UGen")
       end
 
-      def inspect
-        super(rate: rate, **attributes, **inputs)
-      end
-
       def input_values
-        inputs.values.flatten
+        inputs.values
       end
 
       # TODO: no specs
@@ -52,16 +48,12 @@ module Scruby
       end
 
       # TODO: no specs
-      def channels_count
-        1
-      end
+      def channels_count; 1 end
+      def inputs; {} end
+      def attributes; {} end
 
-      def inputs
-        {}
-      end
-
-      def attributes
-        {}
+      def inspect
+        super(rate: rate, **attributes, **inputs)
       end
 
       protected

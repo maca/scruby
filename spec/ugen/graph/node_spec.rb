@@ -36,10 +36,10 @@ RSpec.describe Graph::Node do
     subject(:node) { described_class.new(root_ugen, graph) }
 
     before do
-      allow(graph).to receive(:get_control_name)
+      allow(graph).to receive(:control_name)
                         .with(:k_1) { controls.first }
 
-      allow(graph).to receive(:get_control_name)
+      allow(graph).to receive(:control_name)
                         .with(:k_2) { controls.last }
 
       allow(graph).to receive(:add_control)

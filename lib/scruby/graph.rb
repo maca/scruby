@@ -33,10 +33,14 @@ module Scruby
       controls.index(control)
     end
 
+    def control_name(name)
+      controls.find { |control| control.name == name.to_sym } ||
+        raise(KeyError, "control not found (#{name})")
+    end
+
     def encode
-      [ "SCgf",
-        encode_int32(2), # file version
-        encode_int16(1), # number of defs
+      [
+        init_stream(1),
         encode_string(name),
         encode_constants,
         encode_control_defaults,
@@ -46,12 +50,12 @@ module Scruby
       ].join
     end
 
-    def get_control_name(name)
-      controls.find { |control| control.name == name.to_sym } ||
-        raise(KeyError, "control not found (#{name})")
-    end
-
     private
+
+    def init_stream(def_count = 1)
+      version = 2
+      [ "SCgf", encode_int32(version), encode_int16(def_count) ].join
+    end
 
     def build_control_with_name(name, default)
       build_control(default).tap { |control| control.name = name }
