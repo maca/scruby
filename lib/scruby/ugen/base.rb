@@ -88,7 +88,6 @@ module Scruby
           @inputs = inputs
         end
 
-        # TODO: no specs
         def attributes(**attributes)
           return @attributes || {} if attributes.empty?
           define_accessors(:attributes, attributes)
