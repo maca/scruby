@@ -9,7 +9,7 @@ module Scruby
       @controls = controls.map &method(:build_control_with_name)
       @nodes = []
       @constants = []
-      @root = Node.new(root, self)
+      @root = Node.build(root, self)
     end
 
     def add_node(node)
@@ -22,11 +22,11 @@ module Scruby
     end
 
     def add_control(control)
-      node = nodes.find { |c| c.value.is_a?(Control) }
+      node = nodes.find { |c| c.ugen.is_a?(Control) }
       return node unless node.nil?
 
       control = Control.new(rate: :control, control_names: controls)
-      Node.new(control, self)
+      Node.build(control, self)
     end
 
     def control_index(control)

@@ -24,17 +24,5 @@ module Scruby
         end
       end
     end
-
-    class OutputProxy < Ugen::Base #:nodoc:
-      attr_reader :source, :control_name, :output_index
-      class << self; public :new; end
-
-      def initialize(rate, source, output_index, name = nil)
-        super rate
-        @source, @control_name, @output_index = source, name, output_index
-      end
-
-      def index; @source.index; end
-    end
   end
 end
