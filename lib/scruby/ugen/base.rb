@@ -1,10 +1,11 @@
 module Scruby
   module Ugen
     class Base
+      include Equatable
       include PrettyInspectable
       include Operations
 
-      attr_reader :inputs, :rate, :channels
+      attr_reader :inputs, :channels
 
       def initialize(*args, rate: :audio, **kwargs)
         attribute_names = self.class.attributes.keys
@@ -30,12 +31,6 @@ module Scruby
 
       def name
         (self.class.name || "UGen").split("::").last.sub("Ugen", "UGen")
-      end
-
-      def ==(other)
-        self.class == other.class &&
-          rate == other.rate &&
-          inputs == other.inputs
       end
 
       def inspect

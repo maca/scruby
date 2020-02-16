@@ -67,8 +67,18 @@ RSpec.describe Ugen::Base do
   end
 
 
-  describe "#input" do
-    shared_examples_for "defines setter methods" do
+  describe "#initialize" do
+    let(:subclass) do
+      Class.new(Ugen::Base) do
+        rates :audio
+        attributes foo: :bar
+        inputs freq: 440, phase: 0
+      end
+    end
+
+    describe "defines setter methods" do
+      subject(:instance) { subclass.new(rate: :audio) }
+
       context "change freq" do
         let(:copy) { instance.freq(220) }
         it { expect(copy.freq).to eq 220 }
@@ -81,6 +91,12 @@ RSpec.describe Ugen::Base do
         it_behaves_like "instance is copied"
       end
 
+      context "change attribute" do
+        let(:copy) { instance.foo(:baz) }
+        it { expect(copy.foo).to eq :baz }
+        it_behaves_like "instance is copied"
+      end
+
       context "changes both freq and phase" do
         let(:copy) { instance.freq(220).phase(0.5) }
         it { expect(copy.freq).to eq 220 }
@@ -90,57 +106,35 @@ RSpec.describe Ugen::Base do
     end
 
     context "initialize with defaults" do
-      let(:subclass) do
-        Class.new(Ugen::Base) do
-          rates :audio
-          inputs freq: 440, phase: 0
-        end
-      end
-
       subject(:instance) { subclass.new(rate: :audio) }
 
-      describe "defines getter methods" do
+      describe "sets values" do
+        it { expect(instance.foo).to be :bar }
         it { expect(instance.freq).to be 440 }
         it { expect(instance.phase).to be 0 }
       end
-
-      it_behaves_like "defines setter methods"
     end
 
     context "initialize with named params" do
-      let(:subclass) do
-        Class.new(Ugen::Base) do
-          rates :audio, :control
-          inputs freq: 440, phase: 0
-        end
-      end
-
       subject(:instance) do
-        subclass.new(rate: :audio, phase: 1, freq: 880)
+        subclass.new(rate: :audio, foo: :baz, phase: 1, freq: 880)
       end
 
-      describe "defines getter methods" do
+      describe "sets values" do
+        it { expect(instance.foo).to be :baz }
         it { expect(instance.freq).to be 880 }
         it { expect(instance.phase).to be 1 }
       end
-
-      it_behaves_like "defines setter methods"
     end
 
     context "initialize with positional arguments" do
-      let(:subclass) do
-        Class.new(Ugen::Base) do
-          rates :audio, :control
-          inputs freq: 440, phase: 0
-        end
-      end
-
       context "one argument is passed" do
         subject(:instance) do
-          subclass.new(220, rate: :audio)
+          subclass.new(:baz, 220, rate: :audio)
         end
 
         describe "sets values" do
+          it { expect(instance.foo).to be :baz }
           it { expect(instance.freq).to be 220 }
           it { expect(instance.phase).to be 0 }
         end
@@ -148,10 +142,11 @@ RSpec.describe Ugen::Base do
 
       context "all arguments are passed" do
         subject(:instance) do
-          subclass.new(220, 1, rate: :audio)
+          subclass.new(:baz, 220, 1, rate: :audio)
         end
 
         describe "sets values" do
+          it { expect(instance.foo).to be :baz }
           it { expect(instance.freq).to be 220 }
           it { expect(instance.phase).to be 1 }
         end
@@ -159,10 +154,11 @@ RSpec.describe Ugen::Base do
 
       context "argument is overriden" do
         subject(:instance) do
-          subclass.new(220, 1, freq: 300, rate: :audio)
+          subclass.new(:baz, 220, 1, freq: 300, rate: :audio)
         end
 
         describe "sets values" do
+          it { expect(instance.foo).to be :baz }
           it { expect(instance.freq).to be 300 }
           it { expect(instance.phase).to be 1 }
         end
@@ -173,6 +169,7 @@ RSpec.describe Ugen::Base do
       let(:subclass) do
         Class.new(Ugen::Base) do
           rates :audio, :control
+          attributes foo: :bar
           inputs freq: { audio: 440, control: 10 }, phase: 0
         end
       end
@@ -180,23 +177,19 @@ RSpec.describe Ugen::Base do
       context "audio rate" do
         subject(:instance) { subclass.new(rate: :audio) }
 
-        describe "defines getter methods" do
+        describe "sets values" do
           it { expect(instance.freq).to be 440 }
           it { expect(instance.phase).to be 0 }
         end
-
-        it_behaves_like "defines setter methods"
       end
 
       context "control rate" do
         subject(:instance) { subclass.new(rate: :control) }
 
-        describe "defines getter methods" do
+        describe "sets values" do
           it { expect(instance.freq).to be 10 }
           it { expect(instance.phase).to be 0 }
         end
-
-        it_behaves_like "defines setter methods"
       end
     end
   end
@@ -266,56 +259,7 @@ end
 
 
 
-#   describe "operations" do
-#     before :all do
-#       @op_ugen    = double("op_ugen")
-#       UnaryOpUGen = double "unary_op_ugen",  new: @op_ugen
-#     end
 
-#     before do
-#       @ugen  = audio_rate_ugen
-#       @ugen2 = audio_rate_ugen
-#     end
-
-#     it do # this specs all binary operations
-#       expect(@ugen).to respond_to(:+)
-#     end
-
-#     it "should sum" do
-#       expect(@ugen + @ugen2).to be_a(BinaryOpUGen)
-#     end
-#   end
-
-#   describe "ugen graph in synth def" do
-#     before do
-#       Ugen.synthdef = nil
-#       @ugen = GenUgen.new(:audio, 1, 2)
-#       @ugen2 = GenUgen.new(:audio, 1, 2)
-#     end
-
-#     it "should not have synthdef" do
-#       expect(GenUgen.new(:audio, 1, 2).send(:synthdef)).to be_nil
-#     end
-
-#     it "should have 0 as index if not belonging to ugen" do
-#       expect(GenUgen.new(:audio, 1, 2).index).to be_zero
-#     end
-
-
-#     it "should collect constants" do
-#       expect(GenUgen.new(:audio, 100, @ugen, 200).send(:collect_constants).flatten.sort).to eq([1, 2, 100, 200])
-#     end
-
-#     it "should collect constants on arrayed inputs" do
-#       expect(GenUgen.new(:audio, 100, [@ugen, [200, @ugen2, 100]]).send(:collect_constants).flatten.uniq.sort).to eq([1, 2, 100, 200])
-#     end
-
-#   end
-
-#   describe "initialization and inputs" do
-#     before do
-#       @ugen = GenUgen.new(:audio, 1, 2, 3)
-#     end
 
 
 #   describe "initialization with array as argument" do
