@@ -9,7 +9,7 @@ module Scruby
       @controls = controls.map &method(:build_control_with_name)
       @nodes = []
       @constants = []
-      @root = Node.build(root, self)
+      @root = Node.build_root(root, self)
     end
 
     def add_node(node)

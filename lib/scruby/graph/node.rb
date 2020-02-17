@@ -19,7 +19,10 @@ module Scruby
       def initialize(ugen, inputs, graph)
         @ugen = ugen
         @graph = graph
-        @inputs = map_inputs(inputs, graph).flatten
+        @inputs = inputs
+                    .map(&method(:map_constant))
+                    .map(&method(:map_control_name))
+                    .map(&method(:map_control))
 
         graph.add_node(self)
       end
@@ -58,52 +61,66 @@ module Scruby
 
       private
 
-      def output_index; 0 end
-      def special_index; 0 end
-
-      def map_inputs(inputs, graph)
-        inputs.map { |e| map_node(e, graph)}
-          .map { |e| map_constant(e, graph) }
-          .map { |e| map_control_name(e, graph) }
-          .map { |e| map_control(e, graph) }
-      end
-
-      def map_node(elem, graph)
-        return elem unless elem.is_a?(Ugen::Base)
-        Node.build(elem, graph)
-      end
-
-      def map_constant(elem, graph)
+      def map_constant(elem)
         return elem unless elem.is_a?(Numeric)
         Constant.new(elem).tap { |const| graph.add_constant(const) }
       end
 
-      def map_control_name(name, graph)
+      def map_control_name(name)
         return name unless [ String, Symbol ]
                               .any? { |t| name.is_a?(t) }
 
         graph.control_name(name)
       end
 
-      def map_control(elem, graph)
+      def map_control(elem)
         return elem unless elem.is_a?(ControlName)
         graph.add_control(elem) && elem
       end
 
-      class << self
-        def build(ugen, graph)
-          values = ugen.input_values
+      def output_index; 0 end
+      def special_index; 0 end
 
-          unless values.any? { |e| e.is_a?(Array) }
-            return new(ugen, values, graph)
+      class << self
+        def build_root(ugen, graph)
+          new(ugen, map_inputs(ugen.input_values, graph).flatten, graph)
+        end
+
+        def build(ugen, graph)
+          do_build(ugen, ugen.input_values, graph)
+        end
+
+        private
+
+        def do_build(ugen, inputs, graph)
+          inputs = map_inputs(inputs, graph)
+
+          unless inputs.any? { |i| i.is_a?(Array) }
+            return new(ugen, inputs, graph)
           end
 
-          wrapped = values.map { |elem| [*elem] }
+          wrapped = inputs.map { |elem| [*elem] }
           size = wrapped.max_by(&:size).size
 
           wrapped.map { |elem| elem.cycle.take(size) }
             .transpose
-            .map { |inputs| new(ugen, inputs, graph) }
+            .map { |inputs| do_build(ugen, inputs, graph) }
+        end
+
+        def map_inputs(inputs, graph)
+          inputs
+            .map { |e| map_array(e, graph) }
+            .map { |e| map_node(e, graph) }
+        end
+
+        def map_array(elem, graph)
+          return elem unless elem.is_a?(Array)
+          map_inputs(elem, graph)
+        end
+
+        def map_node(elem, graph)
+          return elem unless elem.is_a?(Ugen::Base)
+          Node.build(elem, graph)
         end
       end
     end
