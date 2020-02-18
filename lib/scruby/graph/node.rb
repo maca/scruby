@@ -102,7 +102,7 @@ module Scruby
             return new(ugen, inputs, graph)
           end
 
-          wrapped = inputs.map { |elem| [*elem] }
+          wrapped = inputs.map { |elem| [ *elem ] }
           max_size = wrapped.max_by(&:size).size
 
           wrapped.map { |elem| elem.cycle.take(max_size) }
