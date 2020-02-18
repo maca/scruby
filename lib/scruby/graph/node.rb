@@ -114,17 +114,22 @@ module Scruby
         end
 
         def map_inputs(inputs, graph)
-          inputs.map { |e| map_node map_array(e, graph), graph }
+          inputs.map &curry(:map_array, graph) >>
+                      curry(:map_node, graph)
         end
 
-        def map_array(elem, graph)
+        def map_array(graph, elem)
           return elem unless elem.is_a?(Array)
           map_inputs(elem, graph)
         end
 
-        def map_node(elem, graph)
+        def map_node(graph, elem)
           return elem unless elem.is_a?(Ugen::Base)
           build(elem, graph)
+        end
+
+        def curry(name, *args)
+          args.reduce(method(name).to_proc.curry) { |f, a| f.call(a) }
         end
       end
     end
