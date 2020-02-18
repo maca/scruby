@@ -19,10 +19,11 @@ module Scruby
       def initialize(ugen, inputs, graph)
         @ugen = ugen
         @graph = graph
-        @inputs = inputs
-                    .map(&method(:map_constant))
-                    .map(&method(:map_control_name))
-                    .map(&method(:map_control))
+        @inputs = inputs.map(
+          &method(:map_constant) >>
+           method(:map_control_name) >>
+           method(:map_control)
+        )
 
         graph.add_node(self)
       end
@@ -100,17 +101,15 @@ module Scruby
           end
 
           wrapped = inputs.map { |elem| [*elem] }
-          size = wrapped.max_by(&:size).size
+          max_size = wrapped.max_by(&:size).size
 
-          wrapped.map { |elem| elem.cycle.take(size) }
+          wrapped.map { |elem| elem.cycle.take(max_size) }
             .transpose
             .map { |inputs| do_build(ugen, inputs, graph) }
         end
 
         def map_inputs(inputs, graph)
-          inputs
-            .map { |e| map_array(e, graph) }
-            .map { |e| map_node(e, graph) }
+          inputs.map { |e| map_node map_array(e, graph), graph }
         end
 
         def map_array(elem, graph)
@@ -120,7 +119,7 @@ module Scruby
 
         def map_node(elem, graph)
           return elem unless elem.is_a?(Ugen::Base)
-          Node.build(elem, graph)
+          build(elem, graph)
         end
       end
     end
