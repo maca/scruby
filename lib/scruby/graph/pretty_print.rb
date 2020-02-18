@@ -1,38 +1,34 @@
 module Scruby
   class Graph
     module PrettyPrint
-      def print_node(level = 0)
-        puts do_print_node(level)
+      def print
+        puts print_node(self, [], "")
       end
 
       protected
 
-      def do_print_node(level)
-        level = level + 1
+      def print_node(node, siblings, padding)
+        last = node == siblings.last
+        inputs = node.send(:inputs)
 
-        # space_one = " " * level
-        # space = "  " * (level + 1)
+        child_padding =
+          case
+          when siblings.empty?
+            padding
+          when last
+            padding + "    "
+          else
+            padding + " │  "
+          end
 
         [
-          print_name,
-          ("\n├" if inputs.any?),
-          inputs.map { |i| i.do_print_node(level) }.join
+          padding,
+          (" #{last ? '└' : '├'}─ " unless siblings.empty?),
+          node.send(:print_name),
+          ("\n" if inputs.any?),
+          inputs.map { |i| print_node(i, inputs, child_padding) },
+          ("\n" unless last)
         ].join
-
-
-        # [
-        #   print_name,
-        #   "\n",
-        #   space,
-        #   # "\n│\n",
-        #   # "├",
-        #   # "─" * (level + 1),
-        #   inputs.map { |input| input.do_print_node(level + 1) }
-        # ].join
-
-        # [ print_name,
-        #   inputs.map { |input| "   #{input.print_node}" },
-        # ].join("\n")
       end
     end
   end

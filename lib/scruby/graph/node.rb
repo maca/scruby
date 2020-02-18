@@ -20,11 +20,9 @@ module Scruby
       def initialize(ugen, inputs, graph)
         @ugen = ugen
         @graph = graph
-        @inputs = inputs.map(
-          &method(:map_constant) >>
-           method(:map_control_name) >>
-           method(:map_control)
-        )
+        @inputs = inputs.map &method(:map_constant) >>
+                              method(:map_control_name) >>
+                              method(:map_control)
 
         graph.add_node(self)
       end
