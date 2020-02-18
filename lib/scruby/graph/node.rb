@@ -129,7 +129,7 @@ module Scruby
         end
 
         def curry(name, *args)
-          args.reduce(method(name).to_proc.curry) { |f, a| f.call(a) }
+          method(name).to_proc.curry[*args]
         end
       end
     end
