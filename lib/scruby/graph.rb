@@ -50,6 +50,10 @@ module Scruby
       ].join
     end
 
+    def visualize
+      Visualize.print(root)
+    end
+
     private
 
     def init_stream(def_count = 1)

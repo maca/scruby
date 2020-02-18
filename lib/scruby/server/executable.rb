@@ -3,7 +3,6 @@ require "concurrent"
 require "forwardable"
 
 
-
 module Scruby
   class Server
     class Executable

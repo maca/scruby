@@ -3,7 +3,6 @@ module Scruby
     class Constant
       include Equatable
       include PrettyInspectable
-      include PrettyPrint
 
       attr_reader :value
 
@@ -19,14 +18,12 @@ module Scruby
         super(value: value)
       end
 
-      private
+      def print_name
+        value.to_s
+      end
 
       def inputs
         []
-      end
-
-      def print_name
-        value.to_s
       end
     end
   end

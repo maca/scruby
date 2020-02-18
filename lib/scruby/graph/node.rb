@@ -9,7 +9,6 @@ module Scruby
       include Encode
       include Equatable
       include PrettyInspectable
-      include PrettyPrint
 
       def_delegators :ugen, :name, :rate_index, :channels_count,
                      :output_specs

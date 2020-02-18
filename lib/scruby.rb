@@ -21,8 +21,6 @@ require "eventmachine"
 require "yaml"
 
 
-# require_relative "core_ext/delegator_array"
-
 require_relative "scruby/version"
 require_relative "scruby/attributes"
 require_relative "scruby/equatable"
@@ -32,7 +30,7 @@ require_relative "scruby/env"
 
 
 require_relative "scruby/graph"
-require_relative "scruby/graph/pretty_print"
+require_relative "scruby/graph/visualize"
 require_relative "scruby/graph/node"
 require_relative "scruby/graph/constant"
 require_relative "scruby/graph/control_name"
