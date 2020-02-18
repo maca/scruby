@@ -39,6 +39,7 @@ require_relative "scruby/graph/control_name"
 
 require_relative "scruby/ugen"
 require_relative "scruby/ugen/operations"
+require_relative "scruby/ugen/abstract_out"
 require_relative "scruby/ugen/base"
 require_relative "scruby/ugen/binary_op_ugen"
 require_relative "scruby/ugen/unary_op_ugen"
