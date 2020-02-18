@@ -9,6 +9,7 @@ module Scruby
       include Encode
       include Equatable
       include PrettyInspectable
+      include PrettyPrint
 
       def_delegators :ugen, :name, :rate_index, :channels_count,
                      :output_specs
@@ -58,6 +59,10 @@ module Scruby
 
       def inspect
         super(name: name, inputs: inputs)
+      end
+
+      def print_name
+        name
       end
 
       private
