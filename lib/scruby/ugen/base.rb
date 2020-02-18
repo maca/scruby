@@ -8,16 +8,13 @@ module Scruby
       attr_reader :inputs, :channels
 
       def initialize(*args, rate: :audio, **kwargs)
-        attribute_names = self.class.attributes.keys
-        input_names = self.class.inputs.keys
+        param_keys = self.class.attributes.keys + self.class.inputs.keys
+        defaults = self.class.attributes.to_a + self.class.inputs.to_a
+        params = param_keys[0...args.size].zip(args) + kwargs.to_a
 
-        assigns =
-          self.class.attributes.to_a +
-          self.class.inputs.to_a +
-          (attribute_names + input_names)[0...args.size].zip(args) +
-          kwargs.to_a
+        @applied = params.map(&:first)
 
-        assigns.map do |name, val|
+        defaults.concat(params).map do |name, val|
           send("#{name}=", val.is_a?(Hash) ? val.fetch(rate) : val)
         end
 
@@ -53,10 +50,24 @@ module Scruby
       def attributes; {} end
 
       def inspect
-        super(rate: rate, **attributes, **inputs)
+        super(rate: rate, **params)
+      end
+
+      def params
+        attributes.merge(inputs)
+      end
+
+      def >> receiver
+        receiver.apply(self)
+      end
+
+      def << input
+        apply(input)
       end
 
       protected
+
+      attr_reader :applied
 
       def rate=(rate)
         unless self.class.rates.include?(rate.to_sym)
@@ -65,6 +76,11 @@ module Scruby
         end
 
         @rate = rate
+      end
+
+      def apply(value)
+        method = (params.keys - applied).first
+        send(method, value)
       end
 
       class << self
@@ -121,7 +137,11 @@ module Scruby
 
           define_method name do |input = nil|
             break instance_variable_get("@#{name}") if input.nil?
-            dup.tap { |copy| copy.send("#{name}=", input) }
+
+            dup.tap do |copy|
+              copy.applied.push(name)
+              copy.send("#{name}=", input)
+            end
           end
 
           protected "#{name}="
