@@ -32,6 +32,7 @@ require_relative "scruby/env"
 
 
 require_relative "scruby/graph"
+require_relative "scruby/graph/pretty_print"
 require_relative "scruby/graph/node"
 require_relative "scruby/graph/constant"
 require_relative "scruby/graph/control_name"
