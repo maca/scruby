@@ -21,7 +21,7 @@ module Scruby
         @graph = graph
         @inputs = inputs.map &method(:map_constant) >>
                               method(:map_control_name) >>
-                              method(:map_control)
+                              method(:add_control)
       end
 
       def encode
@@ -74,10 +74,9 @@ module Scruby
         graph.control_name(name)
       end
 
-      def map_control(elem)
+      def add_control(elem)
         return elem unless elem.is_a?(ControlName)
         graph.add_control(elem)
-        elem
       end
 
       def output_index; 0 end

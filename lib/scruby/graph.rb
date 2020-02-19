@@ -15,14 +15,18 @@ module Scruby
     end
 
     def add_constant(const)
-      constants.push(const) unless constants.include?(const)
+      const.tap do
+        constants.push(const) unless constants.include?(const)
+      end
     end
 
     def add_control(control)
-      return if nodes.any? { |c| c.ugen.is_a?(Control) }
+      control.tap do
+        next if nodes.any? { |c| c.ugen.is_a?(Control) }
 
-      control = Control.new(rate: :control, control_names: controls)
-      add_node Node.build(self, control)
+        control = Control.new(rate: :control, control_names: controls)
+        add_node Node.build(self, control)
+      end
     end
 
     def control_index(control)
