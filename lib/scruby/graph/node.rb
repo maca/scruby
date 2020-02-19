@@ -84,18 +84,18 @@ module Scruby
       def special_index; 0 end
 
       class << self
-        def build_root(ugen, graph)
-          new(ugen, map_inputs(ugen.input_values, graph).flatten, graph)
+        def build_root(graph, ugen)
+          new(ugen, map_inputs(graph, ugen.input_values).flatten, graph)
         end
 
-        def build(ugen, graph)
-          do_build(ugen, ugen.input_values, graph)
+        def build(graph, ugen)
+          do_build(graph, ugen, ugen.input_values)
         end
 
         private
 
-        def do_build(ugen, inputs, graph)
-          inputs = map_inputs(inputs, graph)
+        def do_build(graph, ugen, inputs)
+          inputs = map_inputs(graph, inputs)
 
           unless inputs.any? { |i| i.is_a?(Array) }
             return new(ugen, inputs, graph)
@@ -106,22 +106,22 @@ module Scruby
 
           wrapped.map { |elem| elem.cycle.take(max_size) }
             .transpose
-            .map { |inputs| do_build(ugen, inputs, graph) }
+            .map { |inputs| do_build(graph, ugen, inputs) }
         end
 
-        def map_inputs(inputs, graph)
+        def map_inputs(graph, inputs)
           inputs.map &curry(:map_array, graph) >>
                       curry(:map_node, graph)
         end
 
         def map_array(graph, elem)
           return elem unless elem.is_a?(Array)
-          map_inputs(elem, graph)
+          map_inputs(graph, elem)
         end
 
         def map_node(graph, elem)
           return elem unless elem.is_a?(Ugen::Base)
-          build(elem, graph)
+          build(graph, elem)
         end
 
         def curry(name, *args)

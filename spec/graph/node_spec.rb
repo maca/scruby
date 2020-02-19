@@ -33,7 +33,7 @@ RSpec.describe Graph::Node do
       ]
     end
 
-    subject(:node) { described_class.build(root_ugen, graph) }
+    subject(:node) { described_class.build(graph, root_ugen) }
 
     before do
       allow(graph).to receive(:control_name)
@@ -67,7 +67,7 @@ RSpec.describe Graph::Node do
 
     it "sets nodes" do
       expect(node.nodes)
-        .to eq ugens.map { |u| Graph::Node.build(u, graph) }
+        .to eq ugens.map { |u| Graph::Node.build(graph, u) }
     end
 
     it "sets controls" do
@@ -94,7 +94,7 @@ RSpec.describe Graph::Node do
         ].pack("C*")
       end
 
-      subject(:node) { described_class.build(root_ugen, graph) }
+      subject(:node) { described_class.build(graph, root_ugen) }
 
       it { expect(node.encode).to eq(expected) }
     end
