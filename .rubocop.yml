@@ -666,7 +666,7 @@ Layout/MultilineOperationIndentation:
   Description: >-
                  Checks indentation of binary operations that span more than
                  one line.
-  Enabled: true
+  Enabled: false
   EnforcedStyle: indented
 
 Style/MultilineTernaryOperator:
