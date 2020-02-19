@@ -4,12 +4,12 @@ module Scruby
 
     attr_reader :name, :root, :nodes, :controls, :constants
 
-    def initialize(root, name: nil, controls: {})
+    def initialize(root_ugen, name: nil, controls: {})
       @name = name
       @controls = controls.map &method(:build_control_with_name)
       @nodes = []
       @constants = []
-      @root = Node.build_root(self, root)
+      @root = Node.build_root(self, root_ugen)
 
       add_node @root
     end
@@ -20,8 +20,8 @@ module Scruby
       end
     end
 
-    def add_control(control)
-      control.tap do
+    def add_control(control_name)
+      control_name.tap do
         next if nodes.any? { |c| c.ugen.is_a?(Control) }
 
         control = Control.new(rate: :control, control_names: controls)
