@@ -10,23 +10,19 @@ module Scruby
       @nodes = []
       @constants = []
       @root = Node.build_root(root, self)
-    end
 
-    def add_node(node)
-      nodes.push(node)
+      add_node @root
     end
 
     def add_constant(const)
-      return constants if constants.include?(const)
-      constants.push(const)
+      constants.push(const) unless constants.include?(const)
     end
 
     def add_control(control)
-      node = nodes.find { |c| c.ugen.is_a?(Control) }
-      return node unless node.nil?
+      return if nodes.any? { |c| c.ugen.is_a?(Control) }
 
       control = Control.new(rate: :control, control_names: controls)
-      Node.build(control, self)
+      add_node Node.build(control, self)
     end
 
     def control_index(control)
@@ -55,6 +51,13 @@ module Scruby
     end
 
     private
+
+    def add_node(node)
+      return unless node.is_a?(Node)
+
+      node.inputs.each &method(:add_node)
+      nodes.push(node)
+    end
 
     def init_stream(def_count = 1)
       version = 2
