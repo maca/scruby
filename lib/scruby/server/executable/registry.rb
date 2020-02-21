@@ -13,6 +13,8 @@ module Scruby
 
           Thread.new do
             loop do
+              processes.select!(&:alive?)
+
               ios, _ = IO.select(processes.map(&:read), nil, nil, 0.5)
               [ *ios ].each(&method(:print_line))
             end
