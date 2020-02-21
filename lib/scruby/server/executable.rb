@@ -16,15 +16,13 @@ module Scruby
 
       def initialize(binary = "scsynth", **options)
         @binary = TTY::Which.which(binary) || binary
-        @options = Options.new(options)
+        @options = Options.new(**options)
       end
 
       def spawn
-        @read, write = IO.pipe
+        @read, @write = IO.pipe
         @pid = Kernel.spawn("#{binary} #{options.flags}",
                             out: write, err: [ :child, :out ])
-
-        write.close
 
         Process.detach(pid)
         Registry.register(self)
@@ -50,6 +48,14 @@ module Scruby
       def to_s
         "#{binary} port: #{options.port}"
       end
+
+      def puts(str)
+        write.puts str
+      end
+
+      private
+
+      attr_reader :write
 
       class << self
         def spawn(binary, **options)
