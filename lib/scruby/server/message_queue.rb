@@ -20,19 +20,27 @@ module Scruby
       end
 
       def sync(timeout = 5)
-        id = message_id.increment
-
-        Promises.future(Cancellation.timeout(timeout)) do |cancelation|
-          loop do
-            cancelation.check!
-
-            reply = send_sync(id)
-            break reply if reply
-          end
-        end
+        Promises
+          .future(Cancellation.timeout(timeout), &method(:do_sync))
+          .on_rejection(&method(:future_rejected))
       end
 
       private
+
+      def future_rejected(reason)
+        server.executable.puts("Boot failed with reason: #{reason}")
+      end
+
+      def do_sync(cancelation)
+        id = message_id.increment
+
+        loop do
+          cancelation.check!
+
+          reply = send_sync(id)
+          break reply if reply
+        end
+      end
 
       def send_sync(id)
         server.send_bundle(nil, Message.new("/sync", id))
