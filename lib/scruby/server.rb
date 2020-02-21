@@ -25,7 +25,6 @@ module Scruby
       @client ||= OSC::Client.new(port, host)
     end
 
-
     def dump_osc(code)
       send "/dumpOSC", code
     end

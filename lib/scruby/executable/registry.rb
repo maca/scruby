@@ -16,7 +16,7 @@ module Scruby
           loop do
             @processes.select!(&:alive?)
 
-            ios, _ = IO.select(@processes.map(&:std_out), nil, nil, 0.5)
+            ios, _ = IO.select(@processes.map(&:stdout), nil, nil, 0.5)
             [ *ios ].each(&method(:print_line))
           end
         end
@@ -38,7 +38,7 @@ module Scruby
 
       def print_line(io)
         line = io.gets
-        process = @processes.find { |p| p.std_out == io }
+        process = @processes.find { |p| p.stdout == io }
         color = (io.to_i % 6) + 31
         print "\e[#{color}m[#{process}] #{line}\e[0m\e[1000D"
       end

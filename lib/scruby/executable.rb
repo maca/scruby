@@ -8,7 +8,7 @@ module Scruby
     extend Forwardable
     include PrettyInspectable
 
-    attr_reader :binary, :flags, :pid, :std_out
+    attr_reader :binary, :flags, :pid, :stdout, :stdin
 
 
     def initialize(binary, flags = "")
@@ -17,9 +17,13 @@ module Scruby
     end
 
     def spawn
-      @std_out, @std_out_write = IO.pipe
-      @pid = Kernel.spawn("#{binary} #{flags}",
-                          out: std_out_write, err: [ :child, :out ])
+      return self if alive?
+
+      @stdout, @stdout_write = IO.pipe
+      stdin_read, @stdin = IO.pipe
+
+      @pid = Kernel.spawn("#{binary} #{flags}", in: stdin_read,
+                          out: stdout_write, err: [ :child, :out ])
 
       Process.detach(pid)
       Registry.register(self)
@@ -27,7 +31,7 @@ module Scruby
     end
 
     def alive?
-      pid && Process.kill(0, pid) && true
+      pid && Process.kill(0, pid) && true || false
     rescue Errno::ESRCH # No such process
       false
     rescue Errno::EPERM # The process exists
@@ -38,12 +42,16 @@ module Scruby
       alive? && Process.kill("HUP", pid) && true
     end
 
-    def inspect
-      super(binary: binary)
+    def puts(str)
+      stdout_write.puts(s tr)
     end
 
-    def puts(str)
-      std_out_write.puts str
+    def write_stdin(str)
+      stdin.puts(str)
+    end
+
+    def inspect
+     super(binary: binary)
     end
 
     def to_s
@@ -52,7 +60,7 @@ module Scruby
 
     private
 
-    attr_reader :std_out_write
+    attr_reader :stdout_write
 
     class << self
       def spawn(binary, *args)
