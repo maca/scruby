@@ -16,8 +16,7 @@ module Scruby
 
     def boot(binary: "scsynth", **opts)
       flags = Options.new(**opts, **{ port: port }).flags
-      label = "#{binary} port: #{port}"
-      @executable = Executable.spawn(binary, flags, label)
+      @executable = Executable.spawn(binary, flags)
 
       message_queue.sync.then { continue_boot }
     end

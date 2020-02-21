@@ -8,19 +8,18 @@ module Scruby
     extend Forwardable
     include PrettyInspectable
 
-    attr_reader :binary, :flags, :label, :pid, :read
+    attr_reader :binary, :flags, :pid, :std_out
 
 
-    def initialize(binary, flags = "", label = nil)
+    def initialize(binary, flags = "")
       @binary = TTY::Which.which(binary) || binary
       @flags = flags
-      @label = label || binary
     end
 
     def spawn
-      @read, @write = IO.pipe
+      @std_out, @std_out_write = IO.pipe
       @pid = Kernel.spawn("#{binary} #{flags}",
-                          out: write, err: [ :child, :out ])
+                          out: std_out_write, err: [ :child, :out ])
 
       Process.detach(pid)
       Registry.register(self)
@@ -40,16 +39,20 @@ module Scruby
     end
 
     def inspect
-      super(binary: binary, port: port)
+      super(binary: binary)
     end
 
     def puts(str)
-      write.puts str
+      std_out_write.puts str
+    end
+
+    def to_s
+      "#{binary} #{pid}"
     end
 
     private
 
-    attr_reader :write
+    attr_reader :std_out_write
 
     class << self
       def spawn(binary, *args)
