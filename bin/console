@@ -13,6 +13,9 @@ $loader.enable_reloading
 $loader.setup
 Listen.to(*$loader.root_dirs.keys) { $loader.reload }.start
 
+require "ruby-osc"
+
+
 include Scruby::Helpers
 
 require "irb"
