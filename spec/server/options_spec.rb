@@ -1,4 +1,4 @@
-RSpec.describe Scruby::Server::Executable::Options do
+RSpec.describe Scruby::Server::Options do
   subject(:server_options) { described_class.new }
 
   describe "some defaults" do

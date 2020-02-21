@@ -420,8 +420,10 @@ require_relative "scruby/ugen/zero_crossing"
 require_relative "scruby/ugen/replace_out"
 
 require_relative "scruby/server"
-require_relative "scruby/server/executable/options"
-require_relative "scruby/server/executable"
+require_relative "scruby/server/options"
+
+require_relative "scruby/executable"
+require_relative "scruby/executable/registry"
 
 
 require_relative "scruby/synth_def"
