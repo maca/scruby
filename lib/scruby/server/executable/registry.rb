@@ -1,4 +1,5 @@
 require "concurrent"
+require "singleton"
 
 
 module Scruby
@@ -12,12 +13,8 @@ module Scruby
 
           Thread.new do
             loop do
-              processes.select!(&:alive?)
-              ios, _ = IO.select(processes.map(&:read), nil, nil, 1)
-
-              [ *ios ].each do |io|
-                io.each { |line| print_line(io, line) }
-              end
+              ios, _ = IO.select(processes.map(&:read), nil, nil, 0.5)
+              [ *ios ].each(&method(:print_line))
             end
           end
         end
@@ -36,10 +33,11 @@ module Scruby
           @processes ||= Concurrent::Array.new
         end
 
-        def print_line(io, line)
+        def print_line(io)
+          line = io.gets
           color = (io.to_i % 6) + 31
           process = processes.find { |p| p.read == io }
-          print "\e[#{color}m[#{process}] #{line}\e[0m"
+          print "\e[#{color}m[#{process}] #{line}\e[0m\e[1000D"
         end
 
         class << self
