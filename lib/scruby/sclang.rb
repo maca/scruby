@@ -8,8 +8,16 @@ module Scruby
       executable.spawn && self
     end
 
+    def kill
+      executable.kill
+    end
+
     def execute(code)
-      executable.write_stdin "(#{code}).postcs \e"
+      async_execute(code).value!
+    end
+
+    def async_execute(code)
+      executable.stdin_puts "(#{code}).postcs \e"
     end
 
     private

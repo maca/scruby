@@ -1,14 +1,17 @@
 require "tty-which"
-require "concurrent"
 require "forwardable"
+require "concurrent-edge"
 
 
 module Scruby
   class Executable
+    class Error < StandardError
+    end
+
     extend Forwardable
     include PrettyInspectable
 
-    attr_reader :binary, :flags, :pid, :stdout, :stdin
+    attr_reader :binary, :flags, :pid
 
 
     def initialize(binary, flags = "")
@@ -20,13 +23,16 @@ module Scruby
       return self if alive?
 
       @stdout, @stdout_write = IO.pipe
-      stdin_read, @stdin = IO.pipe
+      stdin, @stdin_write = IO.pipe
 
-      @pid = Kernel.spawn("#{binary} #{flags}", in: stdin_read,
+      @pid = Kernel.spawn("#{binary} #{flags}", in: stdin,
+                          err: [ :child, :out ],
                           out: stdout_write)
 
-      Process.detach(pid)
+      start_print_thread
+
       Registry.register(self)
+      Process.detach(pid)
       self
     end
 
@@ -39,28 +45,58 @@ module Scruby
     end
 
     def kill
-      alive? && Process.kill("HUP", pid) && true
+      return false unless alive?
+
+      Process.kill("HUP", pid)
+      read_thread.kill
+
+      true
     end
 
-    def puts(str)
-      stdout_write.puts(s tr)
+    def stdout_puts(str)
+      stdout_write.puts(str)
     end
 
-    def write_stdin(str)
-      stdin.puts(str)
+    def stdin_puts(str)
+      Concurrent::Promises.future { sync_stdin_puts(str) }
     end
 
     def inspect
      super(binary: binary)
     end
 
-    def to_s
-      "#{binary} #{pid}"
-    end
-
     private
 
-    attr_reader :stdout_write
+    def sync_stdin_puts(str)
+      raise(Error, "`#{self.inspect}` is dead") unless alive?
+
+      read_thread.kill
+      stdin_write.puts(str)
+      stdout_gets
+    ensure
+      start_print_thread
+    end
+
+    def start_print_thread
+      @read_thread = Thread.new { loop &method(:stdout_print_line) }
+    end
+
+    def stdout_gets
+      wait_stdout
+      stdout.gets.strip
+    end
+
+    def stdout_print_line
+      wait_stdout
+      color = (stdout.to_i % 6) + 31
+      print "\e[#{color}m[#{binary} #{pid}] #{stdout.gets}\e[0m\e[1000D"
+    end
+
+    def wait_stdout
+      IO.select([stdout], nil, nil, 0.5)
+    end
+
+    attr_reader :stdout, :stdout_write, :stdin_write, :read_thread
 
     class << self
       def spawn(binary, *args)
