@@ -9,10 +9,22 @@ module Scruby
     end
 
     def execute(code)
-      executable.write_stdin("(#{code}).postcs \e")
+      [ "(", *code.split("\n"), ").postcs" ].each do |line|
+        write escape(line)
+      end
+
+      write("\e")
     end
 
     private
+
+    def write(str)
+      executable.write_stdin(str)
+    end
+
+    def escape(str)
+      str.dump[1..-2].gsub("\\\\", "\\")
+    end
 
     attr_reader :executable
 
