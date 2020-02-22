@@ -12,11 +12,11 @@ module Scruby
       executable.kill
     end
 
-    def execute(code)
-      async_execute(code).value!
+    def eval(code)
+      async_eval(code).value!
     end
 
-    def async_execute(code)
+    def async_eval(code)
       executable.stdin_puts "(#{code}).postcs \e"
     end
 

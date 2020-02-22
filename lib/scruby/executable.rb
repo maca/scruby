@@ -68,9 +68,9 @@ module Scruby
     private
 
     def sync_stdin_puts(str)
+      read_thread.kill
       raise(Error, "`#{self.inspect}` is dead") unless alive?
 
-      read_thread.kill
       stdin_write.puts(str)
       stdout_gets
     ensure
