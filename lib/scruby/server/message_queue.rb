@@ -30,18 +30,15 @@ module Scruby
 
         loop do
           cancelation.check!
-
-          reply = send_sync(id)
-          break reply if reply
+          return server if send_sync(id)
         end
       end
 
       def send_sync(id)
-        server.send_bundle(nil, Message.new("/sync", id))
+        server.send_bundle nil, Message.new("/sync", id)
         msg = Message.decode socket.recvfrom(65_535).first
 
-        return unless msg.address == "/synced" && msg.args.first == id
-        msg
+        msg.address == "/synced" && msg.args.first == id
       rescue Errno::ECONNREFUSED
       end
     end

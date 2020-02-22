@@ -6,7 +6,8 @@ module Scruby
   class Server
     include OSC
 
-    attr_reader :host, :port, :client, :message_queue
+    attr_reader :host, :port, :client, :message_queue, :process
+    private :process
 
     def initialize(host: "127.0.0.1", port: 57_110)
       @host = host
@@ -18,7 +19,11 @@ module Scruby
       flags = Options.new(**opts, **{ port: port }).flags
       @process = Process.spawn(binary, flags)
 
-      message_queue.sync.then { continue_boot }
+      message_queue.sync.then { continue_boot }.then { self }
+    end
+
+    def pid
+      process&.pid
     end
 
     def client
