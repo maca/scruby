@@ -23,7 +23,7 @@ module Scruby
       stdin_read, @stdin = IO.pipe
 
       @pid = Kernel.spawn("#{binary} #{flags}", in: stdin_read,
-                          out: stdout_write, err: [ :child, :out ])
+                          out: stdout_write)
 
       Process.detach(pid)
       Registry.register(self)
