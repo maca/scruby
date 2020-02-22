@@ -20,16 +20,10 @@ module Scruby
       end
 
       def sync(timeout = 5)
-        Promises
-          .future(Cancellation.timeout(timeout), &method(:do_sync))
-          .on_rejection(&method(:future_rejected))
+        Promises.future Cancellation.timeout(timeout), &method(:do_sync)
       end
 
       private
-
-      def future_rejected(reason)
-        server.executable.puts("Boot failed with reason: #{reason}")
-      end
 
       def do_sync(cancelation)
         id = message_id.increment

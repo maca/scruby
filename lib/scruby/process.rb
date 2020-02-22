@@ -4,9 +4,8 @@ require "concurrent-edge"
 
 
 module Scruby
-  class Executable
-    class Error < StandardError
-    end
+  class Process
+    class Error < StandardError; end
 
     extend Forwardable
     include PrettyInspectable
@@ -32,12 +31,12 @@ module Scruby
       start_print_thread
 
       Registry.register(self)
-      Process.detach(pid)
+      ::Process.detach(pid)
       self
     end
 
     def alive?
-      pid && Process.kill(0, pid) && true || false
+      pid && ::Process.kill(0, pid) && true || false
     rescue Errno::ESRCH # No such process
       false
     rescue Errno::EPERM # The process exists
@@ -47,7 +46,7 @@ module Scruby
     def kill
       return false unless alive?
 
-      Process.kill("HUP", pid)
+      ::Process.kill("HUP", pid)
       read_thread.kill
 
       true

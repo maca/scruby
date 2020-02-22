@@ -3,7 +3,7 @@ require "singleton"
 
 
 module Scruby
-  class Executable
+  class Process
     class Registry
       include Singleton
 
