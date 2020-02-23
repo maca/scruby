@@ -18,28 +18,11 @@ module Scruby
     end
 
     def boot(**opts)
-      options = Options.new(**opts, **{ bind_address: host })
-
-      opts_assigns = options.map do |k, v|
-        "opts.#{camelize(k)} = #{sclang_literal(v)}"
-      end
-
-      sclang_boot = <<-SC
-        { var addr = NetAddr.new("#{options.address}", #{port}),
-              opts = ServerOptions.new;
-
-          #{opts_assigns.join(";\n")};
-          ~#{name} = Server.new("#{name}", addr);
-          ~#{name}.boot;
-        }.value
-      SC
-
       Sclang.main.spawn
-        .then { |lang| lang.eval_async(sclang_boot) }.flat_future
+        .then { |lang| eval_boot(opts, lang) }.flat_future
         .then { message_queue.sync }.flat_future
         .then { self }
     end
-
 
     def sclang_literal(value)
       case value
@@ -50,7 +33,6 @@ module Scruby
       else
         raise(ArgumentError,
               "#{value.inspect} is not of a valid server option type")
-
       end
     end
 
@@ -58,7 +40,6 @@ module Scruby
       str.split('_').each_with_index
         .map { |s, i| i.zero? ? s : s.capitalize }.join
     end
-
 
     def dump_osc(code = 1)
       send("/dumpOSC", code)
@@ -85,6 +66,31 @@ module Scruby
         OSC::Message.new("/d_recv", OSC::Blob.new(synth_def.encode), 0)
 
       send OSC::Bundle.new(nil, message)
+    end
+
+
+    private
+
+    def eval_boot(opts, sclang)
+      options = Options.new(**opts, **{ bind_address: host })
+
+      opts_assigns = options.map do |k, v|
+        "opts.#{camelize(k)} = #{sclang_literal(v)}"
+      end
+
+      sclang_boot = <<-SC
+        { var addr = NetAddr.new("#{options.address}", #{port}),
+              opts = ServerOptions.new;
+          #{opts_assigns.join(";\n")};
+          ~#{name} = Server.new("#{name}", addr);
+          ~#{name}.boot;
+        }.value
+      SC
+
+      sclang.eval_async(sclang_boot).then do |line|
+        next line unless /error/i === line
+        raise SclangError, "server could not be booted"
+      end
     end
   end
 end
