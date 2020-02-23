@@ -4,7 +4,7 @@ module Scruby
       extend Attributes
 
       attributes do
-        attribute :bind_address, "127.0.0.1"
+        attribute :address, "127.0.0.1"
         attribute :port, 57_110
         attribute :protocol, :udp
         attribute :num_audio_bus_channels, 1024
@@ -65,7 +65,7 @@ module Scruby
 
       def flags
         flags = [
-          [ :B, bind_address ],
+          [ :B, address ],
           [ (protocol.to_sym == :tcp ? :t : :u), port ],
           [ :a, total_audio_bus_channels ],
           [ :c, num_control_bus_channels ],
