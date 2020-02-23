@@ -14,6 +14,7 @@ module Scruby
     def initialize(binary, flags = "")
       @binary = TTY::Which.which(binary) || binary
       @flags = flags
+      @semaphore = Mutex.new
       @reader, @writer = IO.pipe
     end
 
@@ -59,9 +60,11 @@ module Scruby
     end
 
     def puts_gets(str)
-      true while read
-      stdin_puts str
-      read
+      semaphore.synchronize {
+        true while read
+        stdin_puts str
+        read
+      }
     end
 
     def inspect
@@ -70,7 +73,8 @@ module Scruby
 
     private
 
-    attr_reader :stdout, :stdin, :reader, :writer, :io_thread
+    attr_reader :semaphore, :stdout, :stdin, :reader, :writer,
+                :io_thread
 
     def stdout_gets
       line = stdout.gets

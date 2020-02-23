@@ -39,7 +39,9 @@ module Scruby
     end
 
     def eval_async(code)
-      Promises.future { process.puts_gets("(#{code}).postcs \e")&.strip }
+      Promises.future do
+        process.puts_gets("(#{code}).postcs \e")&.strip
+      end
     end
 
     private
