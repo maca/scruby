@@ -18,13 +18,9 @@ module Scruby
     end
 
     def boot(**opts)
-      sclang = Sclang.new
-      sclang.spawn
-      sleep 2
-
       options = Options.new(**opts, **{ port: port })
 
-      sclang.eval <<-SC
+      Sclang.main.value!.eval <<-SC
         { var addr = NetAddr.new("#{options.address}", #{options.port});
           ~#{name} = Server.new("#{name}", addr);
           ~#{name}.boot;

@@ -55,6 +55,10 @@ module Scruby
       def spawn
         new.spawn
       end
+
+      def main
+        (@main ||= new).spawn
+      end
     end
   end
 end
