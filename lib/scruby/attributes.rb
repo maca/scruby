@@ -29,6 +29,11 @@ module Scruby
               public_send("#{k}=", v)
             end
           end
+
+          define_method :attributes do
+            defaults.keys
+              .map { |attr| [ attr, public_send(attr) ] }.to_h
+          end
         end
 
       include dynamic_module

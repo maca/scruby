@@ -18,10 +18,17 @@ module Scruby
     end
 
     def boot(**opts)
-      options = Options.new(**opts, **{ port: port })
+      options = Options.new(**opts, **{ bind_address: host })
+
+      opts_assigns = options.map do |k, v|
+        "opts.#{camelize(k)} = #{sclang_literal(v)}"
+      end
 
       sclang_boot = <<-SC
-        { var addr = NetAddr.new("#{options.address}", #{options.port});
+        { var addr = NetAddr.new("#{options.address}", #{port}),
+              opts = ServerOptions.new;
+
+          #{opts_assigns.join(";\n")};
           ~#{name} = Server.new("#{name}", addr);
           ~#{name}.boot;
         }.value
@@ -33,10 +40,29 @@ module Scruby
         .then { self }
     end
 
+
+    def sclang_literal(value)
+      case value
+      when String, TrueClass, FalseClass, NilClass, Numeric
+        value.inspect
+      when Symbol
+        "'#{value}'"
+      else
+        raise(ArgumentError,
+              "#{value.inspect} is not of a valid server option type")
+
+      end
+    end
+
+    def camelize(str)
+      str.split('_').each_with_index
+        .map { |s, i| i.zero? ? s : s.capitalize }.join
+    end
+
+
     def dump_osc(code = 1)
       send("/dumpOSC", code)
     end
-
 
     # Sends an OSC command or +Message+ to the scsyth server.
     # E.g. +server.send('/dumpOSC', 1)+
