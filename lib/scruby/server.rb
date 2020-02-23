@@ -5,6 +5,7 @@ require "concurrent-edge"
 module Scruby
   class Server
     include OSC
+    include Sclang::Helpers
 
     attr_reader :host, :port, :client, :message_queue, :process, :name
     private :process
@@ -75,7 +76,7 @@ module Scruby
       options = Options.new(**opts, **{ bind_address: host })
 
       opts_assigns = options.map do |k, v|
-        "opts.#{camelize(k)} = #{sclang_literal(v)}"
+        "opts.#{camelize(k)} = #{literal(v)}"
       end
 
       sclang_boot = <<-SC

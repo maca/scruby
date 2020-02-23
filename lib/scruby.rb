@@ -29,6 +29,15 @@ require_relative "scruby/encode"
 require_relative "scruby/env"
 
 
+require_relative "scruby/sclang/helpers"
+require_relative "scruby/sclang"
+require_relative "scruby/server"
+require_relative "scruby/server/options"
+
+
+require_relative "scruby/process"
+require_relative "scruby/process/registry"
+
 require_relative "scruby/graph"
 require_relative "scruby/graph/visualize"
 require_relative "scruby/graph/node"
@@ -418,12 +427,6 @@ require_relative "scruby/ugen/x_line"
 require_relative "scruby/ugen/x_out"
 require_relative "scruby/ugen/zero_crossing"
 require_relative "scruby/ugen/replace_out"
-
-require_relative "scruby/server"
-require_relative "scruby/server/options"
-
-require_relative "scruby/process"
-require_relative "scruby/process/registry"
 
 
 require_relative "scruby/synth_def"
