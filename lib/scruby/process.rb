@@ -54,12 +54,18 @@ module Scruby
     end
 
     def read
-      ios, _ = IO.select([reader], nil, nil, 0.001)
+      ios, _ = IO.select([ reader ], nil, nil, 0.001)
       ios&.first&.gets
     end
 
+    def puts_gets(str)
+      true while read
+      stdin_puts str
+      read
+    end
+
     def inspect
-     super(binary: binary)
+      super(binary: binary)
     end
 
     private

@@ -20,14 +20,17 @@ module Scruby
     def boot(**opts)
       options = Options.new(**opts, **{ port: port })
 
-      Sclang.main.spawn.value!.eval <<-SC
+      sclang_boot = <<-SC
         { var addr = NetAddr.new("#{options.address}", #{options.port});
           ~#{name} = Server.new("#{name}", addr);
           ~#{name}.boot;
         }.value
       SC
 
-      message_queue.sync.then { self }
+      Sclang.main.spawn
+        .then { |lang| lang.eval_async(sclang_boot) }.flat_future
+        .then { message_queue.sync }.flat_future
+        .then { self }
     end
 
     def dump_osc(code = 1)
