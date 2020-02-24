@@ -14,7 +14,7 @@ module Scruby
       end
 
       def camelize(str)
-        str.split('_').each_with_index
+        str.split("_").each_with_index
           .map { |s, i| i.zero? ? s : s.capitalize }.join
       end
     end
