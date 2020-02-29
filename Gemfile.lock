@@ -26,7 +26,7 @@ GEM
       rake (>= 0.8.7)
     live (0.1.2)
       highline
-    rake (0.8.7)
+    rake (13.0.1)
     rspec (2.5.0)
       rspec-core (~> 2.5.0)
       rspec-expectations (~> 2.5.0)
