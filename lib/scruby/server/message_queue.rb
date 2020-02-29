@@ -35,7 +35,7 @@ module Scruby
       end
 
       def send_sync(id)
-        server.send_bundle nil, Message.new("/sync", id)
+        server.send_bundle Message.new("/sync", id)
         msg = Message.decode socket.recvfrom(65_535).first
 
         msg.address == "/synced" && msg.args.first == id

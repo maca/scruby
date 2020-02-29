@@ -1,6 +1,8 @@
 module Scruby
   class Sclang
     module Helpers
+      module_function
+
       def literal(value)
         case value
         when String, TrueClass, FalseClass, NilClass, Numeric
