@@ -1,3 +1,5 @@
+require "securerandom"
+
 module Scruby
   class Graph
     include Encode
@@ -5,7 +7,7 @@ module Scruby
     attr_reader :name, :root, :nodes, :controls, :constants
 
     def initialize(root_ugen, name: nil, controls: {})
-      @name = name
+      @name = name || SecureRandom.uuid
       @controls = controls.map &method(:build_control_with_name)
       @nodes = []
       @constants = []
@@ -52,6 +54,9 @@ module Scruby
 
     def visualize
       Visualize.print(root)
+    end
+
+    def play(server, out: 0, fade_in: 0.2, position: :head, args: {})
     end
 
     private

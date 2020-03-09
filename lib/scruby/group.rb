@@ -1,5 +1,7 @@
 module Scruby
-  class Group < Node
+  class Group
+    include Node
+
     def free_all
       send "/g_freeAll", id
       self

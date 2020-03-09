@@ -1,7 +1,8 @@
 RSpec.describe Graph do
-  describe "controls" do
+  describe "initialize" do
+    let(:root_ugen) { instance_double("Ugen::Base", input_values: []) }
+
     context "initialize with controls" do
-      let(:root_ugen) { instance_double("Ugen::Base", input_values: []) }
       let(:control_params) do
         { k_1: 1, k_2: ir(2), k_3: tr(3), k_4: kr(4) }
       end
@@ -31,7 +32,26 @@ RSpec.describe Graph do
         it_behaves_like "has controls"
       end
     end
+
+    context "non name is given" do
+      subject(:graph) do
+        described_class.new(root_ugen)
+      end
+
+      let(:regexp) do
+        /[^-]{8}\-[^-]{4}\-[^-]{4}\-[^-]{4}\-[^-]{12}/
+      end
+
+      it "assigns a uuid as name" do
+        expect(graph.name).to match regexp
+      end
+
+      it "name is unique" do
+        expect(graph.name).not_to eq described_class.new(root_ugen).name
+      end
+    end
   end
+
 
   describe "building a graph" do
     context "with two ugens" do

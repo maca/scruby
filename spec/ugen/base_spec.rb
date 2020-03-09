@@ -244,4 +244,32 @@ RSpec.describe Ugen::Base do
     it { expect(instance).to eq instance.freq(440) }
     it { expect(instance).not_to eq instance.freq(220) }
   end
+
+
+  describe "building graph" do
+    subject(:subclass) do
+      Class.new(Ugen::Base) do
+        rates :audio, :control
+        inputs freq: 440, phase: 0
+      end
+    end
+
+    let(:instance) { subclass.ar }
+    let(:graph) { instance_double("Graph") }
+    let(:server) { instance_double("Server") }
+    let(:args) do
+      { a: "simple", b: "something" }
+    end
+
+    it "builds a graph" do
+      allow(Graph).to receive(:new).with(instance, args) { graph }
+      expect(instance.build_graph(**args)).to eq graph
+    end
+
+    it "plays" do
+      allow(Graph).to receive(:new).with(instance) { graph }
+      expect(graph).to receive(:play).with(server, args) { graph }
+      expect(instance.play(server, args)).to eq graph
+    end
+  end
 end

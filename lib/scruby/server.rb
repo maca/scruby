@@ -51,9 +51,8 @@ module Scruby
     end
 
     def dump_osc(code = 1)
-      send("/dumpOSC", code)
+      send_msg("/dumpOSC", code)
     end
-
 
     # Sends an OSC command or +Message+ to the scsyth server.
     # E.g. +server.send('/dumpOSC', 1)+
@@ -76,7 +75,6 @@ module Scruby
       send_msg Bundle.new(nil, Message.new("/d_recv", blob, 0))
     end
 
-
     private
 
     def eval_async(code)
@@ -94,11 +92,12 @@ module Scruby
         "opts.#{camelize(k)} = #{literal(v)}"
       end
 
+
       sclang_boot = <<-SC
         { var addr = NetAddr.new("#{options.address}", #{port}),
               opts = ServerOptions.new;
           #{opts_assigns.join(";\n")};
-          #{name} = Server.new("#{name}", addr);
+          #{name} = Server.new("#{name}", addr, opts);
           #{name}.boot;
         }.value
       SC
@@ -106,6 +105,18 @@ module Scruby
       eval_async(sclang_boot).then do |line|
         next line unless /error/i === line
         raise SclangError, "server could not be booted"
+      end
+    end
+
+    class << self
+      attr_writer :default
+
+      def local
+        Local.instance
+      end
+
+      def default
+        @default || local
       end
     end
   end

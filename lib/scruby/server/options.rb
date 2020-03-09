@@ -32,7 +32,7 @@ module Scruby
         attribute :in_device, nil
         attribute :out_device, nil
         attribute :ugen_plugins_path, nil
-        attribute :max_logins, 1
+        attribute :max_logins, 4
         attribute :num_private_audio_bus_channels, 1020
         attribute :remote_control_volume, false
         attribute :reserved_num_audio_bus_channels, 0

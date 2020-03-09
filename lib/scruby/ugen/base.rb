@@ -56,6 +56,14 @@ module Scruby
         super(rate: rate, **attributes, **inputs)
       end
 
+      def build_graph(**args)
+        Graph.new(self, **args)
+      end
+
+      def play(server, **opts)
+        build_graph.play(server, **opts)
+      end
+
       protected
 
       def rate=(rate)
