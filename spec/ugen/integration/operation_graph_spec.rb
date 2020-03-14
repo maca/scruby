@@ -1,6 +1,6 @@
 RSpec.describe Graph do
   describe "graph with sum" do
-    let(:graph) { Graph.new(Out.ar(0, SinOsc.ar + Saw.ar), name: "sum") }
+    let(:graph) { Graph.new(Out.ar(0, SinOsc.ar + Saw.ar), "sum") }
 
     it { expect(graph.nodes.map(&:name))
            .to eq %w(SinOsc Saw BinaryOpUGen Out) }

@@ -70,9 +70,9 @@ module Scruby
       send_msg Bundle.new(timestamp, *bundle)
     end
 
-    # Encodes and sends a SynthDef to the scsynth server
-    def send_synth_def(graph)
-      blob = Blob.new(graph)
+    # Encodes and sends a synth graph to the scsynth server
+    def send_def(graph)
+      blob = Blob.new(graph.encode)
       send_msg Bundle.new(nil, Message.new("/d_recv", blob, 0))
     end
 

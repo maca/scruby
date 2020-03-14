@@ -1,7 +1,7 @@
 RSpec.describe Graph do
   describe "simple graph with two channels" do
     let(:graph) do
-      Graph.new(Out.ar(0, [ SinOsc.ar, Saw.ar ]), name: "multichannel")
+      Graph.new(Out.ar(0, [ SinOsc.ar, Saw.ar ]), "multichannel")
     end
 
     it { expect(graph.nodes.map(&:name))
@@ -31,7 +31,7 @@ RSpec.describe Graph do
 
   describe "simple ugen with array input" do
     let(:graph) do
-      Graph.new(Out.ar(0, SinOsc.ar([ 242, 442 ])), name: "multichannel")
+      Graph.new(Out.ar(0, SinOsc.ar([ 242, 442 ])), "multichannel")
     end
 
     it { expect(graph.nodes.map(&:name))
@@ -61,8 +61,7 @@ RSpec.describe Graph do
   describe "simple nested multichannel" do
     let(:graph) do
       Graph.new(
-        Out.ar(0, SinOsc.ar(SinOsc.ar([ 242, 442 ]))),
-        name: "multichannel"
+        Out.ar(0, SinOsc.ar(SinOsc.ar([ 242, 442 ]))), "multichannel"
       )
     end
 

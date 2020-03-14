@@ -3,11 +3,12 @@ require "securerandom"
 module Scruby
   class Graph
     include Encode
+    include PrettyInspectable
 
     attr_reader :name, :root, :nodes, :controls, :constants
 
-    def initialize(root_ugen, name: nil, controls: {})
-      @name = name || SecureRandom.uuid
+    def initialize(root_ugen, name = SecureRandom.uuid, **controls)
+      @name = name
       @controls = controls.map &method(:build_control_with_name)
       @nodes = []
       @constants = []
@@ -57,6 +58,10 @@ module Scruby
     end
 
     def play(server, out: 0, fade_in: 0.2, position: :head, args: {})
+    end
+
+    def inspect
+      super(name: name, controls: controls, root: root)
     end
 
     private
