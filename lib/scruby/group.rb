@@ -46,16 +46,16 @@ module Scruby
         new(group.server).create(1, group)
       end
 
-      def before(target)
-        new(target.server).create(2, target)
+      def before(node)
+        new(node.server).create(2, node)
       end
 
-      def after(target)
-        new(target.server).create(3, target)
+      def after(node)
+        new(node.server).create(3, node)
       end
 
-      def replace(target)
-        new(target.server).create(4, target)
+      def replace(node)
+        new(node.server).create(4, node)
       end
     end
   end

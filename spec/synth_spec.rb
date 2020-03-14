@@ -28,7 +28,7 @@ RSpec.describe Synth do
 
     describe 'head' do
       it_behaves_like 'sent message to server' do
-        subject!(:synth) { Synth.head(:a_synth, a_group, a: 1) }
+        subject!(:synth) { Synth.head(a_group, :a_synth, a: 1) }
         let(:node) { synth }
         let(:msg) do
           [ '/s_new', :a_synth, synth.id, 0, a_group.id, :a, 1 ]
@@ -41,7 +41,7 @@ RSpec.describe Synth do
 
     describe 'tail' do
       it_behaves_like 'sent message to server' do
-        subject!(:synth) { Synth.tail(:a_synth, a_group, a: 1) }
+        subject!(:synth) { Synth.tail(a_group, :a_synth, a: 1) }
         let(:node) { synth }
         let(:msg) do
           [ '/s_new', :a_synth, synth.id, 1, a_group.id, :a, 1 ]
@@ -54,7 +54,7 @@ RSpec.describe Synth do
 
     describe 'before' do
       it_behaves_like 'sent message to server' do
-        subject!(:synth) { Synth.before(:a_synth, a_node, a: 1) }
+        subject!(:synth) { Synth.before(a_node, :a_synth, a: 1) }
         let(:node) { synth }
         let(:msg) do
           [ '/s_new', :a_synth, synth.id, 2, a_node.id, :a, 1 ]
@@ -67,7 +67,7 @@ RSpec.describe Synth do
 
     describe 'after' do
       it_behaves_like 'sent message to server' do
-        subject!(:synth) { Synth.after(:a_synth, a_node, a: 1) }
+        subject!(:synth) { Synth.after(a_node, :a_synth, a: 1) }
         let(:node) { synth }
         let(:msg) do
           [ '/s_new', :a_synth, synth.id, 3, a_node.id, :a, 1 ]
@@ -80,7 +80,7 @@ RSpec.describe Synth do
 
     describe 'replace' do
       it_behaves_like 'sent message to server' do
-        subject!(:synth) { Synth.replace(:a_synth, a_node, a: 1) }
+        subject!(:synth) { Synth.replace(a_node, :a_synth, a: 1) }
         let(:node) { synth }
         let(:msg) do
           [ '/s_new', :a_synth, synth.id, 4, a_node.id, :a, 1 ]
@@ -93,7 +93,7 @@ RSpec.describe Synth do
 
     describe 'create' do
       it_behaves_like 'sent message to server' do
-        subject!(:synth) { Synth.create(:a_synth, server, a: 1) }
+        subject!(:synth) { Synth.create(server, :a_synth, a: 1) }
         let(:node) { synth }
         let(:msg) do
           [ '/s_new', :a_synth, synth.id, 0, 1, :a, 1 ]

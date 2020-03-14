@@ -14,30 +14,36 @@ module Scruby
       send_msg('/s_new', name, id, action, target.id, *args.flatten)
     end
 
+    def get
+    end
+
+    def get_n
+    end
+
     private
 
     class << self
-      def create(name, server, **args)
+      def create(server, name, **args)
         new(name, server).create(0, Group.new(server, 1), **args)
       end
 
-      def head(name, group, **args)
+      def head(group, name, **args)
         new(name, group.server).create(0, group, **args)
       end
 
-      def tail(name, group, **args)
+      def tail(group, name, **args)
         new(name, group.server).create(1, group, **args)
       end
 
-      def before(name, node, **args)
+      def before(node, name, **args)
         new(name, node.server).create(2, node, **args)
       end
 
-      def after(name, node, **args)
+      def after(node, name, **args)
         new(name, node.server).create(3, node, **args)
       end
 
-      def replace(name, node, **args)
+      def replace(node, name, **args)
         new(name, node.server).create(4, node, **args)
       end
     end
