@@ -1,10 +1,10 @@
+require "concurrent-edge"
+
 module Scruby
   module Node
     include Equatable
 
-    @@base_id = 999
     attr_reader :server, :id, :group
-
 
     def initialize(server, id = Node.next_id)
       @server = server
@@ -114,7 +114,7 @@ module Scruby
 
     class << self
       def next_id
-        @@base_id += 1
+        (@next_id ||= Concurrent::AtomicFixnum.new).increment
       end
     end
   end
