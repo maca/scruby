@@ -4,15 +4,22 @@ module Scruby
 
     attr_reader :name, :action, :server, :id
 
-    def initialize(name, target = Server.default, action: :head, **args)
+    def initialize(name, server)
       @name = name
-      @id = Node.next_id
-      @target = target
-      @action = action
-      # @group = %i(head tail).include?(action) ? target : target.group
-
-      send_new(**args)
+      super(server)
     end
+
+    # def initialize(name, target, action: :head, **args)
+
+    #   # @name = name
+    #   # @id = Node.next_id
+    #   # @target = target
+    #   # @server = target.is_a?(Server) ? server : target.server
+    #   # @action = action
+    #   # @group = %i(head tail).include?(action) ? target : target.group
+
+    #   # send_new(**args)
+    # end
 
     private
 
