@@ -24,25 +24,33 @@ module Scruby
     def query_tree
     end
 
+    private
+
+    def creation_cmd; 21 end
+
     class << self
+      def create(server)
+        new(server).create(0, Group.new(server, 1))
+      end
+
       def head(target)
-        new(target.server).send(:send_create, 21, 0, target.group)
+        new(target.server).create(0, target)
       end
 
       def tail(target)
-        new(target.server).send(:send_create, 21, 1, target.group)
+        new(target.server).create(1, target)
       end
 
       def before(target)
-        new(target.server).send(:send_create, 21, 2, target)
+        new(target.server).create(2, target)
       end
 
       def after(target)
-        new(target.server).send(:send_create, 21, 3, target)
+        new(target.server).create(3, target)
       end
 
       def replace(target)
-        new(target.server).send(:send_create, 21, 4, target)
+        new(target.server).create(4, target)
       end
     end
   end

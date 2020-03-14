@@ -43,7 +43,10 @@ RSpec.describe Group do
 
 
   describe 'initialize with position' do
-    let(:a_group) { instance_double('Group', id: 5555) }
+    let(:a_group) do
+      instance_double('Group', id: 5555, server: server)
+    end
+
     let(:a_node) do
       instance_double('Node', id: 2222, server: server, group: a_group)
     end
@@ -55,20 +58,22 @@ RSpec.describe Group do
 
     describe 'head' do
       it_behaves_like 'sent message to server' do
-        subject!(:group) { Group.head(a_node) }
+        subject!(:group) { Group.head(a_group) }
         let(:node) { group }
         let(:msg) { [ 21, group.id, 0, a_group.id ] }
 
+        it { expect(node.group).to eq a_group }
         it_behaves_like 'initializes group'
       end
     end
 
     describe 'tail' do
       it_behaves_like 'sent message to server' do
-        subject!(:group) { Group.tail(a_node) }
+        subject!(:group) { Group.tail(a_group) }
         let(:node) { group }
         let(:msg) { [ 21, group.id, 1, a_group.id ] }
 
+        it { expect(node.group).to eq a_group }
         it_behaves_like 'initializes group'
       end
     end
@@ -79,6 +84,7 @@ RSpec.describe Group do
         let(:node) { group }
         let(:msg) { [ 21, group.id, 2, a_node.id ] }
 
+        it { expect(node.group).to eq a_group }
         it_behaves_like 'initializes group'
       end
     end
@@ -89,6 +95,7 @@ RSpec.describe Group do
         let(:node) { group }
         let(:msg) { [ 21, group.id, 3, a_node.id ] }
 
+        it { expect(node.group).to eq a_group }
         it_behaves_like 'initializes group'
       end
     end
@@ -99,6 +106,18 @@ RSpec.describe Group do
         let(:node) { group }
         let(:msg) { [ 21, group.id, 4, a_node.id ] }
 
+        it { expect(node.group).to eq a_group }
+        it_behaves_like 'initializes group'
+      end
+    end
+
+    describe 'create' do
+      it_behaves_like 'sent message to server' do
+        subject!(:group) { Group.create(server) }
+        let(:node) { group }
+        let(:msg) { [ 21, group.id, 0, 1 ] }
+
+        it { expect(node.group).to eq Group.new(server, 1) }
         it_behaves_like 'initializes group'
       end
     end

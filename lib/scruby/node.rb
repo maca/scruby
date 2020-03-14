@@ -6,9 +6,9 @@ module Scruby
     attr_reader :server, :id, :group
 
 
-    def initialize(server)
+    def initialize(server, id = Node.next_id)
       @server = server
-      @id = Node.next_id
+      @id = id
     end
 
     def free(send_flag = true)
@@ -75,6 +75,11 @@ module Scruby
     def wait_for_free
     end
 
+    def create(action, target)
+      @group = action < 2 ? target : target.group
+      send_msg(creation_cmd, id, action, target.id)
+    end
+
     private
 
     def send_msg(*args)
@@ -106,6 +111,10 @@ module Scruby
       when :audio
         [ '/n_mapan', id, *args ].flatten
       end
+    end
+
+    def creation_cmd
+      raise NotImplementedError
     end
 
     class << self
