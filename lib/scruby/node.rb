@@ -11,17 +11,17 @@ module Scruby
       @id = id
     end
 
-    def free(send_flag = true)
+    def free(_send_flag = true)
       @group = nil
-      send_msg('/n_free', id)
+      send_msg("/n_free", id)
     end
 
     def run
-      send_msg('/n_run', id, true)
+      send_msg("/n_run", id, true)
     end
 
     def set(**args)
-      send_msg('/n_set', id, *args.flatten)
+      send_msg("/n_set", id, *args.flatten)
     end
 
     def map(**args)
@@ -34,27 +34,27 @@ module Scruby
     end
 
     def trace
-      send_msg('/n_trace', id)
+      send_msg("/n_trace", id)
     end
 
     def before(node)
       @group = node.group
-      send_msg('/n_before', id, node.id)
+      send_msg("/n_before", id, node.id)
     end
 
     def after(node)
       @group = node.group
-      send_msg('/n_after', id, node.id)
+      send_msg("/n_after", id, node.id)
     end
 
     def head(group)
       @group = group
-      send_msg('/g_head', group.id, id)
+      send_msg("/g_head", group.id, id)
     end
 
     def tail(group)
       @group = group
-      send_msg('/g_tail', group.id, id)
+      send_msg("/g_tail", group.id, id)
     end
 
     def fill
@@ -102,9 +102,9 @@ module Scruby
 
       case rate
       when :control
-        [ '/n_mapn', id, *args ].flatten
+        [ "/n_mapn", id, *args ].flatten
       when :audio
-        [ '/n_mapan', id, *args ].flatten
+        [ "/n_mapan", id, *args ].flatten
       end
     end
 

@@ -11,7 +11,7 @@ module Scruby
 
     def create(action, target, **args)
       @group = action < 2 ? target : target.group
-      send_msg('/s_new', name, id, action, target.id, *args.flatten)
+      send_msg("/s_new", name, id, action, target.id, *args.flatten)
     end
 
     def get

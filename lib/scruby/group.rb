@@ -11,11 +11,11 @@ module Scruby
     end
 
     def free_all
-      send_msg('/g_freeAll', id)
+      send_msg("/g_freeAll", id)
     end
 
     def deep_free
-      send_msg('/g_deepFree', id)
+      send_msg("/g_deepFree", id)
     end
 
     def dump_tree
@@ -31,7 +31,7 @@ module Scruby
 
     private
 
-    def creation_cmd; '/g_new' end
+    def creation_cmd; "/g_new" end
 
     class << self
       def create(server)
