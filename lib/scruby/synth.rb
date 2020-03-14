@@ -20,6 +20,10 @@ module Scruby
     def get_n
     end
 
+    def inspect
+      super(name: name, id: id, server: server)
+    end
+
     private
 
     class << self

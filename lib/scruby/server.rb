@@ -6,6 +6,7 @@ module Scruby
   class Server
     include OSC
     include Sclang::Helpers
+    include PrettyInspectable
 
     attr_reader :host, :port, :client, :message_queue, :process, :name
     private :process
@@ -73,6 +74,10 @@ module Scruby
     def send_synth_def(graph)
       blob = Blob.new(graph)
       send_msg Bundle.new(nil, Message.new("/d_recv", blob, 0))
+    end
+
+    def inspect
+      super(host: host, port: port)
     end
 
     private

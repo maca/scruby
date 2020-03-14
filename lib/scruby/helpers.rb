@@ -5,7 +5,6 @@ module Scruby
         base.include Scruby
         base.include Ugen
         base.include Ugen::Operations::OperationHelpers
-        base.include OSC
       end
     end
 

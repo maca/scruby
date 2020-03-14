@@ -29,6 +29,10 @@ module Scruby
       send_msg(creation_cmd, id, action, target.id)
     end
 
+    def inspect
+      super(id: id, server: server)
+    end
+
     private
 
     def creation_cmd; "/g_new" end

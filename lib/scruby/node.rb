@@ -3,6 +3,7 @@ require "concurrent-edge"
 module Scruby
   module Node
     include Equatable
+    include PrettyInspectable
 
     attr_reader :server, :id, :group
 
