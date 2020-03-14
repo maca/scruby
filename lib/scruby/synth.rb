@@ -9,17 +9,6 @@ module Scruby
       super(server)
     end
 
-    # def initialize(name, target, action: :head, **args)
-
-    #   # @name = name
-    #   # @id = Node.next_id
-    #   # @target = target
-    #   # @server = target.is_a?(Server) ? server : target.server
-    #   # @action = action
-    #   # @group = %i(head tail).include?(action) ? target : target.group
-
-    #   # send_new(**args)
-    # end
 
     private
 
@@ -31,19 +20,15 @@ module Scruby
 
     class << self
       def after(node, name, **args)
-        new name, node, action: :after, **args
       end
 
       def before(node, name, **args)
-        new name, node, action: :before, **args
       end
 
       def head(group, name, **args)
-        new name, group, action: :head, **args
       end
 
       def after(group, name, **args)
-        new name, group, action: :after, **args
       end
     end
   end

@@ -1,6 +1,6 @@
 module Scruby
   module Node
-    ACTIONS = %i(head tail before after replace).freeze
+    include Equatable
 
     @@base_id = 999
     attr_reader :server, :id, :group
@@ -12,8 +12,7 @@ module Scruby
     end
 
     def free(send_flag = true)
-      # @group = nil
-      # @is_running = false
+      @group = nil
       send_msg('/n_free', id)
     end
 
@@ -26,20 +25,55 @@ module Scruby
     end
 
     def map(**args)
-      messages =
-        args.group_by { |_, b| b.rate }.map(&method(:message_for_map))
-
-      send_bundle(*messages.compact)
+      msgs = args.group_by { |_, b| b.rate }.map(&method(:msg_for_map))
+      send_bundle(*msgs.compact)
     end
 
-    # def playing?
-    #   @playing
-    # end
+    def release(time = nil)
+      send_msg(15, id, :gate, release_time(time))
+    end
 
-    # def run(run = true)
-    #   server.send_msg "/n_run", id, run
-    #   self
-    # end
+    def trace
+      send_msg('/n_trace', id)
+    end
+
+    def before(node)
+      @group = node.group
+      send_msg('/n_before', id, node.id)
+    end
+
+    def after(node)
+      @group = node.group
+      send_msg('/n_after', id, node.id)
+    end
+
+    def head(group)
+      @group = group
+      send_msg('/g_head', group.id, id)
+    end
+
+    def tail(group)
+      @group = group
+      send_msg('/g_tail', group.id, id)
+    end
+
+    def fill
+    end
+
+    def query
+    end
+
+    def register
+    end
+
+    def unregister
+    end
+
+    def on_free
+    end
+
+    def wait_for_free
+    end
 
     private
 
@@ -53,17 +87,17 @@ module Scruby
       self
     end
 
-    def action_id
-      ACTIONS.index(action)
+    def send_create(msg, action, target)
+      send_msg(msg, id, action, target.id)
     end
 
-    def target_id
-      # return target if target.is_a?(Server)
-      # target.server
-      0
+    def release_time(time = nil)
+      return 0 if time.nil?
+      return -1 if time < 1
+      (time + 1) * -1
     end
 
-    def message_for_map(rate, params)
+    def msg_for_map(rate, params)
       args = params.map { |n, bus| [ n, bus.index, bus.channels ] }
 
       case rate
