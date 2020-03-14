@@ -436,6 +436,7 @@ require_relative "scruby/synth"
 require_relative "scruby/bus"
 require_relative "scruby/buffer"
 require_relative "scruby/group"
+require_relative "scruby/par_group"
 
 require_relative "scruby/ticker"
 

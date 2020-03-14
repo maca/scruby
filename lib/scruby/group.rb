@@ -24,21 +24,26 @@ module Scruby
     def query_tree
     end
 
+    def create(action, target)
+      @group = action < 2 ? target : target.group
+      send_msg(creation_cmd, id, action, target.id)
+    end
+
     private
 
-    def creation_cmd; 21 end
+    def creation_cmd; '/g_new' end
 
     class << self
       def create(server)
         new(server).create(0, Group.new(server, 1))
       end
 
-      def head(target)
-        new(target.server).create(0, target)
+      def head(group)
+        new(group.server).create(0, group)
       end
 
-      def tail(target)
-        new(target.server).create(1, target)
+      def tail(group)
+        new(group.server).create(1, group)
       end
 
       def before(target)

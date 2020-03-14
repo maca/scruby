@@ -75,11 +75,6 @@ module Scruby
     def wait_for_free
     end
 
-    def create(action, target)
-      @group = action < 2 ? target : target.group
-      send_msg(creation_cmd, id, action, target.id)
-    end
-
     private
 
     def send_msg(*args)

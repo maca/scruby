@@ -60,7 +60,7 @@ RSpec.describe Group do
       it_behaves_like 'sent message to server' do
         subject!(:group) { Group.head(a_group) }
         let(:node) { group }
-        let(:msg) { [ 21, group.id, 0, a_group.id ] }
+        let(:msg) { [ '/g_new', group.id, 0, a_group.id ] }
 
         it { expect(node.group).to eq a_group }
         it_behaves_like 'initializes group'
@@ -71,7 +71,7 @@ RSpec.describe Group do
       it_behaves_like 'sent message to server' do
         subject!(:group) { Group.tail(a_group) }
         let(:node) { group }
-        let(:msg) { [ 21, group.id, 1, a_group.id ] }
+        let(:msg) { [ '/g_new', group.id, 1, a_group.id ] }
 
         it { expect(node.group).to eq a_group }
         it_behaves_like 'initializes group'
@@ -82,7 +82,7 @@ RSpec.describe Group do
       it_behaves_like 'sent message to server' do
         subject!(:group) { Group.before(a_node) }
         let(:node) { group }
-        let(:msg) { [ 21, group.id, 2, a_node.id ] }
+        let(:msg) { [ '/g_new', group.id, 2, a_node.id ] }
 
         it { expect(node.group).to eq a_group }
         it_behaves_like 'initializes group'
@@ -93,7 +93,7 @@ RSpec.describe Group do
       it_behaves_like 'sent message to server' do
         subject!(:group) { Group.after(a_node) }
         let(:node) { group }
-        let(:msg) { [ 21, group.id, 3, a_node.id ] }
+        let(:msg) { [ '/g_new', group.id, 3, a_node.id ] }
 
         it { expect(node.group).to eq a_group }
         it_behaves_like 'initializes group'
@@ -104,7 +104,7 @@ RSpec.describe Group do
       it_behaves_like 'sent message to server' do
         subject!(:group) { Group.replace(a_node) }
         let(:node) { group }
-        let(:msg) { [ 21, group.id, 4, a_node.id ] }
+        let(:msg) { [ '/g_new', group.id, 4, a_node.id ] }
 
         it { expect(node.group).to eq a_group }
         it_behaves_like 'initializes group'
@@ -115,7 +115,7 @@ RSpec.describe Group do
       it_behaves_like 'sent message to server' do
         subject!(:group) { Group.create(server) }
         let(:node) { group }
-        let(:msg) { [ 21, group.id, 0, 1 ] }
+        let(:msg) { [ '/g_new', group.id, 0, 1 ] }
 
         it { expect(node.group).to eq Group.new(server, 1) }
         it_behaves_like 'initializes group'
