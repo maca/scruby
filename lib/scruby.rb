@@ -26,7 +26,6 @@ require_relative "scruby/attributes"
 require_relative "scruby/equatable"
 require_relative "scruby/pretty_inspectable"
 require_relative "scruby/encode"
-require_relative "scruby/env"
 
 
 require_relative "scruby/sclang/helpers"
@@ -437,6 +436,8 @@ require_relative "scruby/bus"
 require_relative "scruby/buffer"
 require_relative "scruby/group"
 require_relative "scruby/par_group"
+require_relative "scruby/env"
+require_relative "scruby/env/interpolator"
 
 require_relative "scruby/ticker"
 

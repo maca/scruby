@@ -57,11 +57,16 @@ module Scruby
       end
 
       def build_graph(**args)
-        Graph.new(self, **args)
+        return Graph.new(self, **args) if is_out?
+        Graph.new(Out.ar(0, self), **args)
       end
 
       def play(server, **opts)
         build_graph.play(server, **opts)
+      end
+
+      def is_out?
+        false
       end
 
       protected

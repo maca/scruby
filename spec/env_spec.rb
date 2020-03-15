@@ -1,28 +1,29 @@
 RSpec.describe Env do
-  subject(:env) { Env.new([0, 1].cycle(4), [0.1],
-                          release_node: 3, loop_node: 4) }
+  subject(:env) { Env.new(levels: [0, 1].cycle(4), times: [0.1],
+                          release_at: 3, loop_at: 4) }
+
 
   describe "initialize" do
     context "levels are smaller than times array" do
-      subject(:env) { Env.new((1..4), (1..8)) }
+      subject(:env) { Env.new(levels: (1..4), times: (1..8)) }
 
-      it { expect(env.levels).to eq (1..4).to_a }
+      it { expect(env.levels).to eq (1..4) }
       it { expect(env.times).to eq (1..3).to_a }
     end
 
     context "levels are greater than times array" do
-      subject(:env) { Env.new((1..8), (1..3)) }
+      subject(:env) { Env.new(levels: (1..8), times: (1..3)) }
 
-      it { expect(env.levels).to eq (1..8).to_a }
+      it { expect(env.levels).to eq (1..8) }
       it { expect(env.times).to eq [ 1, 2, 3, 1, 2, 3, 1 ] }
     end
 
     describe "defaults" do
       it { expect(Env.new.levels).to eq [ 0, 1, 0 ] }
       it { expect(Env.new.times).to eq [ 1, 1 ] }
-      it { expect(Env.new.curves).to eq %i(lin) }
-      it { expect(Env.new.release_node).to be_nil }
-      it { expect(Env.new.loop_node).to be_nil }
+      it { expect(Env.new.curves).to eq %i(linear) }
+      it { expect(Env.new.release_at).to be_nil }
+      it { expect(Env.new.loop_at).to be_nil }
     end
   end
 
@@ -39,9 +40,21 @@ RSpec.describe Env do
     end
 
     describe "release time" do
-      it { expect(Env.new(release_node: 0).release_time).to be 2 }
-      it { expect(Env.new(release_node: 1).release_time).to be 1 }
-      it { expect(Env.new(release_node: 2).release_time).to be 0 }
+      it { expect(Env.new(release_at: 0).release_time).to be 2 }
+      it { expect(Env.new(release_at: 1).release_time).to be 1 }
+      it { expect(Env.new(release_at: 2).release_time).to be 0 }
+    end
+
+    describe "at time" do
+      context "linear env" do
+        subject(:env) { Env.new(times: [2, 3]) }
+
+        it { expect(env.at_time(0)).to eq 0 }
+        it { expect(env.at_time(0.4)).to eq 0.2 }
+        it { expect(env.at_time(1)).to eq 0.5 }
+        it { expect(env.at_time(1.8)).to be_within(0.0001).of(0.9) }
+        it { expect(env.at_time(4.3)).to be_within(0.0001).of(0.2333) }
+      end
     end
   end
 
@@ -67,6 +80,7 @@ RSpec.describe Env do
   describe "predefined envelopes" do
     it { expect(Env.triangle).to be_an Env }
     it { expect(Env.sine).to be_an Env }
+    it { expect(Env.perc).to be_an Env }
     it { expect(Env.linen).to be_an Env }
     it { expect(Env.cutoff).to be_an Env }
     it { expect(Env.dadsr).to be_an Env }
@@ -78,7 +92,6 @@ RSpec.describe Env do
 
   describe "equality" do
     it_behaves_like "is equatable"
-
     it { expect(Env.new(curves: :lin)).to eq Env.new(curves: :linear) }
   end
 end

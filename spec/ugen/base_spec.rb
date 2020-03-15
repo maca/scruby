@@ -261,15 +261,30 @@ RSpec.describe Ugen::Base do
       { a: "simple", b: "something" }
     end
 
-    it "builds a graph" do
-      allow(Graph).to receive(:new).with(instance, args) { graph }
-      expect(instance.build_graph(**args)).to eq graph
+    context 'is not out' do
+      before do
+        allow(Graph).to receive(:new)
+                          .with(Out.new(0, instance), args) { graph }
+      end
+
+      it { expect(instance.build_graph(**args)).to eq graph }
     end
 
-    it "plays" do
-      allow(Graph).to receive(:new).with(instance) { graph }
-      expect(graph).to receive(:play).with(server, args) { graph }
-      expect(instance.play(server, args)).to eq graph
+    context 'is out' do
+      before do
+        allow(instance).to receive(:is_out?) { true }
+        allow(Graph).to receive(:new).with(instance, args) { graph }
+      end
+
+      it "builds a graph" do
+        expect(instance.build_graph(**args)).to eq graph
+      end
+
+      it "plays" do
+        allow(Graph).to receive(:new).with(instance) { graph }
+        expect(graph).to receive(:play).with(server, args) { graph }
+        expect(instance.play(server, args)).to eq graph
+      end
     end
   end
 end
