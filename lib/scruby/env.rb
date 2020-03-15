@@ -127,9 +127,9 @@ module Scruby
         new([ level, 0 ], [ release ], curves: curves, release_node: 0)
       end
 
-      def dadsr(delay: 0.1, attack: 0.01, sustain_level: 0.5,
-                decay: 0.3, release: 1, peak_level: 1, curves: -4,
-                bias: 0)
+      def dadsr(delay: 0.1, attack: 0.01, decay: 0.3,
+                sustain_level: 0.5, release: 1, peak_level: 1,
+                curves: -4, bias: 0)
 
         levels = [ 0, 0, peak_level, peak_level * sustain_level, 0 ]
                    .map{ |e| e + bias }
