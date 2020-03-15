@@ -16,9 +16,9 @@ module Scruby
 
       attr_reader :ugen, :inputs, :graph
 
-      def initialize(ugen, inputs, graph)
-        @ugen = ugen
+      def initialize(graph, ugen, inputs)
         @graph = graph
+        @ugen = ugen
         @inputs = inputs.map &method(:map_constant) >>
                               method(:map_control_name) >>
                               method(:add_control)
@@ -84,7 +84,7 @@ module Scruby
 
       class << self
         def build_root(graph, ugen)
-          new(ugen, map_inputs(graph, ugen.input_values).flatten, graph)
+          new(graph, ugen, map_inputs(graph, ugen.input_values).flatten)
         end
 
         def build(graph, ugen)
@@ -93,19 +93,21 @@ module Scruby
 
         private
 
-        def do_build(graph, ugen, inputs)
-          inputs = map_inputs(graph, inputs)
+        def do_build(graph, ugen, raw_inputs)
+          inputs = map_inputs(graph, raw_inputs)
 
           unless inputs.any? { |i| i.is_a?(Array) }
-            return new(ugen, inputs, graph)
+            return new(graph, ugen, inputs)
           end
 
+          array_inputs(inputs).map { |ins| do_build(graph, ugen, ins) }
+        end
+
+        def array_inputs(inputs)
           wrapped = inputs.map { |elem| [ *elem ] }
           max_size = wrapped.max_by(&:size).size
 
-          wrapped.map { |elem| elem.cycle.take(max_size) }
-            .transpose
-            .map { |inputs| do_build(graph, ugen, inputs) }
+          wrapped.map { |elem| elem.cycle.take(max_size) }.transpose
         end
 
         def map_inputs(graph, inputs)
