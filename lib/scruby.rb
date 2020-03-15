@@ -437,7 +437,6 @@ require_relative "scruby/buffer"
 require_relative "scruby/group"
 require_relative "scruby/par_group"
 require_relative "scruby/env"
-require_relative "scruby/env/interpolator"
 
 require_relative "scruby/ticker"
 

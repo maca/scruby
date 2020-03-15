@@ -89,14 +89,55 @@ module Scruby
         start_time, start_level = acc
         end_time = start_time + duration
 
-        next [ end_time, end_level ] if time > end_time
+        next [ end_time, end_level ] if time >= end_time
 
         pos = (time.to_f - start_time) / duration
 
         level =
           case curve
+          when :step
+            end_level
+
+          when :hold
+            start_level
+
           when :linear
             pos * (end_level - start_level) + start_level
+
+          when :exponential
+            start_level * (end_level / start_level).pow(pos)
+
+          when :sine
+            diff = (end_level - start_level)
+            start_level + diff * (-Math.cos(Math::PI * pos) * 0.5 + 0.5)
+
+          when :welch
+            diff = (end_level - start_level)
+            pi_div = Math::PI / 2
+
+            if (start_level < end_level)
+               start_level + diff * Math.sin(pi_div * pos)
+            else
+               end_level - diff * Math.sin(pi_div - pi_div * pos)
+            end
+
+          when :squared
+            sqrt_start_level = Math.sqrt(start_level)
+            diff = Math.sqrt(end_level) - sqrt_start_level
+
+            (pos * diff + sqrt_start_level) ** 2
+
+          when :cubed
+            cbrt_start_level = start_level.pow(0.3333333)
+            diff = end_level.pow(0.3333333) - cbrt_start_level
+
+            (pos * diff + cbrt_start_level) ** 3
+
+          else
+            denom = 1.0 - Math.exp(curve)
+            numer = 1.0 - Math.exp(pos * curve)
+
+            start_level + (end_level - start_level) * (numer / denom)
           end
 
         return level

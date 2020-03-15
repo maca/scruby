@@ -46,6 +46,22 @@ RSpec.describe Env do
     end
 
     describe "at time" do
+      context "step env" do
+        subject(:env) { Env.new(curves: :step) }
+
+        it { expect(env.at_time(0)).to eq 1 }
+        it { expect(env.at_time(0.6)).to eq 1 }
+        it { expect(env.at_time(1)).to eq 0 }
+      end
+
+      context "hold env" do
+        subject(:env) { Env.new(curves: :hold) }
+
+        it { expect(env.at_time(0)).to eq 0 }
+        it { expect(env.at_time(0.6)).to eq 0 }
+        it { expect(env.at_time(1)).to eq 1 }
+      end
+
       context "linear env" do
         subject(:env) { Env.new(times: [2, 3]) }
 
@@ -54,6 +70,48 @@ RSpec.describe Env do
         it { expect(env.at_time(1)).to eq 0.5 }
         it { expect(env.at_time(1.8)).to be_within(0.0001).of(0.9) }
         it { expect(env.at_time(4.3)).to be_within(0.0001).of(0.2333) }
+      end
+
+      context "exponential env" do
+        subject(:env) { Env.new(levels: [1, 2], curves: :exp) }
+
+        it { expect(env.at_time(0.5)).to be_within(0.001).of(1.4142) }
+        it { expect(env.at_time(0.9)).to be_within(0.001).of(1.8660) }
+      end
+
+      context "sine env" do
+        subject(:env) { Env.new(curves: :sin) }
+
+        it { expect(env.at_time(0.3)).to be_within(0.001).of(0.2061) }
+        it { expect(env.at_time(0.9)).to be_within(0.001).of(0.9755) }
+      end
+
+      context "welch env" do
+        subject(:env) { Env.new(curves: :wel) }
+
+        it { expect(env.at_time(0.3)).to be_within(0.001).of(0.4539) }
+        it { expect(env.at_time(0.9)).to be_within(0.001).of(0.9876) }
+      end
+
+      context "squared env" do
+        subject(:env) { Env.new(curves: :sqr) }
+
+        it { expect(env.at_time(0.3)).to be_within(0.001).of(0.09) }
+        it { expect(env.at_time(0.9)).to be_within(0.001).of(0.81) }
+      end
+
+      context "cubed env" do
+        subject(:env) { Env.new(curves: :cub) }
+
+        it { expect(env.at_time(0.3)).to be_within(0.001).of(0.027) }
+        it { expect(env.at_time(0.9)).to be_within(0.001).of(0.729) }
+      end
+
+      context "numeric curve env" do
+        subject(:env) { Env.new(curves: -5) }
+
+        it { expect(env.at_time(0.3)).to be_within(0.001).of(0.7821) }
+        it { expect(env.at_time(0.9)).to be_within(0.001).of(0.9955) }
       end
     end
   end
@@ -76,6 +134,7 @@ RSpec.describe Env do
       it { expect(env.ar(:a, :b, c: 1)).to eq env_gen }
     end
   end
+
 
   describe "predefined envelopes" do
     it { expect(Env.triangle).to be_an Env }
