@@ -65,23 +65,33 @@ module Scruby
       times[release_at..-1].sum
     end
 
-    def to_a
-      contents = [ levels.first, times.size,
-                   release_at || -99,
-                   loop_at || -99 ]
+    # def to_a
+    #   contents = [ levels.first, times.size,
+    #                release_at || -99,
+    #                loop_at || -99 ]
+    #   contents + levels[1..-1].zip(
+    #     times, shape_numbers.cycle.take(levels.size - 1),
+    #     shape_values.cycle.take(levels.size - 1)
+    #   ).flatten
+    # end
 
-      contents + levels[1..-1].zip(
-        times, shape_numbers.cycle.take(levels.size - 1),
-        shape_values.cycle.take(levels.size - 1)
-      ).flatten
+    def interpolate(step = 1, &block)
+      return each_step(step, &block) if block_given?
+
+      size = duration.fdiv(step).ceil + 1
+      Enumerator.new(size) { |y| each_step(step, &y.method(:yield)) }
     end
 
+    def each_step(step = 1)
+      (0..duration).step(step).each { |time| yield at_time(time) }
+      self
+    end
 
     def at_time(time)
       curves = self.curves.cycle.take(times.size)
       initial = [0, levels.first]
 
-      return levels.last if time > duration
+      return levels.last.to_f if time >= duration
 
       times.zip(levels[1..-1], curves)
         .inject(initial) do |acc, (duration, end_level, curve)|
@@ -93,55 +103,7 @@ module Scruby
 
         pos = (time.to_f - start_time) / duration
 
-        level =
-          case curve
-          when :step
-            end_level
-
-          when :hold
-            start_level
-
-          when :linear
-            pos * (end_level - start_level) + start_level
-
-          when :exponential
-            start_level * (end_level / start_level).pow(pos)
-
-          when :sine
-            diff = (end_level - start_level)
-            start_level + diff * (-Math.cos(Math::PI * pos) * 0.5 + 0.5)
-
-          when :welch
-            diff = (end_level - start_level)
-            pi_div = Math::PI / 2
-
-            if (start_level < end_level)
-               start_level + diff * Math.sin(pi_div * pos)
-            else
-               end_level - diff * Math.sin(pi_div - pi_div * pos)
-            end
-
-          when :squared
-            sqrt_start_level = Math.sqrt(start_level)
-            diff = Math.sqrt(end_level) - sqrt_start_level
-
-            (pos * diff + sqrt_start_level) ** 2
-
-          when :cubed
-            cbrt_start_level = start_level.pow(0.3333333)
-            diff = end_level.pow(0.3333333) - cbrt_start_level
-
-            (pos * diff + cbrt_start_level) ** 3
-
-          else
-            denom = 1.0 - Math.exp(curve)
-            numer = 1.0 - Math.exp(pos * curve)
-
-            start_level + (end_level - start_level) * (numer / denom)
-          end
-
-        return level
-
+        return calculate_level_at(pos, start_level, end_level, curve)
       end
     end
 
@@ -162,10 +124,6 @@ module Scruby
       EnvGen.ar(self, *args, **opts)
     end
 
-    def state
-      [ levels, times, shape_numbers, loop_at, release_at ]
-    end
-
     private
 
     def shape_numbers
@@ -176,6 +134,54 @@ module Scruby
       curves.map do
         0
         # Ugens::Ugen.valid_input?(curve) ? curve : 0
+      end
+    end
+
+    def calculate_level_at(pos, start_level, end_level, curve)
+      case curve
+      when :step
+        end_level
+
+      when :hold
+        start_level
+
+      when :linear
+        pos * (end_level - start_level) + start_level
+
+      when :exponential
+        start_level * (end_level / start_level).pow(pos)
+
+      when :sine
+        diff = (end_level - start_level)
+        start_level + diff * (-Math.cos(Math::PI * pos) * 0.5 + 0.5)
+
+      when :welch
+        diff = (end_level - start_level)
+        pi_div = Math::PI / 2
+
+        if (start_level < end_level)
+          start_level + diff * Math.sin(pi_div * pos)
+        else
+          end_level - diff * Math.sin(pi_div - pi_div * pos)
+        end
+
+      when :squared
+        sqrt_start_level = Math.sqrt(start_level)
+        diff = Math.sqrt(end_level) - sqrt_start_level
+
+        (pos * diff + sqrt_start_level) ** 2
+
+      when :cubed
+        cbrt_start_level = start_level.pow(0.3333333)
+        diff = end_level.pow(0.3333333) - cbrt_start_level
+
+        (pos * diff + cbrt_start_level) ** 3
+
+      else
+        denom = 1.0 - Math.exp(curve)
+        numer = 1.0 - Math.exp(pos * curve)
+
+        start_level + (end_level - start_level) * (numer / denom)
       end
     end
 

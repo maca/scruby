@@ -70,6 +70,7 @@ RSpec.describe Env do
         it { expect(env.at_time(1)).to eq 0.5 }
         it { expect(env.at_time(1.8)).to be_within(0.0001).of(0.9) }
         it { expect(env.at_time(4.3)).to be_within(0.0001).of(0.2333) }
+        it { expect(env.at_time(env.duration)).to be 0.0 }
       end
 
       context "exponential env" do
@@ -112,6 +113,73 @@ RSpec.describe Env do
 
         it { expect(env.at_time(0.3)).to be_within(0.001).of(0.7821) }
         it { expect(env.at_time(0.9)).to be_within(0.001).of(0.9955) }
+      end
+    end
+
+    describe "interpolate" do
+      context "discreet step" do
+        shared_examples "values are interpolated" do
+          it { expect(values.size).to be 3 }
+          it { expect(values[0]).to be 0.0 }
+          it { expect(values[1]).to be 1.0 }
+          it { expect(values[0]).to be 0.0 }
+        end
+
+        describe 'interpolate block given' do
+          let(:values) { [] }
+
+          subject!(:env) do
+            Env.new.interpolate(1) { |v| values.push(v) }
+          end
+
+          it { expect(env).to be_an(Env) }
+          it_behaves_like "values are interpolated"
+        end
+
+        context "no block given" do
+          subject(:enum) { Env.new.interpolate(1) }
+
+          it { expect(enum).to be_a(Enumerator) }
+          it { expect(enum.size).to be 3 }
+
+          it_behaves_like "values are interpolated" do
+            let(:values) { enum.to_a }
+          end
+        end
+      end
+
+      context "float step" do
+        shared_examples "values are interpolated" do
+          it { expect(values.size).to be 21 }
+          it { expect(values[0]).to be 0.0 }
+          it { expect(values[1]).to be_within(0.0001).of(0.1) }
+          it { expect(values[9]).to be_within(0.0001).of(0.9) }
+          it { expect(values[10]).to be_within(0.0001).of(1) }
+          it { expect(values[13]).to be_within(0.0001).of(0.7) }
+          it { expect(values.last).to be 0.0 }
+        end
+
+        describe 'interpolate block given' do
+          let(:values) { [] }
+
+          subject!(:env) do
+            Env.new.interpolate(0.1) { |v| values.push(v) }
+          end
+
+          it { expect(env).to be_an(Env) }
+          it_behaves_like "values are interpolated"
+        end
+
+        context "no block given" do
+          subject(:enum) { Env.new.interpolate(0.1) }
+
+          it { expect(enum).to be_a(Enumerator) }
+          it { expect(enum.size).to be 21 }
+
+          it_behaves_like "values are interpolated" do
+            let(:values) { enum.to_a }
+          end
+        end
       end
     end
   end
