@@ -26,6 +26,7 @@ require_relative "scruby/attributes"
 require_relative "scruby/equatable"
 require_relative "scruby/pretty_inspectable"
 require_relative "scruby/encode"
+require_relative "scruby/utils/positional_keyword_args"
 
 
 require_relative "scruby/sclang/helpers"

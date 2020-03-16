@@ -1,6 +1,7 @@
 module Scruby
   class Env
     include Equatable
+    include Utils::PositionalKeywordArgs
 
     attr_reader :levels, :curves, :release_at, :loop_at, :offset
 
@@ -15,6 +16,7 @@ module Scruby
       hold: 8
     }.freeze
 
+
     SHAPES_ALIAS = {
       lin: :linear,
       exp: :exponential,
@@ -25,15 +27,25 @@ module Scruby
     }.freeze
 
 
-    def initialize(levels: [0, 1, 0], times: [1, 1], curves: :lin,
-                   release_at: nil, loop_at: nil, offset: 0)
+    DEFAULTS =
+      { levels: [ 0, 1, 0 ],
+        times: [ 1, 1 ],
+        curves: :lin,
+        release_at: nil,
+        loop_at: nil,
+        offset: 0,
+      }.freeze
 
-      @levels = levels
-      @times = times
-      @curves = [*curves].map { |c| SHAPES_ALIAS.fetch(c, c) }
-      @release_at = release_at
-      @loop_at = loop_at
-      @offset = offset
+
+    def initialize(*args, **kwargs)
+      assigns = positional_keyword_args(DEFAULTS, *args, **kwargs)
+
+      @levels = assigns[:levels]
+      @times = assigns[:times]
+      @curves = [ *assigns[:curves]].map { |c| SHAPES_ALIAS.fetch(c, c) }
+      @release_at = assigns[:release_at]
+      @loop_at = assigns[:loop_at]
+      @offset = assigns[:offset]
     end
 
     def times
@@ -89,12 +101,12 @@ module Scruby
 
     def at_time(time)
       curves = self.curves.cycle.take(times.size)
-      initial = [0, levels.first]
+      initial = [ 0, levels.first ]
 
       return levels.last.to_f if time >= duration
 
       times.zip(levels[1..-1], curves)
-        .inject(initial) do |acc, (duration, end_level, curve)|
+        .reduce(initial) do |acc, (duration, end_level, curve)|
 
         start_time, start_level = acc
         end_time = start_time + duration
@@ -159,7 +171,7 @@ module Scruby
         diff = (end_level - start_level)
         pi_div = Math::PI / 2
 
-        if (start_level < end_level)
+        if start_level < end_level
           start_level + diff * Math.sin(pi_div * pos)
         else
           end_level - diff * Math.sin(pi_div - pi_div * pos)
@@ -169,13 +181,13 @@ module Scruby
         sqrt_start_level = Math.sqrt(start_level)
         diff = Math.sqrt(end_level) - sqrt_start_level
 
-        (pos * diff + sqrt_start_level) ** 2
+        (pos * diff + sqrt_start_level)**2
 
       when :cubed
         cbrt_start_level = start_level.pow(0.3333333)
         diff = end_level.pow(0.3333333) - cbrt_start_level
 
-        (pos * diff + cbrt_start_level) ** 3
+        (pos * diff + cbrt_start_level)**3
 
       else
         denom = 1.0 - Math.exp(curve)

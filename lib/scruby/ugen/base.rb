@@ -4,21 +4,16 @@ module Scruby
       include Equatable
       include PrettyInspectable
       include Operations
+      include Utils::PositionalKeywordArgs
+
 
       attr_reader :inputs, :channels
 
-      def initialize(*args, rate: :audio, **kwargs)
-        attribute_names = self.class.attributes.keys
-        input_names = self.class.inputs.keys
+      def initialize(*args, rate: :audio, **kw)
+        defaults = self.class.attributes.merge(self.class.inputs)
 
-        assigns =
-          self.class.attributes.to_a +
-          self.class.inputs.to_a +
-          (attribute_names + input_names)[0...args.size].zip(args) +
-          kwargs.to_a
-
-        assigns.map do |name, val|
-          send("#{name}=", val.is_a?(Hash) ? val.fetch(rate) : val)
+        positional_keyword_args(defaults, *args, **kw).map do |key, val|
+          send("#{key}=", val.is_a?(Hash) ? val.fetch(rate) : val)
         end
 
         self.rate = rate

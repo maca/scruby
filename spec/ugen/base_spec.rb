@@ -261,7 +261,7 @@ RSpec.describe Ugen::Base do
       { a: "simple", b: "something" }
     end
 
-    context 'is not out' do
+    context "is not out" do
       before do
         allow(Graph).to receive(:new)
                           .with(Out.new(0, instance), args) { graph }
@@ -270,7 +270,7 @@ RSpec.describe Ugen::Base do
       it { expect(instance.build_graph(**args)).to eq graph }
     end
 
-    context 'is out' do
+    context "is out" do
       before do
         allow(instance).to receive(:is_out?) { true }
         allow(Graph).to receive(:new).with(instance, args) { graph }

@@ -1,5 +1,5 @@
 RSpec.describe Env do
-  subject(:env) { Env.new(levels: [0, 1].cycle(4), times: [0.1],
+  subject(:env) { Env.new(levels: [ 0, 1 ].cycle(4), times: [ 0.1 ],
                           release_at: 3, loop_at: 4) }
 
 
@@ -63,7 +63,7 @@ RSpec.describe Env do
       end
 
       context "linear env" do
-        subject(:env) { Env.new(times: [2, 3]) }
+        subject(:env) { Env.new(times: [ 2, 3 ]) }
 
         it { expect(env.at_time(0)).to eq 0 }
         it { expect(env.at_time(0.4)).to eq 0.2 }
@@ -74,7 +74,7 @@ RSpec.describe Env do
       end
 
       context "exponential env" do
-        subject(:env) { Env.new(levels: [1, 2], curves: :exp) }
+        subject(:env) { Env.new(levels: [ 1, 2 ], curves: :exp) }
 
         it { expect(env.at_time(0.5)).to be_within(0.001).of(1.4142) }
         it { expect(env.at_time(0.9)).to be_within(0.001).of(1.8660) }
@@ -125,7 +125,7 @@ RSpec.describe Env do
           it { expect(values[0]).to be 0.0 }
         end
 
-        describe 'interpolate block given' do
+        describe "interpolate block given" do
           let(:values) { [] }
 
           subject!(:env) do
@@ -159,7 +159,7 @@ RSpec.describe Env do
           it { expect(values.last).to be 0.0 }
         end
 
-        describe 'interpolate block given' do
+        describe "interpolate block given" do
           let(:values) { [] }
 
           subject!(:env) do
