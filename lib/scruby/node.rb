@@ -12,7 +12,7 @@ module Scruby
       @id = id
     end
 
-    def free(_send_flag = true)
+    def free
       @group = nil
       send_msg("/n_free", id)
     end

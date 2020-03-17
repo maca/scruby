@@ -54,7 +54,7 @@ module Scruby
       rates <%= rates.map(&:inspect).join(', ') -%>
       <% unless inputs.empty? %>
       inputs <%= input_spec.join(', ')
-                           .scan(/(.{1,60})(?:,|$)/m).join(",\n") %>
+                  .scan(/(.{1,60})(?:,|$)/m).join(",\n#{ ' ' * 14 }") %>
       <% end -%>
 
     end
