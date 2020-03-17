@@ -2,6 +2,7 @@ module Scruby
   class Env
     include Equatable
     include Utils::PositionalKeywordArgs
+    extend Utils::PositionalKeywordArgs
 
     attr_reader :levels, :curves, :release_at, :loop_at, :offset
 
@@ -27,25 +28,75 @@ module Scruby
     }.freeze
 
 
-    DEFAULTS =
-      { levels: [ 0, 1, 0 ],
-        times: [ 1, 1 ],
-        curves: :lin,
-        release_at: nil,
-        loop_at: nil,
-        offset: 0,
-      }.freeze
+    DEFAULTS = {
+      levels: [ 0, 1, 0 ],
+      times: [ 1, 1 ],
+      curves: :lin,
+      release_at: nil,
+      loop_at: nil,
+      offset: 0,
+    }.freeze
+
+
+    TRIANGLE_DEFAULTS = { dur: 1, level: 1 }.freeze
+
+    SINE_DEFAULTS = { dur: 1, level: 1 }.freeze
+
+    PERC_DEFAULTS = {
+      attack: 0.01,
+      release: 1,
+      level: 1,
+      curves: -4
+    }.freeze
+
+    LINEN_DEFAULTS = {
+      attack: 0.01,
+      sustain: 1,
+      release: 1,
+      level: 1,
+      curves: :lin
+    }.freeze
+
+    CUTOFF_DEFAULTS = { release: 0.1, level: 1, curves: :lin }.freeze
+
+    DADSR_DEFAULTS = {
+      delay: 0.1,
+      attack: 0.01,
+      decay: 0.3,
+      sustain_level: 0.5,
+      release: 1,
+      peak_level: 1,
+      curves: -4,
+      bias: 0
+    }.freeze
+
+    ADSR_DEFAULTS = {
+      attack: 0.01,
+      decay: 0.3,
+      sustain_level: 0.5,
+      release: 1,
+      peak_level: 1,
+      curves: -4,
+      bias: 0
+    }.freeze
+
+    ASR_DEFAULTS = {
+      attack: 0.01,
+      sustain_level: 1,
+      release: 1,
+      curves: -4
+    }
 
 
     def initialize(*args, **kwargs)
-      assigns = positional_keyword_args(DEFAULTS, *args, **kwargs)
+      params = positional_keyword_args(DEFAULTS, *args, **kwargs)
 
-      @levels = assigns[:levels]
-      @times = assigns[:times]
-      @curves = [ *assigns[:curves]].map { |c| SHAPES_ALIAS.fetch(c, c) }
-      @release_at = assigns[:release_at]
-      @loop_at = assigns[:loop_at]
-      @offset = assigns[:offset]
+      @levels = params[:levels]
+      @times = params[:times]
+      @curves = [ *params[:curves]].map { |c| SHAPES_ALIAS.fetch(c, c) }
+      @release_at = params[:release_at]
+      @loop_at = params[:loop_at]
+      @offset = params[:offset]
     end
 
     def times
@@ -88,15 +139,13 @@ module Scruby
     # end
 
     def interpolate(step = 1, &block)
-      return each_step(step, &block) if block_given?
+      if block_given?
+        (0..duration).step(step).each { |time| yield at_time(time) }
+        return self
+      end
 
       size = duration.fdiv(step).ceil + 1
-      Enumerator.new(size) { |y| each_step(step, &y.method(:yield)) }
-    end
-
-    def each_step(step = 1)
-      (0..duration).step(step).each { |time| yield at_time(time) }
-      self
+      Enumerator.new(size) { |y| interpolate(step, &y.method(:yield)) }
     end
 
     def at_time(time)
@@ -139,7 +188,7 @@ module Scruby
     private
 
     def shape_numbers
-      curves.map { |curve| SHAPES.fetch(curve, 5) }
+      curves.map { |curve| SHAPES.fetch(curve, curve || 5) }
     end
 
     def shape_values
@@ -198,57 +247,89 @@ module Scruby
     end
 
     class << self
-      def triangle(dur: 1, level: 1)
-        new(levels: [ 0, level, 0 ], times: [ dur * 0.5, dur * 0.5 ])
+      def triangle(*args, **kwargs)
+        params =
+          positional_keyword_args(TRIANGLE_DEFAULTS, *args, **kwargs)
+
+        dur = params[:dur]
+        level = params[:level]
+
+        new([ 0, level, 0 ], [ dur * 0.5, dur * 0.5 ])
       end
 
-      def sine(dur: 1, level: 1)
-        levels = [ 0, level, 0 ]
-        times = [ dur * 0.5, dur * 0.5 ]
+      def sine(*args, **kwargs)
+        params = positional_keyword_args(SINE_DEFAULTS, *args, **kwargs)
+        dur = params[:dur]
+        level = params[:level]
 
-        new(levels: levels, times: times, curves: :sine)
+        new([ 0, level, 0 ], [ dur * 0.5, dur * 0.5 ], curves: :sine)
       end
 
-      def perc(attack: 0.01, release: 1, level: 1, curves: -4)
-        levels = [ 0, level, 0 ]
-        times = [ attack, release ]
+      def perc(*args, **kwargs)
+        params = positional_keyword_args(PERC_DEFAULTS, *args, **kwargs)
+        levels = [ 0, params[:level], 0 ]
+        times = [ params[:attack], params[:release] ]
 
-        new(levels: levels, times: times, curves: curves)
+        new(levels, times, curves: params[:curves])
       end
 
-      def linen(attack: 0.01, sustain: 1, release: 1, level: 1,
-                curves: :lin)
+      def linen(*args, **kwargs)
+        params =
+          positional_keyword_args(LINEN_DEFAULTS, *args, **kwargs)
 
+        level = params[:level]
         levels = [ 0, level, level, 0 ]
-        times = [ attack, sustain, release ]
+        times = [ params[:attack], params[:sustain ], params[:release] ]
 
-        new(levels: levels, times: times, curves: curves)
+        new(levels, times, curves: params[:curves])
       end
 
       def step
       end
 
-      def cutoff(release: 0.1, level: 1, curves: :lin)
-        # var releaseLevel = if(curveNo == 2) { -100.dbamp } { 0 };
-        levels = [ level, 0 ]
-        times = [ release ]
+      def cutoff(*args, **kwargs)
+        params =
+          positional_keyword_args(CUTOFF_DEFAULTS, *args, **kwargs)
 
-        new(levels: levels, times: times, curves: curves, release_at: 0)
+        # var releaseLevel = if(curveNo == 2) { -100.dbamp } { 0 };
+        levels = [ params[:level], 0 ]
+        times = [ params[:release] ]
+
+        new(levels, times, curves: params[:curves], release_at: 0)
       end
 
-      def dadsr(delay: 0.1, attack: 0.01, decay: 0.3,
-                sustain_level: 0.5, release: 1, peak_level: 1,
-                curves: -4, bias: 0)
+      def dadsr(*args, **kwargs)
+        params =
+          positional_keyword_args(DADSR_DEFAULTS, *args, **kwargs)
+
+        peak_level = params[:peak_level]
+        sustain_level = params[:sustain_level]
+        delay = params[:delay]
+        attack = params[:attack]
+        decay = params[:decay]
+        release = params[:release]
+        bias = params[:bias]
+        curves = params[:curves]
 
         levels = [ 0, 0, peak_level, peak_level * sustain_level, 0 ]
                    .map{ |e| e + bias }
+
         times = [ delay, attack, decay, release ]
 
-        new(levels: levels, times: times, curves: curves, release_at: 3)
+        new(levels, times, curves: curves, release_at: 3)
       end
 
-      def adsr(attack: 0.01, decay: 0.3, sustain_level: 0.5,
-               release: 1, peak_level: 1, curves: -4, bias: 0)
+      def adsr(*args, **kwargs)
+        params =
+          positional_keyword_args(ADSR_DEFAULTS, *args, **kwargs)
+
+        peak_level = params[:peak_level]
+        sustain_level = params[:sustain_level]
+        attack = params[:attack]
+        decay = params[:decay]
+        release = params[:release]
+        bias = params[:bias]
+        curves = params[:curves]
 
         levels = [ 0, peak_level, peak_level * sustain_level, 0 ]
                    .map{ |e| e + bias }
@@ -257,11 +338,18 @@ module Scruby
         new(levels: levels, times: times, curves: curves, release_at: 2)
       end
 
-      def asr(attack: 0.01, sustain_level: 1, release: 1, curves: -4)
+      def asr(*args, **kwargs)
+        params =
+          positional_keyword_args(ASR_DEFAULTS, *args, **kwargs)
+
+        sustain_level = params[:sustain_level]
+        attack = params[:attack]
+        release = params[:release]
+
         levels = [ 0, sustain_level, 0 ]
         times = [ attack, release ]
 
-        new(levels: levels, times: times, curves: curves, release_at: 1)
+        new(levels, times, curves: params[:curves], release_at: 1)
       end
 
       # def circle(levels: nil, times: nil, curves: :lin)
