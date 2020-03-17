@@ -3,7 +3,7 @@ module Scruby
     class OffsetOut < Base
       include AbstractOut
 
-      rates :audio
+      rates :control, :audio
     end
   end
 end

@@ -7,6 +7,10 @@ module Scruby
       def input_values
         super.flatten
       end
+
+      def out?
+        true
+      end
     end
   end
 end

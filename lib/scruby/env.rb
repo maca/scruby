@@ -93,7 +93,7 @@ module Scruby
 
       @levels = params[:levels]
       @times = params[:times]
-      @curves = [ *params[:curves]].map { |c| SHAPES_ALIAS.fetch(c, c) }
+      @curves = [ *params[:curves] ].map { |c| SHAPES_ALIAS.fetch(c, c) }
       @release_at = params[:release_at]
       @loop_at = params[:loop_at]
       @offset = params[:offset]
@@ -138,7 +138,7 @@ module Scruby
     #   ).flatten
     # end
 
-    def interpolate(step = 1, &block)
+    def interpolate(step = 1)
       if block_given?
         (0..duration).step(step).each { |time| yield at_time(time) }
         return self

@@ -7,7 +7,7 @@ module Scruby
       include Utils::PositionalKeywordArgs
 
 
-      attr_reader :inputs, :channels
+      attr_reader :channels
 
       def initialize(*args, rate: :audio, **kw)
         defaults = self.class.attributes.merge(self.class.inputs)
@@ -52,7 +52,7 @@ module Scruby
       end
 
       def build_graph(**args)
-        return Graph.new(self, **args) if is_out?
+        return Graph.new(self, **args) if out?
         Graph.new(Out.ar(0, self), **args)
       end
 
@@ -60,7 +60,7 @@ module Scruby
         build_graph.play(server, **opts)
       end
 
-      def is_out?
+      def out?
         false
       end
 

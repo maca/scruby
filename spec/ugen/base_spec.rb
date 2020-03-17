@@ -272,7 +272,7 @@ RSpec.describe Ugen::Base do
 
     context "is out" do
       before do
-        allow(instance).to receive(:is_out?) { true }
+        allow(instance).to receive(:out?) { true }
         allow(Graph).to receive(:new).with(instance, args) { graph }
       end
 

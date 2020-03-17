@@ -1,7 +1,6 @@
 module Scruby
   module Utils
     module PositionalKeywordArgs
-
       private
 
       def positional_keyword_args(defaults, *args, **kwargs)
@@ -9,13 +8,13 @@ module Scruby
           raise ArgumentError, %W[
             (wrong number of arguments (given #{args.size},
             expected less than #{defaults.size}))
-          ].join(' ')
+          ].join(" ")
         end
 
         extra_keys = kwargs.keys - defaults.keys
         if extra_keys.any?
           sust = "keyword#{ extra_keys.size > 1 ? 's' : '' }"
-          keys = extra_keys.map(&:inspect).join(', ')
+          keys = extra_keys.map(&:inspect).join(", ")
           raise ArgumentError, "(unknown #{sust}: #{keys})"
         end
 

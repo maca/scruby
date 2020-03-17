@@ -1,6 +1,6 @@
 module Scruby
   module Ugen
-    class ReplaceOut < Out
+    class ReplaceOut < Base
       include AbstractOut
 
       rates :control, :audio

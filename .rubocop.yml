@@ -13,7 +13,7 @@ Lint/AmbiguousOperator:
                  Checks for ambiguous operators in the first argument of a
                  method invocation without parentheses.
   StyleGuide: 'https://github.com/bbatsov/ruby-style-guide#parens-as-args'
-  Enabled: true
+  Enabled: false
 
 Lint/AmbiguousRegexpLiteral:
   Description: >-
@@ -128,7 +128,7 @@ Lint/ParenthesesAsGroupedExpression:
                  Checks for method calls with a space before the opening
                  parenthesis.
   StyleGuide: 'https://github.com/bbatsov/ruby-style-guide#parens-no-spaces'
-  Enabled: true
+  Enabled: false
 
 Lint/RequireParentheses:
   Description: >-
@@ -213,7 +213,7 @@ Metrics/BlockNesting:
 
 Metrics/ClassLength:
   Description: 'Avoid classes longer than 250 lines of code.'
-  Enabled: true
+  Enabled: false
   Max: 200
 
 Metrics/CyclomaticComplexity:
@@ -247,7 +247,7 @@ Metrics/MethodLength:
 
 Metrics/ModuleLength:
   Description: 'Avoid modules longer than 50 lines of code.'
-  Enabled: true
+  Enabled: false
   Max: 100
   Exclude:
     - app/controllers/concerns/admin_accounts_concern.rb
@@ -256,7 +256,7 @@ Metrics/ModuleLength:
 Metrics/ParameterLists:
   Description: 'Avoid parameter lists longer than three or four parameters.'
   StyleGuide: 'https://github.com/bbatsov/ruby-style-guide#too-many-params'
-  Enabled: true
+  Enabled: false
 
 Metrics/PerceivedComplexity:
   Description: >-
@@ -277,7 +277,7 @@ Layout/AccessModifierIndentation:
 
 Naming/AccessorMethodName:
   Description: Check the naming of accessor methods for get_/set_.
-  Enabled: true
+  Enabled: false
 
 Style/Alias:
   Description: 'Use alias_method instead of alias.'
@@ -861,7 +861,7 @@ Layout/SpaceAfterColon:
   Enabled: true
 
 Layout/SpaceInsideArrayLiteralBrackets:
-  EnforcedStyle: compact
+  EnforcedStyle: space
   Enabled: true
 
 Layout/SpaceAfterComma:

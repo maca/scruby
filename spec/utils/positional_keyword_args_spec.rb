@@ -36,7 +36,7 @@ RSpec.describe Utils::PositionalKeywordArgs do
     end
 
     context "passing keyword arguments" do
-      let(:kwargs) { { b: :x, c: :y, d: :z} }
+      let(:kwargs) { { b: :x, c: :y, d: :z } }
 
       it "mixes defaults with positional arg values" do
         expect(result).to eq(a: 1, b: :x, c: :y, d: :z)
@@ -45,7 +45,7 @@ RSpec.describe Utils::PositionalKeywordArgs do
 
     describe "keyword arguments override positional arguments" do
       let(:args) { %i(foo bar baz) }
-      let(:kwargs) { { b: :x, d: :z} }
+      let(:kwargs) { { b: :x, d: :z } }
 
       it "mixes defaults with positional arg values" do
         expect(result).to eq(a: :foo, b: :x, c: :baz, d: :z)
