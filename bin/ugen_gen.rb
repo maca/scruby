@@ -51,10 +51,10 @@ module Scruby
       include AbstractOut
       <% end -%>
 
-      rates <%= rates.map(&:inspect).join(', ')
-                     .scan(/(.{1,67})(?:,|$)/m) -%>
+      rates <%= rates.map(&:inspect).join(', ') -%>
       <% unless inputs.empty? %>
-      inputs <%= input_spec.join(', ') %>
+      inputs <%= input_spec.join(', ')
+                           .scan(/(.{1,60})(?:,|$)/m).join(",\n") %>
       <% end -%>
 
     end

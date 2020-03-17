@@ -28,8 +28,6 @@ module Scruby
         @processes.dup
       end
 
-      private
-
       class << self
         def register(process)
           instance.register(process)

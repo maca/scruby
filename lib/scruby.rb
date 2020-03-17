@@ -52,8 +52,6 @@ require_relative "scruby/ugen/base"
 require_relative "scruby/ugen/binary_op_ugen"
 require_relative "scruby/ugen/unary_op_ugen"
 
-require_relative "scruby/ugen/multi_out"
-
 require_relative "scruby/ugen/in"
 require_relative "scruby/ugen/out"
 require_relative "scruby/ugen/a2_k"
@@ -430,7 +428,6 @@ require_relative "scruby/ugen/zero_crossing"
 require_relative "scruby/ugen/replace_out"
 
 
-require_relative "scruby/synth_def"
 require_relative "scruby/node"
 require_relative "scruby/synth"
 require_relative "scruby/bus"
@@ -438,8 +435,6 @@ require_relative "scruby/buffer"
 require_relative "scruby/group"
 require_relative "scruby/par_group"
 require_relative "scruby/env"
-
-require_relative "scruby/ticker"
 
 require_relative "scruby/helpers"
 

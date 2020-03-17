@@ -24,8 +24,6 @@ module Scruby
       super(name: name, id: id, server: server)
     end
 
-    private
-
     class << self
       def create(server, name, **args)
         new(name, server).create(0, Group.new(server, 1), **args)
