@@ -191,12 +191,12 @@ module Scruby
       curves.map { |curve| SHAPES.fetch(curve, curve || 5) }
     end
 
-    def shape_values
-      curves.map do
-        0
-        # Ugens::Ugen.valid_input?(curve) ? curve : 0
-      end
-    end
+    # def shape_values
+    #   curves.map do
+    #     0
+    #     # Ugens::Ugen.valid_input?(curve) ? curve : 0
+    #   end
+    # end
 
     def calculate_level_at(pos, start_level, end_level, curve)
       case curve
