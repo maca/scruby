@@ -19,6 +19,7 @@ RSpec.describe Utils::PositionalKeywordArgs do
     instance.positional_keyword_args(defaults, *args, **kwargs)
   end
 
+
   describe "success" do
     context "default valuess" do
       it "returns defaults" do
@@ -42,7 +43,7 @@ RSpec.describe Utils::PositionalKeywordArgs do
       end
     end
 
-    describe "keyword arguments precedence" do
+    describe "keyword arguments override positional arguments" do
       let(:args) { %i(foo bar baz) }
       let(:kwargs) { { b: :x, d: :z} }
 
@@ -52,11 +53,12 @@ RSpec.describe Utils::PositionalKeywordArgs do
     end
   end
 
+
   describe "failure" do
     context "too many arguments given" do
       let(:args) { (1..5) }
       let(:msg) do
-        "(wrong number of arguments (given 5, expected 4))"
+        "(wrong number of arguments (given 5, expected less than 4))"
       end
 
       it { expect { result }.to raise_error(ArgumentError, msg) }

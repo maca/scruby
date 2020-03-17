@@ -8,7 +8,7 @@ module Scruby
         if args.size > defaults.size
           raise ArgumentError, %W[
             (wrong number of arguments (given #{args.size},
-            expected #{defaults.size}))
+            expected less than #{defaults.size}))
           ].join(' ')
         end
 
