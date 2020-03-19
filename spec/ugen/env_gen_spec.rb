@@ -1,4 +1,6 @@
 RSpec.describe Ugen::EnvGen do
+  it_behaves_like "has done action"
+
   describe "EnvGen as graph node" do
     context "for default Env with defaults" do
       let(:ugen) { EnvGen.kr(Env.new) }

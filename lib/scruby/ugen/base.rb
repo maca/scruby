@@ -76,6 +76,10 @@ module Scruby
       end
 
       class << self
+        def inherited(base)
+          base.prepend DoneActions
+        end
+
         def rates(*rates)
           return [ *@rates ] if rates.empty?
           @rates = rates.flatten
