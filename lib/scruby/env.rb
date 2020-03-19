@@ -128,15 +128,16 @@ module Scruby
       times[release_at..-1].sum
     end
 
-    # def to_a
-    #   contents = [ levels.first, times.size,
-    #                release_at || -99,
-    #                loop_at || -99 ]
-    #   contents + levels[1..-1].zip(
-    #     times, shape_numbers.cycle.take(levels.size - 1),
-    #     shape_values.cycle.take(levels.size - 1)
-    #   ).flatten
-    # end
+    def encode
+      numbers, values = [ shape_numbers, shape_values ].map do |ary|
+        ary.cycle.take(levels.size - 1)
+      end
+
+      [ levels.first, times.size,
+        release_at || -99, loop_at || -99,
+        *levels[1..-1].zip(times, numbers, values).flatten
+      ]
+    end
 
     def interpolate(step = 1)
       if block_given?
@@ -191,12 +192,9 @@ module Scruby
       curves.map { |curve| SHAPES.fetch(curve, curve || 5) }
     end
 
-    # def shape_values
-    #   curves.map do
-    #     0
-    #     # Ugens::Ugen.valid_input?(curve) ? curve : 0
-    #   end
-    # end
+    def shape_values
+      curves.map { 0 } # missing cases
+    end
 
     def calculate_level_at(pos, start_level, end_level, curve)
       case curve

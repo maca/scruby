@@ -41,7 +41,7 @@ require_relative "scruby/process/registry"
 
 require_relative "scruby/graph"
 require_relative "scruby/graph/visualize"
-require_relative "scruby/graph/node"
+require_relative "scruby/graph/ugen_node"
 require_relative "scruby/graph/constant"
 require_relative "scruby/graph/control_name"
 

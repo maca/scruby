@@ -3,7 +3,7 @@ require "forwardable"
 
 module Scruby
   class Graph
-    class Node
+    class UgenNode
       extend Forwardable
 
       include Encode
@@ -19,9 +19,10 @@ module Scruby
       def initialize(graph, ugen, inputs)
         @graph = graph
         @ugen = ugen
-        @inputs = inputs.map &method(:map_constant) >>
-                              method(:map_control_name) >>
-                              method(:add_control)
+        @inputs = inputs.flat_map &method(:map_constant) >>
+                                   method(:map_special_input) >>
+                                   method(:map_control_name) >>
+                                   method(:add_control)
       end
 
       def encode
@@ -37,7 +38,7 @@ module Scruby
       end
 
       def nodes
-        inputs.select { |i| i.is_a?(Node) }
+        inputs.select { |i| i.is_a?(UgenNode) }
       end
 
       def constants
@@ -67,10 +68,14 @@ module Scruby
         Constant.new(elem).tap { |const| graph.add_constant(const) }
       end
 
+      def map_special_input(elem)
+        return elem unless elem.is_a?(Env)
+        elem.encode.map &method(:map_constant)
+      end
+
       def map_control_name(name)
         return name unless [ String, Symbol ]
                               .any? { |t| name.is_a?(t) }
-
         graph.control_name(name)
       end
 

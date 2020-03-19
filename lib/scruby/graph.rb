@@ -12,7 +12,7 @@ module Scruby
       @controls = controls.map &method(:build_control_with_name)
       @nodes = []
       @constants = []
-      @root = Node.build_root(self, root_ugen)
+      @root = UgenNode.build_root(self, root_ugen)
 
       add_node @root
     end
@@ -28,7 +28,7 @@ module Scruby
         next if nodes.any? { |c| c.ugen.is_a?(Control) }
 
         control = Control.new(rate: :control, control_names: controls)
-        add_node Node.build(self, control)
+        add_node UgenNode.build(self, control)
       end
     end
 
@@ -67,7 +67,7 @@ module Scruby
     private
 
     def add_node(node)
-      return unless node.is_a?(Node)
+      return unless node.is_a?(UgenNode)
 
       node.inputs.each &method(:add_node)
       nodes.push(node)

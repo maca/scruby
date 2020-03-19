@@ -204,6 +204,14 @@ RSpec.describe Env do
   end
 
 
+  describe "build" do
+    let(:env) { Env.new }
+    let(:result) { [ 0, 2, -99, -99, 1, 1, 1, 0, 0, 1, 1, 0 ] }
+
+    it { expect(env.encode).to eq(result) }
+  end
+
+
   describe "predefined envelopes" do
     it { expect(Env.triangle).to be_an Env }
     it { expect(Env.sine).to be_an Env }
