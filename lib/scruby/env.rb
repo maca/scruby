@@ -18,7 +18,7 @@ module Scruby
     }.freeze
 
 
-    SHAPES_ALIAS = {
+    SHAPE_ALIASES = {
       lin: :linear,
       exp: :exponential,
       sin: :sine,
@@ -85,7 +85,7 @@ module Scruby
       sustain_level: 1,
       release: 1,
       curves: -4
-    }
+    }.freeze
 
 
     def initialize(*args, **kwargs)
@@ -93,7 +93,7 @@ module Scruby
 
       @levels = params[:levels]
       @times = params[:times]
-      @curves = [ *params[:curves] ].map { |c| SHAPES_ALIAS.fetch(c, c) }
+      @curves = [ *params[:curves] ].map { |c| SHAPE_ALIASES[c] || c }
       @release_at = params[:release_at]
       @loop_at = params[:loop_at]
       @offset = params[:offset]
