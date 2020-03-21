@@ -7,9 +7,9 @@ module Scruby
 
     attr_reader :server, :id, :group
 
-    def initialize(server, id = Node.next_id)
+    def initialize(server, id = nil)
       @server = server
-      @id = id
+      @id = id || Node.next_id
     end
 
     def free
@@ -115,7 +115,7 @@ module Scruby
 
     class << self
       def next_id
-        (@next_id ||= Concurrent::AtomicFixnum.new).increment
+        (@next_id ||= Concurrent::AtomicFixnum.new(999)).increment
       end
     end
   end
