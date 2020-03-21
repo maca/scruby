@@ -10,13 +10,14 @@ module Scruby
       super(server, id)
     end
 
-    def create(action, target, **args)
-      self.group_from_target(target, action)
+    def create(target, action = :head, **args)
+      group_from_target(target, action)
       send_msg *creation_message(action, target, **args)
     end
 
-    def creation_message(action, target, **args)
-      Message.new("/s_new", name, id, action, target.id, *args.flatten)
+    def creation_message(action, target = :head, **args)
+      action_i = map_action(action)
+      Message.new("/s_new", name, id, action_i, target.id, *args.flatten)
     end
 
     def get
@@ -31,27 +32,27 @@ module Scruby
 
     class << self
       def create(server, name, **args)
-        new(name, server).create(0, Group.new(server, 1), **args)
+        new(name, server).create(Group.new(server, 1), :head, **args)
       end
 
       def head(group, name, **args)
-        new(name, group.server).create(0, group, **args)
+        new(name, group.server).create(group, :head, **args)
       end
 
       def tail(group, name, **args)
-        new(name, group.server).create(1, group, **args)
+        new(name, group.server).create(group, :tail, **args)
       end
 
       def before(node, name, **args)
-        new(name, node.server).create(2, node, **args)
+        new(name, node.server).create(node, :before, **args)
       end
 
       def after(node, name, **args)
-        new(name, node.server).create(3, node, **args)
+        new(name, node.server).create(node, :after, **args)
       end
 
       def replace(node, name, **args)
-        new(name, node.server).create(4, node, **args)
+        new(name, node.server).create(node, :replace, **args)
       end
     end
   end

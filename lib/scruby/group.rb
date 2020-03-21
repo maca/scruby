@@ -26,7 +26,7 @@ module Scruby
 
     def create(action, target)
       group_from_target(target, action)
-      send_msg(creation_cmd, id, action, target.id)
+      send_msg(creation_cmd, id, map_action(action), target.id)
     end
 
     def inspect
@@ -39,27 +39,27 @@ module Scruby
 
     class << self
       def create(server)
-        new(server).create(0, Group.new(server, 1))
+        new(server).create(:head, Group.new(server, 1))
       end
 
       def head(group)
-        new(group.server).create(0, group)
+        new(group.server).create(:head, group)
       end
 
       def tail(group)
-        new(group.server).create(1, group)
+        new(group.server).create(:tail, group)
       end
 
       def before(node)
-        new(node.server).create(2, node)
+        new(node.server).create(:before, node)
       end
 
       def after(node)
-        new(node.server).create(3, node)
+        new(node.server).create(:after, node)
       end
 
       def replace(node)
-        new(node.server).create(4, node)
+        new(node.server).create(:replace, node)
       end
     end
   end

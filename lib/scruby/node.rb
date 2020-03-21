@@ -5,6 +5,8 @@ module Scruby
     include Equatable
     include PrettyInspectable
 
+    ACTIONS = %i(head tail before after replace)
+
     attr_reader :server, :id, :group
 
     def initialize(server, id = nil)
@@ -78,8 +80,12 @@ module Scruby
 
     private
 
+    def map_action(action)
+      ACTIONS.index(action) || action
+    end
+
     def group_from_target(target, action)
-      @group = action < 2 ? target : target.group
+      @group = map_action(action) < 2 ? target : target.group
     end
 
     def send_msg(*args)
@@ -111,10 +117,6 @@ module Scruby
       when :audio
         [ "/n_mapan", id, *args ].flatten
       end
-    end
-
-    def creation_cmd
-      raise NotImplementedError
     end
 
     class << self

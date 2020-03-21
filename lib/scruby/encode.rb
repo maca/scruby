@@ -3,15 +3,15 @@ module Scruby
     module_function
 
     def encode_int8(num)
-      encode_int8_array [num & 255 ]
+      encode_int8_array [ num & 255 ]
     end
 
     def encode_int16(num)
-      encode_int16_array [num]
+      encode_int16_array [ num ]
     end
 
     def encode_int32(num)
-      encode_int32_array [num]
+      encode_int32_array [ num ]
     end
 
     def encode_floats_array(array)
