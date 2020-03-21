@@ -1,5 +1,6 @@
 RSpec.describe Graph do
   describe "graph with sum" do
+    let(:server) { Server.new }
     let(:graph) { Graph.new(Out.ar(0, SinOsc.ar + Saw.ar), "sum") }
 
     it { expect(graph.nodes.map(&:name))
@@ -20,8 +21,12 @@ RSpec.describe Graph do
         0, 2, 0, 0, 0, 0, 0, 0 ].pack("C*")
     end
 
-    it "should encode graph" do
+    it "encodes graph" do
       expect(graph.encode).to eq(expected)
+    end
+
+    it "sends graph" do
+      expect(graph.send_to(server)).to eq(graph)
     end
   end
 end

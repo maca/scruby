@@ -43,7 +43,7 @@ module Scruby
 
     def encode
       [
-        init_stream(1),
+        init_stream,
         encode_string(name),
         encode_constants,
         encode_control_defaults,
@@ -53,11 +53,13 @@ module Scruby
       ].join
     end
 
-    def visualize
-      Visualize.print(root)
+    def send_to(server, completion_message = nil)
+      server.send_graph(self, completion_message)
+      self
     end
 
-    def play(server, out: 0, fade_in: 0.2, position: :head, args: {})
+    def visuaize
+      Visualize.print(root)
     end
 
     def inspect

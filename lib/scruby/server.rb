@@ -66,14 +66,18 @@ module Scruby
     end
 
     def send_bundle(*messages, timestamp: nil)
-      bundle = messages.map{ |msg| Message.new(*msg) }
+      bundle = messages.map do |msg|
+        msg.is_a?(Message) ? msg : Message.new(*msg)
+      end
+
       send_msg Bundle.new(timestamp, *bundle)
     end
 
     # Encodes and sends a synth graph to the scsynth server
-    def send_def(graph)
+    def send_graph(graph, completion_message = nil)
       blob = Blob.new(graph.encode)
-      send_msg Bundle.new(nil, Message.new("/d_recv", blob, 0))
+      completion_message ||= 0
+      send_bundle Message.new("/d_recv", blob, completion_message)
     end
 
     def inspect

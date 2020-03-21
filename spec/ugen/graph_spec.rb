@@ -99,4 +99,18 @@ RSpec.describe Graph do
       end
     end
   end
+
+
+  describe "send to server" do
+    let(:ugen) do
+      instance_double("Ugen::Base", input_values: [], name: "SinOsc")
+    end
+
+    let(:server) { spy instance_double("Server") }
+    subject(:graph) { described_class.new(ugen) }
+
+    before { graph.send_to(server) }
+
+    it { expect(server).to have_received(:send_graph).with(graph, nil) }
+  end
 end

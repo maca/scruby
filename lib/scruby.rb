@@ -32,6 +32,7 @@ require_relative "scruby/utils/positional_keyword_args"
 require_relative "scruby/sclang/helpers"
 require_relative "scruby/sclang"
 require_relative "scruby/server"
+require_relative "scruby/server/message_queue"
 require_relative "scruby/server/local"
 require_relative "scruby/server/options"
 
