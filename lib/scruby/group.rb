@@ -25,7 +25,7 @@ module Scruby
     end
 
     def create(action, target)
-      @group = action < 2 ? target : target.group
+      group_from_target(target, action)
       send_msg(creation_cmd, id, action, target.id)
     end
 

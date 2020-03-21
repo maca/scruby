@@ -10,8 +10,12 @@ module Scruby
     end
 
     def create(action, target, **args)
-      @group = action < 2 ? target : target.group
-      send_msg("/s_new", name, id, action, target.id, *args.flatten)
+      self.group_from_target(target, action)
+      send_msg *creation_message(action, target, **args)
+    end
+
+    def creation_message(action, target, **args)
+      Message.new("/s_new", name, id, action, target.id, *args.flatten)
     end
 
     def get

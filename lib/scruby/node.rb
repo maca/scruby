@@ -78,6 +78,10 @@ module Scruby
 
     private
 
+    def group_from_target(target, action)
+      @group = action < 2 ? target : target.group
+    end
+
     def send_msg(*args)
       server.send_msg(*args)
       self
