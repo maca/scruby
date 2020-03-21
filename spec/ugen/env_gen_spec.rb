@@ -33,7 +33,7 @@ RSpec.describe Ugen::EnvGen do
 
       subject(:node) { Graph::UgenNode.build(graph, ugen) }
 
-      it { expect(node.encode).to eq(expected) }
+      it { expect(node).to encode_as(expected) }
     end
   end
 end

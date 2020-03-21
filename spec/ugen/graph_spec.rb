@@ -70,7 +70,7 @@ RSpec.describe Graph do
       subject(:graph) { described_class.new(ugen, :basic) }
 
       it "should encode graph" do
-        expect(graph.encode).to eq(expected)
+        expect(graph).to encode_as(expected)
       end
     end
 
@@ -95,7 +95,7 @@ RSpec.describe Graph do
       end
 
       it "should encode graph" do
-        expect(graph.encode).to eq(expected)
+        expect(graph).to encode_as(expected)
       end
     end
 

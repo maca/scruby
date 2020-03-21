@@ -11,7 +11,7 @@ module Scruby
       include PrettyInspectable
 
       def_delegators :ugen, :name, :rate, :rate_index, :channels_count,
-                     :output_specs
+                     :special_index, :output_specs
 
 
       attr_reader :ugen, :inputs, :graph
@@ -85,7 +85,6 @@ module Scruby
       end
 
       def output_index; 0 end
-      def special_index; 0 end
 
       class << self
         def build_root(graph, ugen)

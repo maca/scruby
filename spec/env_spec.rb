@@ -208,7 +208,7 @@ RSpec.describe Env do
     let(:env) { Env.new }
     let(:result) { [ 0, 2, -99, -99, 1, 1, 1, 0, 0, 1, 1, 0 ] }
 
-    it { expect(env.encode).to eq(result) }
+    it { expect(env).to encode_as(result) }
   end
 
 

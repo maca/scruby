@@ -43,6 +43,7 @@ module Scruby
       def channels_count; 1 end
       def inputs; {} end
       def attributes; {} end
+      def special_index; 0 end
 
       def inspect
         super(rate: rate, **attributes, **inputs)
@@ -57,8 +58,7 @@ module Scruby
       end
 
       def demo(server, **args)
-        root = out? ? self : Out.new(0, self)
-        graph = Graph.new(root)
+        graph = Graph.new(out? ? self : Out.new(0, self))
 
         Synth.new(graph.name, server).tap do |synth|
           group = Group.new(server, 1)

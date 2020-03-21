@@ -81,7 +81,7 @@ RSpec.describe Graph::UgenNode do
 
       subject(:node) { described_class.build(graph, ugen) }
 
-      it { expect(node.encode).to eq(expected) }
+      it { expect(node).to encode_as(expected) }
     end
   end
 end
