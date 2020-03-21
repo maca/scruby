@@ -1,6 +1,7 @@
 module Scruby
   class Synth
     include Node
+    include OSC
 
     attr_reader :name
 
