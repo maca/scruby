@@ -11,10 +11,14 @@ $loader = Zeitwerk::Loader.new
 $loader.push_dir File.join(__dir__, "..", "lib")
 $loader.enable_reloading
 $loader.setup
-Listen.to(*$loader.root_dirs.keys) { $loader.reload }.start
+
+Listen.to(*$loader.root_dirs.keys) {
+  $loader.reload
+  include Scruby::Helpers
+}.start
+
 
 require "ruby-osc"
-
 
 include Scruby::Helpers
 
