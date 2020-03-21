@@ -12,10 +12,11 @@ module Scruby
 
     def create(target, action = :head, **args)
       group_from_target(target, action)
-      send_msg *creation_message(action, target, **args)
+      send_msg *creation_message(target, action, **args)
     end
 
-    def creation_message(action, target = :head, **args)
+    # TODO: no specs
+    def creation_message(target, action = :head, **args)
       action_i = map_action(action)
       Message.new("/s_new", name, id, action_i, target.id, *args.flatten)
     end

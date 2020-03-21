@@ -55,6 +55,17 @@ module Scruby
       def visualize
         build_graph.visualize
       end
+
+      def demo(server, **args)
+        root = out? ? self : Out.new(0, self)
+        graph = Graph.new(root)
+
+        Synth.new(graph.name, server).tap do |synth|
+          group = Group.new(server, 1)
+          graph.send_to(server, synth.creation_message(group))
+        end
+      end
+
       def send_to(server, **args)
         build_graph(**args).send_to(server)
       end

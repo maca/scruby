@@ -98,6 +98,10 @@ RSpec.describe Graph do
         expect(graph.encode).to eq(expected)
       end
     end
+
+    describe "demo a graph" do
+      let(:ugen) { instance_double("Ugen") }
+    end
   end
 
 

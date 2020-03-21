@@ -7,6 +7,7 @@ module Scruby
     include OSC
     include Sclang::Helpers
     include PrettyInspectable
+    include Encode
 
     attr_reader :host, :port, :client, :message_queue, :process, :name
     private :process
@@ -76,8 +77,9 @@ module Scruby
     # Encodes and sends a synth graph to the scsynth server
     def send_graph(graph, completion_message = nil)
       blob = Blob.new(graph.encode)
-      completion_message ||= 0
-      send_bundle Message.new("/d_recv", blob, completion_message)
+      on_completion = graph_completion_blob(completion_message)
+
+      send_bundle Message.new("/d_recv", blob, on_completion)
     end
 
     def inspect
@@ -85,6 +87,11 @@ module Scruby
     end
 
     private
+
+    def graph_completion_blob(message)
+      return message || 0 unless message.is_a? Message
+      Blob.new(message.encode)
+    end
 
     def eval_async(code)
       Sclang.main.eval_async(code)
