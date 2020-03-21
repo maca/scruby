@@ -52,6 +52,9 @@ module Scruby
         Graph.new(self, **args)
       end
 
+      def visualize
+        build_graph.visualize
+      end
       def send_to(server, **args)
         build_graph(**args).send_to(server)
       end

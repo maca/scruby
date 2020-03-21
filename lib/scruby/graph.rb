@@ -58,7 +58,7 @@ module Scruby
       self
     end
 
-    def visuaize
+    def visualize
       Visualize.print(root)
     end
 

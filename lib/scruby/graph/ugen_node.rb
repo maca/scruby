@@ -10,7 +10,7 @@ module Scruby
       include Equatable
       include PrettyInspectable
 
-      def_delegators :ugen, :name, :rate_index, :channels_count,
+      def_delegators :ugen, :name, :rate, :rate_index, :channels_count,
                      :output_specs
 
 
@@ -58,7 +58,7 @@ module Scruby
       end
 
       def print_name
-        name
+        "#{name}(#{rate})"
       end
 
       private
