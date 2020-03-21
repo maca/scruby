@@ -1,7 +1,7 @@
 module Scruby
   module Encode
     def encode_int8(num)
-      [ num & 255 ].pack("C*")
+      encode_int_array [num & 255 ]
     end
 
     def encode_int16(num)
@@ -19,6 +19,10 @@ module Scruby
     def encode_string(string)
       "#{encode_int8(string.size)}#{string[0..255]}"
       encode_int8(string.size) + string[0..255]
+    end
+
+    def encode_int_array(ary)
+      ary.pack("C*")
     end
   end
 end
