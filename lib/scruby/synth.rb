@@ -4,9 +4,9 @@ module Scruby
 
     attr_reader :name
 
-    def initialize(name, server)
+    def initialize(name, server, id = nil)
       @name = name
-      super(server)
+      super(server, id)
     end
 
     def create(action, target, **args)

@@ -9,6 +9,10 @@ RSpec.describe Group do
     let(:node) { group }
   end
 
+  it "instantiates with id" do
+    expect(Group.new(server, 1).id).to be 1
+  end
+
   describe "move node" do
     let(:node) { spy instance_double("Node") }
 

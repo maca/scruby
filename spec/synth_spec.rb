@@ -11,6 +11,10 @@ RSpec.describe Synth do
     let(:node) { synth }
   end
 
+  it "instantiates with id" do
+    expect(Synth.new(:synth, server, 1).id).to be 1
+  end
+
 
   describe "initialize with position" do
     let(:a_group) do
