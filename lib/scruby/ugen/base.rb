@@ -32,17 +32,14 @@ module Scruby
         inputs.values
       end
 
-      # TODO: no specs
       def rate_index
         E_RATES.index(rate)
       end
 
-      # TODO: no specs
       def output_specs #:nodoc:
         [ E_RATES.index(rate) ]
       end
 
-      # TODO: no specs
       def channels_count; 1 end
       def inputs; {} end
       def attributes; {} end
@@ -52,12 +49,11 @@ module Scruby
       end
 
       def build_graph(**args)
-        return Graph.new(self, **args) if out?
-        Graph.new(Out.ar(0, self), **args)
+        Graph.new(self, **args)
       end
 
-      def play(server, **opts)
-        build_graph.play(server, **opts)
+      def send_to(server, **args)
+        build_graph(**args).send_to(server)
       end
 
       def out?
