@@ -17,7 +17,7 @@ RSpec.configure do |config|
 
   config.expect_with :rspec do |c|
     c.syntax = :expect
-    # c.max_formatted_output_length = 0
+    c.max_formatted_output_length = 1000
   end
 end
 
