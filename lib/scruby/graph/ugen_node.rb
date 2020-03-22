@@ -49,8 +49,12 @@ module Scruby
         inputs.select { |i| i.is_a?(ControlName) }
       end
 
+      def index
+        graph.node_index(self)
+      end
+
       def input_specs(_)
-        [ graph.nodes.index(self), output_index ]
+        [ index, output_index ]
       end
 
       def inspect

@@ -60,6 +60,21 @@ RSpec.describe Graph::UgenNode do
     end
   end
 
+
+  describe ".index" do
+    let(:ugen) { instance_double("Ugen::Base", input_values: []) }
+    let(:graph) { instance_double("Scruby::Graph") }
+
+    subject(:node) { described_class.build(graph, ugen) }
+
+    before do
+      allow(graph).to receive(:node_index) { 9 }
+    end
+
+    it { expect(node.index).to eq 9 }
+  end
+
+
   describe ".encode" do
     context "control rate" do
       let(:ugen) { Ugen::SinOsc.kr }

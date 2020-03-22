@@ -32,7 +32,7 @@ RSpec.describe Graph do
       end
     end
 
-    context "non name is given" do
+    context "no name is given" do
       subject(:graph) do
         described_class.new(root_ugen)
       end
@@ -103,7 +103,6 @@ RSpec.describe Graph do
       let(:ugen) { instance_double("Ugen") }
     end
   end
-
 
   describe "send to server" do
     let(:ugen) do

@@ -7,8 +7,8 @@ module Scruby
 
     attr_reader :name, :root, :nodes, :controls, :constants
 
-    def initialize(root_ugen, name = SecureRandom.uuid, **controls)
-      @name = name
+    def initialize(root_ugen, name = nil, **controls)
+      @name = name || SecureRandom.uuid
       @controls = controls.map &method(:build_control_with_name)
       @nodes = []
       @constants = []
@@ -51,6 +51,10 @@ module Scruby
         encode_nodes,
         encode_variants
       ].join
+    end
+
+    def node_index(node)
+      nodes.index(node)
     end
 
     def send_to(server, completion_message = nil)
