@@ -57,7 +57,7 @@ module Scruby
         build_graph.visualize
       end
 
-      def demo(server, **args)
+      def demo(server, **_args)
         graph = Graph.new(out? ? self : Out.new(0, self))
 
         Synth.new(graph.name, server).tap do |synth|
@@ -72,6 +72,10 @@ module Scruby
 
       def out?
         false
+      end
+
+      def ==(other)
+        self.class == other.class && super
       end
 
       protected

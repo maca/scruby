@@ -45,6 +45,7 @@ require_relative "scruby/graph/visualize"
 require_relative "scruby/graph/ugen_node"
 require_relative "scruby/graph/constant"
 require_relative "scruby/graph/control_name"
+require_relative "scruby/synth_def"
 
 require_relative "scruby/ugen"
 require_relative "scruby/ugen/operations"

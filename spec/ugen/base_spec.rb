@@ -238,11 +238,30 @@ RSpec.describe Ugen::Base do
       end
     end
 
-    let(:instance) { subclass.ar }
-    it { expect(instance).to eq instance.rate(:audio) }
-    it { expect(instance).not_to eq instance.rate(:control) }
-    it { expect(instance).to eq instance.freq(440) }
-    it { expect(instance).not_to eq instance.freq(220) }
+    context "literal inputs" do
+      let(:instance) { subclass.ar }
+      it { expect(instance).to eq instance.rate(:audio) }
+      it { expect(instance).not_to eq instance.rate(:control) }
+      it { expect(instance).to eq instance.freq(440) }
+      it { expect(instance).not_to eq instance.freq(220) }
+    end
+
+    context "nested ugens" do
+      let(:ugen_a) do
+        Out.ar(0, SinOsc.ar(400) * 5)
+      end
+
+      let(:ugen_b) do
+        Out.ar(0, SinOsc.ar(400) * 5.0)
+      end
+
+      let(:ugen_c) do
+        Out.ar(0, SinOsc.ar(400) * 4.9)
+      end
+
+      it { expect(ugen_a).to eq ugen_b }
+      it { expect(ugen_a).not_to eq ugen_c }
+    end
   end
 
   shared_context "simple ugen with graph" do

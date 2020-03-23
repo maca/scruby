@@ -116,4 +116,21 @@ RSpec.describe Graph do
 
     it { expect(server).to have_received(:send_graph).with(graph, nil) }
   end
+
+  describe "equality" do
+    let(:graph_a) do
+      Graph.new(Out.ar(0, SinOsc.ar(400) * 5), :simple)
+    end
+
+    let(:graph_b) do
+      Graph.new(Out.ar(0, SinOsc.ar(400) * 5.0), :simple)
+    end
+
+    let(:graph_c) do
+      Graph.new(Out.ar(0, SinOsc.ar(400) * 4.9), :simple)
+    end
+
+    it { expect(graph_a).to eq graph_b }
+    it { expect(graph_a).not_to eq graph_c }
+  end
 end

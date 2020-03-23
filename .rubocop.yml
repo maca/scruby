@@ -651,7 +651,7 @@ Style/ModuleFunction:
 Style/MultilineBlockChain:
   Description: 'Avoid multi-line chains of blocks.'
   StyleGuide: 'https://github.com/bbatsov/ruby-style-guide#single-line-blocks'
-  Enabled: true
+  Enabled: false
 
 Layout/MultilineBlockLayout:
   Description: 'Ensures newlines after multiline block do statements.'

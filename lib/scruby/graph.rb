@@ -3,6 +3,7 @@ require "securerandom"
 module Scruby
   class Graph
     include Encode
+    include Equatable
     include PrettyInspectable
 
     attr_reader :name, :root, :nodes, :controls, :constants
@@ -68,6 +69,12 @@ module Scruby
 
     def inspect
       super(name: name, controls: controls, root: root)
+    end
+
+    protected
+
+    def equatable_state
+      [ name, root.ugen, controls ]
     end
 
     private
