@@ -1,6 +1,10 @@
 module Scruby
   class SynthDef
+    extend Forwardable
+
     attr_reader :graph
+    def_delegators :graph, :encode, :send_to, :visualize
+
 
     def initialize(name = nil, &block)
       controls = catch(:args) { param_defaults(&block) }

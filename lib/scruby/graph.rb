@@ -42,6 +42,19 @@ module Scruby
         raise(KeyError, "control not found (#{name})")
     end
 
+    def node_index(node)
+      nodes.index(node)
+    end
+
+    def visualize
+      Visualize.print(root)
+    end
+
+    def send_to(server, completion_message = nil)
+      server.send_graph(self, completion_message)
+      self
+    end
+
     def encode
       [
         init_stream,
@@ -52,19 +65,6 @@ module Scruby
         encode_nodes,
         encode_variants
       ].join
-    end
-
-    def node_index(node)
-      nodes.index(node)
-    end
-
-    def send_to(server, completion_message = nil)
-      server.send_graph(self, completion_message)
-      self
-    end
-
-    def visualize
-      Visualize.print(root)
     end
 
     def inspect
