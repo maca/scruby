@@ -7,6 +7,7 @@ module Scruby
       attributes do
         attribute :bind_address, "127.0.0.1"
         attribute :protocol, :udp
+        attribute :port, 57_110
         attribute :num_audio_bus_channels, 1024
         attribute :num_control_bus_channels, 16_384
         attribute :num_input_bus_channels, 2
@@ -32,7 +33,7 @@ module Scruby
         attribute :in_device, nil
         attribute :out_device, nil
         attribute :ugen_plugins_path, nil
-        attribute :max_logins, 4
+        attribute :max_logins, 32
         attribute :num_private_audio_bus_channels, 1020
         attribute :remote_control_volume, false
         attribute :reserved_num_audio_bus_channels, 0
@@ -67,6 +68,43 @@ module Scruby
 
       def each(&block)
         attributes.each(&block)
+      end
+
+      def flags
+        flags = [
+          [ :B, bind_address ],
+          [ (protocol.to_sym == :tcp ? :t : :u), port ],
+          [ :a, total_audio_bus_channels ],
+          [ :c, num_control_bus_channels ],
+          [ :i, num_input_bus_channels ],
+          [ :o, num_output_bus_channels ],
+          [ :b, num_buffers ],
+          [ :n, max_nodes ],
+          [ :d, max_synth_defs ],
+          [ :z, block_size ],
+          [ :Z, hardware_buffer_size ],
+          [ :m, mem_size ],
+          [ :r, num_r_gens ],
+          [ :w, num_wire_bufs ],
+          [ :S, sample_rate ],
+          [ :T, threads ],
+          [ :V, verbosity ],
+          [ :P, restricted_path ],
+          [ :I, input_streams_enabled ],
+          [ :O, output_streams_enabled ],
+          [ (:L if memory_locking), "" ],
+          ([ :D, 0 ] unless load_defs),
+          ([ :R, 0 ] unless zero_conf),
+          ([ :C, 1 ] if use_system_clock),
+          [ :H, (devices.map(&:inspect).join(" ") if devices.any?) ],
+          [ :U, ugen_plugins_path ],
+          [ :l, max_logins ]
+        ]
+
+        flags.reduce("") do |str, (k, v)|
+          next str if [ k, v ].any?(&:nil?)
+          "#{str} -#{k} #{v}".strip
+        end
       end
     end
   end

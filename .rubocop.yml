@@ -262,7 +262,7 @@ Metrics/PerceivedComplexity:
   Description: >-
                  A complexity metric geared towards measuring complexity for a
                  human reader.
-  Enabled: true
+  Enabled: false
   Exclude:
     - app/controllers/concerns/admin_accounts_concern.rb
     - app/controllers/concerns/admin_sessions_concern.rb
