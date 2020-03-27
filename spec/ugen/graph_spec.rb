@@ -4,7 +4,7 @@ RSpec.describe Graph do
 
     context "initialize with controls" do
       let(:control_params) do
-        { k_1: 1, k_2: ir(2), k_3: tr(3), k_4: kr(4) }
+        { k_1: 1, k_2: scalar(2), k_3: trigger(3), k_4: control(4) }
       end
 
       subject(:graph) do

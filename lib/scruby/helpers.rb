@@ -8,15 +8,15 @@ module Scruby
       end
     end
 
-    def kr(val)
+    def control(val)
       Graph::ControlName.new(val, :control)
     end
 
-    def ir(val)
+    def scalar(val)
       Graph::ControlName.new(val, :scalar)
     end
 
-    def tr(val)
+    def trigger(val)
       Graph::ControlName.new(val, :trigger)
     end
   end
