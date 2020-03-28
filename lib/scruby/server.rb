@@ -21,22 +21,16 @@ module Scruby
     end
 
     def boot(binary: "scsynth", **opts)
-      flags = Options.new(**opts, **{ bind_address: host }).flags
-      @process = Process.spawn(binary, flags)
+      options = Options.new(**opts, **{ bind_address: host })
+      @process = Process.spawn(binary, options.flags, env: options.env)
 
       message_queue.sync
         .then { continue_boot }
         .then { self }
     end
 
-
     def boot!(binary: "scsynth", **opts)
       boot(binary: binary, **opts).value!
-    end
-
-
-    def continue_boot
-      send_msg "/g_new", 1
     end
 
     # def quit
@@ -95,6 +89,10 @@ module Scruby
     end
 
     private
+
+    def continue_boot
+      send_msg "/g_new", 1, 0, 0
+    end
 
     def graph_completion_blob(message)
       return message || 0 unless message.is_a? Message

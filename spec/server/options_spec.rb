@@ -12,7 +12,7 @@ RSpec.describe Scruby::Server::Options do
 
   describe "flags" do
     let(:flags) do
-      %W[
+      %w(
         -B 127.0.0.1
         -u 57110
         -a 1024
@@ -29,7 +29,7 @@ RSpec.describe Scruby::Server::Options do
         -V 0
         -R 0
         -l 32
-      ].join(" ")
+      ).join(" ")
     end
 
     it { expect(options.flags).to eq flags }

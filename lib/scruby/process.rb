@@ -8,12 +8,13 @@ module Scruby
     extend Forwardable
     include PrettyInspectable
 
-    attr_reader :binary, :flags, :pid
+    attr_reader :binary, :flags, :env, :pid
 
 
-    def initialize(binary, flags = "")
+    def initialize(binary, flags = "", env: {})
       @binary = TTY::Which.which(binary) || binary
       @flags = flags
+      @env = env.map { |k, v| "#{k.to_s.upcase}=#{v}" }.join(" ")
       @semaphore = Mutex.new
       @reader, @writer = IO.pipe
     end
@@ -24,7 +25,7 @@ module Scruby
       @stdout, stdoutw = IO.pipe
       stdinr, @stdin = IO.pipe
 
-      @pid = Kernel.spawn("#{binary} #{flags}", in: stdinr,
+      @pid = Kernel.spawn("#{env} #{binary} #{flags}", in: stdinr,
                           err: [ :child, :out ],
                           out: stdoutw)
 
@@ -89,8 +90,8 @@ module Scruby
     end
 
     class << self
-      def spawn(binary, *args)
-        new(binary, *args).spawn
+      def spawn(binary, *args, env: {})
+        new(binary, *args, env: env).spawn
       end
     end
   end

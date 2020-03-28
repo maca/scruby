@@ -45,6 +45,9 @@ module Scruby
         attribute :rec_channels, 2
         attribute :rec_buf_size, nil
         # attribute :initial_node_id, 1000
+
+        attribute :jack_default_inputs, "system"
+        attribute :jack_default_outputs, "system"
       end
 
       def ugen_plugins_path=(paths)
@@ -105,6 +108,13 @@ module Scruby
           next str if [ k, v ].any?(&:nil?)
           "#{str} -#{k} #{v}".strip
         end
+      end
+
+      def env
+        {
+          SC_JACK_DEFAULT_INPUTS: jack_default_inputs,
+          SC_JACK_DEFAULT_OUTPUTS: jack_default_outputs
+        }
       end
     end
   end
