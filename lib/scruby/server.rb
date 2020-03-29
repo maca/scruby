@@ -37,7 +37,6 @@ module Scruby
 
     def quit
       send_msg "/quit"
-
       # process.kill
     end
 

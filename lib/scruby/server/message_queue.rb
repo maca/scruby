@@ -20,26 +20,29 @@ module Scruby
       end
 
       def sync(timeout = 5)
-        Promises.future Cancellation.timeout(timeout), &method(:do_sync)
-      end
-
-      private
-
-      def do_sync(cancelation)
         id = message_id.increment
 
-        loop do
-          cancelation.check!
-          return server if send_sync(id)
+        Promises.future(Cancellation.timeout(timeout)) do |cancel|
+          loop do
+            begin
+              cancel.check!
+              server.send_bundle Message.new("/sync", id)
+
+              match = message_matching do |msg|
+                msg.address == "/synced" && msg.args.first == id
+              end
+
+              break server if match
+            rescue Errno::ECONNREFUSED
+              retry
+            end
+          end
         end
       end
 
-      def send_sync(id)
-        server.send_bundle Message.new("/sync", id)
+      def message_matching
         msg = Message.decode socket.recvfrom(65_535).first
-
-        msg.address == "/synced" && msg.args.first == id
-      rescue Errno::ECONNREFUSED
+        msg if yield(msg)
       end
     end
   end
