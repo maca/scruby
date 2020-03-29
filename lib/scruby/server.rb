@@ -26,7 +26,7 @@ module Scruby
       @process = Process.spawn(binary, opts.flags, env: opts.env)
 
       wait_for_ready
-        .then { |cancel| message_queue.sync(cancel) }.flat_future
+        .then_flat_future { message_queue.sync }
         .then { continue_boot }
         .then { self }
     end
@@ -110,7 +110,10 @@ module Scruby
       Promises.future(Cancellation.timeout(5)) do |cancelation|
         loop do
           cancelation.check!
-          break cancelation if /server ready/ === process.read
+          line = process.read
+
+          raise "Address in Use" if /Address already in use/ === line
+          break cancelation if /server ready/ === line
         end
       end
     end
