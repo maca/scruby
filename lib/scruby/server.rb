@@ -8,6 +8,7 @@ module Scruby
     include Sclang::Helpers
     include PrettyInspectable
     include Encode
+    include Concurrent
 
     attr_reader :host, :port, :client, :message_queue, :process
     private :process
@@ -24,7 +25,8 @@ module Scruby
       opts = Options.new(**opts, **{ bind_address: host, port: port })
       @process = Process.spawn(binary, opts.flags, env: opts.env)
 
-      message_queue.sync
+      wait_for_ready
+        .then { |cancel| message_queue.sync(cancel) }.flat_future
         .then { continue_boot }
         .then { self }
     end
@@ -103,6 +105,15 @@ module Scruby
     def graph_completion_blob(message)
       return message || 0 unless message.is_a? Message
       Blob.new(message.encode)
+    end
+
+    def wait_for_ready
+      Promises.future(Cancellation.timeout(5)) do |cancelation|
+        loop do
+          cancelation.check!
+          break cancelation if /server ready/ === process.read
+        end
+      end
     end
 
     class << self
