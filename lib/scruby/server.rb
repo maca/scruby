@@ -16,13 +16,13 @@ module Scruby
     def initialize(host: "127.0.0.1", port: 57_110)
       @host = host
       @port = port
-      @message_queue = MessageQueue.new(self)
       @client = OSC::Client.new(port, host)
+      @message_queue = MessageQueue.new(self)
     end
 
     def boot(binary: "scsynth", **opts)
-      options = Options.new(**opts, **{ bind_address: host })
-      @process = Process.spawn(binary, options.flags, env: options.env)
+      opts = Options.new(**opts, **{ bind_address: host, port: port })
+      @process = Process.spawn(binary, opts.flags, env: opts.env)
 
       message_queue.sync
         .then { continue_boot }
@@ -33,17 +33,22 @@ module Scruby
       boot(binary: binary, **opts).value!
     end
 
-    # def quit
-    #   forward_async :quit
-    # end
+    def quit
+      send_msg "/quit"
 
-    # def reboot
-    #   forward_async :reboot
-    # end
+      # process.kill
+    end
 
-    # def free_all
-    #   forward_async :freeAll
-    # end
+    def reboot
+      quit
+      message_queue.sync.then { boot }
+    end
+
+    def free_all
+      send_msg "/g_freeAll", 0
+      send_msg "/clearSched"
+      send_msg "/g_new", 1, 0, 0
+    end
 
     # def mute
     #   forward_async :mute
@@ -54,7 +59,7 @@ module Scruby
     # end
 
     def dump_osc(code = 1)
-      send_msg("/dumpOSC", code)
+      send_msg "/dumpOSC", code
     end
 
 
@@ -62,7 +67,8 @@ module Scruby
     # E.g. +server.send('/dumpOSC', 1)+
     def send_msg(message, *args)
       case message
-      when Message, Bundle then client.send(message)
+      when Message, Bundle
+        client.send(message)
       else
         client.send Message.new(message, *args)
       end
