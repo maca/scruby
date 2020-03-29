@@ -4,6 +4,8 @@ require "concurrent-edge"
 
 module Scruby
   class Server
+    class Error < StandardError; end
+
     include OSC
     include Sclang::Helpers
     include PrettyInspectable
@@ -22,14 +24,21 @@ module Scruby
     end
 
     def boot(binary: "scsynth", **opts)
+      raise Error, "already running" if alive?
+
       opts = Options.new(**opts, **{ bind_address: host, port: port })
       @process = Process.spawn(binary, opts.flags, env: opts.env)
 
       wait_for_ready
-        .then_flat_future { message_queue.sync }
+        .then_flat_future { |c| message_queue.sync(c) }
         .then { continue_boot }
         .then { self }
     end
+
+    def alive?
+      process&.alive? && message_queue.alive? || false
+    end
+    alias running? alive?
 
     def boot!(binary: "scsynth", **opts)
       boot(binary: binary, **opts).value!
@@ -107,14 +116,16 @@ module Scruby
     end
 
     def wait_for_ready
-      Promises.future(Cancellation.timeout(5)) do |cancelation|
+      Promises.future(Cancellation.timeout(5)) do |cancel|
         loop do
-          cancelation.check!
+          cancel.check!
           line = process.read
 
           raise "Address in Use" if /Address already in use/ === line
-          break cancelation if /server ready/ === line
+          break cancel if /server ready/ === line
         end
+
+        cancel
       end
     end
 

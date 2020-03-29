@@ -43,6 +43,7 @@ module Scruby
     rescue Errno::EPERM # The process exists
       true
     end
+    alias running? alive?
 
     def kill
       return false unless alive?
