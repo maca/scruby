@@ -36,7 +36,7 @@ Gem::Specification.new do |spec|
   spec.add_development_dependency "rubocop"
 
   spec.add_dependency "live", "~> 0.1"
-  spec.add_dependency "ruby-osc", "~> 0.3"
+  spec.add_dependency "ruby-osc", "~> 1.0"
   spec.add_dependency "tty-which", "~> 0.4"
   spec.add_dependency "concurrent-ruby", "~> 1.1"
   spec.add_dependency "concurrent-ruby-edge", "~> 0.5.0"

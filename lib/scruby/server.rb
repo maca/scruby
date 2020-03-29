@@ -72,6 +72,9 @@ module Scruby
       send_msg "/dumpOSC", code
     end
 
+    def status
+      message_queue.status.value!
+    end
 
     # Sends an OSC command or +Message+ to the scsyth server.
     # E.g. +server.send('/dumpOSC', 1)+

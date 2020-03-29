@@ -18,7 +18,7 @@ module Scruby
 
       def match(cancellation = nil, &block)
         future =
-          Promises.resolvable_future.tap { |f| patterns << [ block, f] }
+          Promises.resolvable_future.tap { |f| patterns << [ block, f ] }
 
         return future unless cancellation
         Promises.any(future, timeout(cancellation))
@@ -34,13 +34,23 @@ module Scruby
         end
       end
 
+      def status
+        cancellation = Cancellation.timeout(0.1)
+
+        server.send_msg Message.new("/status")
+
+        keys = %i(ugens synths groups synth_defs avg_cpu peak_cpu
+          sample_rate actual_sample_rate)
+
+        match(cancellation) { |msg| msg.address == "/status.reply" }
+          .then { |msg| keys.zip(msg.args[1..-1]).to_h }
+      end
+
       def run
         return thread if thread&.alive?
 
         @thread = Thread.new do
-          loop do
-            dispatch Message.decode(socket.recvfrom(65_535).first)
-          end
+          loop { dispatch socket.recvfrom(65_535).first }
         end
       end
 
@@ -51,7 +61,9 @@ module Scruby
 
       private
 
-      def dispatch(message)
+      def dispatch(raw)
+        message = OSC.decode(raw)
+
         patterns.delete_if do |pattern, future|
           future.evaluate_to { message } if pattern === message
         end
