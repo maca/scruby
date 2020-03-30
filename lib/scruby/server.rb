@@ -12,8 +12,10 @@ module Scruby
     include Encode
     include Concurrent
 
-    attr_reader :host, :port, :client, :message_queue, :process
-    private :process
+    attr_reader :host, :port, :client, :message_queue, :process,
+                :client_id, :max_logins
+
+    private :message_queue, :process
 
 
     def initialize(host: "127.0.0.1", port: 57_110)
@@ -29,9 +31,10 @@ module Scruby
       opts = Options.new(**opts, **{ bind_address: host, port: port })
       @process = Process.spawn(binary, opts.flags, env: opts.env)
 
-      wait_for_ready
-        .then_flat_future { |c| message_queue.sync(c) }
-        .then { continue_boot }
+      wait_for_booted
+        .then_flat_future { message_queue.sync }
+        .then { create_root_group }
+        .then_flat_future { get_client_id }
         .then { self }
     end
 
@@ -107,10 +110,21 @@ module Scruby
       super(host: host, port: port)
     end
 
+    def receive(address, timeout: nil, &pred)
+      message_queue.receive(address, timeout: timeout, &pred)
+    end
+
     private
 
-    def continue_boot
-      send_msg "/g_new", 1, 0, 0
+    def create_root_group
+      send_msg("/g_new", 1, 0, 0)
+    end
+
+    def get_client_id
+      send_msg("/notify", 1, client_id || 0)
+
+      receive("/done", timeout: 0.5)
+        .then { |msg| _, @client_id, @max_logins = msg.args }
     end
 
     def graph_completion_blob(message)
@@ -118,13 +132,16 @@ module Scruby
       Blob.new(message.encode)
     end
 
-    def wait_for_ready
+    def wait_for_booted
       Promises.future(Cancellation.timeout(5)) do |cancel|
         loop do
           cancel.check!
           line = process.read
 
-          raise "Address in Use" if /Address already in use/ === line
+          if /Address already in use/ === line
+            raise Error, "Address in Use"
+          end
+
           break cancel if /server ready/ === line
         end
 
