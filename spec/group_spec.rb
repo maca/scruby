@@ -1,5 +1,5 @@
 RSpec.describe Group do
-  let(:server) { instance_double("Server") }
+  let(:server) { instance_double("Server", next_node_id: 1) }
 
   subject(:group) do
     Group.new(server)

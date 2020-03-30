@@ -46,7 +46,7 @@ module Scruby
       end
 
       def run
-        return thread if thread&.alive?
+        return thread if alive?
 
         @thread = Thread.new do
           loop { dispatch socket.recvfrom(65_535).first }
@@ -54,9 +54,21 @@ module Scruby
       end
 
       def alive?
-        thread.alive?
+        thread&.alive? || false
       end
       alias running? alive?
+
+      def stop
+        return self unless alive?
+
+        thread.kill
+
+        patterns.delete_if do |_, future|
+          future.reject CancelledOperationError.new("server quitted")
+        end
+
+        self
+      end
 
       private
 
@@ -67,7 +79,7 @@ module Scruby
           if  pattern === message || pattern === message.address
             future.evaluate_to { message }
           end
-        rescue
+          rescue
         end
       end
 

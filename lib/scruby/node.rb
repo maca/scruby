@@ -11,7 +11,7 @@ module Scruby
 
     def initialize(server, id = nil)
       @server = server
-      @id = id || Node.next_id
+      @id = id || server.next_node_id
     end
 
     def free
@@ -116,12 +116,6 @@ module Scruby
         [ "/n_mapn", id, *args ].flatten
       when :audio
         [ "/n_mapan", id, *args ].flatten
-      end
-    end
-
-    class << self
-      def next_id
-        (@next_id ||= Concurrent::AtomicFixnum.new(999)).increment
       end
     end
   end

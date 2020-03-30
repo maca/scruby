@@ -13,7 +13,7 @@ module Scruby
     include Concurrent
 
     attr_reader :host, :port, :client, :message_queue, :process,
-                :client_id, :max_logins
+                :client_id
 
     private :message_queue, :process
 
@@ -26,41 +26,69 @@ module Scruby
     end
 
     def boot(binary: "scsynth", **opts)
-      raise Error, "already running" if alive?
+      boot_async(binary: binary, **opts).value!
+    end
+
+    def boot_async(binary: "scsynth", **opts)
+      if process_alive?
+        return message_queue.sync.then { self }
+      end
 
       opts = Options.new(**opts, **{ bind_address: host, port: port })
       @process = Process.spawn(binary, opts.flags, env: opts.env)
 
       wait_for_booted
         .then_flat_future { message_queue.sync }
+        .then { client_id }
+        .then { node_counter }
         .then { create_root_group }
-        .then_flat_future { get_client_id }
         .then { self }
     end
 
     def alive?
-      process&.alive? && message_queue.alive? || false
+      message_queue.alive?
     end
     alias running? alive?
 
-    def boot!(binary: "scsynth", **opts)
-      boot(binary: binary, **opts).value!
+    def process_alive?
+      process&.alive? || false
+    end
+
+    def client_id
+      @client_id ||= obtain_client_id.value!
+    end
+
+    def next_node_id
+      node_counter.increment
+    end
+
+    def quit_async
+      return Promises.fulfilled_future(self) unless alive?
+
+      send_msg("/quit")
+
+      receive(nil, timeout: 1) { |msg| msg.args == ["/quit"] }
+        .then { sleep 0.5 while process_alive? }
+        .then { message_queue.stop }
+        .then { self }
     end
 
     def quit
-      send_msg "/quit"
-      # process.kill
+      quit_async.value!
+    end
+
+    def reboot_async
+      quit_async.then_flat_future { boot_async }
     end
 
     def reboot
-      quit
-      message_queue.sync.then { boot }
+      reboot_async.value!
     end
 
     def free_all
       send_msg "/g_freeAll", 0
       send_msg "/clearSched"
-      send_msg "/g_new", 1, 0, 0
+      create_root_group
     end
 
     # def mute
@@ -107,7 +135,7 @@ module Scruby
     end
 
     def inspect
-      super(host: host, port: port)
+      super(host: host, port: port, running: running?)
     end
 
     def receive(address, timeout: nil, &pred)
@@ -116,15 +144,18 @@ module Scruby
 
     private
 
+    def node_counter
+      # client id is 5 bits and node id is 26 bits long
+      @node_counter ||= Concurrent::AtomicFixnum.new(client_id << 26)
+    end
+
     def create_root_group
       send_msg("/g_new", 1, 0, 0)
     end
 
-    def get_client_id
-      send_msg("/notify", 1, client_id || 0)
-
-      receive("/done", timeout: 0.5)
-        .then { |msg| _, @client_id, @max_logins = msg.args }
+    def obtain_client_id
+      send_msg("/notify", 1, @client_id || 0)
+      receive("/done", timeout: 0.5).then { |msg| msg.args[1] }
     end
 
     def graph_completion_blob(message)
@@ -139,7 +170,7 @@ module Scruby
           line = process.read
 
           if /Address already in use/ === line
-            raise Error, "Address in Use"
+            raise Error, "could not open port"
           end
 
           break cancel if /server ready/ === line
@@ -151,6 +182,10 @@ module Scruby
 
     class << self
       attr_writer :default
+
+      def boot(**args)
+        new(**args).boot
+      end
 
       def local
         Local.instance
