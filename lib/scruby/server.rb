@@ -116,6 +116,8 @@ module Scruby
       else
         client.send Message.new(message, *args)
       end
+
+      self
     end
 
     def send_bundle(*messages, timestamp: nil)
@@ -146,7 +148,8 @@ module Scruby
 
     def node_counter
       # client id is 5 bits and node id is 26 bits long
-      @node_counter ||= Concurrent::AtomicFixnum.new(client_id << 26)
+      @node_counter ||=
+        Concurrent::AtomicFixnum.new((client_id << 26) + 1)
     end
 
     def create_root_group
