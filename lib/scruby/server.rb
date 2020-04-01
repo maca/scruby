@@ -43,6 +43,7 @@ module Scruby
         .then { node_counter }
         .then { create_root_group }
         .then { self }
+        .on_rejection { process.kill }
     end
 
     def alive?
