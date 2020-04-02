@@ -10,8 +10,8 @@ module Scruby
       include Equatable
       include PrettyInspectable
 
-      def_delegators :ugen, :name, :rate, :rate_index, :channels_count,
-                     :special_index, :output_specs
+      def_delegators :ugen, :name, :print_name, :rate, :rate_index,
+                     :channels_count, :special_index, :output_specs
 
 
       attr_reader :ugen, :inputs, :graph
@@ -59,10 +59,6 @@ module Scruby
 
       def inspect
         super(name: name, inputs: inputs)
-      end
-
-      def print_name
-        "#{name}(#{rate})"
       end
 
       private

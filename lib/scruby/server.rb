@@ -66,7 +66,6 @@ module Scruby
         .then_flat_future { message_queue.sync }
         .then { obtain_client_id }
         .then { create_root_group }
-        # .then { listen_to_fail }
         .then { self }
         .on_rejection { process.kill }
     end
@@ -173,7 +172,7 @@ module Scruby
       send_msg("/notify", 1, 0)
 
       receive("/done")
-        .then { |m| @client_id, @max_logins = m.args.slice(1,2) }
+        .then { |m| @client_id, @max_logins = m.args.slice(1, 2) }
         .value!
     end
 

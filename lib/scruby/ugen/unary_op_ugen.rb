@@ -9,6 +9,10 @@ module Scruby
       def special_index
         Operations.unary_indexes.fetch(operation)
       end
+
+      def print_name
+        operation
+      end
     end
   end
 end

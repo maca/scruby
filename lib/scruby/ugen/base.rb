@@ -24,10 +24,6 @@ module Scruby
         dup.tap { |copy| copy.rate = rate }
       end
 
-      def name
-        (self.class.name || "UGen").split("::").last.sub("Ugen", "UGen")
-      end
-
       def input_values
         inputs.values
       end
@@ -72,6 +68,14 @@ module Scruby
 
       def out?
         false
+      end
+
+      def name
+        (self.class.name || "UGen").split("::").last.sub("Ugen", "UGen")
+      end
+
+      def print_name
+        "#{name}(#{rate})"
       end
 
       def ==(other)
