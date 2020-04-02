@@ -288,18 +288,7 @@ RSpec.describe Ugen::Base do
     it { expect(instance.build_graph(a: 1, b: 2)).to eq graph }
   end
 
-  # describe ".demo" do
-  #   include_context "simple ugen with graph"
-
-  #   before do
-  #     allow(Graph).to receive(:new).with(instance) { graph }
-  #   end
-
-  #   let(:demo_args) { { duration: 1 } }
-
-  #   it "demo" do
-  #     expect(graph).to receive(:demo).with(**demo_args) { graph }
-  #     expect(instance.demo(server, demo_args)).to eq graph
-  #   end
-  # end
+  describe ".play" do
+    it "should play"
+  end
 end

@@ -5,7 +5,6 @@ PATH
       concurrent-ruby (~> 1.1)
       concurrent-ruby-edge (~> 0.5.0)
       facets (~> 3.1)
-      live (~> 0.1)
       ruby-osc (~> 1.0)
       tty-which (~> 0.4)
 
@@ -21,7 +20,6 @@ GEM
     eventmachine (1.2.7)
     facets (3.1.0)
     ffi (1.12.2)
-    highline (2.0.3)
     io-console (0.5.6)
     irb (1.2.3)
       reline (>= 0.0.1)
@@ -29,13 +27,10 @@ GEM
     listen (3.2.1)
       rb-fsevent (~> 0.10, >= 0.10.3)
       rb-inotify (~> 0.9, >= 0.9.10)
-    live (0.1.2)
-      highline
     parallel (1.19.1)
     parser (2.7.0.5)
       ast (~> 2.4.0)
     rainbow (3.0.0)
-    rake (13.0.1)
     rb-fsevent (0.10.3)
     rb-inotify (0.10.1)
       ffi (~> 1.0)
@@ -78,7 +73,6 @@ DEPENDENCIES
   byebug
   irb
   listen
-  rake (~> 13.0.1)
   rspec
   rubocop
   scruby!

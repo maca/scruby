@@ -99,8 +99,8 @@ RSpec.describe Graph do
       end
     end
 
-    describe "demo a graph" do
-      let(:ugen) { instance_double("Ugen") }
+    describe "play a graph" do
+      it "should play"
     end
   end
 
