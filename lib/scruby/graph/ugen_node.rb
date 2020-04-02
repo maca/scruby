@@ -20,13 +20,17 @@ module Scruby
       def initialize(graph, ugen, inputs)
         @graph = graph
         @ugen = ugen
-        @inputs = inputs.flat_map &method(:map_constant) >>
-                                   method(:map_special_input) >>
-                                   method(:map_control_name) >>
-                                   method(:add_control)
+        @inputs = inputs.map &method(:map_constant) >>
+                              method(:add_constant_inputs) >>
+                              method(:map_control_name) >>
+                              method(:add_control)
       end
 
       def encode
+        inputs = self.inputs.flat_map { |elem|
+          elem.is_a?(Env) ? elem.constants : elem
+        }.compact
+
         [
           encode_string(name),
           encode_int8(rate_index),
@@ -69,9 +73,9 @@ module Scruby
         Constant.new(elem).tap { |const| graph.add_constant(const) }
       end
 
-      def map_special_input(elem)
-        return elem unless elem.is_a?(Env)
-        elem.encode.map &method(:map_constant)
+      def add_constant_inputs(elem)
+        elem.encode.map &method(:map_constant) if elem.is_a?(Env)
+        elem
       end
 
       def map_control_name(name)

@@ -119,6 +119,10 @@ module Scruby
     def release_range
     end
 
+    def print_name
+      inspect
+    end
+
     def sustained?
       !release_at.nil?
     end
@@ -184,6 +188,10 @@ module Scruby
 
     def ar(*args, **opts)
       EnvGen.ar(self, *args, **opts)
+    end
+
+    def constants
+      encode.map { |i| Graph::Constant.new(i) }
     end
 
     private
