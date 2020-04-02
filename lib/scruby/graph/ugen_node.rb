@@ -20,7 +20,9 @@ module Scruby
       def initialize(graph, ugen, inputs)
         @graph = graph
         @ugen = ugen
-        @inputs = inputs.map &method(:map_constant) >>
+        @inputs = inputs.map &method(:map_buffer) >>
+                              method(:map_boolean) >>
+                              method(:map_constant) >>
                               method(:add_constant_inputs) >>
                               method(:map_control_name) >>
                               method(:add_control)
@@ -67,6 +69,20 @@ module Scruby
       end
 
       private
+
+      def map_buffer(elem)
+        # no specs for mapping
+        return elem unless elem.is_a?(Buffer)
+        elem.id
+      end
+
+      def map_boolean(elem)
+        # no specs for mapping
+        case elem
+        when false then 0
+        when true then 1
+        else elem end
+      end
 
       def map_constant(elem)
         return elem unless elem.is_a?(Numeric)

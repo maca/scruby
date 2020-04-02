@@ -1,15 +1,84 @@
 module Scruby
-  def expand_path(path)
-    File.expand_path path
-  end
-
   class Buffer
-    # readNoUpdate
-    # loadCollection
-    # sendCollection
-    # streamCollection
-    # loadToFloatArray
-    # getToFloatArray
+    include OSC
+
+    attr_reader :server, :id, :frames, :channels, :path, :start_frame,
+                :sample_rate
+
+    def initialize(server)
+      @server = server
+    end
+
+    def id
+      @id ||= server.next_buffer_id
+    end
+
+    def duration
+      return 0 if sample_rate.nil?
+      frames.to_i / sample_rate
+    end
+
+    def alloc(*args, &block)
+      perform(alloc_async(*args), &block)
+    end
+
+    def alloc_async(frames, channels = 1)
+      do_alloc("/b_alloc", id, frames, channels)
+    end
+
+    def alloc_read(path, *args, &block)
+      perform(alloc_read_async(path, *args), &block)
+    end
+
+    def alloc_read_async(path, range = (0..-1))
+      path = File.expand_path(path)
+      from, to = range.first, range.last
+
+      do_alloc("/b_allocRead", id, path, from, to)
+    end
+
+    def close(&block)
+      perform(close_async, &block)
+    end
+
+    def close_async
+      do_alloc("/b_close", id)
+    end
+
+    def copy_data(*args, &block)
+      perform(copy_data_async(*args), &block)
+    end
+
+    def copy_data_async(dest, dest_at = 0, range = (0..-1))
+      from, source_to = range.first, range.last
+
+      do_alloc("/b_gen", dest.id, "copy", dest_at, id, from, source_to)
+    end
+
+    def play(loop = false)
+      player = PlayBuf.ar(channels, id, BufRateScale.kr(id), loop: loop)
+
+      return player.play(server) if loop
+      player.build_graph.add(FreeSelfWhenDone.kr(player)).play(server)
+    end
+
+
+    # def read(path, file_start_frame: 0, start_frame: 0,
+    #          frames: -1, leave_open: false, action: nil)
+
+    #   path = File.expand_path(path)
+    #   start_frame = start_frame
+
+    #   server.send_msg(
+    #     "/b_read",
+    #     id, path, file_start_frame, frames, start_frame, leave_open
+    #   )
+    # end
+
+    # alloc_read_channel
+
+    # write
+    # free
     # set
     # setn
     # get
@@ -17,142 +86,59 @@ module Scruby
     # fill
     # normalize
     # gen
+
     # sine1
-    # ...
-    # copy
-    # copyData
-    # query
-    # updateInfo
-    # queryDone
-    # printOn
-    # play
-    # duration
-    # asBufWithValues
+    # sine2
+    # cheby
 
-    attr_reader   :server
-    attr_accessor :path, :frames, :channels, :rate
-
-    def read(path, file_start: 0, frames: -1, buff_start: 0,
-             leave_open: false, &message)
-
-      # @on_info  = message
-      message ||= [ "/b_query", buffnum ]
-
-      @server.send "/b_read", buffnum, expand_path(path), file_start,
-                   frames, buff_start, leave_open, message.value(self)
-      self
+    def query
+      send_query
+        .then { |a| %i(id frames channels sample_rate).zip(a).to_h }
+        .value!
     end
 
-    def read_channel(path, _file_start: 0, frames: -1, buff_start: 0,
-                     leave_open: false, channels: [], &message)
+    private
 
-      message ||= 0
-
-      @server.send *([ "/b_ReadChannel", buffnum, expand_path(path), start, frames, buff_start, leave_open ] + channels << message.value(self))
-      self
+    def send_query
+      server
+        .send_msg("/b_query", id)
+        .receive { |m| m.address == "/b_info" && m.args.first == id }
+        .then(&:args)
     end
 
-    def close(&message)
-      message ||= 0
-      @server.send "/b_close", buffnum, message.value(self)
-      self
+    def update
+      send_query.then { |a| _, @frames, @channels, @sample_rate = a }
     end
 
-    def zero(&message)
-      message ||= 0
-      @server.send "/b_zero", buffnum, message.value(self)
-      self
+    def do_alloc(action, *args)
+      server
+        .send_msg(action, *args)
+        .receive(&curry(:match_alloc_reply, action, id))
+        .then { update }.flat_future
+        .then { self }
     end
 
-    def cue_sound_file(path, start: 0, &message)
-      message ||= 0
-      @server.send "/b_read", buffnum, expand_path(path), start, @frames,
-                   0, 1, message.value(self)
-      self
+    def match_alloc_reply(action, id, msg, future)
+      case msg.to_a
+      in [ "/fail", ^action, error, ^id ]
+        future.reject Server::Error.new(error)
+      in [ "/done", ^action, ^id ]
+        true
+      end
     end
 
-    def write(path, format: "aiff", sample_format: "int24", frames: -1,
-              start: 0, leave_open: false, &message)
-
-      message ||= 0
-      path    ||= "#{ DateTime.now }.#{ format }"
-      @server.send "/b_write", buffnum, expand_path(path), format, sample_format, frames, start, leave_open, message.value(self)
-      self
+    def perform(future, &block)
+      future.then(&(block || :itself)).value!
     end
 
-    def initialize(server: nil, frames: -1, channels: 1)
-      @server, @frames, @channels = server, frames, channels
-    end
-
-    def allocate(&message)
-      message ||= 0
-      @server.allocate :buffers, self
-      @server.send "/b_alloc", buffnum, frames, channels, message.value(self)
-      self
-    end
-
-    def buffnum
-      @server.buffers.index self
-    end
-    alias index         buffnum
-    # alias :as_control_input :buffnum
-
-    def free(&message)
-      message ||= 0
-      @server.send "/b_free", buffnum, message.value(self)
-      @server.buffers.delete self
-    end
-
-    # :nodoc:
-    def allocate_and_read(path, start, frames, &message)
-      @server.allocate :buffers, self
-      message ||= [ "/b_query", buffnum ]
-      @server.send "/b_allocRead", buffnum, @path = expand_path(path), start, frames, message.value(self)
-      self
-    end
-
-    def allocate_read_channel(path, start, frames, channels, &message)
-      @server.allocate :buffers, self
-      message ||= [ "/b_query", buffnum ]
-      @server.send *([ "/b_allocReadChannel", buffnum, expand_path(path), start, frames ] + channels << message.value(self))
-      self
+    def curry(name, *args)
+      method(name).to_proc.curry[*args]
     end
 
     class << self
-      def allocate(server, frames: -1, channels: 1, &message)
-        new(server, frames, channels).allocate &message
+      def alloc(server, **args)
+        new(server, **args).alloc
       end
-
-      def cue_sound_file(server, path, start, channels: 2, buff_size: 32_768, &message)
-        allocate server, buff_size, channels do |buffer|
-          message ||= 0
-          [ "/b_read", buffer.buffnum, expand_path(path), start, buff_size, 0, true, message.value(buffer) ]
-        end
-      end
-
-      # Allocate a buffer and immediately read a soundfile into it.
-      def read(server, path, start: 0, frames: -1, &message)
-        buffer = new server, &message
-        buffer.allocate_and_read expand_path(path), start, frames
-      end
-
-      def read_channel(server, path, start: 0, frames: -1, channels: [], &message)
-        new(server, frames, channels).allocate_read_channel expand_path(path), start, frames, channels, &message
-      end
-
-      def alloc_consecutive(buffers, server, frames: -1, channels: 1, &message)
-        buffers = Array.new(buffers){ new server, frames, channels }
-        server.allocate :buffers, buffers
-        message ||= 0
-        buffers.each do |buff|
-          server.send "/b_alloc", buff.buffnum, frames, channels, message.value(buff)
-        end
-      end
-
-      # readNoUpdate
-      # loadCollection
-      # sendCollection
-      # loadDialog
     end
   end
 end

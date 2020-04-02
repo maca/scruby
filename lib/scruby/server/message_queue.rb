@@ -73,8 +73,10 @@ module Scruby
       private
 
       def dispatch(raw)
-        message = OSC.decode(raw)
+        dispatch_msg OSC.decode(raw)
+      end
 
+      def dispatch_msg(message)
         patterns.delete_if do |pattern, future|
           if pattern.respond_to?(:call)
             next unless pattern.call(message, future)
@@ -84,7 +86,8 @@ module Scruby
 
           future.evaluate_to { message } if future.pending?
           true
-        rescue
+        rescue StandardError => e
+          puts e
         end
       end
 
