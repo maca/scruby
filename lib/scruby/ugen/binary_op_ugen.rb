@@ -10,6 +10,10 @@ module Scruby
         Operations.binary_indexes.fetch(operation)
       end
 
+      def parameter_names
+        []
+      end
+
       def print_name
         operation
       end

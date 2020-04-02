@@ -28,6 +28,10 @@ module Scruby
         inputs.values
       end
 
+      def parameter_names
+        inputs.keys
+      end
+
       def rate_index
         E_RATES.index(rate)
       end
@@ -75,7 +79,7 @@ module Scruby
       end
 
       def print_name
-        "#{name}(#{rate})"
+        "#{name} (#{rate})"
       end
 
       def ==(other)

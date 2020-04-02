@@ -19,7 +19,6 @@ module Scruby
     end
 
     def encode_string(string)
-      "#{encode_int8(string.size)}#{string[0..255]}"
       encode_int8(string.size) + string[0..255]
     end
 

@@ -11,7 +11,8 @@ module Scruby
       include PrettyInspectable
 
       def_delegators :ugen, :name, :print_name, :rate, :rate_index,
-                     :channels_count, :special_index, :output_specs
+                     :parameter_names, :channels_count,
+                     :special_index, :output_specs
 
 
       attr_reader :ugen, :inputs, :graph
@@ -32,7 +33,7 @@ module Scruby
           encode_int32(inputs.count),
           encode_int32(channels_count),
           encode_int16(special_index),
-          inputs.map { |i| i.input_specs(graph).pack("N*") },
+          inputs.map { |i| encode_int32_array i.input_specs(graph) },
           output_specs.map { |i| encode_int8(i) }.join
         ].join
       end
@@ -74,8 +75,7 @@ module Scruby
       end
 
       def map_control_name(name)
-        return name unless [ String, Symbol ]
-                              .any? { |t| name.is_a?(t) }
+        return name unless [ String, Symbol ].any? { |t| name.is_a?(t) }
         graph.control_name(name)
       end
 

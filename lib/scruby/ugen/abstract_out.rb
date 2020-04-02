@@ -8,6 +8,10 @@ module Scruby
         super.flatten
       end
 
+      def parameter_names
+        super - %i(channels_array)
+      end
+
       def out?
         true
       end
