@@ -131,26 +131,30 @@ module Scruby
         private
 
         def define_accessors(kind, spec)
-          spec.each { |name, _| define_accessor(name) }
-
-          define_method kind do
-            spec.map do |name, _|
-              [ name, instance_variable_get("@#{name}") ]
-            end.to_h
+          dynamic_module = Module.new do
+            define_method kind do
+              spec.map do |name, _|
+                [ name, instance_variable_get("@#{name}") ]
+              end.to_h
+            end
           end
+
+          spec.each { |name, _| define_accessor(name, dynamic_module) }
+
+          include dynamic_module
         end
 
-        def define_accessor(name)
-          define_method "#{name}=" do |input|
+        def define_accessor(name, dynamic_module)
+          dynamic_module.define_method "#{name}=" do |input|
             instance_variable_set("@#{name}", input)
           end
 
-          define_method name do |input = nil|
+          dynamic_module.define_method name do |input = nil|
             break instance_variable_get("@#{name}") if input.nil?
             dup.tap { |copy| copy.send("#{name}=", input) }
           end
 
-          protected "#{name}="
+          dynamic_module.send(:protected, "#{name}=")
         end
       end
     end
