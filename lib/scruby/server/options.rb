@@ -69,6 +69,10 @@ module Scruby
         bind_address
       end
 
+      def host
+        bind_address
+      end
+
       def each(&block)
         attributes.each(&block)
       end
@@ -116,6 +120,8 @@ module Scruby
           SC_JACK_DEFAULT_OUTPUTS: jack_default_outputs
         }
       end
+
+      alias to_hash to_h
     end
   end
 end

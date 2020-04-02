@@ -1,10 +1,12 @@
 require "ruby-osc"
 require "concurrent-edge"
+require "forwardable"
 
 
 module Scruby
   class Server
     class Error < StandardError; end
+    extend Forwardable
 
     include OSC
     include Sclang::Helpers
@@ -12,38 +14,16 @@ module Scruby
     include Encode
     include Concurrent
 
-    attr_reader :host, :port, :client, :message_queue, :process,
-                :client_id
-
+    attr_reader :client, :message_queue, :process, :options
     private :message_queue, :process
 
+    def_delegators :options, :host, :port, :num_buffers
 
-    def initialize(host: "127.0.0.1", port: 57_110)
-      @host = host
-      @port = port
+
+    def initialize(host: "127.0.0.1", port: 57_110, **options)
       @client = OSC::Client.new(port, host)
       @message_queue = MessageQueue.new(self)
-    end
-
-    def boot(binary: "scsynth", **opts)
-      boot_async(binary: binary, **opts).value!
-    end
-
-    def boot_async(binary: "scsynth", **opts)
-      if process_alive?
-        return message_queue.sync.then { self }
-      end
-
-      opts = Options.new(**opts, **{ bind_address: host, port: port })
-      @process = Process.spawn(binary, opts.flags, env: opts.env)
-
-      wait_for_booted
-        .then_flat_future { message_queue.sync }
-        .then { client_id }
-        .then { node_counter }
-        .then { create_root_group }
-        .then { self }
-        .on_rejection { process.kill }
+      @options = Options.new(**options, bind_address: host, port: port)
     end
 
     def alive?
@@ -56,11 +36,39 @@ module Scruby
     end
 
     def client_id
-      @client_id ||= obtain_client_id.value!
+      @client_id ||= obtain_client_id.first
+    end
+
+    def max_logins
+      @max_logins ||= obtain_client_id.last
     end
 
     def next_node_id
       node_counter.increment
+    end
+
+    def next_buffer_id
+      buffer_counter.increment
+    end
+
+    def boot(binary: "scsynth", **opts)
+      boot_async(binary: binary, **opts).value!
+    end
+
+    def boot_async(binary: "scsynth", **opts)
+      return message_queue.sync.then { self } if process_alive?
+
+      @options = Options.new(**options, **opts)
+      @num_buffers = options.num_buffers
+      @process = Process.spawn(binary, options.flags, env: options.env)
+
+      wait_for_booted
+        .then_flat_future { message_queue.sync }
+        .then { obtain_client_id }
+        .then { create_root_group }
+        # .then { listen_to_fail }
+        .then { self }
+        .on_rejection { process.kill }
     end
 
     def quit_async
@@ -68,8 +76,8 @@ module Scruby
 
       send_msg("/quit")
 
-      receive(nil, timeout: 1) { |msg| msg.args == ["/quit"] }
-        .then { sleep 0.5 while process_alive? }
+      receive { |msg| msg.to_a == %w(/done /quit) }
+        .then { sleep 0.1 while process_alive? }
         .then { message_queue.stop }
         .then { self }
     end
@@ -141,7 +149,7 @@ module Scruby
       super(host: host, port: port, running: running?)
     end
 
-    def receive(address, timeout: nil, &pred)
+    def receive(address = nil, timeout: 0.5, &pred)
       message_queue.receive(address, timeout: timeout, &pred)
     end
 
@@ -149,8 +157,12 @@ module Scruby
 
     def node_counter
       # client id is 5 bits and node id is 26 bits long
-      @node_counter ||=
-        Concurrent::AtomicFixnum.new((client_id << 26) + 1)
+      @node_counter ||= AtomicFixnum.new((client_id << 26) + 1)
+    end
+
+    def buffer_counter
+      @buffer_counter ||=
+        AtomicFixnum.new((num_buffers / max_logins) * client_id)
     end
 
     def create_root_group
@@ -158,8 +170,11 @@ module Scruby
     end
 
     def obtain_client_id
-      send_msg("/notify", 1, @client_id || 0)
-      receive("/done", timeout: 0.5).then { |msg| msg.args[1] }
+      send_msg("/notify", 1, 0)
+
+      receive("/done")
+        .then { |m| @client_id, @max_logins = m.args.slice(1,2) }
+        .value!
     end
 
     def graph_completion_blob(message)

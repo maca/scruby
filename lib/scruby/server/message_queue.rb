@@ -76,10 +76,15 @@ module Scruby
         message = OSC.decode(raw)
 
         patterns.delete_if do |pattern, future|
-          if  pattern === message || pattern === message.address
-            future.evaluate_to { message }
+          if pattern.respond_to?(:call)
+            next unless pattern.call(message, future)
+          else
+            next unless pattern === message.address
           end
-          rescue
+
+          future.evaluate_to { message } if future.pending?
+          true
+        rescue
         end
       end
 
