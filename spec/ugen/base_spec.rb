@@ -273,10 +273,9 @@ RSpec.describe Ugen::Base do
     end
 
     let(:instance) { subclass.ar }
-    let(:graph) { instance_double("Graph") }
+    let(:graph) { spy instance_double("Graph") }
     let(:server) { instance_double("Server") }
   end
-
 
   describe ".build_graph" do
     include_context "simple ugen with graph"
@@ -289,6 +288,24 @@ RSpec.describe Ugen::Base do
   end
 
   describe ".play" do
-    it "should play"
+    include_context "simple ugen with graph"
+
+    before do
+      allow(Graph).to receive(:new).with(instance) { graph }
+      instance.play(server)
+    end
+
+    it { expect(graph).to have_received(:play).with(server) }
+  end
+
+  describe ".visualize" do
+    include_context "simple ugen with graph"
+
+    before do
+      allow(Graph).to receive(:new).with(instance) { graph }
+      instance.visualize
+    end
+
+    it { expect(graph).to have_received(:visualize) }
   end
 end

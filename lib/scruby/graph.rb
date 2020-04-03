@@ -61,6 +61,16 @@ module Scruby
       Visualize.print(root)
     end
 
+    def play(server)
+      ugen = root.ugen
+      graph = Graph.new(ugen.out? ? ugen : Out.new(0, ugen))
+
+      Synth.new(graph.name, server).tap do |synth|
+        group = Group.new(server, 1)
+        graph.send_to(server, synth.creation_message(group))
+      end
+    end
+
     def send_to(server, completion_message = nil)
       server.send_graph(self, completion_message)
       self

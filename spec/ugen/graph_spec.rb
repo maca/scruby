@@ -99,9 +99,7 @@ RSpec.describe Graph do
       end
     end
 
-    describe "play a graph" do
-      it "should play"
-    end
+    it "plays"
   end
 
   describe "send to server" do

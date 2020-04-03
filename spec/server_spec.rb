@@ -1,7 +1,6 @@
 RSpec.describe Server do
   it "should have a lot more tests"
 
-
   describe "sends graph" do
     let(:graph) { instance_double("Graph", encode: "encoded-graph") }
     let(:blob) { OSC::Blob.new("encoded-graph") }
