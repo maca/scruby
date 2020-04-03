@@ -1,6 +1,6 @@
 AllCops:
   DisabledByDefault: true
-  TargetRubyVersion: 2.5
+  TargetRubyVersion: 2.7
   Exclude:
     - bin/*
     - node_modules/**/*
@@ -75,10 +75,6 @@ Lint/EmptyInterpolation:
 
 Layout/EndAlignment:
   Description: 'Align ends correctly.'
-  Enabled: true
-
-Lint/EndInMethod:
-  Description: 'END blocks should not be placed inside method definitions.'
   Enabled: true
 
 Lint/EnsureReturn:

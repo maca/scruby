@@ -12,13 +12,25 @@ file = File.open File.expand_path(path)
 data = JSON.load file
 
 
+
 data.each do |name, specs|
   rate_map = { ar: :audio, kr: :control, ir: :scalar }
   rates = specs["methods"].map { |k, _| rate_map[k.to_sym] }
-  inputs = specs["methods"].to_a.first.last
 
 
-  input_spec = inputs.map do |input, value|
+  inputs = specs["methods"].to_a.first.last.to_h
+  attrs = {}
+
+
+  if specs['isMultiOut']
+    names = %w(numChannels numChans)
+
+    attrs = inputs.slice(*names).transform_values { 1 }
+    inputs = inputs.reject { |k, _| names.include?(k) }
+  end
+
+
+  map_names = proc do |input, value|
     values =
       specs["methods"].map { |_, values| values.assoc(input).last }
 
@@ -34,6 +46,8 @@ data.each do |name, specs|
       case input
       when "in" then "input"
       when "end" then "finish"
+      when "numChannels" then "channel_count"
+      when "numChans" then "channel_count"
       when "rate" then "playback_rate"
       else
         input
@@ -41,6 +55,11 @@ data.each do |name, specs|
 
     "#{input.snakecase}: #{defaults}".gsub(/\.0$/, "")
   end
+
+
+  inputs = inputs.map(&map_names)
+  attrs = attrs.map(&map_names)
+
 
   template =
 <<~RUBY
@@ -52,9 +71,13 @@ module Scruby
       <% end -%>
 
       rates <%= rates.map(&:inspect).join(', ') -%>
+      <% unless attrs.empty? %>
+      attributes <%= attrs.join(', ')
+                  .scan(/(.{1,60})(?:,|$)/m).join(",\n#{ ' ' * 16 }") %>
+      <% end -%>
       <% unless inputs.empty? %>
-      inputs <%= input_spec.join(', ')
-                  .scan(/(.{1,60})(?:,|$)/m).join(",\n#{ ' ' * 14 }") %>
+      inputs <%= inputs.join(', ')
+                  .scan(/(.{1,60})(?:,|$)/m).join(",\n#{ ' ' * 12 }") %>
       <% end -%>
 
     end

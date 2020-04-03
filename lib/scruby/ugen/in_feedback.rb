@@ -2,7 +2,9 @@ module Scruby
   module Ugen
     class InFeedback < Base
       rates :audio
-      inputs bus: 0, num_channels: 1
+      attributes channel_count: 1
+
+      inputs bus: 0
     end
   end
 end
