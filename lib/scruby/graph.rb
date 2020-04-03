@@ -18,6 +18,17 @@ module Scruby
       add_node @root
     end
 
+    def add(elem)
+      case elem
+      when Ugen
+        add_node UgenNode.build_root(self, elem)
+      when Graph
+        add elem.root_ugen
+      else
+        raise TypeError, "expected `#{elem}` to be Ugen or Graph"
+      end
+    end
+
     def add_constant(const)
       const.tap do
         constants.push(const) unless constants.include?(const)
@@ -84,6 +95,7 @@ module Scruby
 
       node.inputs.each &method(:add_node)
       nodes.push(node)
+      self
     end
 
     def init_stream(def_count = 1)

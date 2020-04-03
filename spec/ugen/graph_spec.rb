@@ -133,4 +133,28 @@ RSpec.describe Graph do
     it { expect(graph_a).to eq graph_b }
     it { expect(graph_a).not_to eq graph_c }
   end
+
+  describe "add extra node to graph" do
+    let(:expected) do
+      [ 83, 67, 103, 102, 0, 0, 0, 2, 0, 1, 5, 117, 110, 105, 111,
+        110, 0, 0, 0, 3, 67, -36, 0, 0, 0, 0, 0, 0, 63, -128, 0, 0, 0,
+        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 4, 6, 83, 105, 110, 79, 115, 99,
+        2, 0, 0, 0, 2, 0, 0, 0, 1, 0, 0, -1, -1, -1, -1, 0, 0, 0, 0,
+        -1, -1, -1, -1, 0, 0, 0, 1, 2, 3, 79, 117, 116, 2, 0, 0, 0, 2,
+        0, 0, 0, 0, 0, 0, -1, -1, -1, -1, 0, 0, 0, 1, 0, 0, 0, 0, 0,
+        0, 0, 0, 3, 83, 97, 119, 2, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -1,
+        -1, -1, -1, 0, 0, 0, 0, 2, 3, 79, 117, 116, 2, 0, 0, 0, 2, 0,
+        0, 0, 0, 0, 0, -1, -1, -1, -1, 0, 0, 0, 2, 0, 0, 0, 2, 0, 0,
+        0, 0, 0, 0 ].pack("C*")
+    end
+
+    subject(:graph) do
+      described_class.new(Out.ar(0, SinOsc.ar), :union)
+        .add(Out.ar(1, Saw.ar))
+    end
+
+    it "should encode graph" do
+      expect(graph).to encode_as(expected)
+    end
+  end
 end
