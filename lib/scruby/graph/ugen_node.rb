@@ -11,7 +11,7 @@ module Scruby
       include PrettyInspectable
 
       def_delegators :ugen, :name, :print_name, :rate, :rate_index,
-                     :parameter_names, :channels_count,
+                     :parameter_names, :channel_count,
                      :special_index, :output_specs
 
 
@@ -35,7 +35,7 @@ module Scruby
           encode_string(name),
           encode_int8(rate_index),
           encode_int32(inputs.count),
-          encode_int32(channels_count),
+          encode_int32(channel_count),
           encode_int16(special_index),
           inputs.map { |i| encode_int32_array i.input_specs(graph) },
           output_specs.map { |i| encode_int8(i) }.join

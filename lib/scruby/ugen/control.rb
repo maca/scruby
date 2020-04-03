@@ -8,7 +8,7 @@ module Scruby
         control_names.map(&:rate_index)
       end
 
-      def channels_count
+      def channel_count
         control_names.count
       end
     end

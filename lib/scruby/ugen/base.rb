@@ -40,7 +40,7 @@ module Scruby
         [ E_RATES.index(rate) ]
       end
 
-      def channels_count; 1 end
+      def channel_count; 1 end
       def inputs; {} end
       def attributes; {} end
       def special_index; 0 end
