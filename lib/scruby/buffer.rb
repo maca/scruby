@@ -30,10 +30,8 @@ module Scruby
       perform(alloc_read_async(path, *args), &block)
     end
 
-    def alloc_read_async(path, range = (0..-1))
+    def alloc_read_async(path, from = 0, to = -1)
       path = File.expand_path(path)
-      from, to = range.first, range.last
-
       apply("/b_allocRead", id, path, from, to)
     end
 
@@ -49,33 +47,33 @@ module Scruby
       perform(copy_data_async(*args), &block)
     end
 
-    def copy_data_async(dest, dest_at = 0, range = (0..-1))
-      from, source_to = range.first, range.last
+    def copy_data_async(dest, dest_start = 0, src_start = 0,
+                        samples = -1)
 
-      apply("/b_gen", dest.id, "copy", dest_at, id, from, source_to)
+      apply("/b_gen", dest.id, "copy", dest_start, id,
+            src_start, samples)
+    end
+
+    def read(*args, &block)
+      perform(read_async(*args), &block)
+    end
+
+    def read_async(path, file_start_frame = 0, frames = -1,
+                   buf_start_frame = 0, leave_open = false)
+
+      apply("/b_read", id, File.expand_path(path),
+            file_start_frame, frames, buf_start_frame, leave_open)
     end
 
     def play(loop = false)
-      player =
-        PlayBuf.ar(channel_count, id, BufRateScale.kr(id), loop: loop)
+      rate = BufRateScale.kr(id)
+      player = PlayBuf.ar(channel_count, id, rate, loop: loop)
 
       return player.play(server) if loop
       player.build_graph.add(FreeSelfWhenDone.kr(player)).play(server)
     end
 
-
-    # def read(path, file_start_frame: 0, start_frame: 0,
-    #          frames: -1, leave_open: false, action: nil)
-    #   path = File.expand_path(path)
-    #   start_frame = start_frame
-    #   server.send_msg(
-    #     "/b_read",
-    #     id, path, file_start_frame, frames, start_frame, leave_open
-    #   )
-    # end
-
     # alloc_read_channel
-
     # write
     # free
     # set
@@ -85,7 +83,6 @@ module Scruby
     # fill
     # normalize
     # gen
-
     # sine1
     # sine2
     # cheby
