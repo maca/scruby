@@ -7,8 +7,6 @@ module Scruby
       include Utils::PositionalKeywordArgs
 
 
-      attr_reader :channels
-
       def initialize(*args, rate: :audio, **kw)
         defaults = self.class.attributes.merge(self.class.inputs)
 

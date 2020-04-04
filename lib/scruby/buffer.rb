@@ -1,8 +1,9 @@
 module Scruby
   class Buffer
     include OSC
+    include Concurrent
 
-    attr_reader :server, :id, :frames, :channels, :path, :start_frame,
+    attr_reader :server, :frames, :channel_count, :path, :start_frame,
                 :sample_rate
 
     def initialize(server)
@@ -22,8 +23,8 @@ module Scruby
       perform(alloc_async(*args), &block)
     end
 
-    def alloc_async(frames, channels = 1)
-      do_alloc("/b_alloc", id, frames, channels)
+    def alloc_async(frames, channel_count = 1)
+      apply("/b_alloc", id, frames, channel_count)
     end
 
     def alloc_read(path, *args, &block)
@@ -34,7 +35,7 @@ module Scruby
       path = File.expand_path(path)
       from, to = range.first, range.last
 
-      do_alloc("/b_allocRead", id, path, from, to)
+      apply("/b_allocRead", id, path, from, to)
     end
 
     def close(&block)
@@ -42,7 +43,7 @@ module Scruby
     end
 
     def close_async
-      do_alloc("/b_close", id)
+      apply("/b_close", id)
     end
 
     def copy_data(*args, &block)
@@ -52,11 +53,12 @@ module Scruby
     def copy_data_async(dest, dest_at = 0, range = (0..-1))
       from, source_to = range.first, range.last
 
-      do_alloc("/b_gen", dest.id, "copy", dest_at, id, from, source_to)
+      apply("/b_gen", dest.id, "copy", dest_at, id, from, source_to)
     end
 
     def play(loop = false)
-      player = PlayBuf.ar(channels, id, BufRateScale.kr(id), loop: loop)
+      player =
+        PlayBuf.ar(channel_count, id, BufRateScale.kr(id), loop: loop)
 
       return player.play(server) if loop
       player.build_graph.add(FreeSelfWhenDone.kr(player)).play(server)
@@ -65,10 +67,8 @@ module Scruby
 
     # def read(path, file_start_frame: 0, start_frame: 0,
     #          frames: -1, leave_open: false, action: nil)
-
     #   path = File.expand_path(path)
     #   start_frame = start_frame
-
     #   server.send_msg(
     #     "/b_read",
     #     id, path, file_start_frame, frames, start_frame, leave_open
@@ -92,9 +92,9 @@ module Scruby
     # cheby
 
     def query
-      send_query
-        .then { |a| %i(id frames channels sample_rate).zip(a).to_h }
-        .value!
+      send_query.then { |ary|
+        %i(id frames channel_count sample_rate).zip(ary).to_h
+      }.value!
     end
 
     private
@@ -107,10 +107,11 @@ module Scruby
     end
 
     def update
-      send_query.then { |a| _, @frames, @channels, @sample_rate = a }
+      send_query
+        .then { |a| _, @frames, @channel_count, @sample_rate = a }
     end
 
-    def do_alloc(action, *args)
+    def apply(action, *args)
       server
         .send_msg(action, *args)
         .receive(&curry(:match_alloc_reply, action, id))

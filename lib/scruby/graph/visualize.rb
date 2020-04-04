@@ -29,8 +29,8 @@ module Scruby
             [ param_name, node.print_name ].compact.join(": "),
             ("\n" if inputs.any?),
 
-            inputs.zip(param_names).map { |i, param_name|
-              print_node(i, inputs, child_padding, param_name)
+            inputs.zip(param_names).map { |i, name|
+              print_node(i, inputs, child_padding, name)
             },
 
             ("\n" unless last)
