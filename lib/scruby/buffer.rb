@@ -1,7 +1,6 @@
 module Scruby
   class Buffer
     include OSC
-    include Concurrent
 
     attr_reader :server, :frames, :channel_count, :path, :start_frame,
                 :sample_rate
@@ -92,8 +91,8 @@ module Scruby
     # cheby
 
     def query
-      send_query.then { |ary|
-        %i(id frames channel_count sample_rate).zip(ary).to_h
+      send_query.then { |m|
+        %i(id frames channel_count sample_rate).zip(m.args).to_h
       }.value!
     end
 
@@ -102,20 +101,19 @@ module Scruby
     def send_query
       server
         .send_msg("/b_query", id)
-        .receive { |m| m.address == "/b_info" && m.args.first == id }
-        .then(&:args)
+        .receive("/b_info") { |m| m.args.first == id }
     end
 
     def update
       send_query
-        .then { |a| _, @frames, @channel_count, @sample_rate = a }
+        .then { |m| _, @frames, @channel_count, @sample_rate = m.args }
     end
 
     def apply(action, *args)
       server
         .send_msg(action, *args)
         .receive(&curry(:match_alloc_reply, action, id))
-        .then { update }.flat_future
+        .then_flat_future { update }
         .then { self }
     end
 

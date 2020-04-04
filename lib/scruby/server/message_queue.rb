@@ -19,9 +19,8 @@ module Scruby
       def receive(address = nil, timeout: nil, &pred)
         run
 
-        future = Promises.resolvable_future.tap do |f|
-          patterns << [ address || pred, f ]
-        end
+        future = Promises.resolvable_future
+        patterns << [ address, pred, future ]
 
         return future unless timeout
         Promises.any(future, cancellation_future(timeout))
@@ -77,12 +76,11 @@ module Scruby
       end
 
       def dispatch_msg(message)
-        patterns.delete_if do |pattern, future|
-          if pattern.respond_to?(:call)
-            next unless pattern.call(message, future)
-          else
-            next unless pattern === message.address
-          end
+        patterns.delete_if do |pattern, pred, future|
+          match =
+            (pattern || pred) &&
+            (pattern.nil? || pattern === message.address) &&
+            (pred.nil? || pred.call(message, future))
 
           future.evaluate_to { message } if future.pending?
           true
