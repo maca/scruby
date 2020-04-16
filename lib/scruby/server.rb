@@ -94,8 +94,8 @@ module Scruby
     end
 
     def free_all
-      send_msg "/g_freeAll", 0
-      send_msg "/clearSched"
+      send_msg("/g_freeAll", 0)
+      send_msg("/clearSched")
       create_root_group
     end
 
@@ -108,7 +108,7 @@ module Scruby
     # end
 
     def dump_osc(code = 1)
-      send_msg "/dumpOSC", code
+      send_msg("/dumpOSC", code)
     end
 
     def status
@@ -152,7 +152,22 @@ module Scruby
       message_queue.receive(address, timeout: timeout, &pred)
     end
 
+    def query_nodes
+      send_msg("/g_queryTree", 0, 1);
+
+
+      receive("/g_queryTree.reply")
+
+      #   .then do |msg|
+      #   NodeTree.new(msg.args)
+      # end
+    end
+
     private
+
+    def print_func(_, *args)
+      puts args.inspect
+    end
 
     def node_counter
       # client id is 5 bits and node id is 26 bits long

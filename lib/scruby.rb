@@ -35,6 +35,7 @@ require_relative "scruby/server"
 require_relative "scruby/server/message_queue"
 require_relative "scruby/server/local"
 require_relative "scruby/server/options"
+require_relative "scruby/server/node_tree"
 
 
 require_relative "scruby/process"
