@@ -5,13 +5,12 @@ module Scruby
     module NodeTreeDecoder
       class << self
         def decode(server, msg)
-          bytes = msg.to_enum
-          _ = bytes.next
-
-          decode_node(bytes, server, nil)
+          decode_node(msg.to_enum.tap(&:next), server)
         end
 
-        def decode_node(bytes, server, parent)
+        private
+
+        def decode_node(bytes, server)
           id = bytes.next
           children_count = bytes.next
 
@@ -19,15 +18,14 @@ module Scruby
 
           Group.new(server, id).tap do |group|
             group.children =
-              children_count
-                .times
-                .map { decode_node(bytes, server, group) }
+              children_count.times.map { decode_node(bytes, server) }
           end
         end
 
         def decode_synth(bytes, server, id)
           name = bytes.next
           params_count = bytes.next
+
           params =
             Hash[*(params_count * 2).times.map { bytes.next }]
               .transform_keys(&:to_sym)

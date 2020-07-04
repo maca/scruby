@@ -10,7 +10,18 @@ module Scruby
 
         def print_node(node, siblings, padding, param_name)
           last = node == siblings.last
-          inputs = node.respond_to?(:inputs) ? node.inputs : []
+
+          # TODO: refactor
+          inputs =
+            if node.respond_to?(:inputs)
+              node.inputs
+            elsif node.respond_to?(:children)
+              node.children
+            else
+              []
+            end
+
+          # TODO: refactor
           param_names = UgenNode === node ? node.parameter_names : []
 
           child_padding =

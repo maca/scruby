@@ -81,6 +81,14 @@ module Scruby
     def wait_for_free
     end
 
+    def print_name
+      "#{self.class.name.split('::').last} #{id}"
+    end
+
+    def visualize
+      Graph::Visualize.print self
+    end
+
     private
 
     def map_action(action)

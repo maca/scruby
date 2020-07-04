@@ -5,7 +5,7 @@ require "forwardable"
 
 module Scruby
   class Server
-    class Error < StandardError; end
+    class ServerError < StandardError; end
     extend Forwardable
 
     include OSC
@@ -152,26 +152,28 @@ module Scruby
       message_queue.receive(address, timeout: timeout, &pred)
     end
 
-    def query_nodes
+    def tree
       send_msg("/g_queryTree", 0, 1)
 
       receive("/g_queryTree.reply").then do |msg|
         NodeTreeDecoder.decode(self,msg.args)
-      end
+      end.value!
+    end
+
+    def visualize_tree
+      tree.visualize
     end
 
     private
 
-    def print_func(_, *args)
-      puts args.inspect
-    end
-
     def node_counter
       # client id is 5 bits and node id is 26 bits long
+      # TODO: no specs
       @node_counter ||= AtomicFixnum.new((client_id << 26) + 1)
     end
 
     def buffer_counter
+      # TODO: no specs
       @buffer_counter ||=
         AtomicFixnum.new((num_buffers / max_logins) * client_id)
     end
@@ -182,10 +184,13 @@ module Scruby
 
     def obtain_client_id
       send_msg("/notify", 1, 0)
+      receive("/done").then(&method(:extract_client_id)).value!
+    end
 
-      receive("/done")
-        .then { |m| @client_id, @max_logins = m.args.slice(1, 2) }
-        .value!
+    def extract_client_id(msg)
+      msg.args.slice(1, 2).each do |val|
+        raise ServerError, val if val.is_a? String
+      end
     end
 
     def graph_completion_blob(message)
@@ -200,7 +205,7 @@ module Scruby
           line = process.read
 
           if /Address already in use/ === line
-            raise Error, "could not open port"
+            raise ServerError, "could not open port"
           end
 
           break cancel if /server ready/ === line

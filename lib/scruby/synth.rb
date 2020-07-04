@@ -32,6 +32,11 @@ module Scruby
       super(name: name, id: id, server: server)
     end
 
+    def print_name
+      params = self.params.map { |k, v| [k, v].join(':') }.join(', ')
+      "#{super} - #{name} - #{params}"
+    end
+
     class << self
       def create(server, name, **args)
         new(name, server).create(Group.new(server, 1), :head, **args)
