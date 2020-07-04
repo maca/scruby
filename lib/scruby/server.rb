@@ -36,11 +36,11 @@ module Scruby
     end
 
     def client_id
-      @client_id ||= obtain_client_id.first
+      @client_id ||= register_client.first
     end
 
     def max_logins
-      @max_logins ||= obtain_client_id.last
+      @max_logins ||= register_client.last
     end
 
     def next_node_id
@@ -64,7 +64,7 @@ module Scruby
 
       wait_for_booted
         .then_flat_future { message_queue.sync }
-        .then { obtain_client_id }
+        .then { register_client }
         .then { create_root_group }
         .then { self }
         .on_rejection { process.kill }
@@ -182,15 +182,13 @@ module Scruby
       send_msg("/g_new", 1, 0, 0)
     end
 
-    def obtain_client_id
+    def register_client
       send_msg("/notify", 1, 0)
-      receive("/done").then(&method(:extract_client_id)).value!
-    end
 
-    def extract_client_id(msg)
-      msg.args.slice(1, 2).each do |val|
-        raise ServerError, val if val.is_a? String
-      end
+      receive("/done")
+        .then { |m| @client_id, @max_logins = m.args.slice(1, 2) }
+        .then { |a| a.each { |v| raise ServerError, v if String === v } }
+        .value!
     end
 
     def graph_completion_blob(message)
