@@ -28,7 +28,9 @@ module Scruby
         def decode_synth(bytes, server, id)
           name = bytes.next
           params_count = bytes.next
-          params = Hash[*(params_count * 2).times.map { bytes.next }]
+          params =
+            Hash[*(params_count * 2).times.map { bytes.next }]
+              .transform_keys(&:to_sym)
 
           Synth.new(name, server, id, params)
         end

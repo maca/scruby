@@ -17,11 +17,11 @@ RSpec.describe Scruby::Server::NodeTreeDecoder do
         0, 1,
           1, 2,
             1018, 2,
-              1020, -1, "sin", 2, "freq", 300.0, "amp", 0.0,
-              1019, -1, "sin", 2, "freq", 300.0, "amp", 0.0,
+              1020, -1, "sin", 2, "freq", 300, "amp", 0,
+              1019, -1, "sin", 2, "freq", 300, "amp", 0,
             1015, 2,
-              1017, -1, "sin", 2, "freq", 300.0, "amp", 0.0,
-              1016, -1, "sin", 2, "freq", 300.0, "amp", 0.0
+              1017, -1, "sin", 2, "freq", 300, "amp", 0,
+              1016, -1, "sin", 2, "freq", 300, "amp", 0
       ]
     end
 
@@ -33,6 +33,7 @@ RSpec.describe Scruby::Server::NodeTreeDecoder do
       it { expect(synth).to be_a Synth }
       it { expect(synth.group).to be group }
       it { expect(synth.server).to be server }
+      it { expect(synth.params).to eq(freq: 300, amp: 0) }
     end
 
     shared_examples_for "is group node" do |id|
