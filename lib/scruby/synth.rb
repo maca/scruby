@@ -3,15 +3,16 @@ module Scruby
     include Node
     include OSC
 
-    attr_reader :name
+    attr_reader :name, :params
 
-    def initialize(name, server, id = nil)
+    def initialize(name, server, id = nil, params = {})
       @name = name
+      @params = params
       super(server, id)
     end
 
     def create(target, action = :head, **args)
-      group_from_target(target, action)
+      @group = group_from_target(target, action)
       send_msg *creation_message(target, action, **args)
     end
 

@@ -153,14 +153,11 @@ module Scruby
     end
 
     def query_nodes
-      send_msg("/g_queryTree", 0, 1);
+      send_msg("/g_queryTree", 0, 1)
 
-
-      receive("/g_queryTree.reply")
-
-      #   .then do |msg|
-      #   NodeTree.new(msg.args)
-      # end
+      receive("/g_queryTree.reply").then do |msg|
+        NodeTreeDecoder.new(self,msg.args)
+      end
     end
 
     private

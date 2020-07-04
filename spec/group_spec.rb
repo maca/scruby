@@ -9,8 +9,28 @@ RSpec.describe Group do
     let(:node) { group }
   end
 
-  it "instantiates with id" do
-    expect(Group.new(server, 1).id).to be 1
+  describe "instantiation" do
+    subject(:group) { Group.new(server, 1) }
+    let(:children) { instance_double("Array") }
+
+    it { expect(group.server).to be server }
+    it { expect(group.id).to be 1 }
+  end
+
+  describe "children" do
+    let(:children) do
+      [ instance_double("Synth"),
+        instance_double("Synth"),
+      ]
+    end
+
+    before do
+      expect(children.first).to receive(:group=).with(group)
+      expect(children.last).to receive(:group=).with(group)
+      group.children = children
+    end
+
+    it { expect(group.children).to eq children }
   end
 
   describe "move node" do
@@ -122,7 +142,7 @@ RSpec.describe Group do
         let(:msg) { [ "/g_new", group.id, 0, 1 ] }
 
         it { expect(node.group).to eq Group.new(server, 1) }
-        it_behaves_like "initializes group"
+
       end
     end
   end

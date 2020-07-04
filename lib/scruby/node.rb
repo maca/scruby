@@ -8,6 +8,9 @@ module Scruby
     ACTIONS = %i(head tail before after replace)
 
     attr_reader :server, :id, :group
+    attr_writer :group
+
+    protected :group=
 
     def initialize(server, id = nil)
       @server = server
@@ -85,7 +88,7 @@ module Scruby
     end
 
     def group_from_target(target, action)
-      @group = map_action(action) < 2 ? target : target.group
+      map_action(action) < 2 ? target : target.group
     end
 
     def send_msg(*args)
