@@ -73,7 +73,7 @@ RSpec.describe Scruby::Server::NodeTreeDecoder do
       end
     end
 
-  
+
     it_behaves_like "is group node", 1015 do
       let(:parent) { root.children.first }
       subject(:group) { parent.children.last }
