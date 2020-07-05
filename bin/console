@@ -7,7 +7,25 @@ require "zeitwerk"
 require "listen"
 
 
+
+module Scruby
+  class UgenInflector < Zeitwerk::Inflector
+    ACRONYMS = %w(apf bpf bpz brf dc fft fos hpf
+      hpz ifft lf lfd lpf lpz rhpf rlpf)
+
+    def camelize(basename, abspath)
+      if basename =~ /\A(#{Regexp.union(ACRONYMS)})(.*)/
+        $1.upcase + super($2, abspath)
+      else
+        super
+      end
+    end
+  end
+end
+
+
 $loader = Zeitwerk::Loader.new
+$loader.inflector = Scruby::UgenInflector.new
 $loader.push_dir File.join(__dir__, "..", "lib")
 $loader.enable_reloading
 $loader.setup
