@@ -65,9 +65,11 @@ data.each do |name, specs|
 <<~RUBY
 module Scruby
   module Ugen
-    class <%= name.sub("_", "") %> < Base
+    class <%= name.sub("_", "") -%>
       <% if specs['isOut'] == true  %>
-      include AbstractOut
+      < AbstractOut
+      <% else %>
+      < Gen
       <% end -%>
 
       rates <%= rates.map(&:inspect).join(', ') -%>

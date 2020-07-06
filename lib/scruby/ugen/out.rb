@@ -1,8 +1,6 @@
 module Scruby
   module Ugen
-    class Out < Ugen::Base
-      include AbstractOut
-
+    class Out < AbstractOut
       rates :control, :audio
       inputs bus: nil, channels_array: nil
     end

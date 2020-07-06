@@ -1,6 +1,6 @@
 module Scruby
   module Ugen
-    class LagIn < Base
+    class LagIn < Gen
       rates :control
       attributes channel_count: 1
 

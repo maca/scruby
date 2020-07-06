@@ -1,6 +1,6 @@
 module Scruby
   module Ugen
-    class RandSeed < Base
+    class RandSeed < Gen
       rates :control, :audio, :scalar
       inputs trig: 0, seed: 56_789
     end

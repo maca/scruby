@@ -1,6 +1,6 @@
 module Scruby
   module Ugen
-    class PVAdd < Base
+    class PVAdd < Gen
       rates nil
       inputs buffer_a: nil, buffer_b: nil
     end

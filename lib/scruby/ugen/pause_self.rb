@@ -1,6 +1,6 @@
 module Scruby
   module Ugen
-    class PauseSelf < Base
+    class PauseSelf < Gen
       rates :control
       inputs input: nil
     end

@@ -1,6 +1,6 @@
 module Scruby
   module Ugen
-    class BrownNoise < Base
+    class BrownNoise < Gen
       rates :control, :audio
     end
   end

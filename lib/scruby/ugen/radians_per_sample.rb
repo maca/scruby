@@ -1,6 +1,6 @@
 module Scruby
   module Ugen
-    class RadiansPerSample < Base
+    class RadiansPerSample < Gen
       rates :scalar
     end
   end

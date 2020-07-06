@@ -1,6 +1,6 @@
 module Scruby
   module Ugen
-    class PVCopyPhase < Base
+    class PVCopyPhase < Gen
       rates nil
       inputs buffer_a: nil, buffer_b: nil
     end

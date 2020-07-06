@@ -1,6 +1,6 @@
 module Scruby
   module Ugen
-    class Dust < Base
+    class Dust < Gen
       rates :control, :audio
       inputs density: 0
     end

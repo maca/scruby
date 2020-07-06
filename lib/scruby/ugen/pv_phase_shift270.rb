@@ -1,6 +1,6 @@
 module Scruby
   module Ugen
-    class PVPhaseShift270 < Base
+    class PVPhaseShift270 < Gen
       rates nil
       inputs buffer: nil
     end

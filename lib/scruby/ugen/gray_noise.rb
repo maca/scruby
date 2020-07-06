@@ -1,6 +1,6 @@
 module Scruby
   module Ugen
-    class GrayNoise < Base
+    class GrayNoise < Gen
       rates :control, :audio
     end
   end

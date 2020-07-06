@@ -1,6 +1,6 @@
 module Scruby
   module Ugen
-    class NumRunningSynths < Base
+    class NumRunningSynths < Gen
       rates :control, :scalar
     end
   end

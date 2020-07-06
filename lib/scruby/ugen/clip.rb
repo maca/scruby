@@ -1,6 +1,6 @@
 module Scruby
   module Ugen
-    class Clip < Base
+    class Clip < Gen
       rates :control, :audio, :scalar
       inputs input: 0, lo: 0, hi: 1
     end

@@ -1,6 +1,6 @@
 module Scruby
   module Ugen
-    class PeakFollower < Base
+    class PeakFollower < Gen
       rates :control, :audio
       inputs input: 0, decay: 0.999
     end

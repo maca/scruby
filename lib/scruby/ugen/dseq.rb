@@ -1,6 +1,6 @@
 module Scruby
   module Ugen
-    class Dseq < Base
+    class Dseq < Gen
       rates nil
       inputs list: nil, repeats: 1
     end

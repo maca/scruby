@@ -1,8 +1,6 @@
 module Scruby
   module Ugen
-    class OffsetOut < Base
-      include AbstractOut
-
+    class OffsetOut < AbstractOut
       rates :control, :audio
     end
   end

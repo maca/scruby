@@ -1,6 +1,6 @@
 module Scruby
   module Ugen
-    class Lag3UD < Base
+    class Lag3UD < Gen
       rates :control, :audio
       inputs input: 0, lag_time_u: 0.1, lag_time_d: 0.1
     end

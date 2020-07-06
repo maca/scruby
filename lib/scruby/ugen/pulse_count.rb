@@ -1,6 +1,6 @@
 module Scruby
   module Ugen
-    class PulseCount < Base
+    class PulseCount < Gen
       rates :control, :audio
       inputs trig: 0, reset: 0
     end

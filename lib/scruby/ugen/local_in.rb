@@ -1,6 +1,6 @@
 module Scruby
   module Ugen
-    class LocalIn < Base
+    class LocalIn < Gen
       rates :control, :audio
       attributes channel_count: 1
 

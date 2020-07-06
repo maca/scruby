@@ -1,6 +1,6 @@
 module Scruby
   module Ugen
-    class GrainSin < Base
+    class GrainSin < Gen
       rates :audio
       attributes channel_count: 1
 

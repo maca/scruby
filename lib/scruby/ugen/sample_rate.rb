@@ -1,6 +1,6 @@
 module Scruby
   module Ugen
-    class SampleRate < Base
+    class SampleRate < Gen
       rates :scalar
     end
   end

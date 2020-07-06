@@ -1,6 +1,6 @@
 module Scruby
   module Ugen
-    class XFade2 < Base
+    class XFade2 < Gen
       rates :control, :audio
       inputs in_a: nil, in_b: 0, pan: 0, level: 1
     end

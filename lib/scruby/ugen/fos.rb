@@ -1,6 +1,6 @@
 module Scruby
   module Ugen
-    class FOS < Base
+    class FOS < Gen
       rates :control, :audio
       inputs input: 0, a0: 0, a1: 0, b1: 0
     end

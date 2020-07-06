@@ -1,6 +1,6 @@
 module Scruby
   module Ugen
-    class SpecCentroid < Base
+    class SpecCentroid < Gen
       rates :control
       inputs buffer: nil
     end

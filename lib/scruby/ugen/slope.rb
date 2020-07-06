@@ -1,6 +1,6 @@
 module Scruby
   module Ugen
-    class Slope < Base
+    class Slope < Gen
       rates :control, :audio
       inputs input: 0
     end

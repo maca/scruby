@@ -1,6 +1,6 @@
 module Scruby
   module Ugen
-    class InfoUGenBase < Base
+    class InfoUGenBase < Gen
       rates :scalar
     end
   end

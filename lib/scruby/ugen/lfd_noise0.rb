@@ -1,6 +1,6 @@
 module Scruby
   module Ugen
-    class LFDNoise0 < Base
+    class LFDNoise0 < Gen
       rates :control, :audio
       inputs freq: 500
     end

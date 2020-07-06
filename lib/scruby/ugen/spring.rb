@@ -1,6 +1,6 @@
 module Scruby
   module Ugen
-    class Spring < Base
+    class Spring < Gen
       rates :control, :audio
       inputs input: 0, spring: 1, damp: 0
     end

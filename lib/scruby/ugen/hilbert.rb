@@ -1,6 +1,6 @@
 module Scruby
   module Ugen
-    class Hilbert < Base
+    class Hilbert < Gen
       rates :audio
       inputs input: nil
     end

@@ -1,6 +1,6 @@
 module Scruby
   module Ugen
-    class FFT < Base
+    class FFT < Gen
       rates nil
       inputs buffer: nil, input: 0, hop: 0.5, wintype: 0, active: 1,
              winsize: 0

@@ -1,6 +1,6 @@
 module Scruby
   module Ugen
-    class ClipNoise < Base
+    class ClipNoise < Gen
       rates :control, :audio
     end
   end

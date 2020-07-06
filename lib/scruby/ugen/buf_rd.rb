@@ -1,6 +1,6 @@
 module Scruby
   module Ugen
-    class BufRd < Base
+    class BufRd < Gen
       rates :control, :audio
       attributes channel_count: 1
 

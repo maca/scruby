@@ -1,6 +1,6 @@
 module Scruby
   module Ugen
-    class PVMagBelow < Base
+    class PVMagBelow < Gen
       rates nil
       inputs buffer: nil, threshold: 0
     end

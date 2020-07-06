@@ -1,6 +1,6 @@
 module Scruby
   module Ugen
-    class WhiteNoise < Base
+    class WhiteNoise < Gen
       rates :control, :audio
     end
   end

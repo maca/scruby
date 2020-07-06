@@ -1,6 +1,6 @@
 module Scruby
   module Ugen
-    class PVMax < Base
+    class PVMax < Gen
       rates nil
       inputs buffer_a: nil, buffer_b: nil
     end

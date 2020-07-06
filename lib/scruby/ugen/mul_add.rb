@@ -1,8 +1,8 @@
 module Scruby
   module Ugen
-    class Trig < Gen
+    class MulAdd < Gen
       rates :control, :audio
-      inputs input: 0, dur: 0.1
+      inputs input: nil, mul: 1, add: 0
     end
   end
 end

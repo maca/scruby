@@ -1,6 +1,6 @@
 module Scruby
   module Ugen
-    class GVerb < Base
+    class GVerb < Gen
       rates :audio
       inputs input: nil, roomsize: 10, revtime: 3, damping: 0.5,
              inputbw: 0.5, spread: 15, drylevel: 1, earlyreflevel: 0.7,

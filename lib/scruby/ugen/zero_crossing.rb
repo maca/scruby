@@ -1,6 +1,6 @@
 module Scruby
   module Ugen
-    class ZeroCrossing < Base
+    class ZeroCrossing < Gen
       rates :control, :audio
       inputs input: 0
     end

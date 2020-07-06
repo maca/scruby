@@ -1,6 +1,6 @@
 module Scruby
   module Ugen
-    class VDiskIn < Base
+    class VDiskIn < Gen
       rates :audio
       attributes channel_count: 1
 

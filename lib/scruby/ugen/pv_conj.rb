@@ -1,6 +1,6 @@
 module Scruby
   module Ugen
-    class PVConj < Base
+    class PVConj < Gen
       rates nil
       inputs buffer: nil
     end

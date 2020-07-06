@@ -1,6 +1,6 @@
 module Scruby
   module Ugen
-    class BHiPass < Base
+    class BHiPass < Gen
       rates :audio
       inputs input: nil, freq: 1200, rq: 1
     end

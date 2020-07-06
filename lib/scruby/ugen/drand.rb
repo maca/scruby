@@ -1,6 +1,6 @@
 module Scruby
   module Ugen
-    class Drand < Base
+    class Drand < Gen
       rates nil
       inputs list: nil, repeats: 1
     end

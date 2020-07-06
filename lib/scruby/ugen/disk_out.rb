@@ -1,6 +1,6 @@
 module Scruby
   module Ugen
-    class DiskOut < Base
+    class DiskOut < Gen
       rates :audio
       inputs bufnum: nil, channels_array: nil
     end

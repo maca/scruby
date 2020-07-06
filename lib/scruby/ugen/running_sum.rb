@@ -1,6 +1,6 @@
 module Scruby
   module Ugen
-    class RunningSum < Base
+    class RunningSum < Gen
       rates :control, :audio
       inputs input: nil, numsamp: 40
     end

@@ -1,6 +1,6 @@
 module Scruby
   module Ugen
-    class ScopeOut2 < Base
+    class ScopeOut2 < Gen
       rates :control, :audio
       inputs input_array: nil, scope_num: 0, max_frames: 4096,
              scope_frames: nil

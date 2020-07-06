@@ -1,6 +1,6 @@
 module Scruby
   module Ugen
-    class SpecFlatness < Base
+    class SpecFlatness < Gen
       rates :control
       inputs buffer: nil
     end

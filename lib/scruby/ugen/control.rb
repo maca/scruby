@@ -1,6 +1,6 @@
 module Scruby
   module Ugen
-    class Control < Base
+    class Control < Gen
       rates :scalar, :control, :trigger
       attributes control_names: []
 

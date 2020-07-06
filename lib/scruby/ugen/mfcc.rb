@@ -1,6 +1,6 @@
 module Scruby
   module Ugen
-    class MFCC < Base
+    class MFCC < Gen
       rates :control
       inputs chain: nil, numcoeff: 13
     end

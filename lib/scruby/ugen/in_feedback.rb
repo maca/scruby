@@ -1,6 +1,6 @@
 module Scruby
   module Ugen
-    class InFeedback < Base
+    class InFeedback < Gen
       rates :audio
       attributes channel_count: 1
 

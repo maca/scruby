@@ -1,6 +1,6 @@
 module Scruby
   module Ugen
-    class PlayBuf < Base
+    class PlayBuf < Gen
       rates :control, :audio
       attributes channel_count: 1
 

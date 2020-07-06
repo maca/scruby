@@ -1,6 +1,6 @@
 module Scruby
   module Ugen
-    class Done < Base
+    class Done < Gen
       rates :control
       inputs src: nil
     end

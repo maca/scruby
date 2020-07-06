@@ -5,10 +5,11 @@ module Scruby
       include PrettyInspectable
       include Operations
       include Utils::PositionalKeywordArgs
+      extend Utils::PositionalKeywordArgs
 
 
       def initialize(*args, rate: :audio, **kw)
-        defaults = self.class.attributes.merge(self.class.inputs)
+        defaults = self.class.defaults
 
         positional_keyword_args(defaults, *args, **kw).map do |key, val|
           send("#{key}=", val.is_a?(Hash) ? val.fetch(rate) : val)
@@ -114,22 +115,15 @@ module Scruby
           @attributes = attributes
         end
 
-        def ar(*args, **kwargs)
-          new(*args, rate: :audio, **kwargs)
+        def defaults
+          attributes.merge(**inputs)
         end
-        alias audio ar
-
-        def kr(*args, **kwargs)
-          new(*args, rate: :control, **kwargs)
-        end
-        alias control kr
-
-        def ir(*args, **kwargs)
-          new(*args, rate: :scalar, **kwargs)
-        end
-        alias scalar ir
 
         private
+
+        def build(rate, *args, **kwargs)
+          new(*args, rate: rate, **kwargs)
+        end
 
         def define_accessors(kind, spec)
           dynamic_module = Module.new do
@@ -140,12 +134,12 @@ module Scruby
             end
           end
 
-          spec.each { |name, _| define_accessor(name, dynamic_module) }
+          spec.each { |name, _| define_accessor(dynamic_module, name) }
 
           include dynamic_module
         end
 
-        def define_accessor(name, dynamic_module)
+        def define_accessor(dynamic_module, name)
           dynamic_module.define_method "#{name}=" do |input|
             instance_variable_set("@#{name}", input)
           end

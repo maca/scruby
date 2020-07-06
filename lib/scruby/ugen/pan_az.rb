@@ -1,6 +1,6 @@
 module Scruby
   module Ugen
-    class PanAz < Base
+    class PanAz < Gen
       rates :control, :audio
       attributes channel_count: 1
 

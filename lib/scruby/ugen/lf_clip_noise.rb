@@ -1,6 +1,6 @@
 module Scruby
   module Ugen
-    class LFClipNoise < Base
+    class LFClipNoise < Gen
       rates :control, :audio
       inputs freq: 500
     end

@@ -1,6 +1,6 @@
 module Scruby
   module Ugen
-    class Diwhite < Base
+    class Diwhite < Gen
       rates nil
       inputs lo: 0, hi: 1, length: "inf"
     end

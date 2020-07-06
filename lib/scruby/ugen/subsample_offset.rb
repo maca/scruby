@@ -1,6 +1,6 @@
 module Scruby
   module Ugen
-    class SubsampleOffset < Base
+    class SubsampleOffset < Gen
       rates :scalar
     end
   end

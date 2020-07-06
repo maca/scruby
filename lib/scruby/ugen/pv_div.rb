@@ -1,6 +1,6 @@
 module Scruby
   module Ugen
-    class PVDiv < Base
+    class PVDiv < Gen
       rates nil
       inputs buffer_a: nil, buffer_b: nil
     end

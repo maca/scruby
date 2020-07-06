@@ -1,6 +1,6 @@
 module Scruby
   module Ugen
-    class Select < Base
+    class Select < Gen
       rates :control, :audio
       inputs which: nil, array: nil
     end

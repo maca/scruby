@@ -1,6 +1,6 @@
 module Scruby
   module Ugen
-    class FreeSelf < Base
+    class FreeSelf < Gen
       rates :control
       inputs input: nil
     end

@@ -1,6 +1,6 @@
 module Scruby
   module Ugen
-    class WrapIndex < Base
+    class WrapIndex < Gen
       rates :control, :audio
       inputs bufnum: nil, input: 0
     end

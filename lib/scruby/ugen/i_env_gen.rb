@@ -1,6 +1,6 @@
 module Scruby
   module Ugen
-    class IEnvGen < Base
+    class IEnvGen < Gen
       rates :control, :audio
       inputs envelope: nil, index: nil
     end

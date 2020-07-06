@@ -1,6 +1,6 @@
 module Scruby
   module Ugen
-    class NodeID < Base
+    class NodeID < Gen
       rates :scalar
     end
   end

@@ -1,6 +1,6 @@
 module Scruby
   module Ugen
-    class NumBuffers < Base
+    class NumBuffers < Gen
       rates :scalar
     end
   end

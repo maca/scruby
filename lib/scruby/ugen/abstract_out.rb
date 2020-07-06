@@ -1,6 +1,6 @@
 module Scruby
   module Ugen
-    module AbstractOut
+    class AbstractOut < Ugen::Base
       def output_specs; [] end
       def channel_count; 0 end
 
@@ -14,6 +14,13 @@ module Scruby
 
       def out?
         true
+      end
+
+      class << self
+        def ar(*args, **kwargs)
+          build(:audio, *args, **kwargs)
+        end
+        alias audio ar
       end
     end
   end

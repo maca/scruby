@@ -1,6 +1,6 @@
 module Scruby
   module Ugen
-    class Dstutter < Base
+    class Dstutter < Gen
       rates nil
       inputs n: nil, input: nil
     end

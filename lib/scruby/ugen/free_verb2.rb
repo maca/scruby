@@ -1,6 +1,6 @@
 module Scruby
   module Ugen
-    class FreeVerb2 < Base
+    class FreeVerb2 < Gen
       rates :audio
       inputs input: nil, in2: nil, mix: 0.33, room: 0.5, damp: 0.5
     end

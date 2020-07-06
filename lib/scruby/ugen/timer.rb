@@ -1,6 +1,6 @@
 module Scruby
   module Ugen
-    class Timer < Base
+    class Timer < Gen
       rates :control, :audio
       inputs trig: 0
     end

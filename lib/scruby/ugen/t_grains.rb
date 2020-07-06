@@ -1,6 +1,6 @@
 module Scruby
   module Ugen
-    class TGrains < Base
+    class TGrains < Gen
       rates :audio
       attributes channel_count: 1
 

@@ -1,6 +1,6 @@
 module Scruby
   module Ugen
-    class PVMagSmear < Base
+    class PVMagSmear < Gen
       rates nil
       inputs buffer: nil, bins: 0
     end

@@ -1,6 +1,6 @@
 module Scruby
   module Ugen
-    class Gendy1 < Base
+    class Gendy1 < Gen
       rates :control, :audio
       inputs ampdist: 1, durdist: 1, adparam: 1, ddparam: 1,
              minfreq: { control: 20, audio: 440 },

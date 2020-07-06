@@ -1,6 +1,6 @@
 module Scruby
   module Ugen
-    class InTrig < Base
+    class InTrig < Gen
       rates :control
       attributes channel_count: 1
 

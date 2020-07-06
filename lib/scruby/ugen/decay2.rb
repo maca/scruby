@@ -1,6 +1,6 @@
 module Scruby
   module Ugen
-    class Decay2 < Base
+    class Decay2 < Gen
       rates :control, :audio
       inputs input: 0, attack_time: 0.01, decay_time: 1
     end

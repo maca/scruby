@@ -1,6 +1,6 @@
 module Scruby
   module Ugen
-    class IRand < Base
+    class IRand < Gen
       rates nil
       inputs lo: 0, hi: 127
     end

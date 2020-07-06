@@ -1,6 +1,6 @@
 module Scruby
   module Ugen
-    class Convolution < Base
+    class Convolution < Gen
       rates :audio
       inputs input: nil, kernel: nil, framesize: 512
     end

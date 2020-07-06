@@ -1,4 +1,4 @@
-RSpec.describe Ugen::Base do
+RSpec.describe Ugen::Gen do
   include Scruby
 
   shared_examples_for "instance is copied" do
@@ -12,7 +12,7 @@ RSpec.describe Ugen::Base do
 
   describe "#rates" do
     context "allowed rate is audio" do
-      subject(:subclass) { Class.new(Ugen::Base) { rates :audio } }
+      subject(:subclass) { Class.new(Ugen::Gen) { rates :audio } }
 
       it { expect(subclass.rates).to eq %i(audio) }
 
@@ -36,7 +36,7 @@ RSpec.describe Ugen::Base do
 
     context "allowed rates are audio and control" do
       subject(:subclass) do
-        Class.new(Ugen::Base) do
+        Class.new(Ugen::Gen) do
           rates :control, :audio, :scalar, :demand
         end
       end
@@ -69,7 +69,7 @@ RSpec.describe Ugen::Base do
 
   describe "#initialize" do
     let(:subclass) do
-      Class.new(Ugen::Base) do
+      Class.new(Ugen::Gen) do
         rates :audio
         attributes foo: :bar
         inputs freq: 440, phase: 0
@@ -167,7 +167,7 @@ RSpec.describe Ugen::Base do
 
     context "different defaults for audio and control" do
       let(:subclass) do
-        Class.new(Ugen::Base) do
+        Class.new(Ugen::Gen) do
           rates :audio, :control
           attributes foo: :bar
           inputs freq: { audio: 440, control: 10 }, phase: 0
@@ -197,7 +197,7 @@ RSpec.describe Ugen::Base do
 
   describe ".rate" do
     subject(:subclass) do
-      Class.new(Ugen::Base) { rates :audio, :control }
+      Class.new(Ugen::Gen) { rates :audio, :control }
     end
 
     let(:instance) { subclass.ar }
@@ -215,9 +215,53 @@ RSpec.describe Ugen::Base do
   end
 
 
+  describe "instantiate with mul and add" do
+    subject(:subclass) do
+      Class.new(Ugen::Gen) do
+        rates :audio, :control
+        inputs freq: 440, phase: 0
+      end
+    end
+
+    context "mul and add provided" do
+      shared_examples_for "builds a mul add" do
+        it { expect(instance).to be_a MulAdd }
+        it { expect(instance.rate).to be :audio }
+        it { expect(instance.input).to eq subclass.ar(440, 0) }
+        it { expect(instance.mul).to be 0.1 }
+        it { expect(instance.add).to be 0.5 }
+      end
+
+      context "with positional arguments" do
+        let(:instance) { subclass.ar(440, 0, 0.1, 0.5) }
+        it_behaves_like "builds a mul add"
+      end
+
+      context "with keyword arguments" do
+        let(:instance) { subclass.ar(mul: 0.1, add: 0.5) }
+        it_behaves_like "builds a mul add"
+      end
+    end
+
+    context "only add" do
+      let(:instance) { subclass.ar(440, 0, add: 0.2) }
+      it { expect(instance).to eq(subclass.ar(440, 0) + 0.2) }
+    end
+
+    context "only mul" do
+      let(:instance) { subclass.ar(440, 0, mul: 0.2) }
+      it { expect(instance).to eq(subclass.ar(440, 0) * 0.2) }
+    end
+
+    context "ugen is control" do
+      let(:instance) { subclass.kr(440, 0) }
+      it "may not return mul add if inputs are not scalar or control"
+    end
+  end
+
   describe ".name" do
     subject(:subclass) do
-      Class.new(Ugen::Base) { rates :audio, :control }
+      Class.new(Ugen::Gen) { rates :audio, :control }
     end
 
     let(:instance) { subclass.ar }
@@ -232,7 +276,7 @@ RSpec.describe Ugen::Base do
 
   describe "equality" do
     subject(:subclass) do
-      Class.new(Ugen::Base) do
+      Class.new(Ugen::Gen) do
         rates :audio, :control
         inputs freq: 440, phase: 0
       end
@@ -266,7 +310,7 @@ RSpec.describe Ugen::Base do
 
   shared_context "simple ugen with graph" do
     subject(:subclass) do
-      Class.new(Ugen::Base) do
+      Class.new(Ugen::Gen) do
         rates :audio, :control
         inputs freq: 440, phase: 0
       end

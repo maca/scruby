@@ -1,6 +1,6 @@
 module Scruby
   module Ugen
-    class CoinGate < Base
+    class CoinGate < Gen
       rates :control, :audio
       inputs prob: nil, input: nil
     end

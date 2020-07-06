@@ -1,6 +1,6 @@
 module Scruby
   module Ugen
-    class Pitch < Base
+    class Pitch < Gen
       rates :control
       inputs input: 0, init_freq: 440, min_freq: 60, max_freq: 4000,
              exec_freq: 100, max_bins_per_octave: 16, median: 1,

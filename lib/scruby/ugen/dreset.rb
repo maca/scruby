@@ -1,6 +1,6 @@
 module Scruby
   module Ugen
-    class Dreset < Base
+    class Dreset < Gen
       rates nil
       inputs input: nil, reset: 0
     end

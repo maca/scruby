@@ -1,6 +1,6 @@
 module Scruby
   module Ugen
-    class Warp1 < Base
+    class Warp1 < Gen
       rates :audio
       attributes channel_count: 1
 

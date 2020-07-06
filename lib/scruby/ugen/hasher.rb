@@ -1,6 +1,6 @@
 module Scruby
   module Ugen
-    class Hasher < Base
+    class Hasher < Gen
       rates :control, :audio
       inputs input: 0
     end

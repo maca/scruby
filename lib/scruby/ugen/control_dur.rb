@@ -1,6 +1,6 @@
 module Scruby
   module Ugen
-    class ControlDur < Base
+    class ControlDur < Gen
       rates :scalar
     end
   end

@@ -1,6 +1,6 @@
 module Scruby
   module Ugen
-    class Dxrand < Base
+    class Dxrand < Gen
       rates nil
       inputs list: nil, repeats: 1
     end

@@ -1,6 +1,6 @@
 module Scruby
   module Ugen
-    class PinkNoise < Base
+    class PinkNoise < Gen
       rates :control, :audio
     end
   end

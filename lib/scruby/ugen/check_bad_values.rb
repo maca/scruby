@@ -1,6 +1,6 @@
 module Scruby
   module Ugen
-    class CheckBadValues < Base
+    class CheckBadValues < Gen
       rates :control, :audio
       inputs input: 0, id: 0, post: 2
     end

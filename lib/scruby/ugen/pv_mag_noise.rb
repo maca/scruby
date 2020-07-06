@@ -1,6 +1,6 @@
 module Scruby
   module Ugen
-    class PVMagNoise < Base
+    class PVMagNoise < Gen
       rates nil
       inputs buffer: nil
     end

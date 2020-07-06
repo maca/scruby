@@ -1,6 +1,6 @@
 module Scruby
   module Ugen
-    class Free < Base
+    class Free < Gen
       rates :control
       inputs trig: nil, id: nil
     end

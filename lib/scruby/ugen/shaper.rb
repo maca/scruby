@@ -1,6 +1,6 @@
 module Scruby
   module Ugen
-    class Shaper < Base
+    class Shaper < Gen
       rates :control, :audio
       inputs bufnum: nil, input: 0
     end

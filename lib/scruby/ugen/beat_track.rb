@@ -1,6 +1,6 @@
 module Scruby
   module Ugen
-    class BeatTrack < Base
+    class BeatTrack < Gen
       rates :control
       inputs chain: nil, lock: 0
     end

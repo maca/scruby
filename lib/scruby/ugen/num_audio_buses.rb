@@ -1,6 +1,6 @@
 module Scruby
   module Ugen
-    class NumAudioBuses < Base
+    class NumAudioBuses < Gen
       rates :scalar
     end
   end

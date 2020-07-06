@@ -1,6 +1,6 @@
 module Scruby
   module Ugen
-    class DetectIndex < Base
+    class DetectIndex < Gen
       rates :control, :audio
       inputs bufnum: nil, input: 0
     end

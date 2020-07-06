@@ -1,6 +1,6 @@
 module Scruby
   module Ugen
-    class BlockSize < Base
+    class BlockSize < Gen
       rates :scalar
     end
   end

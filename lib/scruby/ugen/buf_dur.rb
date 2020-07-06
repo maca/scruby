@@ -1,6 +1,6 @@
 module Scruby
   module Ugen
-    class BufDur < Base
+    class BufDur < Gen
       rates :control, :scalar
       inputs bufnum: nil
     end

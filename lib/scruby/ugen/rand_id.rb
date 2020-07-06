@@ -1,6 +1,6 @@
 module Scruby
   module Ugen
-    class RandID < Base
+    class RandID < Gen
       rates :control, :scalar
       inputs id: 0
     end

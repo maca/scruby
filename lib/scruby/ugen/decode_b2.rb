@@ -1,6 +1,6 @@
 module Scruby
   module Ugen
-    class DecodeB2 < Base
+    class DecodeB2 < Gen
       rates :control, :audio
       attributes channel_count: 1
 

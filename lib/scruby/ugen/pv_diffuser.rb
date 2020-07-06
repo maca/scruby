@@ -1,6 +1,6 @@
 module Scruby
   module Ugen
-    class PVDiffuser < Base
+    class PVDiffuser < Gen
       rates nil
       inputs buffer: nil, trig: 0
     end
