@@ -1,6 +1,4 @@
 RSpec.describe Ugen::Gen do
-  include Scruby
-
   shared_examples_for "instance is copied" do
     it { expect(copy.object_id).not_to eq instance.object_id }
   end

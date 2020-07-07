@@ -44,6 +44,10 @@ module Scruby
       def attributes; {} end
       def special_index; 0 end
 
+      def channels(count)
+        Ugen::MultiChannel.new([ self ] * count)
+      end
+
       def inspect
         super(rate: rate, **attributes, **inputs)
       end
@@ -134,14 +138,25 @@ module Scruby
             end
           end
 
-          spec.each { |name, _| define_accessor(dynamic_module, name) }
+          spec.each do |name, _|
+            define_accessor(dynamic_module, kind, name)
+          end
 
           include dynamic_module
         end
 
-        def define_accessor(dynamic_module, name)
-          dynamic_module.define_method "#{name}=" do |input|
-            instance_variable_set("@#{name}", input)
+        def define_accessor(dynamic_module, kind, name)
+          if kind == :inputs
+            dynamic_module.define_method "#{name}=" do |input|
+              input = [ *input ]
+              input = input.size == 1 ? input.first : input
+
+              instance_variable_set("@#{name}", input)
+            end
+          else
+            dynamic_module.define_method "#{name}=" do |input|
+              instance_variable_set("@#{name}", input)
+            end
           end
 
           dynamic_module.define_method name do |input = nil|
