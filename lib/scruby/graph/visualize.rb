@@ -9,7 +9,7 @@ module Scruby
         protected
 
         def print_node(node, siblings, padding, param_name)
-          last = node == siblings.last
+          is_last = node.eql? siblings.last
 
           # TODO: refactor
           inputs =
@@ -28,7 +28,7 @@ module Scruby
             case
             when siblings.empty?
               padding
-            when last
+            when is_last
               padding + "    "
             else
               padding + " │  "
@@ -36,7 +36,7 @@ module Scruby
 
           [
             padding,
-            (" #{last ? '└' : '├'}─ " unless siblings.empty?),
+            (" #{is_last ? '└' : '├'}─ " unless siblings.empty?),
             [ param_name, node.print_name ].compact.join(": "),
             ("\n" if inputs.any?),
 
@@ -44,7 +44,7 @@ module Scruby
               print_node(i, inputs, child_padding, name)
             },
 
-            ("\n" unless last)
+            ("\n" unless is_last)
           ].join
         end
       end

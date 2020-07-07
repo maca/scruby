@@ -1,11 +1,8 @@
 module Scruby
   module Equatable
     def ==(other)
-      other.is_a?(Equatable) && other.equatable_state == equatable_state
-    end
-
-    def eql?(other)
-      self.class == other.class && self == other
+      self.class == other.class &&
+        other.equatable_state == equatable_state
     end
 
     protected
