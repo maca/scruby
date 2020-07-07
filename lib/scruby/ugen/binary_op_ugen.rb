@@ -1,22 +1,8 @@
 module Scruby
   module Ugen
-    class BinaryOpUgen < Base
-      rates Scruby::Ugen::RATES
-
+    class BinaryOpUgen < Operation
       attributes operation: nil
       inputs left: nil, right: nil
-
-      def special_index
-        Operations.binary_indexes.fetch(operation)
-      end
-
-      def parameter_names
-        []
-      end
-
-      def print_name
-        operation
-      end
     end
   end
 end
