@@ -33,7 +33,7 @@ module Scruby
     end
 
     def print_name
-      params = self.params.map { |k, v| [k, v].join(':') }.join(', ')
+      params = self.params.map { |k, v| [ k, v ].join(":") }.join(", ")
       "#{super} - #{name} - #{params}"
     end
 

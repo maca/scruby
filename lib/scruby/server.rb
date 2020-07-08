@@ -156,7 +156,7 @@ module Scruby
       send_msg("/g_queryTree", 0, 1)
 
       receive("/g_queryTree.reply").then do |msg|
-        NodeTreeDecoder.decode(self,msg.args)
+        NodeTreeDecoder.decode(self, msg.args)
       end.value!
     end
 

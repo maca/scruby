@@ -77,8 +77,7 @@ module Scruby
 
       def dispatch_msg(message)
         patterns.delete_if do |pattern, pred, future|
-          match =
-            (pattern || pred) &&
+          (pattern || pred) &&
             (pattern.nil? || pattern === message.address) &&
             (pred.nil? || pred.call(message, future))
 

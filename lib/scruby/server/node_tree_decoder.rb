@@ -1,4 +1,4 @@
-require 'ostruct'
+require "ostruct"
 
 module Scruby
   class Server

@@ -166,7 +166,7 @@ RSpec.describe Buffer do
       subject!(:alloc) do
         buffer.copy_data_async(dest_buffer, 1, 2, 3).value!
       end
-   
+
       it_behaves_like "performs alloc"
     end
   end
