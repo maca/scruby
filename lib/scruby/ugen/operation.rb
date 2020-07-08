@@ -10,12 +10,16 @@ module Scruby
       end
 
       def print_name
-        operation
+        "#{operation.to_s.capitalize} (#{rate})"
       end
 
       class << self
         def inherited(base)
           base.rates Scruby::Ugen::RATES
+        end
+
+        def apply(*args)
+          raise NotImplementedError
         end
       end
     end

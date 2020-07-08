@@ -31,6 +31,7 @@ GEM
     parser (2.7.1.0)
       ast (~> 2.4.0)
     rainbow (3.0.0)
+    rantly (2.0.0)
     rb-fsevent (0.10.3)
     rb-inotify (0.10.1)
       ffi (~> 1.0)
@@ -73,6 +74,7 @@ DEPENDENCIES
   byebug
   irb
   listen
+  rantly
   rspec
   rubocop
   scruby!

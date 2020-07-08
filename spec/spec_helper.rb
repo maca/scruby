@@ -1,6 +1,10 @@
 require "bundler/setup"
 require "byebug"
 require "scruby"
+require "rantly"
+require "rantly/rspec_extensions"
+require "rantly/shrinks"
+
 
 Dir.glob(File.join(__dir__, "support/**/*.rb")).each { |f| load f }
 

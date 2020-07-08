@@ -20,11 +20,13 @@ module Scruby
           unary_indexes[name] = index
 
           define_method(name) do
-            Operations.apply_unary(name, self)
+            UnaryOpUgen.apply(name, self)
           end
 
+          return if Kernel.respond_to?(name)
+
           OperationHelpers.define_method name do |operand|
-            Operations.apply_unary(name, operand)
+            UnaryOpUgen.apply(name, operand)
           end
 
           aliases.each do |name_alias|
@@ -40,11 +42,13 @@ module Scruby
           binary_indexes[name] = index
 
           define_method name do |input|
-            Operations.apply_binary(name, self, input)
+            BinaryOpUgen.apply(name, self, input)
           end
 
+          return if Kernel.respond_to?(name)
+
           OperationHelpers.define_method name do |left, right|
-            Operations.apply_binary(name, left, right)
+            BinaryOpUgen.apply(name, left, right)
           end
 
           define_method(operator) { |i| send(name, i) } if operator
@@ -58,37 +62,6 @@ module Scruby
               send(name, left, right)
             end
           end
-        end
-
-        def apply_unary(name, operand)
-          UnaryOpUgen.new(
-            rate: operand.rate,
-            operation: name,
-            operand: operand
-          )
-        end
-
-        def apply_binary(name, left, right)
-          BinaryOpUgen.new(
-            rate: max_rate(left, right),
-            operation: name,
-            left: left,
-            right: right
-          )
-        end
-
-        private
-
-        def max_rate(left, right)
-          index = [ rate(left), rate(right) ]
-                    .map { |rate| Ugen::RATES.index(rate) }.max
-
-          Ugen::RATES.fetch(index)
-        end
-
-        def rate(operand)
-          return operand.rate if operand.respond_to?(:rate)
-          :scalar
         end
       end
 

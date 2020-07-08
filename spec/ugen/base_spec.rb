@@ -20,7 +20,7 @@ RSpec.describe Ugen::Base do
 
     context "passing multichannel instance" do
       let(:instance) do
-        subclass.new(ins: MultiChannel.new(subclass.new, subclass.new))
+        subclass.new(ins: MultiChannel.new([subclass.new, subclass.new]))
       end
 
       it { expect(instance.ins).to eq [ subclass.new, subclass.new ] }
@@ -28,7 +28,7 @@ RSpec.describe Ugen::Base do
 
     context "passing single channel multichannel instance" do
       let(:instance) do
-        subclass.new(ins: MultiChannel.new(subclass.new))
+        subclass.new(ins: MultiChannel.new([subclass.new]))
       end
 
       it { expect(instance.ins).to eq subclass.new }
@@ -36,10 +36,10 @@ RSpec.describe Ugen::Base do
 
     context "passing single channel multichannel instance as attr" do
       let(:instance) do
-        subclass.new(colors: MultiChannel.new(subclass.new))
+        subclass.new(colors: MultiChannel.new([subclass.new]))
       end
 
-      it { expect(instance.colors).to eq MultiChannel.new(subclass.new) }
+      it { expect(instance.colors).to eq MultiChannel.new([subclass.new]) }
     end
   end
 end

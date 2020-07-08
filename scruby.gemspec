@@ -31,6 +31,7 @@ Gem::Specification.new do |spec|
   spec.add_development_dependency "byebug"
   spec.add_development_dependency "irb"
   spec.add_development_dependency "rspec"
+  spec.add_development_dependency "rantly"
   spec.add_development_dependency "zeitwerk"
   spec.add_development_dependency "listen"
   spec.add_development_dependency "rubocop"
