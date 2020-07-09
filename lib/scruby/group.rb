@@ -7,11 +7,11 @@ module Scruby
     end
 
     def node_to_head(node)
-      node.head(self)
+      node.move_to_head(self)
     end
 
     def node_to_tail(node)
-      node.tail(self)
+      node.move_to_tail(self)
     end
 
     def free_all

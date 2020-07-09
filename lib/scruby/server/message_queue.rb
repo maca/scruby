@@ -8,6 +8,8 @@ module Scruby
       include OSC
 
       attr_reader :message_id, :server, :patterns, :thread
+      attr_accessor :debug
+
       private :message_id, :server, :patterns, :thread
 
       def initialize(server)
@@ -72,14 +74,19 @@ module Scruby
       private
 
       def dispatch(raw)
-        dispatch_msg OSC.decode(raw)
+        msg = OSC.decode(raw)
+        puts "[#{server}] sent: #{msg.inspect}" if debug
+        dispatch_msg msg
       end
 
       def dispatch_msg(message)
         patterns.delete_if do |pattern, pred, future|
-          (pattern || pred) &&
+          match =
+            (pattern || pred) &&
             (pattern.nil? || pattern === message.address) &&
             (pred.nil? || pred.call(message, future))
+
+          next unless match
 
           future.evaluate_to { message } if future.pending?
           true

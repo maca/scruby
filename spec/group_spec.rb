@@ -38,12 +38,12 @@ RSpec.describe Group do
 
     describe "move to head" do
       before { group.node_to_head(node) }
-      it { expect(node).to have_received(:head).with(group) }
+      it { expect(node).to have_received(:move_to_head).with(group) }
     end
 
     describe "move to tail" do
       before { group.node_to_tail(node) }
-      it { expect(node).to have_received(:tail).with(group) }
+      it { expect(node).to have_received(:move_to_tail).with(group) }
     end
   end
 

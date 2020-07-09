@@ -114,7 +114,7 @@ RSpec.shared_examples_for "a node" do
 
     describe "before" do
       it_behaves_like "sent message to server" do
-        subject! { node.before(other) }
+        subject! { node.move_before(other) }
         let(:msg) { [ "/n_before", node.id, 2222 ] }
 
         it { expect(node.group).to eq a_group }
@@ -123,7 +123,7 @@ RSpec.shared_examples_for "a node" do
 
     describe "after" do
       it_behaves_like "sent message to server" do
-        subject! { node.after(other) }
+        subject! { node.move_after(other) }
         let(:msg) { [ "/n_after", node.id, 2222 ] }
 
         it { expect(node.group).to eq a_group }
@@ -132,7 +132,7 @@ RSpec.shared_examples_for "a node" do
 
     describe "head" do
       it_behaves_like "sent message to server" do
-        subject! { node.head(a_group) }
+        subject! { node.move_to_head(a_group) }
         let(:msg) { [ "/g_head", 5555, node.id ] }
 
         it { expect(node.group).to eq a_group }
@@ -141,7 +141,7 @@ RSpec.shared_examples_for "a node" do
 
     describe "tail" do
       it_behaves_like "sent message to server" do
-        subject! { node.tail(a_group) }
+        subject! { node.move_to_tail(a_group) }
         let(:msg) { [ "/g_tail", 5555, node.id ] }
 
         it { expect(node.group).to eq a_group }

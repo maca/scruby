@@ -35,6 +35,8 @@ Gem::Specification.new do |spec|
   spec.add_development_dependency "zeitwerk"
   spec.add_development_dependency "listen"
   spec.add_development_dependency "rubocop"
+  spec.add_development_dependency "rdoc"
+  spec.add_development_dependency "yard"
 
   spec.add_dependency "ruby-osc", "~> 1.0"
   spec.add_dependency "tty-which", "~> 0.4"

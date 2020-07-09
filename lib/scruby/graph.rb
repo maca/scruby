@@ -37,9 +37,11 @@ module Scruby
 
     def add_control(control_name)
       control_name.tap do
-        next if nodes.any? { |c| c.ugen.is_a?(Control) }
+        next if nodes.any? { |c| c.ugen.is_a?(Ugen::Control) }
 
-        control = Control.new(rate: :control, control_names: controls)
+        control =
+          Ugen::Control.new(rate: :control, control_names: controls)
+
         add_node UgenNode.build(self, control)
       end
     end

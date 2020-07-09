@@ -80,10 +80,12 @@ module Scruby
         .then { message_queue.stop }
         .then { self }
     end
+    alias stop_async quit_async
 
     def quit
       quit_async.value!
     end
+    alias stop quit
 
     def reboot_async
       quit_async.then_flat_future { boot_async }
@@ -106,10 +108,6 @@ module Scruby
     # def unmute
     #   forward_async :unmute
     # end
-
-    def dump_osc(code = 1)
-      send_msg("/dumpOSC", code)
-    end
 
     def status
       message_queue.status.value!
@@ -162,6 +160,15 @@ module Scruby
 
     def visualize_tree
       tree.visualize
+    end
+
+    def message_queue_debug(status = nil)
+      return message_queue.debug if status.nil?
+      message_queue.debug = !!status
+    end
+
+    def dump_osc(code = 1)
+      send_msg("/dumpOSC", code)
     end
 
     private
