@@ -65,7 +65,8 @@ module Scruby
 
     def play(server)
       ugen = root.ugen
-      graph = Graph.new(ugen.out? ? ugen : Out.new(0, ugen))
+      ctrls = controls.map { |c| [ c.name, c ] }.to_h
+      graph = Graph.new(ugen.out? ? ugen : Out.new(0, ugen), **ctrls)
 
       Synth.new(graph.name, server).tap do |synth|
         group = Group.new(server, 1)

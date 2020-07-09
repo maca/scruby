@@ -14,11 +14,11 @@ module Scruby
 
         @rate = rate
         @default = default || 0
-        @name = name
+        self.name = name
       end
 
       def name=(name)
-        @name = name.to_sym
+        @name = name&.to_sym
       end
 
       def rates
