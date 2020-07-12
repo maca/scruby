@@ -18,11 +18,11 @@ module Scruby
         @patterns = Concurrent::Array.new
       end
 
-      def receive(address = nil, timeout: nil, &pred)
+      def receive(address = nil, timeout: nil, once: false, &pred)
         run
 
         future = Promises.resolvable_future
-        patterns << [ address, pred, future ]
+        patterns << [ address, pred, future, !once ]
 
         return future unless timeout
         Promises.any(future, cancellation_future(timeout))
@@ -75,21 +75,21 @@ module Scruby
 
       def dispatch(raw)
         msg = OSC.decode(raw)
-        puts "[#{server}] sent: #{msg.inspect}" if debug
+        puts "[#{server.host} #{server.port}] #{msg.inspect}" if debug
         dispatch_msg msg
       end
 
       def dispatch_msg(message)
-        patterns.delete_if do |pattern, pred, future|
-          match =
+        patterns.delete_if do |pattern, pred, future, delete|
+          next true if future.rejected?
+
+          next unless
             (pattern || pred) &&
             (pattern.nil? || pattern === message.address) &&
             (pred.nil? || pred.call(message, future))
 
-          next unless match
-
           future.evaluate_to { message } if future.pending?
-          true
+          delete
         rescue StandardError => e
           puts e
         end
