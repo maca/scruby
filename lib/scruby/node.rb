@@ -136,8 +136,15 @@ module Scruby
       Graph::Visualize.print self
     end
 
+    def create(action = :head, target = Group.new(server, 1))
+      @group = group_from_target(target, action)
+      send_msg *creation_message(action, target)
+    end
     private
 
+    def creation_message(_, _)
+      raise NotImplementedError
+    end
     def map_action(action)
       ACTIONS.index(action) || action
     end

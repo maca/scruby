@@ -5,21 +5,17 @@ module Scruby
 
     attr_reader :name, :params
 
-    def initialize(name, server, id = nil, params = {})
+    def initialize(name, server, id = nil, **params)
       @name = name
       @params = params
       super(server, id)
     end
 
-    def create(target, action = :head, **args)
-      @group = group_from_target(target, action)
-      send_msg *creation_message(target, action, **args)
-    end
-
-    # TODO: no specs
-    def creation_message(target, action = :head, **args)
+    def creation_message(action = :head, target = Group.new(server, 1))
       action_i = map_action(action)
-      Message.new("/s_new", name, id, action_i, target.id, *args.flatten)
+      args = params.flatten
+
+      OSC::Message.new("/s_new", name, id, action_i, target.id, *args)
     end
 
     def get
@@ -34,32 +30,34 @@ module Scruby
 
     def print_name
       params = self.params.map { |k, v| [ k, v ].join(":") }.join(", ")
-      "#{super} - #{name} - #{params}"
+      [ super, name, params ].join(" - ")
     end
 
+    private
+
     class << self
-      def create(server, name, **args)
-        new(name, server).create(Group.new(server, 1), :head, **args)
+      def create(name, server, **args)
+        new(name, server, **args).create
       end
 
       def head(group, name, **args)
-        new(name, group.server).create(group, :head, **args)
+        new(name, group.server, **args).create(:head, group)
       end
 
       def tail(group, name, **args)
-        new(name, group.server).create(group, :tail, **args)
+        new(name, group.server, **args).create(:tail, group)
       end
 
       def before(node, name, **args)
-        new(name, node.server).create(node, :before, **args)
+        new(name, node.server, **args).create(:before, node)
       end
 
       def after(node, name, **args)
-        new(name, node.server).create(node, :after, **args)
+        new(name, node.server, **args).create(:after, node)
       end
 
       def replace(node, name, **args)
-        new(name, node.server).create(node, :replace, **args)
+        new(name, node.server, **args).create(:replace, node)
       end
     end
   end

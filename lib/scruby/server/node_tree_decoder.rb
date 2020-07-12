@@ -27,10 +27,10 @@ module Scruby
           params_count = bytes.next
 
           params =
-            Hash[*(params_count * 2).times.map { bytes.next }]
+            Hash[ *(params_count * 2).times.map { bytes.next } ]
               .transform_keys(&:to_sym)
 
-          Synth.new(name, server, id, params)
+          Synth.new(name, server, id, **params)
         end
       end
     end

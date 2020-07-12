@@ -102,7 +102,7 @@ RSpec.describe Synth do
 
     describe "create" do
       it_behaves_like "sent message to server" do
-        subject!(:synth) { Synth.create(server, :test, a: 1) }
+        subject!(:synth) { Synth.create(:test, server, a: 1) }
         let(:node) { synth }
         let(:msg) do
           [ "/s_new", "test", synth.id, 0, 1, "a", 1 ]
@@ -113,24 +113,4 @@ RSpec.describe Synth do
       end
     end
   end
-
-  # describe 'encoding' do
-  #   let(:msg) do
-  #     [ 9, test, 1004, 0, 1 ]
-  #   end
-
-  #   let(:hex) do
-  #     %w(00 00 00 20  00 00 00 09  2c 73 69 69  69 00 00 00
-  #        74 65 73 74  00 00 00 00  00 00 03 eb  00 00 00 00
-  #        00 00 00 01  2c 00 00 00)
-  #   end
-
-  #   let(:encoded) do
-  #     Encode.string_to_hex(synth.encode)
-  #     # [ 32, 9, 745761129, 1761607680, 1952805748, 0, 1002, 0, 1,
-  #     #   738197504 ]
-  #   end
-
-  #   it { expect(encoded).to eq(hex) }
-  # end
 end
