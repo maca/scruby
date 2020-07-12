@@ -69,8 +69,7 @@ module Scruby
       graph = Graph.new(ugen.out? ? ugen : Out.new(0, ugen), **ctrls)
 
       Synth.new(graph.name, server).tap do |synth|
-        group = Group.new(server, 1)
-        graph.send_to(server, synth.creation_message(group))
+        graph.send_to(server, synth.creation_message)
       end
     end
 
