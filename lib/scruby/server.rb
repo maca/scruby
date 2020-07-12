@@ -116,6 +116,16 @@ module Scruby
     # Sends an OSC command or +Message+ to the scsyth server.
     # E.g. +server.send('/dumpOSC', 1)+
     def send_msg(message, *args)
+      # Fix in ruby osc gem
+      args = args.map { |a|
+        case a
+        when true then 1
+        when false then 0
+        else
+          a
+        end
+      }
+
       case message
       when Message, Bundle
         client.send(message)
