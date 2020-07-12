@@ -6,6 +6,7 @@ module Scruby
     include PrettyInspectable
 
     ACTIONS = %i(head tail before after replace)
+    # MSGS = %w(/n_go /n_off /n_on /n_end)
 
     attr_reader :server, :id, :group
     attr_writer :group
@@ -19,14 +20,19 @@ module Scruby
 
     # Stop node and free from parent group on the server. Once a node
     # is stopped, it cannot be restarted.
-    def stop
+    def free
       @group = nil
       send_msg("/n_free", id)
     end
-    alias free stop
 
+    # Run node after it has been stoped.
     def run
       send_msg("/n_run", id, true)
+    end
+
+    # Stop node, the node can be resumed.
+    def stop
+      send_msg("/n_run", id, false)
     end
 
     def set(**args)
@@ -109,9 +115,9 @@ module Scruby
       success = receive("/n_info") { |m| m.args.first == id }
                   .then { |msg| Hash[ keys.zip([ true, *msg.args ]) ] }
 
-      failure = receive("/fail") { |m| m.args.first == "/n_query" &&
-                                   m.args.last.include?(id.to_s) }
-                  .then { |msg| Hash[ keys.zip([ false, id ]) ] }
+      failure = receive("/fail") { |m|
+        m.args.first == "/n_query" && m.args.last.include?(id.to_s)
+      }.then { Hash[ keys.zip([ false, id ]) ] }
 
       Concurrent::Promises.any(success, failure)
     end
@@ -140,11 +146,13 @@ module Scruby
       @group = group_from_target(target, action)
       send_msg *creation_message(action, target)
     end
+
     private
 
     def creation_message(_, _)
       raise NotImplementedError
     end
+
     def map_action(action)
       ACTIONS.index(action) || action
     end
