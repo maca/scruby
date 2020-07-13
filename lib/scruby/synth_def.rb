@@ -17,7 +17,7 @@ module Scruby
         ].join(" ")
       end
 
-      @graph = Graph.new(root_ugen, name, **controls)
+      @graph = UgenGraph.new(root_ugen, name, **controls)
     end
 
     private

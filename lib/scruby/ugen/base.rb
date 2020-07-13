@@ -53,7 +53,7 @@ module Scruby
       end
 
       def build_graph(**args)
-        Graph.new(self, **args)
+        UgenGraph.new(self, **args)
       end
 
       def visualize

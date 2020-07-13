@@ -1,5 +1,5 @@
 module Scruby
-  class Graph
+  class UgenGraph
     class Constant
       include Equatable
       include PrettyInspectable

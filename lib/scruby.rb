@@ -32,15 +32,14 @@ require_relative "scruby/utils/positional_keyword_args"
 require_relative "scruby/sclang/helpers"
 require_relative "scruby/sclang"
 
-
 require_relative "scruby/process"
 require_relative "scruby/process/registry"
 
-require_relative "scruby/graph"
-require_relative "scruby/graph/visualize"
-require_relative "scruby/graph/ugen_node"
-require_relative "scruby/graph/constant"
-require_relative "scruby/graph/control_name"
+require_relative "scruby/ugen_graph"
+require_relative "scruby/ugen_graph/visualize"
+require_relative "scruby/ugen_graph/ugen_node"
+require_relative "scruby/ugen_graph/constant"
+require_relative "scruby/ugen_graph/control_name"
 require_relative "scruby/synth_def"
 
 require_relative "scruby/ugen"

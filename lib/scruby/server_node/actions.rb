@@ -127,7 +127,7 @@ module Scruby
       end
 
       def visualize
-        Graph::Visualize.print self
+        UgenGraph::Visualize.print self
       end
 
       def create(action = :head, target = Group.new(server, 1))

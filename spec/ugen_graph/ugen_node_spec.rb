@@ -1,4 +1,4 @@
-RSpec.describe Graph::UgenNode do
+RSpec.describe UgenGraph::UgenNode do
   include Scruby
   include Scruby::Ugen
 
@@ -13,8 +13,8 @@ RSpec.describe Graph::UgenNode do
     end
 
     let(:controls) do
-      [ Graph::ControlName.new(1, :control),
-        Graph::ControlName.new(2, :control)
+      [ UgenGraph::ControlName.new(1, :control),
+        UgenGraph::ControlName.new(2, :control)
       ]
     end
 
@@ -47,12 +47,12 @@ RSpec.describe Graph::UgenNode do
 
     it "sets constants" do
       expect(node.constants)
-        .to eq constants.map { |c| Graph::Constant.new(c) }
+        .to eq constants.map { |c| UgenGraph::Constant.new(c) }
     end
 
     it "sets nodes" do
       expect(node.nodes)
-        .to eq ugens.map { |u| Graph::UgenNode.build(graph, u) }
+        .to eq ugens.map { |u| UgenGraph::UgenNode.build(graph, u) }
     end
 
     it "sets controls" do
@@ -63,7 +63,7 @@ RSpec.describe Graph::UgenNode do
 
   describe ".index" do
     let(:ugen) { instance_double("Ugen::Base", input_values: []) }
-    let(:graph) { instance_double("Scruby::Graph") }
+    let(:graph) { instance_double("Scruby::UgenGraph") }
 
     subject(:node) { described_class.build(graph, ugen) }
 
@@ -82,8 +82,8 @@ RSpec.describe Graph::UgenNode do
       include_context "node with graph"
       include_context "node with graph constants" do
         let(:constants) do
-          [ Graph::Constant.new(440),
-            Graph::Constant.new(0)
+          [ UgenGraph::Constant.new(440),
+            UgenGraph::Constant.new(0)
           ]
         end
       end

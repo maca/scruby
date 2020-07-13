@@ -2,7 +2,7 @@ require "forwardable"
 
 
 module Scruby
-  class Graph
+  class UgenGraph
     class UgenNode
       extend Forwardable
 

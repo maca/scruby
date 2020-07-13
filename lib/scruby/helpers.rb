@@ -9,15 +9,15 @@ module Scruby
     end
 
     def control(val)
-      Graph::ControlName.new(val, :control)
+      UgenGraph::ControlName.new(val, :control)
     end
 
     def scalar(val)
-      Graph::ControlName.new(val, :scalar)
+      UgenGraph::ControlName.new(val, :scalar)
     end
 
     def trigger(val)
-      Graph::ControlName.new(val, :trigger)
+      UgenGraph::ControlName.new(val, :trigger)
     end
   end
 end

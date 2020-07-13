@@ -8,7 +8,7 @@ RSpec.describe Scruby::SynthDef do
       end
 
       let(:graph) do
-        Graph.new(Out.ar(0, SinOsc.ar(400) * 0.5), :simple)
+        UgenGraph.new(Out.ar(0, SinOsc.ar(400) * 0.5), :simple)
       end
 
       it { expect(synth_def.graph).to eq graph }
@@ -22,7 +22,7 @@ RSpec.describe Scruby::SynthDef do
       end
 
       let(:graph) do
-        Graph.new(
+        UgenGraph.new(
           Out.ar(0, SinOsc.ar(:freq, :phase) * :amp), :simple,
           freq: nil, amp: 0.5, phase: nil
         )
@@ -39,7 +39,7 @@ RSpec.describe Scruby::SynthDef do
       end
 
       let(:graph) do
-        Graph.new(
+        UgenGraph.new(
           Out.ar(0, SinOsc.ar(:freq, :phase) * :amp), :simple,
           freq: nil, amp: scalar(0.5), phase: nil
         )

@@ -1,32 +1,26 @@
 module Scruby
-  class Graph
+  class UgenGraph
     class ControlName
       include Equatable
       include PrettyInspectable
       include Encode
 
-      attr_reader :default, :rate, :name
+      RATES = %i(scalar control trigger)
+
+      attr_reader :rate, :default, :name
 
       def initialize(default, rate = :control, name = nil)
-        rates.include?(rate) ||
+        RATES.include?(rate) ||
           raise(ArgumentError,
-                "rate `#{rate}` is not one of `#{rates}`")
+                "rate `#{rate}` is not one of `#{RATES}`")
 
         @rate = rate
         @default = default || 0
-        self.name = name
+        @name = name
       end
 
       def name=(name)
-        @name = name&.to_sym
-      end
-
-      def rates
-        Ugen::Control.rates
-      end
-
-      def rate_index
-        E_RATES.index(rate)
+        @name = name.to_sym
       end
 
       def encode_name(graph)

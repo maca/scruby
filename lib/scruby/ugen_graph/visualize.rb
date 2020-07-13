@@ -1,5 +1,5 @@
 module Scruby
-  class Graph
+  class UgenGraph
     module Visualize
       class << self
         def print(root)

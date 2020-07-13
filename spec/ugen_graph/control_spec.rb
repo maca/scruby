@@ -1,4 +1,4 @@
-RSpec.describe Graph::ControlName do
+RSpec.describe UgenGraph::ControlName do
   include Scruby
 
   describe "building a graph" do

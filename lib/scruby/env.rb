@@ -191,7 +191,7 @@ module Scruby
     end
 
     def constants
-      encode.map { |i| Graph::Constant.new(i) }
+      encode.map { |i| UgenGraph::Constant.new(i) }
     end
 
     private

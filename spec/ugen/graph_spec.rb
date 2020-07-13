@@ -1,4 +1,4 @@
-RSpec.describe Graph do
+RSpec.describe UgenGraph do
   describe "initialize" do
     let(:root_ugen) { instance_double("Ugen::Base", input_values: []) }
 
@@ -13,16 +13,16 @@ RSpec.describe Graph do
 
       shared_examples_for "has controls" do
         it { expect(graph.controls)
-               .to include(Graph::ControlName.new(1, :control, :k_1)) }
+               .to include(UgenGraph::ControlName.new(1, :control, :k_1)) }
 
         it { expect(graph.controls)
-               .to include(Graph::ControlName.new(2, :scalar, :k_2)) }
+               .to include(UgenGraph::ControlName.new(2, :scalar, :k_2)) }
 
         it { expect(graph.controls)
-               .to include(Graph::ControlName.new(3, :trigger, :k_3)) }
+               .to include(UgenGraph::ControlName.new(3, :trigger, :k_3)) }
 
         it { expect(graph.controls)
-               .to include(Graph::ControlName.new(4, :control, :k_4)) }
+               .to include(UgenGraph::ControlName.new(4, :control, :k_4)) }
       end
 
       it_behaves_like "has controls"
@@ -117,15 +117,15 @@ RSpec.describe Graph do
 
   describe "equality" do
     let(:graph_a) do
-      Graph.new(Out.ar(0, SinOsc.ar(400) * 5), :simple)
+      UgenGraph.new(Out.ar(0, SinOsc.ar(400) * 5), :simple)
     end
 
     let(:graph_b) do
-      Graph.new(Out.ar(0, SinOsc.ar(400) * 5.0), :simple)
+      UgenGraph.new(Out.ar(0, SinOsc.ar(400) * 5.0), :simple)
     end
 
     let(:graph_c) do
-      Graph.new(Out.ar(0, SinOsc.ar(400) * 4.9), :simple)
+      UgenGraph.new(Out.ar(0, SinOsc.ar(400) * 4.9), :simple)
     end
 
     it { expect(graph_a).to eq graph_b }

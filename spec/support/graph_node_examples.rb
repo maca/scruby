@@ -1,5 +1,5 @@
 RSpec.shared_context "node with graph" do
-  let(:graph) { instance_double("Scruby::Graph") }
+  let(:graph) { instance_double("Scruby::UgenGraph") }
 
   before do
     allow(graph).to receive(:add)

@@ -1,7 +1,7 @@
 require "securerandom"
 
 module Scruby
-  class Graph
+  class UgenGraph
     include Encode
     include Equatable
     include PrettyInspectable
@@ -22,10 +22,10 @@ module Scruby
       case elem
       when Ugen
         add_node UgenNode.build_root(self, elem)
-      when Graph
+      when UgenGraph
         add elem.root_ugen
       else
-        raise TypeError, "expected `#{elem}` to be Ugen or Graph"
+        raise TypeError, "expected `#{elem}` to be Ugen or UgenGraph"
       end
     end
 
@@ -66,7 +66,7 @@ module Scruby
     def play(server)
       ugen = root.ugen
       ctrls = controls.map { |c| [ c.name, c ] }.to_h
-      graph = Graph.new(ugen.out? ? ugen : Out.new(0, ugen), **ctrls)
+      graph = UgenGraph.new(ugen.out? ? ugen : Out.new(0, ugen), **ctrls)
 
       Synth.new(graph.name, server).tap do |synth|
         graph.send_to(server, synth.creation_message)

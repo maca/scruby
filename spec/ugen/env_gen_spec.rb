@@ -8,10 +8,10 @@ RSpec.describe Ugen::EnvGen do
       include_context "node with graph"
       include_context "node with graph constants" do
         let(:constants) do
-          [ Graph::Constant.new(1),
-            Graph::Constant.new(0),
-            Graph::Constant.new(2),
-            Graph::Constant.new(-99)
+          [ UgenGraph::Constant.new(1),
+            UgenGraph::Constant.new(0),
+            UgenGraph::Constant.new(2),
+            UgenGraph::Constant.new(-99)
           ]
         end
       end
@@ -31,7 +31,7 @@ RSpec.describe Ugen::EnvGen do
         ].pack("C*")
       end
 
-      subject(:node) { Graph::UgenNode.build(graph, ugen) }
+      subject(:node) { UgenGraph::UgenNode.build(graph, ugen) }
 
       it { expect(node).to encode_as(expected) }
     end

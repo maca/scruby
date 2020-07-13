@@ -1,7 +1,7 @@
-RSpec.describe Graph do
+RSpec.describe UgenGraph do
   describe "graph with float mult" do
     let(:server) { Server.new }
-    let(:graph) { Graph.new(Out.ar(0, SinOsc.ar * 0.5), "mult") }
+    let(:graph) { UgenGraph.new(Out.ar(0, SinOsc.ar * 0.5), "mult") }
 
     it { expect(graph.nodes.map(&:name))
            .to eq %w(SinOsc BinaryOpUGen Out) }
@@ -35,7 +35,7 @@ RSpec.describe Graph do
 
   describe "graph with sum" do
     let(:server) { Server.new }
-    let(:graph) { Graph.new(Out.ar(0, SinOsc.ar + Saw.ar), "sum") }
+    let(:graph) { UgenGraph.new(Out.ar(0, SinOsc.ar + Saw.ar), "sum") }
 
     it { expect(graph.nodes.map(&:name))
            .to eq %w(SinOsc Saw BinaryOpUGen Out) }
