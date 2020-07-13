@@ -55,14 +55,16 @@ RSpec.describe Scruby::Graph::Decoder do
       let(:parent) { nodes[1018] }
       subject(:node) { nodes[1020] }
 
-      it { expect(node.params).to eq(freq: 300, amp: 0) }
+      it { expect(node.obj.name).to eq "sin" }
+      it { expect(node.obj.params).to eq(freq: 300, amp: 0) }
     end
 
     it_behaves_like "is node", 1019 do
       let(:parent) { nodes[1018] }
       subject(:node) { nodes[1019] }
 
-      it { expect(node.params).to eq(freq: 300, amp: 0) }
+      it { expect(node.obj.name).to eq "sin" }
+      it { expect(node.obj.params).to eq(freq: 300, amp: 0) }
     end
 
     it_behaves_like "is node", 1015 do
@@ -74,14 +76,16 @@ RSpec.describe Scruby::Graph::Decoder do
       let(:parent) { nodes[1015] }
       let(:node) { nodes[1017] }
 
-      it { expect(node.params).to eq(freq: 300, amp: 0) }
+      it { expect(node.obj.name).to eq "sin" }
+      it { expect(node.obj.params).to eq(freq: 300, amp: 0) }
     end
 
     it_behaves_like "is node", 1016 do
       let(:parent) { nodes[1015] }
       let(:node) { nodes[1016] }
 
-      it { expect(node.params).to eq(freq: 300, amp: 0) }
+      it { expect(node.obj.name).to eq "sin" }
+      it { expect(node.obj.params).to eq(freq: 300, amp: 0) }
     end
   end
 end

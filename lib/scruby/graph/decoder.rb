@@ -15,16 +15,17 @@ module Scruby
           children_count = bytes.next
 
           if children_count == -1
-            return acc << associate(decode_synth(bytes), id, parent)
+            acc << associate(decode_synth(bytes), id, parent)
+          else
+            nparent = associate(Node.new, id, parent)
+            acc << nparent
+
+            children_count.times
+              .each { decode_node(bytes, nparent, acc) }
           end
 
-          nparent = associate(Graph::Node.new, id, parent)
-
-          acc << nparent
-          children_count.times.each { decode_node(bytes, nparent, acc) }
           acc
         end
-
 
         def decode_synth(bytes)
           name = bytes.next
@@ -34,7 +35,7 @@ module Scruby
             Hash[ *(params_count * 2).times.map { bytes.next } ]
               .transform_keys(&:to_sym)
 
-          Graph::Node.new(name, **params)
+          Node.new ServerNode::Properties.new(name, **params)
         end
 
         def associate(node, id, parent)

@@ -22,7 +22,6 @@ RSpec.shared_examples_for "performs node actions" do
   let(:a_group) { instance_double("Group", id: 5555) }
 
   it { expect(node.server).to eq server }
-  it { expect(node.id).to be_an Integer }
 
   describe "free" do
     before do

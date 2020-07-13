@@ -11,6 +11,7 @@ module Scruby
     end
 
     def add(node)
+      node.graph = self
       nodes[node.id] = node
       parent_indices[node.parent] = [ *children_for(node.parent), node ]
       node

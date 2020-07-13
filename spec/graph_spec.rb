@@ -32,7 +32,11 @@ RSpec.describe Scruby::Graph do
 
   describe "add node" do
     let(:five) { instance_double("Graph::Node", id: 5, parent: one) }
-    before { graph.add(five) }
+
+    before do
+      expect(five).to receive(:graph=).with(graph)
+      graph.add(five)
+    end
 
     it { expect(graph[5]).to eq five }
     it { expect(graph.children_for(one)).to eq [ three, four, five ] }

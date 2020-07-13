@@ -1,18 +1,16 @@
 module Scruby
   class Synth
-    include ServerNode::Proxy
+    include ServerNode
 
-    def initialize(name, server, id = nil, **params)
-      @node = Graph::Node.new(name, **params)
-      @server = server
-      node.id = id || server.next_node_id
+    def initialize(name, server, **params)
+      super(server, Properties.new(name, **params))
     end
 
-    def creation_message(action = :head, target = Group.new(server, 1))
+    def creation_message(action = :head, target = server.node(1))
       action_i = map_action(action)
-      args = node.params.flatten
+      args = params.flatten
 
-      OSC::Message.new("/s_new", name, id, action_i, target.id, *args)
+      OSC::Message.new(creation_cmd, name, id, action_i, target.id, *args)
     end
 
     def get
@@ -27,10 +25,12 @@ module Scruby
     end
 
     def inspect
-      super(name: name, id: id, server: server)
+      super(name: name, id: id)
     end
 
     private
+
+    def creation_cmd; "/s_new" end
 
     class << self
       def create(name, server, **args)

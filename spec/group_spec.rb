@@ -1,5 +1,5 @@
 RSpec.describe Group do
-  let(:server) { instance_double("Server", next_node_id: 1) }
+  let(:server) { instance_double("Server", next_node_id: 16) }
 
   subject(:group) do
     Group.new(server)
@@ -7,14 +7,6 @@ RSpec.describe Group do
 
   it_behaves_like "performs node actions" do
     let(:node) { group }
-  end
-
-  describe "instantiation" do
-    subject(:group) { Group.new(server, 1) }
-    let(:children) { instance_double("Array") }
-
-    it { expect(group.server).to be server }
-    it { expect(group.id).to be 1 }
   end
 
   describe "move node" do
@@ -70,6 +62,7 @@ RSpec.describe Group do
         let(:node) { group }
         let(:msg) { [ "/g_new", group.id, 0, a_group.id ] }
 
+        it { expect(node.id).to be 16 }
         it { expect(node.group).to eq a_group }
         it_behaves_like "initializes group"
       end
@@ -81,6 +74,7 @@ RSpec.describe Group do
         let(:node) { group }
         let(:msg) { [ "/g_new", group.id, 1, a_group.id ] }
 
+        it { expect(node.id).to be 16 }
         it { expect(node.group).to eq a_group }
         it_behaves_like "initializes group"
       end
@@ -92,6 +86,7 @@ RSpec.describe Group do
         let(:node) { group }
         let(:msg) { [ "/g_new", group.id, 2, a_node.id ] }
 
+        it { expect(node.id).to be 16 }
         it { expect(node.group).to eq a_group }
         it_behaves_like "initializes group"
       end
@@ -103,6 +98,7 @@ RSpec.describe Group do
         let(:node) { group }
         let(:msg) { [ "/g_new", group.id, 3, a_node.id ] }
 
+        it { expect(node.id).to be 16 }
         it { expect(node.group).to eq a_group }
         it_behaves_like "initializes group"
       end
@@ -114,19 +110,26 @@ RSpec.describe Group do
         let(:node) { group }
         let(:msg) { [ "/g_new", group.id, 4, a_node.id ] }
 
+        it { expect(node.id).to be 16 }
         it { expect(node.group).to eq a_group }
         it_behaves_like "initializes group"
       end
     end
 
     describe "create" do
+      before do
+        allow(server).to receive(:node).with(1) do
+          instance_double("Node", id: 1)
+        end
+      end
+
       it_behaves_like "sent message to server" do
         subject!(:group) { Group.create(server) }
         let(:node) { group }
         let(:msg) { [ "/g_new", group.id, 0, 1 ] }
 
-        it { expect(node.group).to eq Group.new(server, 1) }
-
+        it { expect(node.id).to be 16 }
+        it { expect(node.group.id).to eq 1 }
       end
     end
   end

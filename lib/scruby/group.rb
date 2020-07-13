@@ -1,11 +1,9 @@
 module Scruby
   class Group
-    include ServerNode::Proxy
+    include ServerNode
 
-    def initialize(server, id = nil)
-      @node = Graph::Node.new
-      @server = server
-      node.id = id || server.next_node_id
+    def initialize(server)
+      super(server)
     end
 
     def node_to_head(node)
@@ -30,13 +28,13 @@ module Scruby
     def query_tree
     end
 
-    def create(action, target)
+    def create(action = :head, target = server.node(1))
       node.parent = group_from_target(target, action)
       send_msg(creation_cmd, id, map_action(action), target.id)
     end
 
     def inspect
-      super(id: id, server: server)
+      super(id: id)
     end
 
     private
@@ -45,7 +43,7 @@ module Scruby
 
     class << self
       def create(server)
-        new(server).create(:head, Group.new(server, 1))
+        new(server).create
       end
 
       def head(group)

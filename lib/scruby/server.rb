@@ -44,6 +44,14 @@ module Scruby
       @max_logins ||= register_client.last
     end
 
+    def node(idx)
+      nodes[idx]
+    end
+
+    def add_node(node)
+      nodes.add(node)
+    end
+
     def next_node_id
       node_counter.increment
     end

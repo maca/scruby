@@ -4,7 +4,7 @@ module Scruby
       include Enumerable
 
       attr_reader :semaphore, :graph
-      private :semaphore, :graph
+      private :semaphore
 
       def initialize
         @graph = Graph.new([])
@@ -12,7 +12,8 @@ module Scruby
       end
 
       def decode_and_update(msg)
-        synchronize  { @graph = Graph::Decoder.decode(msg) }
+        graph = Graph::Decoder.decode(msg)
+        synchronize  { @graph = graph }
       end
 
       def add(node)
@@ -20,11 +21,15 @@ module Scruby
       end
 
       def each(&block)
-        synchronize { graph.each(&block) }
+        graph.to_a.each(&block)
       end
 
       def [](idx)
         synchronize { graph[idx] }
+      end
+
+      def print
+        first.print
       end
 
       private

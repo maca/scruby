@@ -439,9 +439,8 @@ require_relative "scruby/graph/decoder"
 require_relative "scruby/graph/print"
 
 
-# require_relative "scruby/node"
-require_relative "scruby/server_node/actions"
-require_relative "scruby/server_node/proxy"
+require_relative "scruby/server_node"
+require_relative "scruby/server_node/properties"
 require_relative "scruby/server"
 require_relative "scruby/server/nodes"
 require_relative "scruby/server/message_queue"
