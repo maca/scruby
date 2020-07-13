@@ -8,6 +8,10 @@ module Scruby
         @name = name
         @params = params
       end
+
+      def children
+        graph.children_for(self)
+      end
     end
   end
 end
