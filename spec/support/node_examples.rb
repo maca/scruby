@@ -18,14 +18,11 @@ RSpec.shared_examples_for "sent bundle to server" do
 end
 
 
-RSpec.shared_examples_for "a node" do
+RSpec.shared_examples_for "performs node actions" do
   let(:a_group) { instance_double("Group", id: 5555) }
 
   it { expect(node.server).to eq server }
   it { expect(node.id).to be_an Integer }
-
-  it_behaves_like "is equatable"
-
 
   describe "free" do
     before do

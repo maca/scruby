@@ -1,19 +1,15 @@
 module Scruby
   class Synth
-    include Node
-    include OSC
-
-    attr_reader :name, :params
+    include ServerNode::Proxy
 
     def initialize(name, server, id = nil, **params)
-      @name = name
-      @params = params
-      super(server, id)
+      @node = ServerNode.new(server, -1, name, **params)
+      node.id = id || server.next_node_id
     end
 
     def creation_message(action = :head, target = Group.new(server, 1))
       action_i = map_action(action)
-      args = params.flatten
+      args = node.params.flatten
 
       OSC::Message.new("/s_new", name, id, action_i, target.id, *args)
     end
@@ -24,13 +20,13 @@ module Scruby
     def get_n
     end
 
-    def inspect
-      super(name: name, id: id, server: server)
-    end
-
     def print_name
       params = self.params.map { |k, v| [ k, v ].join(":") }.join(", ")
       [ super, name, params ].join(" - ")
+    end
+
+    def inspect
+      super(name: name, id: id, server: server)
     end
 
     private

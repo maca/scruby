@@ -5,7 +5,7 @@ RSpec.describe Group do
     Group.new(server)
   end
 
-  it_behaves_like "a node" do
+  it_behaves_like "performs node actions" do
     let(:node) { group }
   end
 
@@ -15,22 +15,6 @@ RSpec.describe Group do
 
     it { expect(group.server).to be server }
     it { expect(group.id).to be 1 }
-  end
-
-  describe "children" do
-    let(:children) do
-      [ instance_double("Synth"),
-        instance_double("Synth"),
-      ]
-    end
-
-    before do
-      expect(children.first).to receive(:group=).with(group)
-      expect(children.last).to receive(:group=).with(group)
-      group.children = children
-    end
-
-    it { expect(group.children).to eq children }
   end
 
   describe "move node" do

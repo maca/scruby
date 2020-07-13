@@ -7,7 +7,7 @@ RSpec.describe Synth do
 
   it { expect(synth.name).to eq :test }
 
-  it_behaves_like "a node" do
+  it_behaves_like "performs node actions" do
     let(:node) { synth }
   end
 

@@ -31,11 +31,6 @@ require_relative "scruby/utils/positional_keyword_args"
 
 require_relative "scruby/sclang/helpers"
 require_relative "scruby/sclang"
-require_relative "scruby/server"
-require_relative "scruby/server/message_queue"
-require_relative "scruby/server/local"
-require_relative "scruby/server/options"
-require_relative "scruby/server/node_tree_decoder"
 
 
 require_relative "scruby/process"
@@ -436,7 +431,15 @@ require_relative "scruby/ugen/zero_crossing"
 require_relative "scruby/ugen/replace_out"
 
 
-require_relative "scruby/node"
+# require_relative "scruby/node"
+require_relative "scruby/server_node"
+require_relative "scruby/server_node/actions"
+require_relative "scruby/server_node/proxy"
+require_relative "scruby/server/server_nodes_decoder"
+require_relative "scruby/server"
+require_relative "scruby/server/message_queue"
+require_relative "scruby/server/local"
+require_relative "scruby/server/options"
 require_relative "scruby/synth"
 require_relative "scruby/bus"
 require_relative "scruby/buffer"

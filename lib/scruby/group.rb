@@ -1,9 +1,10 @@
 module Scruby
   class Group
-    include Node
+    include ServerNode::Proxy
 
     def initialize(server, id = nil)
-      super(server, id)
+      @node = ServerNode.new(server, true)
+      node.id = id || server.next_node_id
     end
 
     def node_to_head(node)
@@ -29,21 +30,12 @@ module Scruby
     end
 
     def create(action, target)
-      @group = group_from_target(target, action)
+      node.group = group_from_target(target, action)
       send_msg(creation_cmd, id, map_action(action), target.id)
     end
 
     def inspect
       super(id: id, server: server)
-    end
-
-    def children=(children)
-      children.each { |c| c.group = self }
-      @children = children
-    end
-
-    def children
-      @children.dup
     end
 
     private

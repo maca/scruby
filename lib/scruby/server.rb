@@ -160,17 +160,17 @@ module Scruby
       message_queue.receive(address, timeout: timeout, &pred)
     end
 
-    def tree
-      send_msg("/g_queryTree", 0, 1)
+    # def tree
+    #   send_msg("/g_queryTree", 0, 1)
 
-      receive("/g_queryTree.reply")
-        .then { |msg| Server::NodeTreeDecoder.decode(self, msg.args) }
-        .value!
-    end
+    #   receive("/g_queryTree.reply")
+    #     .then { |msg| Server::NodeTreeDecoder.decode(self, msg.args) }
+    #     .value!
+    # end
 
-    def visualize_tree
-      tree.visualize
-    end
+    # def visualize_tree
+    #   tree.visualize
+    # end
 
     def dump_server_messages(status = nil)
       return !!message_queue.debug if status.nil?
