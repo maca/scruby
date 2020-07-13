@@ -56,8 +56,8 @@ module Scruby
         UgenGraph.new(self, **args)
       end
 
-      def visualize
-        build_graph.visualize
+      def print
+        build_graph.print
       end
 
       def play(server)

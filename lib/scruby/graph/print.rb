@@ -1,6 +1,6 @@
 module Scruby
-  class UgenGraph
-    module Visualize
+  class Graph
+    module Print
       class << self
         def print(root)
           puts print_node(root, [], "", nil)
@@ -22,7 +22,7 @@ module Scruby
             end
 
           # TODO: refactor
-          param_names = UgenNode === node ? node.parameter_names : []
+          param_names = UgenGraph::UgenNode === node ? node.parameter_names : []
 
           child_padding =
             case

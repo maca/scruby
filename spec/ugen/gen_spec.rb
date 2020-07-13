@@ -340,14 +340,14 @@ RSpec.describe Ugen::Gen do
     it { expect(graph).to have_received(:play).with(server) }
   end
 
-  describe ".visualize" do
+  describe ".print" do
     include_context "simple ugen with graph"
 
     before do
       allow(UgenGraph).to receive(:new).with(instance) { graph }
-      instance.visualize
+      instance.print
     end
 
-    it { expect(graph).to have_received(:visualize) }
+    it { expect(graph).to have_received(:print) }
   end
 end

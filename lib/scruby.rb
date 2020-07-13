@@ -38,7 +38,6 @@ require_relative "scruby/process/registry"
 
 
 require_relative "scruby/ugen_graph"
-require_relative "scruby/ugen_graph/visualize"
 require_relative "scruby/ugen_graph/ugen_node"
 require_relative "scruby/ugen_graph/constant"
 require_relative "scruby/ugen_graph/control_name"
@@ -437,6 +436,7 @@ require_relative "scruby/ugen/replace_out"
 require_relative "scruby/graph"
 require_relative "scruby/graph/node"
 require_relative "scruby/graph/decoder"
+require_relative "scruby/graph/print"
 
 
 # require_relative "scruby/node"

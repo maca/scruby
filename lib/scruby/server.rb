@@ -168,10 +168,6 @@ module Scruby
         .then { |msg| nodes.decode_and_update(msg.args) }
     end
 
-    # def visualize_tree
-    #   tree.visualize
-    # end
-
     def dump_server_messages(status = nil)
       return !!message_queue.debug if status.nil?
       message_queue.debug = !!status

@@ -12,6 +12,10 @@ module Scruby
       def children
         graph.children_for(self)
       end
+
+      def print
+        Print.print(self)
+      end
     end
   end
 end

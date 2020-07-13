@@ -59,8 +59,8 @@ module Scruby
       nodes.index(node)
     end
 
-    def visualize
-      Visualize.print(root)
+    def print
+      Graph::Print.print(root)
     end
 
     def play(server)

@@ -126,8 +126,8 @@ module Scruby
         "#{self.class.name.split('::').last} #{id}"
       end
 
-      def visualize
-        UgenGraph::Visualize.print self
+      def print
+        Graph::Print.print(self)
       end
 
       def create(action = :head, target = Group.new(server, 1))

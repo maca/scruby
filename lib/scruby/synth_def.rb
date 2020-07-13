@@ -3,7 +3,7 @@ module Scruby
     extend Forwardable
 
     attr_reader :graph
-    def_delegators :graph, :encode, :send_to, :visualize, :name
+    def_delegators :graph, :encode, :send_to, :print, :name
 
 
     def initialize(name = nil, &block)
