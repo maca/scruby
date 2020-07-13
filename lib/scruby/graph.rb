@@ -10,17 +10,23 @@ module Scruby
       @parent_indices = nodes.group_by(&:parent)
     end
 
-    def each(&block)
-      return enum_for(:each) unless block_given?
-      nodes.each(&:last.to_proc >> block)
+    def add(node)
+      nodes[node.id] = node
+      parent_indices[node.parent] = [ *children_for(node.parent), node ]
+      node
+    end
+
+    def children_for(parent)
+      parent_indices[parent] || []
     end
 
     def [](idx)
       nodes[idx]
     end
 
-    def children_for(idx)
-      parent_indices[idx] || []
+    def each(&block)
+      return enum_for(:each) unless block_given?
+      nodes.each(&:last.to_proc >> block)
     end
 
     private

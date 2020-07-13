@@ -1,7 +1,7 @@
 require "concurrent-edge"
 
 module Scruby
-  class ServerNode
+  module ServerNode
     module Actions
       ACTIONS = %i(head tail before after replace)
       # MSGS = %w(/n_go /n_off /n_on /n_end)
@@ -9,7 +9,7 @@ module Scruby
       # Stop node and free from parent group on the server. Once a node
       # is stopped, it cannot be restarted.
       def free
-        self.group = nil
+        node.parent = nil
         send_msg("/n_free", id)
       end
 
@@ -43,22 +43,22 @@ module Scruby
       end
 
       def move_before(other)
-        self.group = other.group
+        node.parent = other.group
         send_msg("/n_before", id, other.id)
       end
 
       def move_after(other)
-        self.group = other.group
+        node.parent = other.group
         send_msg("/n_after", id, other.id)
       end
 
       def move_to_head(group)
-        self.group = group
+        node.parent = group
         send_msg("/g_head", group.id, id)
       end
 
       def move_to_tail(group)
-        self.group = group
+        node.parent = group
         send_msg("/g_tail", group.id, id)
       end
 
@@ -131,7 +131,7 @@ module Scruby
       end
 
       def create(action = :head, target = Group.new(server, 1))
-        self.group = group_from_target(target, action)
+        node.parent = group_from_target(target, action)
         send_msg *creation_message(action, target)
       end
 

@@ -14,7 +14,7 @@ module Scruby
     include Encode
     include Concurrent
 
-    attr_reader :client, :message_queue, :process, :options
+    attr_reader :client, :message_queue, :process, :options, :nodes
     private :message_queue, :process
 
     def_delegators :options, :host, :port, :num_buffers
@@ -24,6 +24,7 @@ module Scruby
       @client = OSC::Client.new(port, host)
       @message_queue = MessageQueue.new(self)
       @options = Options.new(**options, bind_address: host, port: port)
+      @nodes = Nodes.new
     end
 
     def alive?
@@ -160,13 +161,12 @@ module Scruby
       message_queue.receive(address, timeout: timeout, &pred)
     end
 
-    # def tree
-    #   send_msg("/g_queryTree", 0, 1)
+    def update_nodes
+      send_msg("/g_queryTree", 0, 1)
 
-    #   receive("/g_queryTree.reply")
-    #     .then { |msg| Server::NodeTreeDecoder.decode(self, msg.args) }
-    #     .value!
-    # end
+      receive("/g_queryTree.reply")
+        .then { |msg| nodes.decode_and_update(msg.args) }
+    end
 
     # def visualize_tree
     #   tree.visualize
@@ -235,14 +235,6 @@ module Scruby
 
       def boot(**args)
         new(**args).boot
-      end
-
-      def local
-        Local.instance
-      end
-
-      def default
-        @default || local
       end
     end
   end

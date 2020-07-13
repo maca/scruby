@@ -31,7 +31,7 @@ module Scruby
     end
 
     def create(action, target)
-      self.group = group_from_target(target, action)
+      node.parent = group_from_target(target, action)
       send_msg(creation_cmd, id, map_action(action), target.id)
     end
 

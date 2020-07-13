@@ -62,11 +62,11 @@ module Scruby
     end
 
     def puts_gets(str)
-      semaphore.synchronize {
+      semaphore.synchronize do
         true while read
         stdin_puts str
         read
-      }
+      end
     end
 
     def inspect

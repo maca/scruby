@@ -1,5 +1,5 @@
 module Scruby
-  class ServerNode
+  module ServerNode
     module Proxy
       extend Forwardable
       include PrettyInspectable
@@ -10,10 +10,6 @@ module Scruby
 
       def ==(other)
         self.class == other.class && other.id == id
-      end
-
-      def group=(group)
-        node.parent = group
       end
 
       def group

@@ -1,9 +1,9 @@
 RSpec.describe Scruby::Graph do
   let(:zero) { instance_double("Graph::Node", id: 0, parent: nil) }
-  let(:one) { instance_double("Graph::Node", id: 1,  parent: 0) }
-  let(:two) { instance_double("Graph::Node", id: 2, parent: 0) }
-  let(:three) { instance_double("Graph::Node", id: 3, parent: 1) }
-  let(:four) { instance_double("Graph::Node", id: 4, parent: 1) }
+  let(:one) { instance_double("Graph::Node", id: 1,  parent: zero) }
+  let(:two) { instance_double("Graph::Node", id: 2, parent: zero) }
+  let(:three) { instance_double("Graph::Node", id: 3, parent: one) }
+  let(:four) { instance_double("Graph::Node", id: 4, parent: one) }
 
   let(:nodes) do
     [ zero, one, two, three, four ]
@@ -25,9 +25,17 @@ RSpec.describe Scruby::Graph do
 
   describe "children for node" do
     it { expect(graph.children_for(nil)).to eq [ zero ] }
-    it { expect(graph.children_for(0)).to eq [ one, two ] }
-    it { expect(graph.children_for(1)).to eq [ three, four ] }
-    it { expect(graph.children_for(2)).to eq [ ] }
+    it { expect(graph.children_for(zero)).to eq [ one, two ] }
+    it { expect(graph.children_for(one)).to eq [ three, four ] }
+    it { expect(graph.children_for(two)).to eq [ ] }
+  end
+
+  describe "add node" do
+    let(:five) { instance_double("Graph::Node", id: 5, parent: one) }
+    before { graph.add(five) }
+
+    it { expect(graph[5]).to eq five }
+    it { expect(graph.children_for(one)).to eq [ three, four, five ] }
   end
 
   describe "enumerable methods" do
