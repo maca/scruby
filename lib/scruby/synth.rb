@@ -3,7 +3,8 @@ module Scruby
     include ServerNode::Proxy
 
     def initialize(name, server, id = nil, **params)
-      @node = ServerNode.new(server, -1, name, **params)
+      @node = Graph::Node.new(name, **params)
+      @server = server
       node.id = id || server.next_node_id
     end
 

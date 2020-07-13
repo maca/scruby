@@ -32,8 +32,10 @@ require_relative "scruby/utils/positional_keyword_args"
 require_relative "scruby/sclang/helpers"
 require_relative "scruby/sclang"
 
+
 require_relative "scruby/process"
 require_relative "scruby/process/registry"
+
 
 require_relative "scruby/ugen_graph"
 require_relative "scruby/ugen_graph/visualize"
@@ -41,6 +43,7 @@ require_relative "scruby/ugen_graph/ugen_node"
 require_relative "scruby/ugen_graph/constant"
 require_relative "scruby/ugen_graph/control_name"
 require_relative "scruby/synth_def"
+
 
 require_relative "scruby/ugen"
 require_relative "scruby/ugen/operations"
@@ -52,6 +55,7 @@ require_relative "scruby/ugen/abstract_out"
 require_relative "scruby/ugen/gen"
 require_relative "scruby/ugen/binary_op_ugen"
 require_relative "scruby/ugen/unary_op_ugen"
+
 
 require_relative "scruby/ugen/in"
 require_relative "scruby/ugen/out"
@@ -430,11 +434,14 @@ require_relative "scruby/ugen/zero_crossing"
 require_relative "scruby/ugen/replace_out"
 
 
+require_relative "scruby/graph"
+require_relative "scruby/graph/node"
+require_relative "scruby/graph/decoder"
+
+
 # require_relative "scruby/node"
-require_relative "scruby/server_node"
 require_relative "scruby/server_node/actions"
 require_relative "scruby/server_node/proxy"
-require_relative "scruby/server/server_nodes_decoder"
 require_relative "scruby/server"
 require_relative "scruby/server/message_queue"
 require_relative "scruby/server/local"

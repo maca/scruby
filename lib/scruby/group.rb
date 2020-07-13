@@ -3,7 +3,8 @@ module Scruby
     include ServerNode::Proxy
 
     def initialize(server, id = nil)
-      @node = ServerNode.new(server, true)
+      @node = Graph::Node.new
+      @server = server
       node.id = id || server.next_node_id
     end
 
@@ -30,7 +31,7 @@ module Scruby
     end
 
     def create(action, target)
-      node.group = group_from_target(target, action)
+      self.group = group_from_target(target, action)
       send_msg(creation_cmd, id, map_action(action), target.id)
     end
 
