@@ -5,36 +5,38 @@ module Scruby
     extend Forwardable
     include PrettyInspectable
 
-    ACTIONS = %i(head tail before after replace)
-    # MSGS = %w(/n_go /n_off /n_on /n_end)
+    POS = %i(head tail before after replace)
+    MESSAGES = %w(/n_run /n_go /n_off /n_on /n_end)
 
-    attr_reader :server, :id, :node
+    attr_reader :server
 
-
-    def initialize(server, obj = nil)
-      @server, @node = server, Graph::Node.new(obj)
+    def initialize(server, id = nil)
+      @server, @id = server, id
     end
 
-    def id
-      node.id ||= server.next_node_id
+    def node
+      server.node(id)
     end
 
-    def parent
-      node.parent
+    def group
+      Group.new(server, node.parent.id) if node.parent
     end
 
     def name
-      node.obj&.name
+      node&.obj&.name
     end
 
     def params
-      node.obj&.params
+      node&.obj&.params
+    end
+
+    def id
+      @id ||= server.next_node_id
     end
 
     # Stop node and free from parent group on the server. Once a node
     # is stopped, it cannot be restarted.
     def free
-      node.parent = nil
       send_msg("/n_free", id)
     end
 
@@ -68,22 +70,18 @@ module Scruby
     end
 
     def move_before(other)
-      node.parent = other.group
       send_msg("/n_before", id, other.id)
     end
 
     def move_after(other)
-      node.parent = other.group
       send_msg("/n_after", id, other.id)
     end
 
     def move_to_head(group)
-      node.parent = group
       send_msg("/g_head", group.id, id)
     end
 
     def move_to_tail(group)
-      node.parent = group
       send_msg("/g_tail", group.id, id)
     end
 
@@ -100,43 +98,6 @@ module Scruby
     #   node.stop
     #   node.running? #=> false
     def running?
-      query.fetch(:running)
-    end
-
-    # Send a *n_query* message to the server to obtain and return
-    # information about the node.
-    #
-    # @return [Hash]
-    #
-    # @example
-    #   server = Server.boot
-    #   node = SinOsc.ar.play(server)
-    #   node.query #=> { running: true, id: 3, parent: 1, ... }
-    def query
-      query_async.value!
-    end
-
-    # Async version of {query}.
-    #
-    # @return [Concurrent::Promises::Future]
-    def query_async
-      # no specs
-      send_msg("/n_query", id)
-
-      keys = %i(running id parent prev next head tail)
-
-      success = receive("/n_info") { |m| m.args.first == id }
-                  .then { |msg| Hash[ keys.zip([ true, *msg.args ]) ] }
-
-      failure = receive("/fail") { |m|
-        m.args.first == "/n_query" && m.args.last.include?(id.to_s)
-      }.then { Hash[ keys.zip([ false, id ]) ] }
-
-      Concurrent::Promises.any(success, failure)
-    end
-
-    def group
-      parent
     end
 
     def register
@@ -159,9 +120,12 @@ module Scruby
       Graph::Print.print(self)
     end
 
-    def create(action = :head, target = server.node(1))
-      node.parent = group_from_target(target, action)
-      send_msg *creation_message(action, target)
+    def create(*args)
+      send_msg(creation_cmd, *args)
+    end
+
+    def creation_message(*args)
+      OSC::Message.new(creation_cmd, *args)
     end
 
     private
@@ -170,12 +134,12 @@ module Scruby
       raise NotImplementedError
     end
 
-    def creation_message(_, _)
-      raise NotImplementedError
+    def map_action(action)
+      POS.index(action) || action
     end
 
-    def map_action(action)
-      ACTIONS.index(action) || action
+    def future
+      @future ||= Promises.fulfilled_future(self)
     end
 
     def group_from_target(target, action)

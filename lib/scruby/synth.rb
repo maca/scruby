@@ -2,30 +2,22 @@ module Scruby
   class Synth
     include ServerNode
 
-    def initialize(name, server, **params)
-      super(server, Properties.new(name, **params))
-    end
-
-    def creation_message(action = :head, target = server.node(1))
-      action_i = map_action(action)
-      args = params.flatten
-
-      OSC::Message.new(creation_cmd, name, id, action_i, target.id, *args)
-    end
-
     def get
     end
 
     def get_n
     end
 
-    def print_name
-      params = self.params.map { |k, v| [ k, v ].join(":") }.join(", ")
-      [ super, name, params ].join(" - ")
+    def inspect
+      super(**{ name: name, id: id }.compact)
     end
 
-    def inspect
-      super(name: name, id: id)
+    def create(action, target, name, **params)
+      super(name, id, map_action(action), target.id, *params.flatten)
+    end
+
+    def creation_message(action, target, name, **params)
+      super(name, id, map_action(action), target.id, *params.flatten)
     end
 
     private
@@ -34,27 +26,27 @@ module Scruby
 
     class << self
       def create(name, server, **args)
-        new(name, server, **args).create
+        new(server).create(:head, server.node(1), name, **args)
       end
 
       def head(group, name, **args)
-        new(name, group.server, **args).create(:head, group)
+        new(group.server).create(:head, group, name, **args)
       end
 
       def tail(group, name, **args)
-        new(name, group.server, **args).create(:tail, group)
+        new(group.server).create(:tail, group, name, **args)
       end
 
       def before(node, name, **args)
-        new(name, node.server, **args).create(:before, node)
+        new(node.server).create(:before, node, name, **args)
       end
 
       def after(node, name, **args)
-        new(name, node.server, **args).create(:after, node)
+        new(node.server).create(:after, node, name, **args)
       end
 
       def replace(node, name, **args)
-        new(name, node.server, **args).create(:replace, node)
+        new(node.server).create(:replace, node, name, **args)
       end
     end
   end

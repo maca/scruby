@@ -18,11 +18,11 @@ module Scruby
         @patterns = Concurrent::Array.new
       end
 
-      def receive(address = nil, timeout: nil, once: false, &pred)
+      def receive(address = nil, timeout: 0.5, &pred)
         run
 
         future = Promises.resolvable_future
-        patterns << [ address, pred, future, !once ]
+        patterns << [ address, pred, future ]
 
         return future unless timeout
         Promises.any(future, cancellation_future(timeout))
@@ -64,7 +64,7 @@ module Scruby
 
         thread.kill
 
-        patterns.delete_if do |_, future|
+        patterns.delete_if do |_, _, future|
           future.reject CancelledOperationError.new("server quitted")
         end
 
@@ -80,7 +80,7 @@ module Scruby
       end
 
       def dispatch_msg(message)
-        patterns.delete_if do |pattern, pred, future, delete|
+        patterns.delete_if do |pattern, pred, future|
           next true if future.rejected?
 
           next unless
@@ -89,7 +89,8 @@ module Scruby
             (pred.nil? || pred.call(message, future))
 
           future.evaluate_to { message } if future.pending?
-          delete
+
+          true
         rescue StandardError => e
           puts e
         end

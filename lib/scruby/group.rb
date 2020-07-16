@@ -2,16 +2,12 @@ module Scruby
   class Group
     include ServerNode
 
-    def initialize(server)
-      super(server)
+    def node_to_head(other)
+      other.move_to_head(self)
     end
 
-    def node_to_head(node)
-      node.move_to_head(self)
-    end
-
-    def node_to_tail(node)
-      node.move_to_tail(self)
+    def node_to_tail(other)
+      other.move_to_tail(self)
     end
 
     def free_all
@@ -28,9 +24,12 @@ module Scruby
     def query_tree
     end
 
-    def create(action = :head, target = server.node(1))
-      node.parent = group_from_target(target, action)
-      send_msg(creation_cmd, id, map_action(action), target.id)
+    def create(action, target)
+      super(id, map_action(action), target.id)
+    end
+
+    def creation_message(action, target)
+      super(id, map_action(action), target.id)
     end
 
     def inspect
@@ -43,7 +42,7 @@ module Scruby
 
     class << self
       def create(server)
-        new(server).create
+        new(server).create(:head, server.node(1))
       end
 
       def head(group)

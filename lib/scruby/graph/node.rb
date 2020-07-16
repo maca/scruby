@@ -1,7 +1,6 @@
 module Scruby
   class Graph
     class Node
-      attr_reader :name
       attr_accessor :obj, :id, :parent, :graph
 
       def initialize(obj = nil, id = nil, parent = nil)
@@ -19,7 +18,13 @@ module Scruby
       end
 
       def print
-        Print.print(self)
+        Graph::Print.print(self)
+      end
+
+      def print_name
+        params = obj&.params || {}
+        params = params.map { |k, v| [ k, v ].join(":") }.join(", ")
+        [ id, obj&.name, params ].join(" - ")
       end
     end
   end

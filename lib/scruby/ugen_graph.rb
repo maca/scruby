@@ -68,8 +68,9 @@ module Scruby
       ctrls = controls.map { |c| [ c.name, c ] }.to_h
       graph = UgenGraph.new(ugen.out? ? ugen : Out.new(0, ugen), **ctrls)
 
-      Synth.new(graph.name, server).tap do |synth|
-        graph.send_to(server, synth.creation_message)
+      Synth.new(server).tap do |synth|
+        msg = synth.creation_message(:head, server.node(1), graph.name)
+        graph.send_to(server, msg)
       end
     end
 

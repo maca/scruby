@@ -14,7 +14,7 @@ module Scruby
     include Encode
     include Concurrent
 
-    attr_reader :client, :message_queue, :process, :options, :nodes
+    attr_reader :client, :message_queue, :process, :options
     private :message_queue, :process
 
     def_delegators :options, :host, :port, :num_buffers
@@ -24,7 +24,9 @@ module Scruby
       @client = OSC::Client.new(port, host)
       @message_queue = MessageQueue.new(self)
       @options = Options.new(**options, bind_address: host, port: port)
-      @nodes = Nodes.new
+      @nodes = Nodes.new(self)
+
+      receive_node_changes
     end
 
     def alive?
@@ -42,6 +44,10 @@ module Scruby
 
     def max_logins
       @max_logins ||= register_client.last
+    end
+
+    def nodes
+      @nodes.any? ? @nodes : update_nodes.value!
     end
 
     def node(idx)
@@ -165,15 +171,8 @@ module Scruby
       super(host: host, port: port, running: running?)
     end
 
-    def receive(address = nil, timeout: 0.5, &pred)
-      message_queue.receive(address, timeout: timeout, &pred)
-    end
-
-    def update_nodes
-      send_msg("/g_queryTree", 0, 1)
-
-      receive("/g_queryTree.reply")
-        .then { |msg| nodes.decode_and_update(msg.args) }
+    def receive(address = nil, **args, &pred)
+      message_queue.receive(address, **args, &pred)
     end
 
     def dump_server_messages(status = nil)
@@ -186,6 +185,27 @@ module Scruby
     end
 
     private
+
+    def update_nodes
+      send_msg("/g_queryTree", 0, 1)
+
+      receive("/g_queryTree.reply")
+        .then { |msg| @nodes.decode_and_update(msg.args) }
+    end
+
+    def received_node_changes
+      nodes.clear
+      receive_node_changes
+    end
+
+    def receive_node_changes
+      receive(Regexp.union(*ServerNode::MESSAGES), timeout: nil)
+        .then_flat_future { received_node_changes }
+
+      receive("/fail", timeout: nil) { |m|
+        ServerNode::MESSAGES.include?(m.args.first)
+      }.then_flat_future { received_node_changes }
+    end
 
     def node_counter
       # client id is 5 bits and node id is 26 bits long
