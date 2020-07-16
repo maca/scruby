@@ -5,9 +5,9 @@ RSpec.describe Group do
     Group.new(server, 16)
   end
 
-  # it_behaves_like "performs node actions" do
-  #   let(:node) { group }
-  # end
+  it_behaves_like "performs node actions" do
+    let(:node) { group }
+  end
 
   describe "move node" do
     let(:node) { spy instance_double("Node") }
@@ -52,8 +52,17 @@ RSpec.describe Group do
     end
 
     shared_examples_for "initializes group" do
+      let(:node_node) { instance_double("Graph::Node") }
+      let(:nodes) { instance_double("Nodes") }
+
+      before do
+        allow(nodes).to receive(:node).with(16) { node_node }
+        allow(server).to receive(:nodes) { nodes }
+      end
+
       it { expect(group).to be_a Group }
       it { expect(group.server).to be server }
+      it { expect(node.node).to eq node_node }
     end
 
     describe "head" do
@@ -62,7 +71,6 @@ RSpec.describe Group do
         let(:msg) { [ "/g_new", 16, 0, a_group.id ] }
 
         it { expect(node.id).to be 16 }
-        # it { expect(node.group).to eq a_group }
         it_behaves_like "initializes group"
       end
     end
@@ -73,7 +81,6 @@ RSpec.describe Group do
         let(:msg) { [ "/g_new", 16, 1, a_group.id ] }
 
         it { expect(node.id).to be 16 }
-        # it { expect(node.group).to eq a_group }
         it_behaves_like "initializes group"
       end
     end
@@ -84,7 +91,6 @@ RSpec.describe Group do
         let(:msg) { [ "/g_new", 16, 2, a_node.id ] }
 
         it { expect(node.id).to be 16 }
-        # it { expect(node.group).to eq a_group }
         it_behaves_like "initializes group"
       end
     end
@@ -95,7 +101,6 @@ RSpec.describe Group do
         let(:msg) { [ "/g_new", 16, 3, a_node.id ] }
 
         it { expect(node.id).to be 16 }
-        # it { expect(node.group).to eq a_group }
         it_behaves_like "initializes group"
       end
     end
@@ -106,7 +111,6 @@ RSpec.describe Group do
         let(:msg) { [ "/g_new", 16, 4, a_node.id ] }
 
         it { expect(node.id).to be 16 }
-        # it { expect(node.group).to eq a_group }
         it_behaves_like "initializes group"
       end
     end
@@ -123,7 +127,6 @@ RSpec.describe Group do
         let(:msg) { [ "/g_new", 16, 0, 1 ] }
 
         it { expect(node.id).to be 16 }
-        # it { expect(node.group.id).to eq 1 }
       end
     end
   end

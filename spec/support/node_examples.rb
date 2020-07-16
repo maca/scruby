@@ -24,14 +24,9 @@ RSpec.shared_examples_for "performs node actions" do
   it { expect(node.server).to eq server }
 
   describe "free" do
-    before do
-      node.instance_variable_set(:@group, a_group)
-    end
-
     it_behaves_like "sent message to server" do
       subject! { node.free }
       let(:msg) { [ "/n_free", node.id ] }
-      it { expect(node.group).to be nil }
     end
   end
 
@@ -112,8 +107,6 @@ RSpec.shared_examples_for "performs node actions" do
       it_behaves_like "sent message to server" do
         subject! { node.move_before(other) }
         let(:msg) { [ "/n_before", node.id, 2222 ] }
-
-        it { expect(node.group).to eq a_group }
       end
     end
 
@@ -121,8 +114,6 @@ RSpec.shared_examples_for "performs node actions" do
       it_behaves_like "sent message to server" do
         subject! { node.move_after(other) }
         let(:msg) { [ "/n_after", node.id, 2222 ] }
-
-        it { expect(node.group).to eq a_group }
       end
     end
 
@@ -130,8 +121,6 @@ RSpec.shared_examples_for "performs node actions" do
       it_behaves_like "sent message to server" do
         subject! { node.move_to_head(a_group) }
         let(:msg) { [ "/g_head", 5555, node.id ] }
-
-        it { expect(node.group).to eq a_group }
       end
     end
 
@@ -139,8 +128,6 @@ RSpec.shared_examples_for "performs node actions" do
       it_behaves_like "sent message to server" do
         subject! { node.move_to_tail(a_group) }
         let(:msg) { [ "/g_tail", 5555, node.id ] }
-
-        it { expect(node.group).to eq a_group }
       end
     end
   end
