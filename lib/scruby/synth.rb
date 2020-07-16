@@ -8,8 +8,12 @@ module Scruby
     def get_n
     end
 
-    def inspect
-      super(**{ name: name, id: id }.compact)
+    def name
+      obj&.name
+    end
+
+    def params
+      obj&.params
     end
 
     def create(action, target, name, **params)
@@ -20,9 +24,19 @@ module Scruby
       super(name, id, map_action(action), target.id, *params.flatten)
     end
 
+    def print_name
+      params = params&.map { |k, v| "#{k}: #{v}" }&.join(', ')
+      "#{super} - #{name} #{params}"
+    end
+
+    def inspect
+      super(**{ name: name, id: id }.compact)
+    end
+
     private
 
     def creation_cmd; "/s_new" end
+    def obj; node&.obj end
 
     class << self
       def create(name, server, **args)

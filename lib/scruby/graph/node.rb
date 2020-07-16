@@ -16,16 +16,6 @@ module Scruby
           self.id == other.id &&
           self.graph == other.graph
       end
-
-      def print
-        Graph::Print.print(self)
-      end
-
-      def print_name
-        params = obj&.params || {}
-        params = params.map { |k, v| [ k, v ].join(":") }.join(", ")
-        [ id, obj&.name, params ].join(" - ")
-      end
     end
   end
 end

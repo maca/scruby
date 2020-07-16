@@ -32,6 +32,11 @@ module Scruby
       super(id, map_action(action), target.id)
     end
 
+    # TODO: no specs
+    def children
+      server.nodes.children_for(node)
+    end
+
     def inspect
       super(id: id)
     end

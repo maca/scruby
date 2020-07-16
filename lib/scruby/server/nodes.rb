@@ -30,12 +30,20 @@ module Scruby
         graph.to_a.each(&method(:wrap) >> block)
       end
 
+      def children_for(node)
+        graph.children_for(node).map(&method(:wrap))
+      end
+
       def [](idx)
+        wrap node(idx)
+      end
+
+      def node(idx)
         synchronize { graph[idx] }
       end
 
       def print
-        first.node.print
+        first.print
       end
 
       def inspect

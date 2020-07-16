@@ -26,7 +26,7 @@ module Scruby
       @options = Options.new(**options, bind_address: host, port: port)
       @nodes = Nodes.new(self)
 
-      receive_node_changes
+      listen_node_changes
     end
 
     def alive?
@@ -85,6 +85,11 @@ module Scruby
         .on_rejection { process.kill }
     end
 
+    def quit
+      quit_async.value!
+    end
+    alias stop quit
+
     def quit_async
       return Promises.fulfilled_future(self) unless alive?
 
@@ -97,17 +102,12 @@ module Scruby
     end
     alias stop_async quit_async
 
-    def quit
-      quit_async.value!
+    def reboot
+      reboot_async.value!
     end
-    alias stop quit
 
     def reboot_async
       quit_async.then_flat_future { boot_async }
-    end
-
-    def reboot
-      reboot_async.value!
     end
 
     def free_all
@@ -193,18 +193,18 @@ module Scruby
         .then { |msg| @nodes.decode_and_update(msg.args) }
     end
 
-    def received_node_changes
+    def nodes_changed
       nodes.clear
-      receive_node_changes
+      listen_node_changes
     end
 
-    def receive_node_changes
+    def listen_node_changes
       receive(Regexp.union(*ServerNode::MESSAGES), timeout: nil)
-        .then_flat_future { received_node_changes }
+        .then_flat_future { nodes_changed }
 
       receive("/fail", timeout: nil) { |m|
         ServerNode::MESSAGES.include?(m.args.first)
-      }.then_flat_future { received_node_changes }
+      }.then_flat_future { nodes_changed }
     end
 
     def node_counter

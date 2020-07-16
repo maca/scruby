@@ -15,19 +15,11 @@ module Scruby
     end
 
     def node
-      server.node(id)
+      server.nodes.node(id)
     end
 
     def group
       Group.new(server, node.parent.id) if node.parent
-    end
-
-    def name
-      node&.obj&.name
-    end
-
-    def params
-      node&.obj&.params
     end
 
     def id
@@ -69,6 +61,7 @@ module Scruby
       send_msg("/n_trace", id)
     end
 
+
     def move_before(other)
       send_msg("/n_before", id, other.id)
     end
@@ -84,6 +77,7 @@ module Scruby
     def move_to_tail(group)
       send_msg("/g_tail", group.id, id)
     end
+
 
     def fill
     end
@@ -106,10 +100,12 @@ module Scruby
     def unregister
     end
 
-    def on_free
+    def create(*args)
+      send_msg(creation_cmd, *args)
     end
 
-    def wait_for_free
+    def creation_message(*args)
+      OSC::Message.new(creation_cmd, *args)
     end
 
     def print_name
@@ -118,14 +114,6 @@ module Scruby
 
     def print
       Graph::Print.print(self)
-    end
-
-    def create(*args)
-      send_msg(creation_cmd, *args)
-    end
-
-    def creation_message(*args)
-      OSC::Message.new(creation_cmd, *args)
     end
 
     private
