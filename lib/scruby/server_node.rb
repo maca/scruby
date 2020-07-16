@@ -2,16 +2,19 @@ require "concurrent-edge"
 
 module Scruby
   module ServerNode
-    extend Forwardable
     include PrettyInspectable
 
     POS = %i(head tail before after replace)
-    MESSAGES = %w(/n_run /n_go /n_off /n_on /n_end)
+    MESSAGES = %w(/n_run /n_go /n_off /n_on /n_end /n_move)
 
     attr_reader :server
 
     def initialize(server, id = nil)
       @server, @id = server, id
+    end
+
+    def id
+      @id ||= server.next_node_id
     end
 
     def node
@@ -21,10 +24,7 @@ module Scruby
     def group
       Group.new(server, node.parent.id) if node.parent
     end
-
-    def id
-      @id ||= server.next_node_id
-    end
+    alias parent group
 
     # Stop node and free from parent group on the server. Once a node
     # is stopped, it cannot be restarted.

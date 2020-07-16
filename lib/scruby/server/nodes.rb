@@ -35,7 +35,8 @@ module Scruby
       end
 
       def [](idx)
-        wrap node(idx)
+        n = node(idx)
+        wrap(n) if n
       end
 
       def node(idx)
