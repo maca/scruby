@@ -5,11 +5,11 @@ require "scruby/core_ext/array"
 require "scruby/control_name"
 require "scruby/env"
 require "scruby/synthdef"
-require "scruby/ugens/ugen" 
+require "scruby/ugens/ugen"
 require "scruby/ugens/ugen_operations"
-require "scruby/ugens/operation_ugens" 
+require "scruby/ugens/operation_ugens"
 require "scruby/ugens/multi_out"
-require "scruby/ugens/ugens" 
+require "scruby/ugens/ugens"
 require "scruby/ugens/disk_in_out"
 
 include Scruby
@@ -89,7 +89,7 @@ describe 'IO ugens' do
     it "should set inputs" do
       @instance.inputs.should == @inputs
     end
-    
+
     it "should encode" do
       @sdef.encode.should == @expected.pack('C*')
     end
@@ -114,7 +114,7 @@ describe 'IO ugens' do
     end
     it_should_behave_like 'DiskIn'
   end
-  
+
   describe VDiskIn, 'single channel' do
     before do
       @channels = 1

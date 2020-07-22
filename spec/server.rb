@@ -5,7 +5,7 @@ class Scruby::Server
     @output << string
     string
   end
-  
+
   def flush
     @output = ''
   end

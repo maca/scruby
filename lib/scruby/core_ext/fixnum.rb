@@ -1,5 +1,5 @@
 # Musical math
-class Fixnum  
+class Fixnum
   def freq
     440 * (2 ** ((self - 69) * 0.083333333333) )
   end

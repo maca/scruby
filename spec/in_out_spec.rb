@@ -39,7 +39,7 @@ describe In do
     In.should respond_to(:ar)
   end
 
-  it "should spec #ar" do    
+  it "should spec #ar" do
     @ar.should be_instance_of( DelegatorArray )
     @ar.should have(1).proxy
     @ar.first.should == @proxy
@@ -63,7 +63,7 @@ describe Out do
     before do
       @sdef = mock 'sdef', :children => [], :constants => [400, 0]
       Ugen.should_receive( :synthdef ).at_least( :once ).and_return @sdef
-    end               
+    end
 
     it "should accept one ugen" do
       @ugen1 = MockUgen.new :audio
@@ -98,7 +98,7 @@ describe Out do
 
       out = @sdef.children.last
       out.inputs.should == [1, @ugen1, @ugen2, @ugen3]
-    end    
+    end
 
     it "should validate rate"
     it "should substitute zero with silence"

@@ -1,7 +1,7 @@
 module Scruby
   class SynthDef
     attr_reader :name, :children, :constants, :control_names
-    # Creates a new SynthDef instance 
+    # Creates a new SynthDef instance
     # An "ugen graph" block should be passed:
     #
     #   SynthDef.new('simple') do |rate|
@@ -48,9 +48,9 @@ module Scruby
     def encode
       controls         = @control_names.reject { |cn| cn.non_control? }
       encoded_controls = [controls.size].pack('n') + controls.collect{ |c| c.name.encode + [c.index].pack('n') }.join
-      
+
       init_stream + name.encode + constants.encode_floats + values.flatten.encode_floats + encoded_controls +
-      [children.size].pack('n') + children.collect{ |u| u.encode }.join + 
+      [children.size].pack('n') + children.collect{ |u| u.encode }.join +
       [@variants.size].pack('n') #stub!!!
     end
 
@@ -78,7 +78,7 @@ module Scruby
     #
     def send *servers
       servers.peel!
-      (servers.empty? ? Server.all : servers).each{ |s| s.send_synth_def( self ) } 
+      (servers.empty? ? Server.all : servers).each{ |s| s.send_synth_def( self ) }
       self
     end
 
@@ -89,8 +89,8 @@ module Scruby
     end
 
     def build_controls control_names
-      # control_names.select{ |c| c.rate == :noncontrol }.sort_by{ |c| c.control_name.index } + 
-      [:scalar, :trigger, :control].collect do |rate| 
+      # control_names.select{ |c| c.rate == :noncontrol }.sort_by{ |c| c.control_name.index } +
+      [:scalar, :trigger, :control].collect do |rate|
         same_rate_array = control_names.select{ |control| control.rate == rate }
         Control.and_proxies_from( same_rate_array ) unless same_rate_array.empty?
       end.flatten.compact.sort_by{ |proxy| proxy.control_name.index }

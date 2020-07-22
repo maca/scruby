@@ -3,11 +3,11 @@ require File.expand_path(File.dirname(__FILE__)) + "/helper"
 require "scruby/core_ext/delegator_array"
 require "scruby/control_name"
 require "scruby/env"
-require "scruby/ugens/ugen" 
+require "scruby/ugens/ugen"
 require "scruby/ugens/ugen_operations"
-require "scruby/ugens/operation_ugens" 
+require "scruby/ugens/operation_ugens"
 require "scruby/ugens/multi_out"
-require "scruby/ugens/ugens" 
+require "scruby/ugens/ugens"
 require "scruby/ugens/buffer_read_write"
 
 include Scruby
@@ -25,11 +25,11 @@ describe 'Buffer Read Ugens' do
       @inputs ||= @params
       @instance = @proxies.first.source
     end
-    
+
     it "should output a DelegatorArray" do
       @proxies.should be_a(DelegatorArray)
     end
-    
+
     it "should have correct rate" do
       @instance.rate.should == @rate
     end
@@ -259,7 +259,7 @@ describe 'Buffer write Ugens' do
 
     it "should require phase to be audio rate"
   end
-  
+
   describe Tap, 'single input' do
     before do
       @inputs    = 5, 1, 0, SampleRate.ir.neg * 3, 1, 0
@@ -278,14 +278,14 @@ describe 'Buffer write Ugens' do
       @buff_ugen.inputs.should == @inputs
     end
   end
-  
+
   describe Tap, 'single input' do
     before do
       @inputs    = 5, 1, 0, SampleRate.ir.neg * 3, 1, 0
       @channels  = 1
       @proxies   = Tap.ar( 5, @channels, 3 )
     end
-    
+
     it "should have one proxy" do
       @proxies.should have(@channels).proxy
     end
@@ -302,14 +302,14 @@ describe 'Buffer write Ugens' do
       @proxies.each{ |p| p.source.inputs == @inputs }
     end
   end
-  
+
   describe Tap, 'multi input' do
     before do
       @inputs    = 5, 1, 0, SampleRate.ir.neg * 3, 1, 0
       @channels  = 4
       @proxies   = Tap.ar( 5, @channels, 3 )
     end
-    
+
     it "should have one proxy" do
       @proxies.should have(@channels).proxy
     end
@@ -326,7 +326,7 @@ describe 'Buffer write Ugens' do
       @proxies.each{ |p| p.source.inputs == @inputs }
     end
   end
-  
+
   #LocalBuf
   #MaxLocalBufs
   #ClearBuf

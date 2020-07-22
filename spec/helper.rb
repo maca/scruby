@@ -1,10 +1,10 @@
-require "rubygems" 
-require "rspec" 
+require "rubygems"
+require "rspec"
 require 'arguments'
 require 'yaml'
 require 'ruby-osc'
 
-$:.unshift( File.dirname(__FILE__) + '/../lib' ) 
+$:.unshift( File.dirname(__FILE__) + '/../lib' )
 
 require "scruby/core_ext/object"
 require "scruby/core_ext/array"
