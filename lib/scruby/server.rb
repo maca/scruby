@@ -6,6 +6,8 @@ require "forwardable"
 module Scruby
   class Server
     class ServerError < StandardError; end
+    class ClientInfo < Struct.new(:id, :max_logins); end
+
     extend Forwardable
 
     include OSC
@@ -14,36 +16,31 @@ module Scruby
     include Encode
     include Concurrent
 
-    attr_reader :client, :message_queue, :process, :options
+    attr_reader :osc_client, :message_queue, :process, :options,
+                :client_info
     private :message_queue, :process
 
     def_delegators :options, :host, :port, :num_buffers
 
 
     def initialize(host: "127.0.0.1", port: 57_110, **options)
-      @client = OSC::Client.new(port, host)
+      @osc_client = OSC::Client.new(port, host)
       @message_queue = MessageQueue.new(self)
       @options = Options.new(**options, bind_address: host, port: port)
       @nodes = Nodes.new(self)
-
-      listen_node_changes
     end
 
     def alive?
-      message_queue.alive?
+      process_alive?
     end
     alias running? alive?
 
-    def process_alive?
-      process&.alive? || false
-    end
-
     def client_id
-      @client_id ||= register_client.first
+      client_info&.id
     end
 
     def max_logins
-      @max_logins ||= register_client.last
+      client_info&.max_logins
     end
 
     def nodes
@@ -71,7 +68,7 @@ module Scruby
     end
 
     def boot_async(binary: "scsynth", **opts)
-      return message_queue.sync.then { self } if process_alive?
+      return sync.then { self } if process_alive?
 
       @options = Options.new(**options, **opts)
       @num_buffers = options.num_buffers
@@ -79,7 +76,7 @@ module Scruby
 
       wait_for_booted
         .then_flat_future { message_queue.sync }
-        .then { register_client }
+        .then_flat_future { register_client }
         .then { create_root_group }
         .then { self }
         .on_rejection { process.kill }
@@ -91,13 +88,13 @@ module Scruby
     alias stop quit
 
     def quit_async
-      return Promises.fulfilled_future(self) unless alive?
-
+      # return Promises.fulfilled_future(self) unless alive?
       send_msg("/quit")
 
       receive { |msg| msg.to_a == %w(/done /quit) }
         .then { sleep 0.1 while process_alive? }
-        .then { message_queue.stop }
+        .then { message_queue.flush }
+        .then { @client_info = nil }
         .then { self }
     end
     alias stop_async quit_async
@@ -125,7 +122,17 @@ module Scruby
     # end
 
     def status
-      message_queue.status.value!
+      status_async.value!
+    end
+
+    def status_async
+      keys = %i(ugens synths groups synth_defs avg_cpu peak_cpu
+          sample_rate actual_sample_rate)
+
+      send_msg Message.new("/status")
+
+      receive("/status.reply", timeout: 0.2)
+        .then { |msg| keys.zip(msg.args[1..-1]).to_h }
     end
 
     # Sends an OSC command or +Message+ to the scsyth server.
@@ -143,9 +150,9 @@ module Scruby
 
       case message
       when Message, Bundle
-        client.send(message)
+        osc_client.send(message)
       else
-        client.send Message.new(message, *args)
+        osc_client.send Message.new(message, *args)
       end
 
       self
@@ -184,7 +191,19 @@ module Scruby
       send_msg("/dumpOSC", code)
     end
 
+    def socket
+      osc_client.instance_variable_get(:@socket)
+    end
+
     private
+
+    def process_alive?
+      process&.alive? || false
+    end
+
+    def sync
+      message_queue.sync
+    end
 
     def update_nodes
       send_msg("/g_queryTree", 0, 1)
@@ -227,9 +246,10 @@ module Scruby
       send_msg("/notify", 1, 0)
 
       receive("/done")
-        .then { |m| @client_id, @max_logins = m.args.slice(1, 2) }
+        .then { |m| m.args.slice(1, 2) }
         .then { |a| a.each { |v| raise ServerError, v if String === v } }
-        .value!
+        .then { |args| @client_info = ClientInfo.new(*args) }
+        .then { listen_node_changes }
     end
 
     def graph_completion_blob(message)

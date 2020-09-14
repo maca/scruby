@@ -94,12 +94,6 @@ module Scruby
     def running?
     end
 
-    def register
-    end
-
-    def unregister
-    end
-
     def create(*args)
       send_msg(creation_cmd, *args)
     end
@@ -112,8 +106,8 @@ module Scruby
       "#{self.class.name.split('::').last} #{id}"
     end
 
-    def print
-      Graph::Print.print(self)
+    def visualize
+      Graph::Print.visualize(self)
     end
 
     private

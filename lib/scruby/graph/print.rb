@@ -3,12 +3,16 @@ module Scruby
     module Print
       class << self
         def print(root)
-          puts print_node(root, [], "", nil)
+          puts visualize(root)
+        end
+
+        def visualize(root)
+          visualize_node(root, [], "", nil)
         end
 
         protected
 
-        def print_node(node, siblings, padding, param_name)
+        def visualize_node(node, siblings, padding, param_name)
           is_last = node.eql? siblings.last
 
           # TODO: refactor
@@ -41,7 +45,7 @@ module Scruby
             ("\n" if inputs.any?),
 
             inputs.zip(param_names).map { |i, name|
-              print_node(i, inputs, child_padding, name)
+              visualize_node(i, inputs, child_padding, name)
             },
 
             ("\n" unless is_last)

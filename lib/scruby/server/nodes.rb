@@ -43,12 +43,8 @@ module Scruby
         synchronize { graph[idx] }
       end
 
-      def print
-        first.print
-      end
-
       def inspect
-        print
+        first.visualize
       end
 
       private

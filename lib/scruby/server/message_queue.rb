@@ -37,15 +37,6 @@ module Scruby
         end
       end
 
-      def status
-        keys = %i(ugens synths groups synth_defs avg_cpu peak_cpu
-          sample_rate actual_sample_rate)
-
-        server.send_msg Message.new("/status")
-        receive("/status.reply", timeout: 0.2)
-          .then { |msg| keys.zip(msg.args[1..-1]).to_h }
-      end
-
       def run
         return thread if alive?
 
@@ -59,16 +50,10 @@ module Scruby
       end
       alias running? alive?
 
-      def stop
-        return self unless alive?
-
-        thread.kill
-
+      def flush
         patterns.delete_if do |_, _, future|
           future.reject CancelledOperationError.new("server quitted")
         end
-
-        self
       end
 
       private
@@ -97,7 +82,7 @@ module Scruby
       end
 
       def socket
-        server.client.instance_variable_get(:@socket)
+        server.socket
       end
 
       def cancellation_future(timeout)
