@@ -12,6 +12,10 @@ module Scruby
     end
 
     def spawn
+      spawn_async.value!
+    end
+
+    def spawn_async
       return Promises.fulfilled_future(self) if process.alive?
 
       process.spawn
@@ -35,6 +39,10 @@ module Scruby
     end
 
     def eval(code)
+      unless process.alive?
+        raise SclangError, "sclang process not running, try `sclang.spawn`"
+      end
+
       eval_async(code).value!
     end
 
