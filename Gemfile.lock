@@ -68,7 +68,7 @@ GEM
     ruby-progressbar (1.11.0)
     tty-which (0.4.2)
     unicode-display_width (2.0.0)
-    yard (0.9.26)
+    yard (0.9.36)
     zeitwerk (2.4.2)
 
 PLATFORMS
