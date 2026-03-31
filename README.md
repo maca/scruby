@@ -1,43 +1,63 @@
-# Scruby
+== Scruby 
 
-Welcome to your new gem! In this directory, you'll find the files you need to be able to package up your Ruby library into a gem. Put your Ruby code in the file `lib/scruby`. To experiment with that code, run `bin/console` for an interactive prompt.
+Is a bare-bones SuperCollider livecoding library for Ruby, it provides comunication with a remote or local scsynth server and SynthDef creation with a
+in a similar way to Sclang.
 
-TODO: Delete this and the text above, and describe your gem
+SynthDef creation and sending is robust but some features are not implemented such as SynthDef variations and others I may not be aware of.
 
-## Installation
+livecode.rb executable is located in the bin directory and a TextMate bundle included in extras permits livecoding from TextMate, comunication is 
+thrugh *nix pipes. Similar functionality shouldn't be too dificult to implement from Emacs or Vim.
 
-Add this line to your application's Gemfile:
+== Install
 
-```ruby
-gem 'scruby'
-```
+    $ [sudo] gem install scruby
 
-And then execute:
+Scruby is just a SuperCollider client so SC must be installed on the system. There's a PPA for installing SC under Ubuntu: https://launchpad.net/~supercollider/+archive/ppa.
 
-    $ bundle
 
-Or install it yourself as:
+== Usage
 
-    $ gem install scruby
+    require 'scruby'
+    
+    s = Server.new
+    s.boot
+    
+    SynthDef.new :fm do |freq, amp, dur|
+      mod_env = EnvGen.kr Env.new( d(600, 200, 100), d(0.7,0.3) ), 1, :timeScale => dur
+      mod     = SinOsc.ar freq * 1.4, :mul => mod_env
+      sig     = SinOsc.ar freq + mod
+      env     = EnvGen.kr Env.new( d(0, 1, 0.6, 0.2, 0.1, 0), d(0.001, 0.005, 0.3, 0.5, 0.7) ), 1, :timeScale => dur, :doneAction => 2
+      sig     = sig * amp * env
+      Out.ar  0, [sig, sig]
+    end.send
 
-## Usage
+    Synth.new :fm, :freq => 220, :amp => 0.4, :dur => 1
+    
 
-TODO: Write usage instructions here
+To start a live coding session:
 
-## Development
+    $ live
+    
+See http://github.com/maca/live
 
-After checking out the repo, run `bin/setup` to install dependencies. You can also run `bin/console` for an interactive prompt that will allow you to experiment.
 
-To install this gem onto your local machine, run `bundle exec rake install`. To release a new version, update the version number in `version.rb`, and then run `bundle exec rake release`, which will create a git tag for the version, push git commits and tags, and push the `.gem` file to [rubygems.org](https://rubygems.org).
+== Todo
 
-## Contributing
+Receive OSC messages from SuperCollider
 
-Bug reports and pull requests are welcome on GitHub at https://github.com/[USERNAME]/scruby. This project is intended to be a safe, welcoming space for collaboration, and contributors are expected to adhere to the [Contributor Covenant](http://contributor-covenant.org) code of conduct.
+== License:
 
-## License
+Copyright (c) 2008 Macario Ortega
 
-The gem is available as open source under the terms of the [MIT License](https://opensource.org/licenses/MIT).
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
 
-## Code of Conduct
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
 
-Everyone interacting in the Scruby project’s codebases, issue trackers, chat rooms and mailing lists is expected to follow the [code of conduct](https://github.com/[USERNAME]/scruby/blob/master/CODE_OF_CONDUCT.md).
+You should have received a copy of the GNU General Public License
+along with this program.  If not, see <http://www.gnu.org/licenses/>.
